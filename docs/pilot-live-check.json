@@ -1,0 +1,57 @@
+{
+  "date": "2026-09-19",
+  "url": "https://demo.milliseconds.ai/ax-pilot/",
+  "workerVersion": "b1ec6622-3850-4cb7-a957-66fb0c249039",
+  "viewportWidths": [
+    1440,
+    390
+  ],
+  "liveApiCalls": 26,
+  "results": [
+    {
+      "preset": "0",
+      "calls": 4,
+      "errors": [],
+      "status": "GOAL COMPLETED Verified in the simulated app: display reads 576.",
+      "window": "Calculator\n\n576\n\nAC\n\u00b1\n%\n\u00f7\n7\n8\n9\n\u00d7\n4\n5\n6\n\u2212\n1\n2\n3\n+\n0\n.\n=\n\u232b",
+      "steps": "01\ntype_text\n'48*12'\nMODEL\n982 ms\n02\npress\ne19 button 'Equals'\nMODEL\n1390 ms",
+      "overflow": false
+    },
+    {
+      "preset": "1",
+      "calls": 4,
+      "errors": [],
+      "status": "GOAL COMPLETED Verified in the simulated app: the document holds the text.",
+      "window": "Untitled\nbold\nitalic\ntypeface\nHello from milliseconds",
+      "steps": "01\npress\ne1 button 'New Document'\nMODEL\n997 ms\n02\ntype_text\n'Hello from milliseconds' into e4\nMODEL\n1160 ms",
+      "overflow": false
+    },
+    {
+      "preset": "2",
+      "calls": 6,
+      "errors": [],
+      "status": "GOAL COMPLETED Verified in the simulated app: a second tab shows milliseconds.ai.",
+      "window": "milliseconds.ai\nStart Page\nmilliseconds.ai\n+\nmilliseconds.ai\n\nmilliseconds.ai\n\nmilliseconds.ai \u2014 decisions in milliseconds, not seconds.",
+      "steps": "01\npress\ne2 button 'New Tab'\nMODEL\n1191 ms\n02\ntype_text\n'milliseconds.ai' into e4\nMODEL\n1027 ms\n03\npress_key\nReturn\nFALLBACK\n1384 ms",
+      "overflow": false
+    },
+    {
+      "preset": "3",
+      "calls": 6,
+      "errors": [],
+      "status": "GOAL COMPLETED Verified in the simulated app: a note named Grocery list exists.",
+      "window": "Notes\n\uff0b New Note\nGrocery list\nMeeting notes\nReading list\n\nGrocery list\n\nGrocery list",
+      "steps": "01\npress\ne1 button 'Continue'\nMODEL\n934 ms\n02\npress\ne1 button 'New Note'\nMODEL\n1458 ms\n03\ntype_text\n'Grocery list' into e5\nMODEL\n926 ms",
+      "overflow": false
+    },
+    {
+      "preset": "4",
+      "calls": 6,
+      "errors": [],
+      "status": "GOAL COMPLETED Verified in the simulated app: Dark is the selected appearance.",
+      "window": "System Settings\nSign in, with your Apple Account\nWi-Fi\nBluetooth\nNetwork\nEnergy\nGeneral\nAccessibility\nAppearance\nMenu Bar\nDesktop & Dock\nDisplays\nSpotlight\nWallpaper\nSiri\nNotifications\nempty\n\nAppearance\n\nChoose how windows and menus look on this Mac.\n\nAppearance: Dark\n\nLight\nDark\nAuto",
+      "steps": "01\npress\ne8 row 'Appearance'\nMODEL\n946 ms\n02\npress\ne17 radio button 'Light' value=1 (selected)\nMODEL\n1205 ms\n03\npress\ne18 radio button 'Dark' value=0\nFALLBACK\n1177 ms",
+      "overflow": false
+    }
+  ]
+}

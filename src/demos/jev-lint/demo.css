@@ -1,0 +1,370 @@
+/* jev-lint. Everything is scoped under .d-jev-lint; tokens come from site.css. */
+
+.d-jev-lint {
+  --sev-error: #ff8a8a;
+  --sev-warning: #f0b35a;
+  --sev-info: #6d8dff;
+  --lh: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* File tabs */
+.d-jev-lint .jl-tabs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.d-jev-lint .jl-tab {
+  padding: 8px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font: 400 13px var(--mono);
+  cursor: pointer;
+}
+.d-jev-lint .jl-tab:hover {
+  color: var(--white);
+  border-color: var(--purple-on-dark);
+}
+.d-jev-lint .jl-tab.on {
+  color: var(--white);
+  border-color: var(--purple-on-dark);
+  background: #6d4aff1f;
+}
+
+.d-jev-lint .jl-main {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  align-items: start;
+}
+@media (max-width: 960px) {
+  .d-jev-lint .jl-main {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.d-jev-lint .jl-editor-panel {
+  padding: 16px;
+  min-width: 0;
+}
+.d-jev-lint .jl-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+  font-size: 13px;
+}
+.d-jev-lint .jl-counts {
+  margin-left: auto;
+  color: var(--muted);
+  font-size: 12px;
+}
+.d-jev-lint .jl-counts b {
+  font-weight: 600;
+}
+.d-jev-lint .sev-error {
+  color: var(--sev-error);
+}
+.d-jev-lint .sev-warning {
+  color: var(--sev-warning);
+}
+.d-jev-lint .sev-info {
+  color: var(--sev-info);
+}
+
+/* Editor: gutter + overlay + textarea, all on one 20px line grid. */
+.d-jev-lint .jl-ed {
+  position: relative;
+  overflow: auto;
+  max-height: 60vh;
+  min-height: 380px;
+  background: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+.d-jev-lint .jl-ed-inner {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr);
+  min-width: 100%;
+  font: 400 13px / var(--lh) var(--mono);
+  padding: 8px 0;
+}
+.d-jev-lint .jl-gutter {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  background: var(--ink);
+  border-right: 1px solid var(--line);
+}
+.d-jev-lint .jl-ln {
+  height: var(--lh);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 5px;
+  padding-right: 6px;
+  color: #6a6a78;
+  font-size: 11px;
+}
+.d-jev-lint .jl-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex: none;
+  background: var(--sev-info);
+}
+.d-jev-lint .jl-dot.sev-error {
+  background: var(--sev-error);
+}
+.d-jev-lint .jl-dot.sev-warning {
+  background: var(--sev-warning);
+}
+
+.d-jev-lint .jl-code {
+  position: relative;
+  min-width: 0;
+}
+.d-jev-lint .jl-overlay {
+  position: absolute;
+  inset: 0;
+  padding: 0 10px;
+  white-space: pre;
+  pointer-events: none;
+  color: #d8dee9;
+}
+/* regex tokenizer classes; the overlay is the only thing the eye reads */
+.d-jev-lint .t-kw {
+  color: #c39bff;
+}
+.d-jev-lint .t-str {
+  color: #8fd7a4;
+}
+.d-jev-lint .t-num {
+  color: #f0b35a;
+}
+.d-jev-lint .t-com {
+  color: #6b7590;
+  font-style: italic;
+}
+.d-jev-lint .jl-row {
+  height: var(--lh);
+}
+.d-jev-lint .jl-row.planted {
+  box-shadow: inset 3px 0 0 #f0c239;
+  background: #f0c2390f;
+}
+.d-jev-lint .jl-sq {
+  text-decoration: underline wavy var(--sev-info) 1px;
+  text-underline-offset: 4px;
+}
+.d-jev-lint .jl-sq.sev-error {
+  text-decoration-color: var(--sev-error);
+}
+.d-jev-lint .jl-sq.sev-warning {
+  text-decoration-color: var(--sev-warning);
+}
+
+.d-jev-lint .jl-input {
+  display: block;
+  width: 100%;
+  border: 0;
+  padding: 0 10px;
+  margin: 0;
+  background: transparent;
+  color: transparent;
+  font: inherit;
+  white-space: pre;
+  overflow: hidden;
+  resize: none;
+  caret-color: var(--purple-on-dark);
+}
+.d-jev-lint .jl-input:focus {
+  outline: none;
+}
+/* the glyphs come from the overlay, so give the selection its own visible colour */
+.d-jev-lint .jl-input::selection {
+  background: #6d4aff66;
+  color: #fff;
+}
+
+.d-jev-lint .jl-tip {
+  position: absolute;
+  left: 24px;
+  z-index: 5;
+  width: min(360px, 80%);
+  padding: 10px 12px;
+  background: #101016;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  font: 400 12px/1.5 var(--sans);
+  box-shadow: 0 14px 40px #00000080;
+  pointer-events: none;
+}
+.d-jev-lint .jl-tip-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.d-jev-lint .jl-tip-row {
+  display: grid;
+  grid-template-columns: 120px 1fr 38px;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+  color: var(--muted);
+}
+.d-jev-lint .jl-tip-row b {
+  text-align: right;
+  color: var(--white);
+  font-weight: 500;
+}
+.d-jev-lint .jl-tip-sev {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.d-jev-lint .metrics {
+  margin-top: 12px;
+}
+.d-jev-lint .error {
+  margin: 8px 0 0;
+}
+
+/* Sidebar */
+.d-jev-lint .jl-side {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+.d-jev-lint .jl-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.d-jev-lint .jl-actions .btn {
+  justify-content: center;
+}
+.d-jev-lint .btn.on {
+  border-color: var(--purple-on-dark);
+  background: #6d4aff1f;
+}
+.d-jev-lint .btn.hot {
+  border-color: #ff8a8a66;
+  color: var(--sev-error);
+}
+.d-jev-lint .jl-hint {
+  font-size: 12px;
+  line-height: 1.5;
+  margin: 4px 0 0;
+}
+
+.d-jev-lint .jl-seg {
+  display: flex;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.d-jev-lint .jl-seg button {
+  flex: 1;
+  padding: 8px 6px;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font: 500 12px var(--sans);
+  cursor: pointer;
+}
+.d-jev-lint .jl-seg button.on {
+  background: var(--purple);
+  color: var(--white);
+}
+
+.d-jev-lint .jl-big {
+  font: 400 34px/1 var(--mono);
+  color: var(--white);
+}
+.d-jev-lint .jl-big small {
+  display: block;
+  margin-top: 4px;
+  font: 400 12px var(--sans);
+  color: var(--muted);
+}
+.d-jev-lint .jl-burst p {
+  margin: 8px 0 0;
+  font-size: 12px;
+}
+.d-jev-lint .jl-pr {
+  display: flex;
+  gap: 28px;
+}
+.d-jev-lint .jl-pr span {
+  font-size: 12px;
+}
+
+.d-jev-lint .jl-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 260px;
+  overflow: auto;
+  font-size: 12px;
+}
+.d-jev-lint .jl-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.d-jev-lint .jl-list li.miss {
+  opacity: 0.55;
+}
+.d-jev-lint .jl-list li.skip {
+  opacity: 0.45;
+  text-decoration: line-through;
+  text-decoration-color: var(--line);
+}
+.d-jev-lint .jl-list li.hit .tag {
+  color: #6fdc8c;
+  border-color: #6fdc8c55;
+}
+.d-jev-lint .jl-log li.fallback .tag {
+  color: var(--sev-error);
+  border-color: #ff8a8a55;
+}
+.d-jev-lint .jl-log li.stale .tag {
+  color: var(--sev-warning);
+  border-color: #f0b35a55;
+}
+
+.d-jev-lint, .d-jev-lint .panel { min-width: 0; }
+.d-jev-lint .jl-start { grid-column: 1 / -1; display: flex; align-items: center; gap: 20px; }
+.d-jev-lint .jl-start > div { flex: 1; min-width: 0; }
+.d-jev-lint .jl-start p { margin: 0; }
+.d-jev-lint .jl-start .muted { font-size: 13px; line-height: 1.6; margin-top: 6px; }
+.d-jev-lint .jl-start > .btn { flex: none; }
+.d-jev-lint .jl-line-link { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; padding: 8px 0; border: 0; background: transparent; color: inherit; text-align: left; cursor: pointer; font: inherit; }
+.d-jev-lint .jl-line-link:hover { color: var(--white); }
+.d-jev-lint .jl-ed:focus-within { border-color: var(--purple-on-dark); }
+@media (max-width: 560px) {
+  .d-jev-lint .jl-start { flex-direction: column; align-items: stretch; gap: 12px; }
+  .d-jev-lint .jl-start > .btn { justify-content: center; }
+  .d-jev-lint .jl-editor-panel { padding: 12px; }
+  .d-jev-lint .jl-counts { width: 100%; margin-left: 0; }
+  .d-jev-lint .jl-ed { min-height: 300px; }
+  .d-jev-lint .jl-tab { font-size: 11px; padding: 8px 10px; }
+}

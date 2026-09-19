@@ -1,0 +1,14 @@
+---
+import Demo from '../layouts/Demo.astro';
+import meta from '../demos/instant-search/meta';
+import Island from '../demos/instant-search/Demo.tsx';
+---
+<Demo meta={meta}>
+  <Island client:only="react" />
+  <div slot="notes">
+    <h2>How it works</h2>
+    <p>A local search index selects candidate products. The model checks how well each candidate fits the request and identifies shopping intent. Local ranking weights combine those results with product details.</p>
+    <h3>Demo scope</h3>
+    <p>The catalog is synthetic. The model can only rank candidates returned by the search index, so an omitted product cannot appear. Reusing a cached query does not create a new model request.</p>
+  </div>
+</Demo>

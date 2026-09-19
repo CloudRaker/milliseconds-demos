@@ -1,0 +1,14 @@
+---
+import Demo from '../layouts/Demo.astro';
+import meta from '../demos/evidence-check/meta';
+import Island from '../demos/evidence-check/Demo.tsx';
+---
+<Demo meta={meta}>
+  <Island client:only="react" />
+  <div slot="notes">
+    <h2>Check the record before it travels</h2>
+    <p>Review a contract summary, imported record or extracted field against supplied text. Each populated field makes one verify request. The demo locates the returned wording in the source and applies a conservative match rule.</p>
+    <h3>Demo scope</h3>
+    <p>This is field-value checking, not general fact-checking or a hallucination detector. A model can select the wrong field, miss a value or accept a partial match. “Different value” is a review prompt, not proof of contradiction. The 0.90 span-confidence threshold is a demo policy, not a measured accuracy rate. No external systems are updated.</p>
+  </div>
+</Demo>

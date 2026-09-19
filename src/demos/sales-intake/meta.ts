@@ -1,0 +1,2 @@
+import type { DemoMeta } from '../meta';
+export default {slug:'sales-intake',title:'Sales Intake',summary:'Turn inbound messages into a sales queue with stated facts, transparent fit criteria and a destination team.',instruction:'Run the stock inbox free and adjust fit weights. Use your key for your own messages or criteria.',routes:['yes-no','classify','extract'],category:'Sales & commerce',order:2} satisfies DemoMeta;

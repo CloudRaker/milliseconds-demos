@@ -1,0 +1,14 @@
+---
+import Demo from '../layouts/Demo.astro';
+import meta from '../demos/returns-desk/meta';
+import Island from '../demos/returns-desk/Demo.tsx';
+---
+<Demo meta={meta}>
+  <Island client:only="react" />
+  <div slot="notes">
+    <h2>Read the request. Apply your rules.</h2>
+    <p>The model classifies customer intent and finds source wording. Code compares the order number and applies the supplied dates, USD amount, condition and store policy. The request date is explicit, so examples stay reproducible.</p>
+    <h3>A draft for your team</h3>
+    <p>Order facts are supplied by you; the model does not verify them against a store. Model readings can be wrong or omit evidence. A person must confirm the request and facts before any action. This demo does not issue refunds, contact customers or determine legal eligibility.</p>
+  </div>
+</Demo>

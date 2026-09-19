@@ -1,0 +1,165 @@
+{
+ "slug": "modstream",
+ "title": "ModStream \u2014 pre-publish chat moderation at chat speed",
+ "one_liner": "Hold every live-stream chat message, judge it with 7 typed questions in ~100 ms, and release, hide, time out, route to care, or escalate before viewers see it; scored live against a labelled corpus and a word-list baseline.",
+ "platform": "web (vite/react) + Node WebSocket server (ws) that owns the simulator and the Jev call",
+ "what_it_does": "The user presses \"Go live\" and a seeded simulator (mulberry32, 1,000 synthetic usernames, 9 labelled buckets: ok, backseat, harassment, slur_evasion, scam, doxxing, self_harm, spam, off_topic_fight) emits chat at 5-60 msg/s with Poisson gaps. \"Simulate raid\" dumps 150 spam/harassment/slur/scam lines in 1.5 s. Each message is HELD, sent as one Jev request with 7 questions (1 choice, 5 noul, 1 score), then RELEASED to the React console with timings (queuedMs, jevMs, heldMs, retries). A pure policy (shared/policy.ts) turns the 7 probabilities into allow / hide / timeout_user / care / review with adjustable thresholds; self-harm always wins and gets a supportive auto-reply, never a ban. The console shows a HUD (msg/s, hold p50/p95 with a sparkline of the last 300 hold times, in-flight/queued, API errors), the chat pane (hidden messages greyed for the moderator, word-list hits marked), an inbox with Human review (approve/reject) and Care tabs, and a comparison table scoring word-list vs Jev+policy against ground truth (caught harmful, wrongly blocked clean) over the last 500 messages plus archived totals. Dragging a threshold re-decides all 500 stored judgments instantly with no new inference. A FIFO limiter (default 16 in flight), backoff on 429/529/5xx, 3 s timeout, and a MOCK=1 mode with a yellow badge complete it.",
+ "jev_questions": [
+  {
+   "key": "action",
+   "type": "choice",
+   "instructions": "You are the moderation policy for a live video-game stream chat. Which moderation action is right for `message.text`? Viewer chat is casual: hype, emotes, caps, mild profanity, gamer trash talk about the game, and backseat-gaming advice are normal and allowed.",
+   "options": [
+    "allow: Normal chat: hype, questions, emotes, jokes, mild profanity, opinions about the game or the run, unsolicited gameplay advice, banter that does not attack a person.",
+    "hide: Remove this single message; the user does not need a timeout: spam floods (the same word, emote or character repeated many times, e.g. 'GG GG GG GG GG GG' or 'AAAAAAAAAA'), scam/phishing or giveaway bait, mild insults, off-topic political fights, disguised abuse where intent is unclear.",
+    "timeout_user: Clear targeted harassment, threats, hate speech or slurs (including leetspeak or spaced-out spellings), doxxing or posting someone's personal details, telling someone to kill themselves. The user should be timed out.",
+    "escalate_to_human: A human moderator must look: the sender appears to be in crisis or expressing self-harm or suicidal thoughts, or the situation is serious but genuinely ambiguous."
+   ],
+   "state_shape": "{context: 'Live Twitch-style chat for a video-game speedrun stream with a few thousand viewers.', message: {user, text, recent_duplicates_from_user}}"
+  },
+  {
+   "key": "harassment",
+   "type": "noul",
+   "instructions": "Does `message.text` harass, threaten, demean or attack a specific person or group (the streamer, another chatter, or a protected group)? Trash talk about the game itself, self-deprecation, or advice about how to play is not harassment.",
+   "options": [
+    "true: Targets a person or group with abuse, threats, hate, slurs or doxxing.",
+    "false: No personal attack: normal chat, banter aimed at the game, or gameplay advice."
+   ],
+   "state_shape": "same state object"
+  },
+  {
+   "key": "scam_or_phishing",
+   "type": "noul",
+   "instructions": "Is `message.text` a scam, phishing attempt or unsolicited promotion: free gift cards, giveaways that require a DM or a link, crypto pumps, 'check my bio', suspicious links, selling accounts, or asking for login details?",
+   "options": [
+    "true: Tries to lure chatters to a link, DM, giveaway, account sale or crypto deal; a classic chat scam.",
+    "false: Not trying to lure anyone anywhere; an ordinary question or comment."
+   ],
+   "state_shape": "same state object"
+  },
+  {
+   "key": "self_harm_risk",
+   "type": "noul",
+   "instructions": "Does `message.text` indicate the SENDER may be at risk of self-harm or suicide, or is in emotional crisis? Telling someone else to harm themselves does not count, nor does hyperbole like 'this game is killing me'.",
+   "options": [
+    "true: The sender expresses their own suicidal thoughts, self-harm, hopelessness or crisis.",
+    "false: No sign the sender is at risk; jokes, hyperbole, or attacks on others do not count."
+   ],
+   "state_shape": "same state object"
+  },
+  {
+   "key": "spam",
+   "type": "noul",
+   "instructions": "Is `message.text` spam: repeated characters or words, copypasta walls, an all-caps flood with no content, or the same message repeated (see `message.recent_duplicates_from_user`)?",
+   "options": [
+    "true: Low-value repetitive flood content.",
+    "false: A normal message, even if short, loud, or just an emote."
+   ],
+   "state_shape": "same state object; uses recent_duplicates_from_user"
+  },
+  {
+   "key": "is_obfuscated_slur_or_evasion",
+   "type": "noul",
+   "instructions": "Does `message.text` contain a slur, hateful term or abusive phrase that has been disguised to evade a word filter (leetspeak like k1ll, spaced letters like k y s, symbol swaps like f@g, homoglyphs, deliberate misspellings, or split words)?",
+   "options": [
+    "true: A disguised slur or abusive phrase written to slip past a word filter.",
+    "false: No disguised abuse: ordinary spelling, typos, or gamer slang."
+   ],
+   "state_shape": "same state object"
+  },
+  {
+   "key": "severity",
+   "type": "score",
+   "instructions": "How harmful is `message.text` to the chat community if it is shown publicly?",
+   "options": [
+    "Harmless: ordinary chat.",
+    "Mildly disruptive: spam, off-topic, mild rudeness.",
+    "Harmful: scam, targeted insult, doxxing attempt, political derailing.",
+    "Severe: slurs, hate speech, threats of violence, telling someone to kill themselves."
+   ],
+   "state_shape": "same state object; score 0-3 probability-weighted"
+  }
+ ],
+ "request_cadence": "One HTTP request per chat message carrying all 7 questions; up to 16 in flight (slider 1-48); base rate 5-60 msg/s, raid adds 150 messages in 1.5 s. Measured: 45 msg/s sustained, 1,361 requests in 30 s.",
+ "data_files": [
+  "/Users/blaget/projects/jev-experiments/modstream/shared/corpus.ts (244 lines: seeded RNG, username generator, 9 labelled buckets of ~120 chat lines, BUCKETS/RAID_BUCKETS weights, generateLine, allFixtureLines)",
+  "/Users/blaget/projects/jev-experiments/modstream/shared/wordlist.ts (28-term substring baseline)",
+  "/Users/blaget/projects/jev-experiments/modstream/screenshots/modstream.jpg (180 KB reference screenshot)",
+  "/Users/blaget/projects/jev-experiments/modstream/screenshots/modstream-demo.webp (1.2 MB animation, reference only)",
+  "/Users/blaget/projects/jev-experiments/modstream/public/fonts/Inter.woff2 (48 KB; drop, use milliseconds site fonts)"
+ ],
+ "ui_components": [
+  "App shell with header, collapsible sidebar, topbar (Go live, Simulate raid), stream toolbar (rate + concurrency sliders, reset, thresholds): /Users/blaget/projects/jev-experiments/modstream/src/App.tsx",
+  "Hud (msg/s, hold p95 with LatencyTrace sparkline, in-flight/queued, API errors) and Comparison table (word list vs Jev+policy, caught/wrongly blocked, decision totals): /Users/blaget/projects/jev-experiments/modstream/src/components/Hud.tsx",
+  "ChatPane (last 500 messages, hidden ones greyed, word-list hit markers, search, Interventions filter): /Users/blaget/projects/jev-experiments/modstream/src/components/ChatPane.tsx",
+  "QueuePane (Human review tab with approve/reject and View judgment, Care tab with CARE_REPLY): /Users/blaget/projects/jev-experiments/modstream/src/components/QueuePane.tsx",
+  "SettingsDrawer (6 threshold sliders, centered dialog): /Users/blaget/projects/jev-experiments/modstream/src/components/SettingsDrawer.tsx",
+  "Icon set: /Users/blaget/projects/jev-experiments/modstream/src/components/Icon.tsx",
+  "useStream hook (WebSocket client, 10 Hz flush, 500-message window, rolling hold/jev latency): /Users/blaget/projects/jev-experiments/modstream/src/useStream.ts",
+  "styles: /Users/blaget/projects/jev-experiments/modstream/src/styles.css (394 lines; replace with milliseconds site tokens)"
+ ],
+ "reusable_source": [
+  "/Users/blaget/projects/jev-experiments/modstream/shared/corpus.ts (pure, no deps)",
+  "/Users/blaget/projects/jev-experiments/modstream/shared/policy.ts (pure decide(), thresholds, scoreVerdict, CARE_REPLY; only the Judgment type changes)",
+  "/Users/blaget/projects/jev-experiments/modstream/shared/policy.test.ts",
+  "/Users/blaget/projects/jev-experiments/modstream/shared/wordlist.ts",
+  "/Users/blaget/projects/jev-experiments/modstream/shared/stats.ts (percentile, Rolling)",
+  "/Users/blaget/projects/jev-experiments/modstream/shared/types.ts (Truth, Judgment, ChatMessage, Timing; drop ServerEvent/ClientCommand)",
+  "/Users/blaget/projects/jev-experiments/modstream/server/limiter.ts (browser-safe; reuse as in-page limiter)",
+  "/Users/blaget/projects/jev-experiments/modstream/server/limiter.test.ts",
+  "/Users/blaget/projects/jev-experiments/modstream/src/components/Hud.tsx, ChatPane.tsx, QueuePane.tsx, SettingsDrawer.tsx, Icon.tsx (no Jev coupling; restyle only)"
+ ],
+ "dm1_mapping": [
+  {
+   "jev_key": "action",
+   "dm1_route": "classify",
+   "dm1_body": "POST /classify {\"texts\":[...up to 32 message texts...],\"labels\":{\"allow\":\"Normal stream chat: hype, questions, emotes, jokes, mild profanity, opinions about the game, unsolicited gameplay advice, banter that attacks nobody.\",\"hide\":\"Remove only this message: spam flood of repeated words, emotes or characters, scam or giveaway bait, mild insult, off-topic political fight, disguised abuse with unclear intent.\",\"timeout_user\":\"Time the user out: targeted harassment, threats, hate speech or slurs including leetspeak or spaced spellings, doxxing or posting personal details, telling someone to kill themselves.\",\"escalate_to_human\":\"A human moderator must look: the sender seems in crisis or suicidal, or the case is serious and ambiguous.\"}}",
+   "notes": "Map response label -> action, scores -> actionProbabilities, confidence -> actionConfidence. Prefix each text with 'user: <name> | repeats: <n> | ' so the classifier keeps the duplicate signal."
+  },
+  {
+   "jev_key": "harassment",
+   "dm1_route": "yes-no",
+   "dm1_body": "POST /yes-no {\"texts\":[...batch...],\"statement\":\"The message attacks, threatens or demeans a specific person or group.\",\"when_true\":\"Abuse, threats, hate, slurs or doxxing aimed at the streamer, a chatter or a group.\",\"when_false\":\"Normal chat, trash talk about the game itself, self-deprecation, or gameplay advice.\"}",
+   "notes": "Use probability as the noul value."
+  },
+  {
+   "jev_key": "scam_or_phishing",
+   "dm1_route": "yes-no",
+   "dm1_body": "POST /yes-no {\"texts\":[...batch...],\"statement\":\"The message is a scam, phishing attempt or unsolicited promotion.\",\"when_true\":\"Free gift cards, giveaways needing a DM or link, crypto pumps, 'check my bio', account sales, or requests for login details.\",\"when_false\":\"An ordinary question or comment that lures nobody to a link, DM or deal.\"}"
+  },
+  {
+   "jev_key": "self_harm_risk",
+   "dm1_route": "yes-no",
+   "dm1_body": "POST /yes-no {\"texts\":[...batch...],\"statement\":\"The sender expresses their own risk of self-harm, suicide or emotional crisis.\",\"when_true\":\"The sender talks about their own suicidal thoughts, self-harm, hopelessness or crisis.\",\"when_false\":\"Jokes, hyperbole like 'this game is killing me', or telling someone else to harm themselves.\"}",
+   "notes": "Critical for the care queue; verify against the 6 SELF_HARM fixture lines and the 10 SLUR_EVASION lines (kys must be false here)."
+  },
+  {
+   "jev_key": "spam",
+   "dm1_route": "yes-no",
+   "dm1_body": "POST /yes-no {\"texts\":[...batch...],\"statement\":\"The message is spam flood content.\",\"when_true\":\"Repeated characters, words or emotes, copypasta walls, all-caps floods with no content, or the same message sent again by the same user.\",\"when_false\":\"A normal message, even if short, loud, or just one emote.\"}",
+   "notes": "The 'repeats: n' prefix on the text carries recent_duplicates_from_user."
+  },
+  {
+   "jev_key": "is_obfuscated_slur_or_evasion",
+   "dm1_route": "yes-no",
+   "dm1_body": "POST /yes-no {\"texts\":[...batch...],\"statement\":\"The message contains a slur or abusive phrase disguised to evade a word filter.\",\"when_true\":\"Leetspeak like k1ll, spaced letters like k y s, symbol swaps like f@g, homoglyphs, deliberate misspellings or split words hiding abuse.\",\"when_false\":\"Ordinary spelling, typos, or gamer slang with no hidden abuse.\"}"
+  },
+  {
+   "jev_key": "severity",
+   "dm1_route": "rate",
+   "dm1_body": "POST /rate {\"texts\":[...batch...],\"scale\":[\"Harmless: ordinary chat.\",\"Mildly disruptive: spam, off-topic, mild rudeness.\",\"Harmful: scam, targeted insult, doxxing attempt, political derailing.\",\"Severe: slurs, hate speech, threats of violence, telling someone to kill themselves.\"]}",
+   "notes": "DM1 score is 0..1 weighted position; multiply by 3 to keep policy thresholds hideSeverity 1.6 and timeoutSeverity 2.6 unchanged, or rescale thresholds to 0.53/0.87."
+  }
+ ],
+ "browser_plan": "Move the whole pipeline into the browser; delete the WebSocket server. The simulator (corpus.ts, makeRng, makeUsers, generateLine, Poisson scheduler, raid) runs in a React island with setTimeout. A Cloudflare Worker/Pages Function at demo.milliseconds.ai/api/dm1/:route injects the bearer key, forwards the JSON body to https://api.milliseconds.ai/v1/decision-machine-1/:route, passes back x-inference-ms and x-input-tokens, and rejects bodies without texts arrays or over 32 items. Replace the per-message request with a batcher: held messages accumulate in a buffer; every 500 ms (or when 32 pile up) the buffer flushes as one batch. Per batch send 3 requests: /yes-no with texts plus the 5 statements (if the API accepts texts and statements together; else 5 separate /yes-no calls, one statement each, and drop the flush interval to 2.5 s), /classify with texts and the 4 described labels, /rate with texts and the 4-level scale. Fire them with Promise.all, join results by index into the Judgment object, then release all 32 messages at once and stamp heldMs and inferenceMs (max of the 3 x-inference-ms). Keep policy.ts unchanged; hold p50 becomes about batch wait plus one round trip, and the HUD copy changes from '7 judgments in 1 request' to '32 messages, 7 judgments, 3 requests'. Throttle: a token bucket of 2 requests/s in the page (the existing Limiter with concurrency 1 plus a 500 ms gap works); with 3 requests per batch this gives one batch per 1.5 s, so ~21 msg/s sustained; cap the rate slider at 20 and raid at 96 (3 batches). On 429 read retry-after, pause the scheduler, show an amber 'Rate limited, shared demo key' badge on the HUD, retry the batch with backoff, and keep held messages held rather than dropping them. Remove the concurrency slider (replace with a read-only 'requests/s' meter). Keep the word-list comparison, review/care queues, threshold dialog and instant re-decide as they are. Restyle with the milliseconds.ai tokens from ~/projects/cloudraker-spring-2026.",
+ "difficulty": "M",
+ "risks": [
+  "Unknown if /yes-no accepts texts[] and statements[] in one body; if not, a batch costs 7 requests and throughput drops to ~9 msg/s at 2 req/s.",
+  "Classify has no instruction field and no state object; the context (speedrun stream, 1,000 viewers) and recent_duplicates_from_user must be folded into label descriptions and a text prefix, which may shift accuracy vs the 99.5 % / 0 % headline numbers.",
+  "self_harm_risk vs slur_evasion confusion: 'kys' lines must not route to care; when_false hint must cover it and needs eval on the fixture before publish.",
+  "Rate scale returns 0..1 not 0..3; forgetting to rescale silently breaks hideSeverity/timeoutSeverity.",
+  "Shared org limit of 200 req/min: several concurrent visitors exhaust it; page must back off and show it honestly rather than freeze.",
+  "Hold latency will read as ~600 ms to 1.5 s (batch wait) instead of ~120 ms; the README's latency-is-the-point framing needs rewording to 'batches of 32 in one round trip'.",
+  "Corpus contains slurs and self-harm text; fine for a moderation demo but the public page should carry a content note."
+ ]
+}

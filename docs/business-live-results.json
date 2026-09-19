@@ -1,0 +1,349 @@
+{
+  "date": "2026-09-19",
+  "scope": "Integrated local UI with live production API; fictional inputs; one run per demo, not a latency benchmark.",
+  "results": [
+    {
+      "slug": "invoice-desk",
+      "status": "LIVE RESULT\nLive processing complete. Review the draft and any exceptions below.",
+      "metrics": [
+        "701 ms",
+        "1,207",
+        "$0.000048"
+      ],
+      "calls": [
+        {
+          "route": "extract",
+          "status": 200,
+          "tokens": "498",
+          "modelMs": "44"
+        },
+        {
+          "route": "answer",
+          "status": 200,
+          "tokens": "409",
+          "modelMs": "39"
+        },
+        {
+          "route": "verify",
+          "status": 200,
+          "tokens": "300",
+          "modelMs": "43"
+        }
+      ]
+    },
+    {
+      "slug": "sales-intake",
+      "status": "LIVE RESULTS\n\nLive run complete \u00b7 6 messages processed. Review the drafts before using them.\n\nReset sample\nRun inbox live",
+      "metrics": [
+        "591 ms",
+        "2,951",
+        "$0.000118"
+      ],
+      "calls": [
+        {
+          "route": "yes-no",
+          "status": 200,
+          "tokens": "561",
+          "modelMs": "482"
+        },
+        {
+          "route": "extract",
+          "status": 200,
+          "tokens": "636",
+          "modelMs": "476"
+        },
+        {
+          "route": "classify",
+          "status": 200,
+          "tokens": "583",
+          "modelMs": "184"
+        },
+        {
+          "route": "classify",
+          "status": 200,
+          "tokens": "580",
+          "modelMs": "191"
+        },
+        {
+          "route": "classify",
+          "status": 200,
+          "tokens": "591",
+          "modelMs": "188"
+        }
+      ]
+    },
+    {
+      "slug": "catalog-studio",
+      "status": "Live draft \u00b7 4 listings structured. 1 listing needs attention. Nothing published.",
+      "metrics": [
+        "371 ms",
+        "763",
+        "$0.000031"
+      ],
+      "calls": [
+        {
+          "route": "classify",
+          "status": 200,
+          "tokens": "343",
+          "modelMs": "148"
+        },
+        {
+          "route": "extract",
+          "status": 200,
+          "tokens": "420",
+          "modelMs": "210"
+        }
+      ]
+    },
+    {
+      "slug": "evidence-check",
+      "status": "Check complete. Review the evidence before reusing this record.",
+      "metrics": [
+        "346 ms",
+        "1,084",
+        "$0.000043"
+      ],
+      "calls": [
+        {
+          "route": "verify",
+          "status": 200,
+          "tokens": "274",
+          "modelMs": "38"
+        },
+        {
+          "route": "verify",
+          "status": 200,
+          "tokens": "271",
+          "modelMs": "37"
+        },
+        {
+          "route": "verify",
+          "status": 200,
+          "tokens": "266",
+          "modelMs": "38"
+        },
+        {
+          "route": "verify",
+          "status": 200,
+          "tokens": "273",
+          "modelMs": "37"
+        }
+      ]
+    },
+    {
+      "slug": "private-share",
+      "status": "LIVE RESULT\n4 model findings \u00b7 review the entire transcript",
+      "metrics": [
+        "340 ms",
+        "353",
+        "$0.000014"
+      ],
+      "calls": [
+        {
+          "route": "entities",
+          "status": 200,
+          "tokens": "353",
+          "modelMs": "36"
+        }
+      ]
+    },
+    {
+      "slug": "returns-desk",
+      "status": "Live reading complete. Policy checks applied to your supplied facts.",
+      "metrics": [
+        "365 ms",
+        "520",
+        "$0.000021"
+      ],
+      "calls": [
+        {
+          "route": "classify",
+          "status": 200,
+          "tokens": "282",
+          "modelMs": "26"
+        },
+        {
+          "route": "answer",
+          "status": 200,
+          "tokens": "238",
+          "modelMs": "39"
+        }
+      ]
+    }
+  ],
+  "productionVerification": {
+    "sourceCommit": "44a2b41",
+    "workerVersion": "2a01afb9-661c-414e-8ef5-eb005357336a",
+    "site": "https://demo.milliseconds.ai",
+    "results": [
+      {
+        "slug": "invoice-desk",
+        "status": "LIVE RESULT\nLive processing complete. Review the draft and any exceptions below.",
+        "metrics": [
+          "564 ms",
+          "1,207",
+          "$0.000048"
+        ],
+        "calls": [
+          {
+            "route": "extract",
+            "status": 200,
+            "tokens": "498",
+            "modelMs": "43"
+          },
+          {
+            "route": "answer",
+            "status": 200,
+            "tokens": "409",
+            "modelMs": "36"
+          },
+          {
+            "route": "verify",
+            "status": 200,
+            "tokens": "300",
+            "modelMs": "42"
+          }
+        ]
+      },
+      {
+        "slug": "sales-intake",
+        "status": "LIVE RESULTS\n\nLive run complete \u00b7 6 messages processed. Review the drafts before using them.\n\nReset sample\nRun inbox live",
+        "metrics": [
+          "609 ms",
+          "2,951",
+          "$0.000118"
+        ],
+        "calls": [
+          {
+            "route": "yes-no",
+            "status": 200,
+            "tokens": "561",
+            "modelMs": "330"
+          },
+          {
+            "route": "extract",
+            "status": 200,
+            "tokens": "636",
+            "modelMs": "544"
+          },
+          {
+            "route": "classify",
+            "status": 200,
+            "tokens": "583",
+            "modelMs": "173"
+          },
+          {
+            "route": "classify",
+            "status": 200,
+            "tokens": "580",
+            "modelMs": "164"
+          },
+          {
+            "route": "classify",
+            "status": 200,
+            "tokens": "591",
+            "modelMs": "181"
+          }
+        ]
+      },
+      {
+        "slug": "catalog-studio",
+        "status": "Live draft \u00b7 4 listings structured. 1 listing needs attention. Nothing published.",
+        "metrics": [
+          "560 ms",
+          "763",
+          "$0.000031"
+        ],
+        "calls": [
+          {
+            "route": "classify",
+            "status": 200,
+            "tokens": "343",
+            "modelMs": "143"
+          },
+          {
+            "route": "extract",
+            "status": 200,
+            "tokens": "420",
+            "modelMs": "148"
+          }
+        ]
+      },
+      {
+        "slug": "evidence-check",
+        "status": "Check complete. Review the evidence before reusing this record.",
+        "metrics": [
+          "337 ms",
+          "1,084",
+          "$0.000043"
+        ],
+        "calls": [
+          {
+            "route": "verify",
+            "status": 200,
+            "tokens": "274",
+            "modelMs": "37"
+          },
+          {
+            "route": "verify",
+            "status": 200,
+            "tokens": "271",
+            "modelMs": "39"
+          },
+          {
+            "route": "verify",
+            "status": 200,
+            "tokens": "266",
+            "modelMs": "37"
+          },
+          {
+            "route": "verify",
+            "status": 200,
+            "tokens": "273",
+            "modelMs": "37"
+          }
+        ]
+      },
+      {
+        "slug": "private-share",
+        "status": "LIVE RESULT\n4 model findings \u00b7 review the entire transcript",
+        "metrics": [
+          "371 ms",
+          "353",
+          "$0.000014"
+        ],
+        "calls": [
+          {
+            "route": "entities",
+            "status": 200,
+            "tokens": "353",
+            "modelMs": "39"
+          }
+        ]
+      },
+      {
+        "slug": "returns-desk",
+        "status": "Live reading complete. Policy checks applied to your supplied facts.",
+        "metrics": [
+          "379 ms",
+          "520",
+          "$0.000021"
+        ],
+        "calls": [
+          {
+            "route": "classify",
+            "status": 200,
+            "tokens": "282",
+            "modelMs": "25"
+          },
+          {
+            "route": "answer",
+            "status": 200,
+            "tokens": "238",
+            "modelMs": "37"
+          }
+        ]
+      }
+    ]
+  }
+}

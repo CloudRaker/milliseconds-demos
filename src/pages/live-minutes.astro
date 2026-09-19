@@ -1,0 +1,14 @@
+---
+import Demo from '../layouts/Demo.astro';
+import meta from '../demos/live-minutes/meta';
+import Island from '../demos/live-minutes/Demo.tsx';
+---
+<Demo meta={meta}>
+  <Island client:only="react" />
+  <div slot="notes">
+    <h2>How it works</h2>
+    <p>Transcript lines are checked in batches for note type, owner, deadline, blockers and changed decisions. Local date rules turn deadline labels into dates, and uncertain owners can be corrected in the interface.</p>
+    <h3>Demo scope</h3>
+    <p>The meeting is a scripted replay; no microphone is used. The notes are a draft and can miss tasks or mistake a suggestion for a decision. Check them against the transcript.</p>
+  </div>
+</Demo>

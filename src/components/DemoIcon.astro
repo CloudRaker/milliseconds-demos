@@ -1,0 +1,44 @@
+---
+import {
+  AirTrafficControlIcon, ChatCircleDotsIcon, CodeBlockIcon, CommandIcon,
+  CursorClickIcon, FilesIcon, GitDiffIcon, GraphIcon, HeadsetIcon, MapTrifoldIcon,
+  NotepadIcon, PaperPlaneTiltIcon, PulseIcon, RocketLaunchIcon, ShieldCheckIcon,
+  ShoppingBagOpenIcon, TableIcon, TerminalWindowIcon, TrayIcon, WaveformIcon,
+  ReceiptIcon, FunnelIcon, BarcodeIcon, FileMagnifyingGlassIcon, FileLockIcon, PackageIcon,
+} from '@phosphor-icons/react/ssr';
+
+// The same Phosphor family as rakerone-web, rendered to static SVG by Astro.
+const icons = {
+  'invoice-desk': ReceiptIcon,
+  'sales-intake': FunnelIcon,
+  'catalog-studio': BarcodeIcon,
+  'evidence-check': FileMagnifyingGlassIcon,
+  'private-share': FileLockIcon,
+  'returns-desk': PackageIcon,
+  'agent-assist': HeadsetIcon,
+  'ax-pilot': CursorClickIcon,
+  'commit-sentry': GitDiffIcon,
+  dispatch: MapTrifoldIcon,
+  firehose: ChatCircleDotsIcon,
+  'inbox-blitz': TrayIcon,
+  'instant-search': ShoppingBagOpenIcon,
+  'jev-lint': CodeBlockIcon,
+  'judge-sheets': TableIcon,
+  launcher: RocketLaunchIcon,
+  'live-minutes': NotepadIcon,
+  'log-sentinel': PulseIcon,
+  modstream: ShieldCheckIcon,
+  'nl-palette': CommandIcon,
+  'send-guard': PaperPlaneTiltIcon,
+  'shell-guard': TerminalWindowIcon,
+  swarm: GraphIcon,
+  tower: AirTrafficControlIcon,
+  'turbo-rerank': FilesIcon,
+  'voice-turn': WaveformIcon,
+};
+interface Props { slug: string; }
+const { slug } = Astro.props;
+const Icon = icons[slug as keyof typeof icons];
+if (!Icon) throw new Error(`Choose a demo icon for ${slug}`);
+---
+<Icon className="demo-icon" size={28} weight="regular" aria-hidden="true" focusable="false" />

@@ -1,0 +1,148 @@
+{
+ "slug": "jev-lint",
+ "title": "Semantic linter on every keystroke",
+ "one_liner": "A browser code editor that judges the line you edit for bugs, security risks, misleading names, dead code and performance smells, and draws squiggles within a few hundred milliseconds.",
+ "platform": "web (vite/react)",
+ "what_it_does": "The page shows a CodeMirror 6 editor with six sample files as tabs: orders.ts, reports.py, server.go, reporting.sql, deploy.sh, inventory.rs. Each file carries 6 to 7 planted issues (40 total). On load, and on \"Full-file scan\", the app judges every judgeable line of the file in a parallel burst and shows the wall-clock time. On every edit, the app diffs the document, finds the enclosing function with deterministic parsers (brace, indent, SQL $$ blocks, bash parens), and sends the changed lines with the numbered function source for judgment, throttled at 60 ms. Each judged line gets five yes/no probabilities (probable_bug, security_risk, misleading_name, dead_or_unreachable, performance_smell) and one severity choice (ignore/info/warning/error). Thresholds turn answers into markers: a yes/no at or above 0.60 raises a marker alone; a warning/error choice at confidence 0.55 with any yes/no at 0.15 raises one too. Markers become gutter dots, squiggles and a hover tooltip with probability bars. clusterMarkers demotes adjacent same-kind spillover to info. The sidebar has: Full-file scan, \"Type it for me\" (types a buggy averagePrice function at 38 ms per character, squiggles land while later lines are still typed), \"Reveal planted issues\" (live precision/recall against the planted lines), Reset file, a baseline switch (live / regex only / LLM +3 s that holds the same answers for 3 s), a findings list and a request log with ok/stale/fallback rows. A status bar shows last/p50/p95 latency, decisions per second, judgments per minute, request count, input tokens, tokens per judgment and cost. Failed or rate-limited requests fall back to a regex heuristic so the editor never goes blank. Answers whose line changed in flight are discarded as stale.",
+ "jev_questions": [
+  {
+   "key": "c{i}.probable_bug",
+   "type": "noul",
+   "instructions": "Does `lines_under_review[{i}]` (line {n}), read in the context of `function_source`, contain a logic error that would make the program behave incorrectly at runtime?",
+   "options": [
+    "true: A concrete defect: off-by-one bound, wrong comparison or assignment used as comparison, inverted condition, wrong variable, unhandled null/None/nil/empty case, missing error check, integer/float mistake",
+    "false: The line does what the surrounding code expects, even if stylistically imperfect or incomplete"
+   ],
+   "state_shape": "{language, function_name, function_source (numbered lines 'N: code'), lines_under_review:[{line,text}], identifiers:{declared[],used[]}, file_imports[]}; one request per function, up to 10 lines per request, 6 questions per line keyed c0..c9"
+  },
+  {
+   "key": "c{i}.security_risk",
+   "type": "noul",
+   "instructions": "Does `lines_under_review[{i}]` (line {n}) introduce a security vulnerability?",
+   "options": [
+    "true: Injection (SQL, shell, HTML/JS, path traversal) from untrusted input, eval/exec of dynamic code, a hardcoded secret or credential, insecure randomness or weak crypto used for a security purpose, disabled TLS verification, unsafe deserialization",
+    "false: No security-relevant behaviour, or the risky-looking API is used with constant/trusted input"
+   ],
+   "state_shape": "same state as above"
+  },
+  {
+   "key": "c{i}.misleading_name",
+   "type": "noul",
+   "instructions": "Does an identifier declared or assigned on `lines_under_review[{i}]` (line {n}) have a name that contradicts what the value actually holds or what the code does with it?",
+   "options": [
+    "true: The name asserts the opposite or a different meaning, e.g. `isEmpty = items.length > 0`, `maxRetries` holding a timeout, a function named `save` that deletes",
+    "false: Names are accurate, or merely vague/short"
+   ],
+   "state_shape": "same state as above"
+  },
+  {
+   "key": "c{i}.dead_or_unreachable",
+   "type": "noul",
+   "instructions": "Is `lines_under_review[{i}]` (line {n}) dead code that can never execute or never affect the program, read in the context of `function_source`?",
+   "options": [
+    "true: Follows an unconditional return/throw/break/exit in the same block, guarded by an always-false or always-true condition, or assigns a value that is never read",
+    "false: The line can execute and its effect is observable"
+   ],
+   "state_shape": "same state as above"
+  },
+  {
+   "key": "c{i}.performance_smell",
+   "type": "noul",
+   "instructions": "Does `lines_under_review[{i}]` (line {n}) create an avoidable performance problem, read in the context of `function_source`?",
+   "options": [
+    "true: A database/network/file call inside a loop (N+1), a nested loop or linear search inside a loop over potentially large data (quadratic), repeatedly recomputing or re-reading something that could be hoisted or cached, a synchronous blocking call on a hot path",
+    "false: Work proportional to the task, or data known to be tiny"
+   ],
+   "state_shape": "same state as above"
+  },
+  {
+   "key": "c{i}.severity",
+   "type": "choice",
+   "instructions": "Considering every problem on `lines_under_review[{i}]` (line {n}), what severity should a linter assign to it?",
+   "options": [
+    "ignore: Nothing wrong with the line",
+    "info: Minor or stylistic concern; behaviour is correct",
+    "warning: Likely defect, smell or risk that should be fixed but does not by itself break the program",
+    "error: Definite bug or security hole that produces wrong or dangerous behaviour"
+   ],
+   "state_shape": "same state as above; answer gives choice, confidence, probabilities per option"
+  }
+ ],
+ "request_cadence": "Edits throttled at 60 ms: one request per enclosing function per flush, 6 questions per changed line (up to 12 changed lines). Max 8 in flight. Full-file scan: every judgeable line in batches of 10 lines per function (8 for top-level), all requests in parallel; orders.ts = 10 requests, 264 judgments, 330-750 ms wall-clock. \"Type it for me\" 30 s run = 83-130 requests. One bounded retry on 429 then heuristic fallback.",
+ "data_files": [
+  "/Users/blaget/projects/jev-experiments/jev-lint/src/samples.ts (603 lines: six annotated sample files with 40 planted issues marked \u27e6kind|note\u27e7, plus the typed demo snippet per file; copy as-is)",
+  "/Users/blaget/projects/jev-experiments/jev-lint/docs/scan-hover.png (420 KB screenshot, reference only)",
+  "/Users/blaget/projects/jev-experiments/jev-lint/docs/reveal.png (422 KB)",
+  "/Users/blaget/projects/jev-experiments/jev-lint/docs/typing.png (454 KB)",
+  "/Users/blaget/projects/jev-experiments/jev-lint/docs/typing.gif (959 KB)",
+  "/Users/blaget/projects/jev-experiments/jev-lint/docs/demo.mp4 (3.8 MB)"
+ ],
+ "ui_components": [
+  "App shell, tabs, sidebar cards, status bar: /Users/blaget/projects/jev-experiments/jev-lint/src/App.tsx",
+  "CodeMirror editor with lint gutter, squiggles, hover probability bars, planted-line decorations: /Users/blaget/projects/jev-experiments/jev-lint/src/Editor.tsx",
+  "Type-it-for-me character typer: /Users/blaget/projects/jev-experiments/jev-lint/src/typer.ts",
+  "Dark theme styles (replace with milliseconds.ai tokens): /Users/blaget/projects/jev-experiments/jev-lint/src/styles.css",
+  "Node proxy: /Users/blaget/projects/jev-experiments/jev-lint/proxy.mjs and server.mjs (replace with a /api/dm1/* proxy)"
+ ],
+ "reusable_source": [
+  "/Users/blaget/projects/jev-experiments/jev-lint/src/analysis.ts (function extraction, changedLines, identifiers, imports, numberedSource, isJudgeable; pure)",
+  "/Users/blaget/projects/jev-experiments/jev-lint/src/heuristics.ts (regex fallback and baseline; pure)",
+  "/Users/blaget/projects/jev-experiments/jev-lint/src/eval.ts (precision/recall; pure)",
+  "/Users/blaget/projects/jev-experiments/jev-lint/src/metrics.ts (percentiles, trailing rates; drop USD_PER_INPUT_TOKEN or swap in milliseconds pricing)",
+  "/Users/blaget/projects/jev-experiments/jev-lint/src/samples.ts (samples and planted issues)",
+  "/Users/blaget/projects/jev-experiments/jev-lint/src/typer.ts (CodeMirror typer)",
+  "/Users/blaget/projects/jev-experiments/jev-lint/src/Editor.tsx (only imports Marker/Planted types)",
+  "/Users/blaget/projects/jev-experiments/jev-lint/src/markers.ts partial: Marker/Kind/Severity types, THRESHOLDS, severityFromChoice, clusterMarkers stay; questionsForLine/buildRequest/markersFromAnswers get rewritten",
+  "/Users/blaget/projects/jev-experiments/jev-lint/src/linter.ts structure: throttle, stale discard, in-flight coalescing, shiftMarkers, log; only send() and fullScan batching change",
+  "/Users/blaget/projects/jev-experiments/jev-lint/src/*.test.ts (46 vitest tests; analysis/eval/metrics/heuristics tests port unchanged)"
+ ],
+ "dm1_mapping": [
+  {
+   "jev_key": "c{i}.probable_bug",
+   "dm1_route": "yes-no",
+   "dm1_body": "POST /yes-no {\"texts\": [<one string per judged line, up to 32>], \"statement\": \"The marked line contains a logic error that makes the program behave incorrectly at runtime.\", \"when_true\": \"Off-by-one bound, assignment used as comparison, inverted condition, wrong variable, unhandled null or empty case, missing error check.\", \"when_false\": \"The line does what the surrounding code expects, even if stylistically imperfect.\"}  where each text = \"typescript function averagePrice\\nLINE UNDER REVIEW 74: for (let i = 0; i <= order.items.length; i++) {\\n\\nFUNCTION:\\n72: export function averagePrice(order: Order): number {\\n73:   let sum = 0;\\n74:   for (...)\\n...\"",
+   "notes": "Jev batched 6 questions x 10 lines per function. DM1 batches by kind: one request per kind carries up to 32 line-texts. The line text repeats the enclosing function source (numberedSource) so token cost is similar to Jev (about 150-200 tokens per line)."
+  },
+  {
+   "jev_key": "c{i}.security_risk",
+   "dm1_route": "yes-no",
+   "dm1_body": "POST /yes-no {\"texts\": [...same 32 line-texts...], \"statement\": \"The marked line introduces a security vulnerability.\", \"when_true\": \"SQL, shell, HTML or path injection from untrusted input, eval of dynamic code, a hardcoded secret, insecure randomness or weak crypto for a security purpose, disabled TLS verification.\", \"when_false\": \"No security-relevant behaviour, or the risky-looking API is used with constant or trusted input.\"}",
+   "notes": "Same texts array as probable_bug; only statement and hints change."
+  },
+  {
+   "jev_key": "c{i}.misleading_name",
+   "dm1_route": "yes-no",
+   "dm1_body": "POST /yes-no {\"texts\": [...], \"statement\": \"An identifier declared or assigned on the marked line has a name that contradicts the value it holds.\", \"when_true\": \"The name asserts the opposite meaning, for example isEmpty = items.length > 0, in_stock = qty == 0, a view named inactive_users that selects active users.\", \"when_false\": \"Names are accurate, or only vague or short.\"}",
+   "notes": "Only send lines that declare or assign an identifier (DECL regex in analysis.ts) to cut tokens; other lines get p=0 locally."
+  },
+  {
+   "jev_key": "c{i}.dead_or_unreachable",
+   "dm1_route": "yes-no",
+   "dm1_body": "POST /yes-no {\"texts\": [...], \"statement\": \"The marked line is dead code that can never execute or never affects the program.\", \"when_true\": \"It follows an unconditional return, throw, break or exit in the same block, it is guarded by an always-false condition, or it assigns a value that is never read.\", \"when_false\": \"The line can execute and its effect is observable.\"}",
+   "notes": ""
+  },
+  {
+   "jev_key": "c{i}.performance_smell",
+   "dm1_route": "yes-no",
+   "dm1_body": "POST /yes-no {\"texts\": [...], \"statement\": \"The marked line creates an avoidable performance problem.\", \"when_true\": \"A database, network or file call inside a loop, a linear search or nested loop inside a loop over large data, repeated recomputation that could be hoisted, a blocking call on a hot path.\", \"when_false\": \"Work is proportional to the task, or the data is known to be tiny.\"}",
+   "notes": ""
+  },
+  {
+   "jev_key": "c{i}.severity",
+   "dm1_route": "classify",
+   "dm1_body": "POST /classify {\"texts\": [...same line-texts...], \"labels\": {\"ignore\": \"Nothing is wrong with the marked line.\", \"info\": \"Minor or stylistic concern on the marked line; behaviour is correct.\", \"warning\": \"Likely defect, smell or risk on the marked line that should be fixed but does not by itself break the program.\", \"error\": \"Definite bug or security hole on the marked line that produces wrong or dangerous behaviour.\"}}  -> per result: choice = label, confidence = probability, probabilities = scores",
+   "notes": "markersFromAnswers maps result.label -> severityFromChoice, result.probability -> confidence, result.scores -> severityProbabilities. Thresholds (0.60 / 0.55 / 0.15) stay and get re-tuned with scripts/evaluate.ts against the 40 planted issues. Optional 2-request variant: replace the five yes-no calls with one /classify over labels {no_issue, probable_bug, security_risk, misleading_name, dead_or_unreachable, performance_smell} and read scores per label as the per-kind probabilities; use it if the six-request burst is too slow at 2 req/s."
+  }
+ ],
+ "browser_plan": "Keep the Vite/React/CodeMirror app nearly intact and restyle it with the milliseconds.ai tokens from ~/projects/cloudraker-spring-2026. Copy analysis.ts, heuristics.ts, eval.ts, metrics.ts, samples.ts, typer.ts, Editor.tsx and the tests unchanged. Rewrite markers.ts buildRequest into buildLineTexts(text, lang, lines): each judged line becomes one string: language, function name, the line under review with its number, then the numbered function source (numberedSource). Rewrite Linter.send to run one batch = up to 32 line-texts through 6 calls (5 x POST /api/dm1/yes-no with texts + statement + when_true/when_false, 1 x POST /api/dm1/classify with texts + described labels), then markersFromAnswers zips results[i] per kind back onto refs[i]. Proxy: a Cloudflare Worker (same pattern as apps/milliseconds) at demo.milliseconds.ai/api/dm1/:route that allow-lists the eight route names, adds the bearer key from a secret, forwards status, retry-after, x-inference-ms and x-input-tokens; the browser never sees the key. Rate limit: replace maxInFlight with a client queue that releases one request every 500 ms (2 req/s) and at most 2 in flight; full-file scan of orders.ts (about 44 judgeable lines) = 2 batches x 6 = 12 requests = about 6 s, shown as the burst wall-clock; typing demo flushes the changed line every 500 ms as a 6-request mini-batch, or coalesces changed lines into one batch so squiggles still land within about 1-3 s, before the next line finishes at 38 ms/char. On HTTP 429 read retry-after, pause the queue for that long, show a \"rate limited, waiting Ns\" pill in the status bar, and after two consecutive 429s fall back to heuristic markers for that batch (existing fallback path, logged as fallback). Status bar: last/p50/p95 from x-inference-ms and client round-trip, tokens from x-input-tokens, judgments/min = texts x 6; drop the dollar cost or wire milliseconds pricing when known. Baseline switch stays: live / regex only / LLM +3 s. Reveal planted issues and precision/recall stay unchanged. Re-run scripts/evaluate.ts (pointed at the proxy or the API with the key) to re-tune THRESHOLDS and print a new README table.",
+ "difficulty": "L",
+ "risks": [
+  "Unverified whether /yes-no accepts texts[] together with statements[] as a cross product; the plan assumes texts + one statement per call (6 calls per batch). If cross product works, one call covers 32 lines x 5 statements and the burst drops to 2 requests.",
+  "2 req/s org-wide with 6 calls per batch makes a full-file scan take about 6 s instead of 300-700 ms; the 'speed is the point' story weakens. Mitigate with the single classify-over-kinds variant (2 calls per batch) or by scanning only functions with planted issues on first load.",
+  "Each line-text repeats the whole function source, so a 32-line batch can reach 5-6k tokens per call; still far under 1M tokens/min but the payload is large. Cap function source at about 40 lines (fallbackSpan) to bound it.",
+  "DM1 probabilities will have a different distribution from Jev nouls; thresholds 0.60/0.55/0.15 and the clusterMarkers gap must be re-tuned on the 40 planted issues or precision/recall claims in the README are false.",
+  "Multiple visitors share the 200 req/min budget; the typing demo can starve other tabs. Add a per-page cap (for example 60 requests per minute) and degrade to heuristics beyond it.",
+  "CodeMirror language packages add about 1 MB to the bundle; keep chunkSizeWarningLimit and lazy-load per-language extensions.",
+  "No milliseconds.ai token pricing given in the brief; the 'spent' and 'typing cost' stats need a price or must be removed."
+ ]
+}

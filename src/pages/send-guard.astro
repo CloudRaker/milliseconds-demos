@@ -1,0 +1,14 @@
+---
+import Demo from '../layouts/Demo.astro';
+import meta from '../demos/send-guard/meta';
+import Island from '../demos/send-guard/Demo.tsx';
+---
+<Demo meta={meta}>
+  <Island client:only="react" />
+  <div slot="notes">
+    <h2>How it works</h2>
+    <p>After a typing pause, the model checks the draft and relevant text fragments. Channel context and local policy combine the results into an allow, warning or block decision.</p>
+    <h3>Demo scope</h3>
+    <p>This is a simulated chat composer. Audience-fit scores are advisory and can miss a mismatch. The guard can make mistakes; a green verdict does not guarantee that a message is safe to share.</p>
+  </div>
+</Demo>

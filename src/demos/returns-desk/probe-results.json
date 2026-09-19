@@ -1,0 +1,307 @@
+{
+  "date": "2026-09-19",
+  "notes": "Fictional examples. Serial API probes; no credentials. Initial reason extraction was unreliable, so the shipped answer request asks only for the order number. This is a bounded capability check, not a general accuracy benchmark.",
+  "results": [
+    {
+      "phase": "initial_four_labels_and_reason_question",
+      "text": "Hello, I would like to return order RD-1042. The jacket is too small. It is unworn with its tags attached.",
+      "route": "classify",
+      "status": 200,
+      "data": {
+        "label": "return",
+        "probability": 0.558,
+        "confidence": 0.357,
+        "scores": {
+          "return": 0.558,
+          "exchange": 0.006,
+          "tracking": 0.377,
+          "other": 0.059
+        }
+      }
+    },
+    {
+      "phase": "initial_four_labels_and_reason_question",
+      "text": "Hello, I would like to return order RD-1042. The jacket is too small. It is unworn with its tags attached.",
+      "route": "answer",
+      "status": 200,
+      "data": {
+        "results": [
+          {
+            "question": "What is the order number?",
+            "answer": "RD-1042",
+            "probability": 0.994,
+            "start": 36,
+            "end": 43
+          },
+          {
+            "question": "Why does the customer want to return or exchange the product?",
+            "answer": null,
+            "probability": 0,
+            "start": null,
+            "end": null
+          }
+        ]
+      }
+    },
+    {
+      "phase": "initial_four_labels_and_reason_question",
+      "text": "I want to exchange order RD-2088 for a larger size. The shoes are unused.",
+      "route": "classify",
+      "status": 200,
+      "data": {
+        "label": "exchange",
+        "probability": 0.997,
+        "confidence": 0.986,
+        "scores": {
+          "return": 0,
+          "exchange": 0.997,
+          "tracking": 0.002,
+          "other": 0.001
+        }
+      }
+    },
+    {
+      "phase": "initial_four_labels_and_reason_question",
+      "text": "I want to exchange order RD-2088 for a larger size. The shoes are unused.",
+      "route": "answer",
+      "status": 200,
+      "data": {
+        "results": [
+          {
+            "question": "What is the order number?",
+            "answer": "RD-2088",
+            "probability": 0.99,
+            "start": 25,
+            "end": 32
+          },
+          {
+            "question": "Why does the customer want to return or exchange the product?",
+            "answer": null,
+            "probability": 0,
+            "start": null,
+            "end": null
+          }
+        ]
+      }
+    },
+    {
+      "phase": "initial_four_labels_and_reason_question",
+      "text": "Where is my parcel for order RD-3001? It has not arrived.",
+      "route": "classify",
+      "status": 200,
+      "data": {
+        "label": "tracking",
+        "probability": 0.992,
+        "confidence": 0.966,
+        "scores": {
+          "return": 0,
+          "exchange": 0,
+          "tracking": 0.992,
+          "other": 0.007
+        }
+      }
+    },
+    {
+      "phase": "initial_four_labels_and_reason_question",
+      "text": "Where is my parcel for order RD-3001? It has not arrived.",
+      "route": "answer",
+      "status": 200,
+      "data": {
+        "results": [
+          {
+            "question": "What is the order number?",
+            "answer": "RD-3001",
+            "probability": 0.978,
+            "start": 29,
+            "end": 36
+          },
+          {
+            "question": "Why does the customer want to return or exchange the product?",
+            "answer": null,
+            "probability": 0,
+            "start": null,
+            "end": null
+          }
+        ]
+      }
+    },
+    {
+      "phase": "final_labels_reason_question_removed_after_probe",
+      "text": "Hello, I would like to return order RD-1042. The jacket is too small. It is unworn with its tags attached.",
+      "route": "classify",
+      "status": 200,
+      "data": {
+        "label": "return_or_exchange",
+        "probability": 0.999,
+        "confidence": 0.992,
+        "scores": {
+          "return_or_exchange": 0.999,
+          "delivery_status": 0,
+          "other": 0.001
+        }
+      }
+    },
+    {
+      "phase": "final_labels_reason_question_removed_after_probe",
+      "text": "Hello, I would like to return order RD-1042. The jacket is too small. It is unworn with its tags attached.",
+      "route": "answer",
+      "status": 200,
+      "data": {
+        "results": [
+          {
+            "question": "What is the order number?",
+            "answer": "RD-1042",
+            "probability": 0.993,
+            "start": 36,
+            "end": 43
+          },
+          {
+            "question": "What is wrong with the product?",
+            "answer": null,
+            "probability": 0,
+            "start": null,
+            "end": null
+          }
+        ]
+      }
+    },
+    {
+      "phase": "final_labels_reason_question_removed_after_probe",
+      "text": "I want to exchange order RD-2088 for a larger size. The shoes are unused.",
+      "route": "classify",
+      "status": 200,
+      "data": {
+        "label": "return_or_exchange",
+        "probability": 0.998,
+        "confidence": 0.987,
+        "scores": {
+          "return_or_exchange": 0.998,
+          "delivery_status": 0,
+          "other": 0.002
+        }
+      }
+    },
+    {
+      "phase": "final_labels_reason_question_removed_after_probe",
+      "text": "I want to exchange order RD-2088 for a larger size. The shoes are unused.",
+      "route": "answer",
+      "status": 200,
+      "data": {
+        "results": [
+          {
+            "question": "What is the order number?",
+            "answer": "RD-2088",
+            "probability": 0.991,
+            "start": 25,
+            "end": 32
+          },
+          {
+            "question": "What is wrong with the product?",
+            "answer": "unused",
+            "probability": 0.761,
+            "start": 66,
+            "end": 72
+          }
+        ]
+      }
+    },
+    {
+      "phase": "final_request_shapes_held_out",
+      "text": "Can I return the lamp I bought? It does not fit my desk.",
+      "route": "classify",
+      "status": 200,
+      "data": {
+        "label": "return_or_exchange",
+        "probability": 0.972,
+        "confidence": 0.882,
+        "scores": {
+          "return_or_exchange": 0.972,
+          "delivery_status": 0,
+          "other": 0.028
+        }
+      }
+    },
+    {
+      "phase": "final_request_shapes_held_out",
+      "text": "Can I return the lamp I bought? It does not fit my desk.",
+      "route": "answer",
+      "status": 200,
+      "data": {
+        "results": [
+          {
+            "question": "What is the order number?",
+            "answer": null,
+            "probability": 0,
+            "start": null,
+            "end": null
+          }
+        ]
+      }
+    },
+    {
+      "phase": "final_request_shapes_held_out",
+      "text": "\ud83d\udce6 Please return order RD-3001. The coat is too large. It is unused.",
+      "route": "classify",
+      "status": 200,
+      "data": {
+        "label": "return_or_exchange",
+        "probability": 0.967,
+        "confidence": 0.865,
+        "scores": {
+          "return_or_exchange": 0.967,
+          "delivery_status": 0.001,
+          "other": 0.032
+        }
+      }
+    },
+    {
+      "phase": "final_request_shapes_held_out",
+      "text": "\ud83d\udce6 Please return order RD-3001. The coat is too large. It is unused.",
+      "route": "answer",
+      "status": 200,
+      "data": {
+        "results": [
+          {
+            "question": "What is the order number?",
+            "answer": "RD-3001",
+            "probability": 0.994,
+            "start": 22,
+            "end": 29
+          }
+        ]
+      }
+    },
+    {
+      "phase": "final_labels_negative_cases",
+      "text": "Where is my parcel for order RD-3001? It has not arrived.",
+      "route": "classify",
+      "status": 200,
+      "data": {
+        "label": "delivery_status",
+        "probability": 0.998,
+        "confidence": 0.989,
+        "scores": {
+          "return_or_exchange": 0,
+          "delivery_status": 0.998,
+          "other": 0.002
+        }
+      }
+    },
+    {
+      "phase": "final_labels_negative_cases",
+      "text": "Please help me with order RD-1042.",
+      "route": "classify",
+      "status": 200,
+      "data": {
+        "label": "other",
+        "probability": 0.971,
+        "confidence": 0.862,
+        "scores": {
+          "return_or_exchange": 0.016,
+          "delivery_status": 0.013,
+          "other": 0.971
+        }
+      }
+    }
+  ]
+}

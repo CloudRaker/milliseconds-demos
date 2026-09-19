@@ -1,0 +1,14 @@
+---
+import Demo from '../layouts/Demo.astro';
+import meta from '../demos/judge-sheets/meta';
+import Island from '../demos/judge-sheets/Demo.tsx';
+---
+<Demo meta={meta}>
+  <Island client:only="react" />
+  <div slot="notes">
+    <h2>How it works</h2>
+    <p>A column header determines the kind of judgment to apply. The model processes the source text in batches, and formulas update as answers arrive. Repeated judgments use a local cache.</p>
+    <h3>Demo scope</h3>
+    <p>The sheets contain sample reviews and leads. Header interpretation supports a defined set of tasks, and free-form columns may need adjustment. Cached results add no new API usage.</p>
+  </div>
+</Demo>

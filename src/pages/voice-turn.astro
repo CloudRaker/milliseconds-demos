@@ -1,0 +1,14 @@
+---
+import Demo from '../layouts/Demo.astro';
+import meta from '../demos/voice-turn/meta';
+import Island from '../demos/voice-turn/Demo.tsx';
+---
+<Demo meta={meta}>
+  <Island client:only="react" />
+  <div slot="notes">
+    <h2>How it works</h2>
+    <p>The model identifies intent as transcript fragments arrive. Local rules check that required details are present before responding. While a reply is playing, a separate check detects an interruption.</p>
+    <h3>Demo scope</h3>
+    <p>The microphone and speech are simulated with a scripted transcript. Nothing is recorded; only transcript text is sent. Intent confidence describes the model’s judgment, not certainty that a request is complete.</p>
+  </div>
+</Demo>

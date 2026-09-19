@@ -1,0 +1,110 @@
+[
+  {
+    "scenario": "sim-calculator",
+    "verified": true,
+    "steps": [
+      {
+        "step": 1,
+        "action": "type_text",
+        "target": "'48*12'",
+        "source": "model"
+      },
+      {
+        "step": 2,
+        "action": "press",
+        "target": "e19 button 'Equals'",
+        "source": "model"
+      }
+    ]
+  },
+  {
+    "scenario": "sim-textedit",
+    "verified": true,
+    "steps": [
+      {
+        "step": 1,
+        "action": "press",
+        "target": "e1 button 'New Document'",
+        "source": "model"
+      },
+      {
+        "step": 2,
+        "action": "type_text",
+        "target": "'Hello from milliseconds' into e4",
+        "source": "model"
+      }
+    ]
+  },
+  {
+    "scenario": "sim-safari",
+    "verified": true,
+    "steps": [
+      {
+        "step": 1,
+        "action": "press",
+        "target": "e2 button 'New Tab'",
+        "source": "model"
+      },
+      {
+        "step": 2,
+        "action": "type_text",
+        "target": "'milliseconds.ai' into e4",
+        "source": "model"
+      },
+      {
+        "step": 3,
+        "action": "press_key",
+        "target": "Return",
+        "source": "fallback"
+      }
+    ]
+  },
+  {
+    "scenario": "sim-notes",
+    "verified": true,
+    "steps": [
+      {
+        "step": 1,
+        "action": "press",
+        "target": "e1 button 'Continue'",
+        "source": "model"
+      },
+      {
+        "step": 2,
+        "action": "press",
+        "target": "e1 button 'New Note'",
+        "source": "model"
+      },
+      {
+        "step": 3,
+        "action": "type_text",
+        "target": "'Grocery list' into e5",
+        "source": "model"
+      }
+    ]
+  },
+  {
+    "scenario": "sim-system-settings",
+    "verified": true,
+    "steps": [
+      {
+        "step": 1,
+        "action": "press",
+        "target": "e8 row 'Appearance'",
+        "source": "model"
+      },
+      {
+        "step": 2,
+        "action": "press",
+        "target": "e17 radio button 'Light' value=1 (selected)",
+        "source": "model"
+      },
+      {
+        "step": 3,
+        "action": "press",
+        "target": "e18 radio button 'Dark' value=0",
+        "source": "fallback"
+      }
+    ]
+  }
+]

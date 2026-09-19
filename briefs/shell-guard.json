@@ -1,0 +1,120 @@
+{
+ "slug": "shell-guard",
+ "title": "Shell Guard",
+ "one_liner": "A terminal that judges each command before it runs: safe commands run silently, risky ones ask to confirm, catastrophic ones are refused, in about 100 ms.",
+ "platform": "cli (Swift CLI `jevsh` + zsh accept-line hook, macOS 14+)",
+ "what_it_does": "The user types a shell command and presses Enter. A zsh hook calls the `jevsh check` binary with the buffer, the last three history lines, whether the first word resolves to a program, and the cwd. Code (not the model) builds one JSON state object: command, cwd, cwd_is_home, tool {name, found_in_path}, uses_sudo, git {in_repo, branch, working_tree_dirty, on_default_branch}, referenced_paths [{arg, resolved, exists, is_directory, is_home, is_filesystem_root, inside_cwd}] (max 8), contains_token_like_string (regex), previous_commands (last 3). One POST to Jev asks four noul questions (destructive, wrong_target, likely_typo, leaks_secret) plus one choice question (verdict: run/confirm/block). A deterministic policy turns probabilities into a decision: any noul over its threshold (0.70/0.65/0.60/0.60) escalates to confirm; block only if verdict=block with P>=0.60 or destructive AND wrong_target both >=0.90; a block verdict with no flagged noul only downgrades to confirm. On `run` nothing prints. On `confirm` a yellow banner shows the flagged reasons with probabilities, the command, `[y/N]` and the round-trip latency in dim text. On `block` a red banner prints, the line is cleared but kept in history. A hard deadline (400 ms) or any error/429 falls through to a regex denylist (Fallback.swift) and prints `jev offline (...) \u2014 regex fallback`. Extra subcommands: `explain` (prints state, all raw probabilities with threshold markers, tokens, cost), `bench` (50 fixed commands sequentially, prints p50/p95/mean latency, decisions/s, mean tokens, cost, run/confirm/block counts; `--heuristic` runs the regex-only baseline), `stats` (same summary over a local jsonl log), `config`.",
+ "jev_questions": [
+  {
+   "key": "destructive",
+   "type": "noul",
+   "instructions": "Will running `command` irreversibly destroy data a developer would care about losing? Consider `git.working_tree_dirty` and `git.branch` for git commands and `referenced_paths` for file commands. criteria.true: Deletes or overwrites source files, documents or user data; discards uncommitted changes; rewrites or force-pushes shared git history; drops databases; wipes disks. criteria.false: Read-only or additive; changes are easy to undo; or it only removes regenerable artifacts such as build output, caches, node_modules, dist or temp files.",
+   "state_shape": "{command, cwd, cwd_is_home, tool:{name, found_in_path}, uses_sudo, git:{in_repo, branch, working_tree_dirty, on_default_branch}, referenced_paths:[{arg, resolved, exists, is_directory, is_home, is_filesystem_root, inside_cwd}], contains_token_like_string, previous_commands:[..3]}"
+  },
+  {
+   "key": "wrong_target",
+   "type": "noul",
+   "instructions": "Given `cwd`, `git` and `referenced_paths`, does `command` aim at the wrong or an unusually dangerous target: the home directory, the filesystem root, a system path, a protected branch such as main or master, a production host or database, or a path that does not exist? criteria.true: A destructive or mutating operation pointed at `~`, `/`, a system directory, a path with `exists: false`, or a prod/production host; or a history-rewriting git operation (force push, reset --hard, branch -D, rebase of pushed commits) while `git.branch` is main/master. criteria.false: Targets look like the developer's own project files in or under `cwd`, a feature branch, or local/dev hosts; an ordinary commit, push, pull or fetch even on main; or the command does not mutate anything.",
+   "state_shape": "same state object"
+  },
+  {
+   "key": "likely_typo",
+   "type": "noul",
+   "instructions": "Does `command` contain a misspelled program name or flag, so that it will simply fail with an error instead of doing what was meant? `tool.found_in_path` says whether the program exists on this machine. criteria.true: `tool.name` is a transposition or misspelling of a real tool (gti, sl, pytohn, dokcer), or a flag is clearly misspelled (--forse, -lsa). criteria.false: The program and flags are spelled correctly. A correctly spelled tool that is merely not installed (`found_in_path` false for docker, cargo, kubectl) is not a typo.",
+   "state_shape": "same state object"
+  },
+  {
+   "key": "leaks_secret",
+   "type": "noul",
+   "instructions": "Does `command` inline a literal credential such as an API key, bearer token, password or private key that will be written to shell history? criteria.true: A literal secret value appears in the command text (sk-..., ghp_..., AKIA..., Bearer <token>, password=<value>, user:password@host). criteria.false: No secret, or it is read from an environment variable, file or prompt (e.g. $TOKEN, --password-file, -p with no value).",
+   "state_shape": "same state object"
+  },
+  {
+   "key": "verdict",
+   "type": "choice",
+   "instructions": "Should the shell run `command` immediately, ask the developer to confirm first, or refuse to run it? criteria.run: Ordinary, safe or easily reversible command; the developer clearly meant it. criteria.confirm: Risky, irreversible, typo-like or secret-leaking, but plausibly intended; a one-line confirmation is warranted. criteria.block: Almost certainly catastrophic or a mistake: deleting the home directory or the filesystem root, wiping a disk, forking-bombing the shell.",
+   "options": [
+    "run",
+    "confirm",
+    "block"
+   ],
+   "state_shape": "same state object"
+  }
+ ],
+ "request_cadence": "One POST per Enter keypress (one command line, five questions in a single fan-out request, ~1150 input tokens, 400 ms hard deadline). `bench` sends 50 sequential single-command requests (~6 decisions/s). No batching in the original.",
+ "data_files": [
+  "/Users/blaget/projects/jev-experiments/jev-shell-guard/Sources/jevsh/main.swift lines 250-266: benchCommands, the fixed list of 50 commands (35 run / 11 confirm / 4 block expected). Copy into a JS array.",
+  "/Users/blaget/projects/jev-experiments/jev-shell-guard/Sources/JevShellGuard/Fallback.swift: 7 deny + 13 confirm regexes for the offline fallback (~2 KB). Port 1:1 to JS RegExp.",
+  "/Users/blaget/projects/jev-experiments/jev-shell-guard/Sources/JevShellGuard/CommandState.swift: 8 token-like secret regexes (~0.5 KB).",
+  "/Users/blaget/projects/jev-experiments/jev-shell-guard/Tests/JevShellGuardTests/PolicyTests.swift (6.7 KB) and StateBuilderTests.swift (6.2 KB): fixture answers and expected decisions, reusable as JS test vectors.",
+  "/Users/blaget/projects/jev-experiments/jev-shell-guard/screenshots/demo.png (179 KB), bench.png (241 KB), explain.png (115 KB), demo.gif (2.4 MB): reference for the expected terminal output; not shipped.",
+  "/Users/blaget/projects/jev-experiments/jev-shell-guard/README.md: measured numbers (p50 119 ms, p95 209 ms, 1151 tokens/decision) to quote as the 'before' comparison."
+ ],
+ "ui_components": [
+  "FakeTerminal (new): prompt line, scrollback, Enter handler, y/N confirm prompt, blocked-line clear; source of truth is jevsh.zsh + main.swift runCheck (lines ~120-195)",
+  "Banner (port of Sources/JevShellGuard/Banner.swift): yellow '\u26a0 reasons \u2014 `cmd` [y/N] dm1 174ms', red '\u2716 blocked: ...', dim 'dm1 offline (http 429) \u2014 regex fallback'",
+  "ExplainPanel (port of main.swift runExplain, lines ~196-245): state JSON, four probabilities with threshold \u25b2 marks, verdict scores, latency/tokens",
+  "BenchPanel (port of main.swift runBench, lines ~248-340): table of 50 commands with decision/latency, summary line p50/p95/mean/throughput/tokens/decisions, 'regex only' toggle",
+  "ConfigPanel (port of Policy.swift Config): sliders for the four thresholds, block_threshold, block_verdict_probability, deadline_ms",
+  "Scenario chips: the TESTING.md live table (ls, rm -rf ./build, rm -rf ~/, git push --force origin main, git reset --hard, curl Bearer sk-live, gti status)"
+ ],
+ "reusable_source": [
+  "/Users/blaget/projects/jev-experiments/jev-shell-guard/Sources/JevShellGuard/CommandState.swift: tokenize, primaryTool, looksLikePath, resolvePath, referencedPaths, containsTokenLikeString, build \u2014 pure logic, translate to ~120 lines of JS with an in-memory FileProbe",
+  "/Users/blaget/projects/jev-experiments/jev-shell-guard/Sources/JevShellGuard/Policy.swift: Config defaults + Policy.decide \u2014 ~40 lines JS, unchanged semantics",
+  "/Users/blaget/projects/jev-experiments/jev-shell-guard/Sources/JevShellGuard/Fallback.swift: regex lists + decide \u2014 copy regex literals verbatim",
+  "/Users/blaget/projects/jev-experiments/jev-shell-guard/Sources/JevShellGuard/Banner.swift: banner strings (replace ANSI with CSS classes)",
+  "/Users/blaget/projects/jev-experiments/jev-shell-guard/Sources/JevShellGuard/Stats.swift: percentile/mean/cost helpers",
+  "/Users/blaget/projects/jev-experiments/jev-shell-guard/Sources/jevsh/main.swift lines 250-266: benchCommands list"
+ ],
+ "dm1_mapping": [
+  {
+   "jev_key": "state -> text",
+   "dm1_route": "yes-no",
+   "dm1_body": "Render the state object as short labeled lines and send it as `text` for every route. Example for `git reset --hard`:\n\"command: git reset --hard\\ncwd: /Users/devin/repo (not the home directory)\\ntool: git (found in PATH: yes)\\nuses sudo: no\\ngit: inside a repo, branch main (the default branch), working tree dirty\\nreferenced paths: none\\ncontains token-like string: no\\nprevious commands: ls; git status --short; npm test\"\nFor `rm -rf ./build`: \"referenced paths: ./build -> /Users/devin/repo/build (exists: yes, directory: yes, home: no, root: no, inside cwd: yes)\"",
+   "notes": "dm1 takes text, not a JSON state. Keep it under ~120 tokens so bench batches stay far under 1M tokens/min."
+  },
+  {
+   "jev_key": "destructive + wrong_target + likely_typo + leaks_secret (interactive, one command per Enter)",
+   "dm1_route": "yes-no",
+   "dm1_body": "POST /yes-no\n{\"text\": \"<state text>\", \"statements\": [\n \"The command irreversibly destroys data a developer would care about losing, not just build output, caches or node_modules.\",\n \"The command mutates the home directory, the filesystem root, a system path, a path that does not exist, a production host, or rewrites git history on main or master.\",\n \"The program name or a flag in the command is misspelled, so it will fail with an error.\",\n \"The command inlines a literal credential such as an API key, bearer token or password.\"\n]}\nresults[0..3].probability -> nouls.destructive / wrong_target / likely_typo / leaks_secret (same order).",
+   "notes": "One request for all four nouls. Hints are shared by the batch, so criteria are folded into the statement wording. If evals show `likely_typo` firing on installed-but-missing tools, add the found_in_path line to the text (already there) and reword the statement to 'misspelled, not merely not installed'."
+  },
+  {
+   "jev_key": "destructive (bench / batched over many commands)",
+   "dm1_route": "yes-no",
+   "dm1_body": "POST /yes-no\n{\"texts\": [<up to 32 state texts>], \"statement\": \"The command irreversibly destroys data a developer cares about.\", \"when_true\": \"It deletes or overwrites source files, documents or user data, discards uncommitted changes, rewrites or force-pushes shared git history, drops a database or wipes a disk.\", \"when_false\": \"It is read-only or additive, easy to undo, or only removes regenerable artifacts such as build output, caches, node_modules, dist or temp files.\"}",
+   "notes": "In bench mode invert the batching: one request per statement with texts:[32], so each statement keeps its own hints. 50 commands = 2 batches x 4 statements = 8 yes-no calls."
+  },
+  {
+   "jev_key": "wrong_target (bench)",
+   "dm1_route": "yes-no",
+   "dm1_body": "POST /yes-no\n{\"texts\": [...32], \"statement\": \"The command is aimed at the wrong or an unusually dangerous target.\", \"when_true\": \"A destructive or mutating operation points at the home directory, the filesystem root, a system directory, a path that does not exist, or a production host; or it rewrites git history (force push, reset --hard, branch -D) while the branch is main or master.\", \"when_false\": \"Targets are the developer's own project files under cwd, a feature branch, or local hosts; an ordinary commit, push, pull or fetch even on main; or the command does not mutate anything.\"}"
+  },
+  {
+   "jev_key": "likely_typo (bench)",
+   "dm1_route": "yes-no",
+   "dm1_body": "POST /yes-no\n{\"texts\": [...32], \"statement\": \"The program name or a flag in the command is misspelled.\", \"when_true\": \"The tool name is a transposition or misspelling of a real tool (gti, sl, pytohn, dokcer), or a flag is clearly misspelled (--forse, -lsa).\", \"when_false\": \"The program and flags are spelled correctly. A correctly spelled tool that is merely not installed (found in PATH: no for docker, cargo, kubectl) is not a typo.\"}"
+  },
+  {
+   "jev_key": "leaks_secret (bench)",
+   "dm1_route": "yes-no",
+   "dm1_body": "POST /yes-no\n{\"texts\": [...32], \"statement\": \"The command inlines a literal credential.\", \"when_true\": \"A literal secret value appears in the command text: sk-..., ghp_..., AKIA..., Bearer <token>, password=<value>, user:password@host.\", \"when_false\": \"No secret, or it is read from an environment variable, file or prompt ($TOKEN, --password-file, -p with no value).\"}"
+  },
+  {
+   "jev_key": "verdict",
+   "dm1_route": "classify",
+   "dm1_body": "POST /classify\n{\"text\": \"<state text>\" (or \"texts\": [...32] in bench), \"labels\": {\n \"run\": \"Ordinary, safe or easily reversible command; the developer clearly meant it.\",\n \"confirm\": \"Risky, irreversible, typo-like or secret-leaking, but plausibly intended; a one-line confirmation is warranted.\",\n \"block\": \"Almost certainly catastrophic or a mistake: deleting the home directory or the filesystem root, wiping a disk, fork-bombing the shell.\"\n}}\nlabel -> judgment.verdict; scores -> verdictProbabilities; confidence -> verdictConfidence.",
+   "notes": "Policy.decide stays byte-for-byte: flagged = nouls >= threshold sorted desc; block iff (verdict==block && scores.block>=0.60) || (destructive>=0.90 && wrong_target>=0.90); verdict-only block downgrades to confirm."
+  }
+ ],
+ "browser_plan": "Build a browser terminal that judges commands before it runs them in a sandboxed fake shell. Page = /shell-guard on demo.milliseconds.ai, one React island in the cloudraker-spring-2026 style (mono font, dark terminal card, dim latency tags). Fake shell: in-memory tree (/Users/devin/repo with src/, build/, node_modules/, dist/, .cache/, README.md, notes.txt; ~ and / exist), fake PATH list (ls, git, npm, rm, curl, python3, ... but not docker/kubectl/cargo so found_in_path is honest), fake git {in_repo, branch main, dirty}. Implement ls, cd, pwd, cat, echo, mkdir, touch, rm, mv, cp, git status; other commands print a one-line stub. Port StateBuilder, Policy, Fallback, Banner to JS (pure functions). On Enter: build state, render text, fire 2 requests in parallel (yes-no with 4 statements, classify with 3 labels), race against a 1500 ms deadline (browser TLS is slower than the 400 ms CLI budget; expose it as a slider), then Policy.decide. run -> execute silently; confirm -> inline `[y/N]` prompt, y executes, else leaves line editable; block -> red banner, line cleared, kept in up-arrow history. On 429/timeout/error -> Fallback regex, print `dm1 offline (http 429) \u2014 regex fallback`. Show x-inference-ms and x-input-tokens as the dim tag. Side panel = `explain` (state text, 4 probabilities with threshold \u25b2, verdict scores) for the last command, plus threshold sliders. `Bench` button: 50 fixed commands, batched as texts:[32]+[18] per statement (8 yes-no + 2 classify = 10 requests), prints the same summary as the CLI (p50/p95/mean latency from x-inference-ms, tokens, run/confirm/block) and a 'regex only' baseline column. Throttle: a single client-side queue that releases one request per 500 ms (~2 req/s); interactive commands are 2 requests, so one Enter costs ~1 s worst case; bench is ~5 s total; on 429 the queue backs off 5 s and the shell uses the regex fallback meanwhile. Proxy: a small Cloudflare Worker (same as the other demos) at demo.milliseconds.ai/api/dm1/<route> that allowlists yes-no and classify, injects the bearer key, forwards the JSON body and passes x-inference-ms / x-input-tokens / 429 back; the browser never sees the key.",
+ "difficulty": "L",
+ "risks": [
+  "Hint loss: the interactive path uses one yes-no with 4 statements and no per-statement when_true/when_false. Evals showed hints matter. Mitigation: fold criteria into statements; if precision drops, switch interactive to 4 parallel single-statement calls with hints (5 requests per Enter, still under the 2 req/s average for a single visitor) and keep the batch layout for bench.",
+  "Text vs structured state: Jev consumed a JSON state; dm1 gets flattened text. Booleans like found_in_path and exists must be spelled out in words or the model will ignore them. Re-run the 50-command bench and compare against the README expected split (35/11/4) before shipping.",
+  "Latency story changes: CLI quoted 100-200 ms end to end; browser adds TLS and the proxy hop. Show x-inference-ms as the headline number and wall-clock beside it, and raise the deadline to ~1500 ms.",
+  "Shared org rate limit (200 req/min): several visitors pressing bench together will 429. Bench must be gated (one at a time per tab, backoff on 429) and the fallback path must stay visibly graceful.",
+  "Fake shell scope creep: keep it to ~10 builtins and a stub for everything else; the judgment is the demo, not the shell.",
+  "Regex fallback ports NSRegularExpression syntax; verify the 20 patterns against the PolicyTests fixture cases in JS."
+ ]
+}

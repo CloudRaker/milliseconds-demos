@@ -1,0 +1,58 @@
+---
+// Page shell for one demo: title band, the live island below, and the "how it works" notes.
+import Site from './Site.astro';
+import DemoIcon from '../components/DemoIcon.astro';
+import RunMetrics from '../components/RunMetrics';
+import PaperworkNext from '../components/PaperworkNext.astro';
+import SdkExamples from '../components/SdkExamples.astro';
+import type { DemoMeta } from '../demos/meta';
+type Props = { meta: DemoMeta };
+const { meta } = Astro.props;
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'All demos', item: 'https://demo.milliseconds.ai/' },
+    { '@type': 'ListItem', position: 2, name: meta.title, item: `https://demo.milliseconds.ai/${meta.slug}/` },
+  ],
+};
+---
+<Site title={`${meta.title} · milliseconds.ai demos`} description={meta.summary} structuredData={structuredData} image={`/og/${meta.slug}.png`} imageAlt={`${meta.title} — a milliseconds.ai demo`}>
+  <section class="demo-head">
+    <div class="shell">
+      <p class="demo-crumbs"><a href="/">All demos</a><span aria-hidden="true">/</span><span>{meta.title}</span></p>
+      <div class="demo-title"><DemoIcon slug={meta.slug} /><h1>{meta.title}</h1></div>
+      <p class="demo-summary">{meta.summary}</p>
+      <p class="demo-routes"><span>Powered by</span>{meta.routes.map((r) => <code>/{r}</code>)}</p>
+    </div>
+  </section>
+  <section class="demo-stage">
+    <div class="shell demo-stage-inner">
+      <div class="key-banner">
+        <span><strong>Run the examples for free.</strong> Use your API key for your own inputs.</span>
+        <button class="btn" type="button" data-key-open>Use your own input</button>
+        <a class="muted" data-demo-key-cta href="https://console.milliseconds.ai/signup" target="_blank" rel="noopener noreferrer">Get a free key</a>
+      </div>
+      <RunMetrics client:load />
+      <div class="demo-instruction"><span class="instruction-label">Try it</span><p>{meta.instruction}</p></div>
+      <div class="demo-workspace" data-demo-slug={meta.slug}><slot /></div>
+      <SdkExamples meta={meta} />
+      <PaperworkNext slug={meta.slug} />
+    </div>
+  </section>
+  <script>
+    import { openKeyPanel } from "../lib/dm1";
+    import { track } from '@plausible-analytics/tracker';
+    document.querySelector("[data-key-open]")?.addEventListener("click", openKeyPanel);
+    document.querySelector('[data-demo-key-cta]')?.addEventListener('click', () => {
+      const demo = document.querySelector<HTMLElement>('[data-demo-slug]')?.dataset.demoSlug;
+      if (demo) track('Demo key CTA', { props: { demo }, url: location.origin + location.pathname });
+    });
+  </script>
+  <section class="demo-notes">
+    <div class="shell">
+      <slot name="notes" />
+      {meta.origin && <p class="demo-origin">Inspired by the work of <a href={`https://github.com/dabit3/jev-experiments/tree/main/${meta.origin}`} target="_blank" rel="noopener noreferrer">dabit3</a>.</p>}
+    </div>
+  </section>
+</Site>

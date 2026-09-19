@@ -1,0 +1,66 @@
+---
+import Site from '../layouts/Site.astro';
+import DemoIcon from '../components/DemoIcon.astro';
+import { ArrowRightIcon } from '@phosphor-icons/react/ssr';
+import type { DemoMeta } from '../demos/meta';
+const modules = import.meta.glob<{ default: DemoMeta }>('../demos/*/meta.ts', { eager: true });
+const demos = Object.values(modules).map((m) => m.default).sort((a, b) => (a.order ?? 99) - (b.order ?? 99) || a.title.localeCompare(b.title));
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Interactive AI demos — milliseconds.ai',
+  url: 'https://demo.milliseconds.ai/',
+  mainEntity: {
+    '@type': 'ItemList',
+    numberOfItems: demos.length,
+    itemListElement: demos.map((demo, index) => ({
+      '@type': 'ListItem', position: index + 1, name: demo.title,
+      url: `https://demo.milliseconds.ai/${demo.slug}/`,
+    })),
+  },
+};
+const categories = ['Documents & operations', 'Sales & commerce', 'Customer experience', 'Developer & interactive'];
+---
+<Site structuredData={structuredData} title="Interactive AI demos · milliseconds.ai" description="Try decision-machine-1 with free stock examples for routing, moderation, search, documents and more. Use your own API key for custom input.">
+  <section class="demo-head">
+    <div class="shell">
+      <p class="demo-crumbs"><span>Interactive demos</span></p>
+      <h1>Small decisions. Remarkable possibilities.</h1>
+      <p class="demo-summary">Turn messy inputs into useful records, organized queues, and decisions your software can act on. Explore {demos.length} interactive demos powered by decision-machine-1, with time, tokens, and cost visible as you go. Run the supplied examples for free—no API key needed.</p>
+    </div>
+  </section>
+  <section class="demo-stage">
+    <div class="shell">
+      {demos.length === 0 && <p class="muted">No demos yet.</p>}
+      <div class="demo-filters" role="group" aria-label="Filter demos by business use">
+        <button class="btn" data-demo-filter="all" aria-pressed="true">All demos <span>{demos.length}</span></button>
+        {categories.map(category => <button class="btn" data-demo-filter={category} aria-pressed="false">{category} <span>{demos.filter(d => d.category === category).length}</span></button>)}
+      </div>
+      <p class="demo-filter-count muted small" role="status" aria-live="polite">Showing {demos.length} demos</p>
+      <div class="demo-grid">
+        {demos.map((d) => (
+          <a class="demo-card" href={`/${d.slug}/`} data-category={d.category}>
+            <div class="demo-card-heading"><DemoIcon slug={d.slug} /><h3>{d.title}</h3></div>
+            <p>{d.summary}</p>
+            <span class="demo-card-action">Try demo <ArrowRightIcon size={16} aria-hidden="true" focusable="false" /></span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</Site>
+<script>
+  const filters = document.querySelectorAll<HTMLButtonElement>('[data-demo-filter]');
+  const cards = document.querySelectorAll<HTMLAnchorElement>('.demo-card');
+  const count = document.querySelector('.demo-filter-count');
+  for (const button of filters) button.addEventListener('click', () => {
+    const category = button.dataset.demoFilter;
+    for (const filter of filters) filter.setAttribute('aria-pressed', String(filter === button));
+    let shown = 0;
+    for (const card of cards) {
+      card.hidden = category !== 'all' && card.dataset.category !== category;
+      if (!card.hidden) shown++;
+    }
+    if (count) count.textContent = `Showing ${shown} ${shown === 1 ? 'demo' : 'demos'}${category === 'all' ? '' : ` in ${category}`}`;
+  });
+</script>

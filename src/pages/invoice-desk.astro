@@ -1,0 +1,15 @@
+---
+import Demo from '../layouts/Demo.astro';
+import meta from '../demos/invoice-desk/meta';
+import Island from '../demos/invoice-desk/Demo';
+---
+<Demo meta={meta}>
+ <Island client:only="react" />
+ <div slot="notes">
+  <h2>From invoice to exception review</h2>
+  <p>Extract fills a draft record. Answer locates supporting spans. Verify checks the total against the source. Code compares required fields, subtotal plus tax, purchase-order details and a supplied prior record.</p>
+  <h3>Keep a person in the loop</h3>
+  <p>Model spans can select the wrong company or amount. Scores describe the model’s span confidence, not guaranteed correctness. Sample-preview evidence is curated. Runs use real model responses, with cached or live provenance shown in Performance & cost. A draft is never a payment authorization.</p>
+  <p>This demo handles text headers and US-style decimal formatting. It does not parse PDFs, extract line items, connect to accounting systems or send payments.</p>
+ </div>
+</Demo>

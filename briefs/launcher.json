@@ -1,0 +1,133 @@
+{
+ "slug": "launcher",
+ "title": "Intent Launcher",
+ "one_liner": "A Spotlight-style command palette that re-ranks a fixed candidate list on every keystroke by asking the API which item the user means, whether Enter is safe, and whether they want one item or all of them.",
+ "platform": "macos-swift",
+ "what_it_does": "The user presses a hotkey and types a short phrase into a translucent panel: \"dark\", \"wifi off\", \"15% of 240\", \"the pdf I just downloaded\", \"open devin ambassador links I visited in the past 24 hours\". On every keystroke the app fuzzy-filters a local index (apps, files with modification age, nine system toggles, Shortcuts, Chrome history) to at most 13 candidates (30 when the query names a time window), adds a calculator row when the text parses and a web-search fallback row, and sends one fan-out request. That request holds a `target` choice over candidate ids plus `none`, an `action` choice over eight action kinds, a `ready` noul, a `scope` choice (one vs all) and one `match_cN` noul per real candidate. The list re-ranks with `score = 0.65\u00b7P(target) + 0.20\u00b7P(action matches kind) + 0.15\u00b7fuzzy` plus a set bonus. Each row shows its target probability as a percentage. The top row gets a green Enter badge when `ready >= 0.6` or `P(target) >= 0.9`. When `P(all) >= 0.5` and at least two rows have `match >= 0.6`, a synthetic \"Open all N links\" group row leads the list with members checkmarked. Responses carry a sequence number; stale answers are discarded and the previous judgment stays dimmed. The footer shows last round-trip ms, p50/p95, decision count, stale count, tokens per decision and a cost estimate. Enter executes: open app, open file, open URLs in Chrome, toggle Dark Mode via AppleScript, copy the calculator result, or web search. On HTTP or transport failure the list falls back to pure fuzzy order and the footer shows the error in red.",
+ "jev_questions": [
+  {
+   "key": "target",
+   "type": "choice",
+   "instructions": "The user typed `query` into a launcher. Which entry in `candidates` is the item they intend to open or run? Treat `query` as a possibly incomplete prefix or paraphrase of the intended item. Match on meaning: a candidate's `title` and `detail` may use different words than `query` (for example `query` \"the pdf I just downloaded\" means the PDF in Downloads whose `detail` says it was modified most recently; \"wifi off\" means the candidate that disables Wi-Fi). Use `context.frontmost_app` and `context.recent_apps` only to break ties. Pick `none` only when no candidate plausibly matches.",
+   "options": [
+    "c0..cN: \"<Kind label>: <title> \u2014 <subtitle>\" per candidate",
+    "none: None of the listed candidates is what the user means."
+   ],
+   "state_shape": "{query, query_note, time_window?, context:{frontmost_app, recent_apps[], clipboard_kind, time_of_day, weekday}, candidates:[{id:'cN', kind, title, detail}]} (max 32 candidates; Sources/JevQuestions.swift)"
+  },
+  {
+   "key": "action",
+   "type": "choice",
+   "instructions": "What kind of action does `query` ask the launcher to perform? Judge from the words in `query` and, when `query` names one of the `candidates`, that candidate's `kind`. If `query` is a bare arithmetic expression choose calculate. If it reads like a question or a topic with no matching local candidate choose web_search.",
+   "options": [
+    "open_app: Launch or switch to an installed application.",
+    "open_file: Open a document, folder or file from disk.",
+    "open_url: Reopen a web page the user has visited before, from browser history.",
+    "web_search: Look something up on the web; a question or topic, not a local item.",
+    "calculate: Evaluate arithmetic, percentages or unit-free math.",
+    "system_toggle: Change a system setting: appearance, wi-fi, focus, sleep, lock, trash, hidden files.",
+    "run_shortcut: Run a user-created macOS Shortcut by name.",
+    "unclear: Too little typed or too ambiguous to tell what kind of action is meant."
+   ],
+   "state_shape": "same state as target"
+  },
+  {
+   "key": "ready",
+   "type": "noul",
+   "instructions": "The launcher is about to run the best-matching candidate the instant the user presses Enter. Is `query` already unambiguous enough for that? `candidates` is the complete list of everything the launcher could do for this query; the web_search entry is only a fallback for when nothing local fits. Short input is fine: \"empty tr\" unambiguously means the Empty Trash toggle if no other local candidate fits it, while a single letter that several local candidates start with is ambiguous.",
+   "options": [
+    "true: One local candidate is the obvious meaning of `query` and the remaining candidates are not plausible; running it on Enter would not surprise the user.",
+    "false: Several candidates fit `query` roughly equally, or only the web_search fallback fits, so the user should choose from the list."
+   ],
+   "state_shape": "same state as target"
+  },
+  {
+   "key": "scope",
+   "type": "choice",
+   "instructions": "Does `query` refer to one specific item, or to every item that fits a description? Plural nouns, words like all, every, everything, the links, the files, and phrases describing a period of activity (\"the pages I visited today\") mean all. A singular noun, a name, or \"the X I just \u2026\" means one, even if several candidates loosely fit.",
+   "options": [
+    "one: The user wants exactly one item opened or run.",
+    "all: The user wants every candidate that fits the description opened together."
+   ],
+   "state_shape": "same state as target"
+  },
+  {
+   "key": "match_cN",
+   "type": "noul",
+   "instructions": "Consider only the candidate with id `cN` in `candidates`. Judged on its own, does it fit the description the user typed in `query`? Ignore whether other candidates fit better; several candidates may all fit. A time phrase in `query` has already been applied, so do not reject the candidate for its age.",
+   "options": [
+    "true: This candidate's title, detail and kind fit what `query` describes.",
+    "false: This candidate does not fit the description in `query`."
+   ],
+   "state_shape": "one question per real candidate (web_search and calculate rows excluded); same state as target"
+  }
+ ],
+ "request_cadence": "One POST per keystroke, no debounce; each request carries 4 fixed questions plus up to 13 (30 with a time window) match_cN nouls over one state of up to 15 candidates (~1,400 to 2,700 input tokens). Sequence-numbered; stale responses discarded. Measured p50 ~101 ms, p95 ~222 ms.",
+ "data_files": [
+  "/Users/blaget/projects/jev-experiments/jev-launcher/TESTING.md (fixture list: 5 files with ages in ~/Downloads and ~/Desktop, 9 seeded Chrome history rows with titles, hosts and hours-ago; reuse verbatim as the demo's fake index, under 2 KB)",
+  "/Users/blaget/projects/jev-experiments/jev-launcher/Sources/Candidate.swift (SystemToggle: 9 toggles with title, subtitle, keywords; ~3 KB)",
+  "/Users/blaget/projects/jev-experiments/jev-launcher/README.md (expected outcomes table for the 5 single queries and 4 set queries; use as acceptance checks)",
+  "/Users/blaget/projects/jev-experiments/jev-launcher/docs/query-*.png, set-ambassador.png, empty.png (visual reference, 30 KB to 630 KB each)",
+  "/Users/blaget/projects/jev-experiments/jev-launcher/docs/demo.gif (4.8 MB, do not ship)"
+ ],
+ "ui_components": [
+  "Panel: header with bolt icon (green when ready), large text field, in-flight dot \u2014 Sources/LauncherView.swift LauncherView.header",
+  "Example chips in empty state: dark, wifi off, 15% of 240, the pdf I just downloaded, links I visited today \u2014 Sources/LauncherView.swift EmptyHint",
+  "HitRow: icon by kind, title, subtitle, target percentage (dimmed when stale), green Enter badge, checkmark for set members, member count pill for group row \u2014 Sources/LauncherView.swift HitRow (lines ~130-260)",
+  "StatsFooter: last ms, p50/p95, decisions count with (N stale) and (N failed), tokens per decision, cost \u2014 Sources/LauncherView.swift StatsFooter, Sources/LatencyStats.swift",
+  "Keyboard: up/down moves selection, Enter executes, Esc clears \u2014 Sources/LauncherPanel.swift"
+ ],
+ "reusable_source": [
+  "/Users/blaget/projects/jev-experiments/jev-launcher/Sources/Fuzzy.swift (port to ~80 lines TS; pure)",
+  "/Users/blaget/projects/jev-experiments/jev-launcher/Sources/Calculator.swift (port to TS; recursive descent, no eval)",
+  "/Users/blaget/projects/jev-experiments/jev-launcher/Sources/TimeWindow.swift (port to TS; two regexes plus calendar math)",
+  "/Users/blaget/projects/jev-experiments/jev-launcher/Sources/Ranker.swift (port to TS; prefilter, rank, setMembers, groupCandidate, thresholds)",
+  "/Users/blaget/projects/jev-experiments/jev-launcher/Sources/LatencyStats.swift (port to TS; p50/p95, stale, tokens)",
+  "/Users/blaget/projects/jev-experiments/jev-launcher/Sources/Candidate.swift (ActionKind rubrics and SystemToggle table; copy as data)",
+  "/Users/blaget/projects/jev-experiments/jev-launcher/Sources/LocalIndex.swift recency() and fileTypeWords() (copy as data helpers)",
+  "/Users/blaget/projects/jev-experiments/jev-launcher/Tests/RankingTests.swift, CalculatorTests.swift (port assertions into one vitest file)"
+ ],
+ "dm1_mapping": [
+  {
+   "jev_key": "target",
+   "dm1_route": "classify",
+   "dm1_body": "POST /classify {\"text\":\"Launcher query: \\\"the pdf I just downloaded\\\". Frontmost app: Finder. Time: afternoon, Thursday.\",\"labels\":{\"c0\":\"File: Q3-Roadmap-Review.pdf \u2014 PDF in ~/Downloads, modified 16 min ago\",\"c1\":\"File: invoice-2026-08.pdf \u2014 PDF in ~/Downloads, modified 1 month ago\",\"c2\":\"File: Lease-Agreement.pdf \u2014 PDF in ~/Desktop, modified 2 months ago\",\"c3\":\"Web: search the web for the query (fallback only)\",\"none\":\"No listed item is what the user means\"}}",
+   "notes": "Use the full `scores` map as P(target) per row, not just `label`. Put the recency phrase inside each label description; the original needed the hint that detail carries recency. Keep the query short as text; drop query_note prose. Max 64 labels, so the 15-candidate cap holds."
+  },
+  {
+   "jev_key": "action",
+   "dm1_route": "classify",
+   "dm1_body": "POST /classify {\"text\":\"Launcher query: \\\"wifi off\\\"\",\"labels\":{\"open_app\":\"Launch or switch to an installed application.\",\"open_file\":\"Open a document, folder or file from disk.\",\"open_url\":\"Reopen a web page the user has visited before, from browser history.\",\"web_search\":\"Look something up on the web; a question or topic, not a local item.\",\"calculate\":\"Evaluate arithmetic, percentages or unit-free math.\",\"system_toggle\":\"Change a system setting: appearance, wi-fi, focus, sleep, lock, trash, hidden files.\",\"run_shortcut\":\"Run a user-created macOS Shortcut by name.\",\"unclear\":\"Too little typed or too ambiguous to tell what kind of action is meant.\"}}",
+   "notes": "Rubrics copy verbatim. Use `scores` as actionProbabilities for the 0.20 weight. Batch with `texts` when several queued keystrokes flush together."
+  },
+  {
+   "jev_key": "ready",
+   "dm1_route": "yes-no",
+   "dm1_body": "POST /yes-no {\"text\":\"Query: \\\"dark\\\". Candidates: Toggle Dark Mode (system toggle); Search the web (fallback only).\",\"statement\":\"The query clearly means exactly one of the local candidates.\",\"when_true\":\"One local candidate is the obvious meaning and the others are not plausible.\",\"when_false\":\"Several candidates fit roughly equally, or only the web search fallback fits.\"}",
+   "notes": "Rewrite the long Jev prose as one short declarative plus hints. Keep the second rule from the original: top row is ready when P(target) >= 0.9 even when this probability is under 0.6. Text lists the candidate titles so the model sees the full option set."
+  },
+  {
+   "jev_key": "scope",
+   "dm1_route": "classify",
+   "dm1_body": "POST /classify {\"text\":\"Launcher query: \\\"open devin ambassador links I visited in the past 24 hours\\\"\",\"labels\":{\"one\":\"The user wants exactly one specific item: a singular noun, a name, or 'the X I just ...'.\",\"all\":\"The user wants every item that fits: plural nouns, all, every, the links, the files, or a period of activity like 'pages I visited today'.\"}}",
+   "notes": "Two labels; `scores.all` is P(all). Same text as action, so this request and action can share one keystroke slot but must be two calls (different labels). Alternative: yes-no with statement \"The query asks for several items at once.\" if classify with 2 labels is less stable."
+  },
+  {
+   "jev_key": "match_cN",
+   "dm1_route": "yes-no",
+   "dm1_body": "POST /yes-no {\"text\":\"Query: \\\"devin ambassador links I visited\\\" (time window already applied)\",\"statements\":[\"Candidate 'Introducing the Devin Ambassador Program' (cognition.ai, visited 2 h ago) fits the query.\",\"Candidate 'Devin Ambassadors: Getting Started' (docs.devin.ai, visited 5 h ago) fits the query.\",\"Candidate 'Hacker News' (news.ycombinator.com, visited 4 h ago) fits the query.\"],\"when_true\":\"The candidate's title, site and kind match what the query describes.\",\"when_false\":\"The candidate does not match the description in the query.\"}",
+   "notes": "One request per keystroke with up to 32 statements replaces N separate nouls. Statement i maps back to candidate i by index. Skip web_search and calculate rows. `probability` per result feeds memberThreshold 0.6 and the set bonus."
+  }
+ ],
+ "browser_plan": "Build one React island (Vite/React, styled like cloudraker-spring-2026) that renders a centered 680px translucent palette over a dark backdrop, with the same header, rows, chips and stats footer. Replace the macOS index with a static JSON fixture: about 30 fake apps, the 9 toggles from Candidate.swift, the 5 files and 9 history rows from TESTING.md with ages expressed relative to page load, and 3 fake Shortcuts. Port Fuzzy, Calculator, TimeWindow, Ranker and LatencyStats to TypeScript nearly line for line. Execution becomes a simulation: Enter flips the page theme for Dark Mode, shows a toast for Wi-Fi/Sleep/Lock, copies the calc result to the clipboard, and opens a modal listing the URLs or files that would open. Per keystroke, the client builds four proxied calls: classify (target over candidate labels), classify (action), yes-no (ready), classify (scope), plus one yes-no with `statements` for match_cN. Throttle: a single trailing-edge scheduler fires at most every 500 ms and only for the newest query; the five calls of one tick go out together, so effective rate is about 2 ticks per second at most under typing but each tick is 5 requests. To stay near 2 req/s, collapse: merge action and scope into the target classify by adding the rubrics as extra labels is not valid, so instead drop `action` in the browser demo (its 0.20 weight is folded into fuzzy) and fire target classify, ready yes-no and the match_cN batch only when the query contains a plural/time phrase; that is 2 requests per tick on plain queries and 3 on set queries at 500 ms spacing. Tag each tick with a sequence number, discard stale results, keep the previous judgment dimmed. Proxy: a Cloudflare Worker route /api/dm1/:route that forwards JSON to https://api.milliseconds.ai/v1/decision-machine-1/:route with the bearer key from a secret, caps body size, and passes through x-inference-ms and x-input-tokens headers for the footer. On 429 the client backs off to 2 s ticks, shows \"rate limited, fuzzy order\" in the footer in red and keeps the fuzzy ranking; any other error does the same with the status code. Footer shows last ms from x-inference-ms, p50/p95, decisions, stale, tokens per decision.",
+ "difficulty": "L",
+ "risks": [
+  "Fan-out loss: Jev answered 5 questions in one round trip; DM1 needs 3 to 5 separate requests per keystroke, so per-keystroke cadence at 200 req/min shared across visitors is not viable. Must throttle to about 500 ms ticks and cut the action question.",
+  "Target classify over 15 candidate labels with 'none' is a different judgment than Jev's choice with state context. P(target) calibration may differ; the 0.9 certain-target rule and 0.6 ready threshold need re-tuning on the 5 README queries.",
+  "Recency reasoning ('the pdf I just downloaded' picks the newest) depends on the modified-N-min-ago phrase inside label text. Verify on the 3-PDF fixture before shipping.",
+  "Scope with only two labels may be unstable; keep a yes-no fallback ready.",
+  "No real execution in the browser: Dark Mode, Wi-Fi, Sleep, file open are simulated. State this in the page so the demo is honest.",
+  "Shared org rate limit: a few concurrent visitors typing fast will hit 429; the graceful fuzzy fallback must be tested, and the proxy should add a per-IP cap.",
+  "Text tokens per tick: target classify text plus 15 labels plus a 15-statement yes-no batch is roughly 600 to 900 input tokens per tick; well under 1M/min but track x-input-tokens in the footer."
+ ]
+}

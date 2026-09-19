@@ -1,0 +1,805 @@
+{
+  "evaluatedAt": "2026-09-19T15:46:45.919Z",
+  "scope": "30 fictional listings; ten held out. Checks category labels and expected missing fields, not complete field accuracy.",
+  "requests": [
+    {
+      "route": "classify",
+      "elapsedMs": 722,
+      "tokens": "696"
+    },
+    {
+      "route": "extract",
+      "elapsedMs": 916,
+      "tokens": "772"
+    }
+  ],
+  "categoryCorrect": 26,
+  "missingFieldsPreserved": 30,
+  "results": [
+    {
+      "text": "Northline cotton T-shirt. Color: forest green. Size: medium.",
+      "category": "apparel",
+      "missing": [],
+      "actual": {
+        "category": "apparel",
+        "probability": 0.943,
+        "attributes": {
+          "brand": {
+            "value": "Northline",
+            "start": 0,
+            "end": 9
+          },
+          "material": {
+            "value": "cotton",
+            "start": 10,
+            "end": 16
+          },
+          "size": {
+            "value": "medium",
+            "start": 53,
+            "end": 59
+          },
+          "color": {
+            "value": "forest green",
+            "start": 33,
+            "end": 45
+          }
+        },
+        "issues": []
+      },
+      "categoryCorrect": true,
+      "missingFieldsPreserved": true
+    },
+    {
+      "text": "Oak & Field side table. Material: solid oak. Dimensions: 45 x 40 x 55 cm.",
+      "category": "furniture",
+      "missing": [],
+      "actual": {
+        "category": "furniture",
+        "probability": 0.999,
+        "attributes": {
+          "brand": {
+            "value": "Oak & Field",
+            "start": 0,
+            "end": 11
+          },
+          "material": {
+            "value": "solid oak",
+            "start": 34,
+            "end": 43
+          },
+          "dimensions": {
+            "value": "45 x 40 x 55 cm",
+            "start": 57,
+            "end": 72
+          }
+        },
+        "issues": []
+      },
+      "categoryCorrect": true,
+      "missingFieldsPreserved": true
+    },
+    {
+      "text": "Soundmere wireless headphones. Brand: Soundmere. Connectivity: Bluetooth 5.3. Color: black.",
+      "category": "audio",
+      "missing": [],
+      "actual": {
+        "category": "audio",
+        "probability": 0.997,
+        "attributes": {
+          "brand": {
+            "value": "Soundmere",
+            "start": 0,
+            "end": 9
+          },
+          "color": {
+            "value": "black",
+            "start": 85,
+            "end": 90
+          },
+          "connectivity": {
+            "value": "Bluetooth 5.3",
+            "start": 63,
+            "end": 76
+          }
+        },
+        "issues": []
+      },
+      "categoryCorrect": true,
+      "missingFieldsPreserved": true
+    },
+    {
+      "text": "Soft everyday shirt in blue.",
+      "category": "apparel",
+      "missing": [
+        "material",
+        "size"
+      ],
+      "actual": {
+        "category": "apparel",
+        "probability": 0.992,
+        "attributes": {
+          "color": {
+            "value": "blue",
+            "start": 23,
+            "end": 27
+          }
+        },
+        "issues": [
+          "Missing material",
+          "Missing size"
+        ]
+      },
+      "categoryCorrect": true,
+      "missingFieldsPreserved": true
+    },
+    {
+      "text": "Linen blouse, size S, white.",
+      "category": "apparel",
+      "missing": [],
+      "actual": {
+        "category": "apparel",
+        "probability": 0.972,
+        "attributes": {
+          "material": {
+            "value": "Linen",
+            "start": 0,
+            "end": 5
+          },
+          "size": {
+            "value": "s",
+            "start": 10,
+            "end": 11
+          },
+          "color": {
+            "value": "white",
+            "start": 22,
+            "end": 27
+          }
+        },
+        "issues": []
+      },
+      "categoryCorrect": true,
+      "missingFieldsPreserved": true
+    },
+    {
+      "text": "Black wool coat in XL.",
+      "category": "apparel",
+      "missing": [],
+      "actual": {
+        "category": "apparel",
+        "probability": 0.768,
+        "attributes": {
+          "material": {
+            "value": "wool",
+            "start": 6,
+            "end": 10
+          },
+          "size": {
+            "value": "XL",
+            "start": 19,
+            "end": 21
+          },
+          "color": {
+            "value": "Black",
+            "start": 0,
+            "end": 5
+          }
+        },
+        "issues": []
+      },
+      "categoryCorrect": true,
+      "missingFieldsPreserved": true
+    },
+    {
+      "text": "Cotton trousers, size 32, navy.",
+      "category": "apparel",
+      "missing": [],
+      "actual": {
+        "category": "apparel",
+        "probability": 0.691,
+        "attributes": {
+          "material": {
+            "value": "Cotton",
+            "start": 0,
+            "end": 6
+          },
+          "size": {
+            "value": "32",
+            "start": 22,
+            "end": 24
+          },
+          "color": {
+            "value": "navy",
+            "start": 26,
+            "end": 30
+          }
+        },
+        "issues": [
+          "Category score below the demo review threshold (75%)"
+        ]
+      },
+      "categoryCorrect": true,
+      "missingFieldsPreserved": true
+    },
+    {
+      "text": "Red polyester sports shirt. Size: large.",
+      "category": "apparel",
+      "missing": [],
+      "actual": {
+        "category": "apparel",
+        "probability": 0.961,
+        "attributes": {
+          "material": {
+            "value": "polyester",
+            "start": 4,
+            "end": 13
+          },
+          "size": {
+            "value": "large",
+            "start": 34,
+            "end": 39
+          },
+          "color": {
+            "value": "Red",
+            "start": 0,
+            "end": 3
+          }
+        },
+        "issues": []
+      },
+      "categoryCorrect": true,
+      "missingFieldsPreserved": true
+    },
+    {
+      "text": "Green T-shirt in small. Material not supplied.",
+      "category": "apparel",
+      "missing": [
+        "material"
+      ],
+      "actual": {
+        "category": "other",
+        "probability": 0.697,
+        "attributes": {
+          "size": {
+            "value": "small",
+            "start": 17,
+            "end": 22
+          },
+          "color": {
+            "value": "Green",
+            "start": 0,
+            "end": 5
+          }
+        },
+        "issues": [
+          "Choose a category outside this demo taxonomy"
+        ]
+      },
+      "categoryCorrect": false,
+      "missingFieldsPreserved": true
+    },
+    {
+      "text": "Cotton shirt in size medium. No color provided.",
+      "category": "apparel",
+      "missing": [
+        "color"
+      ],
+      "actual": {
+        "category": "apparel",
+        "probability": 0.664,
+        "attributes": {
+          "material": {
+            "value": "Cotton",
+            "start": 0,
+            "end": 6
+          },
+          "size": {
+            "value": "medium",
+            "start": 21,
+            "end": 27
+          }
+        },
+        "issues": [
+          "Category score below the demo review threshold (75%)",
+          "Missing color"
+        ]
+      },
+      "categoryCorrect": true,
+      "missingFieldsPreserved": true
+    },
+    {
+      "text": "Solid pine bookshelf, dimensions 80 x 30 x 180 cm.",
+      "category": "furniture",
+      "missing": [],
+      "actual": {
+        "category": "furniture",
+        "probability": 0.999,
+        "attributes": {
+          "dimensions": {
+            "value": "80 x 30 x 180 cm",
+            "start": 33,
+            "end": 49
+          }
+        },
+        "issues": [
+          "Missing material"
+        ]
+      },
+      "categoryCorrect": true,
+      "missingFieldsPreserved": true
+    },
+    {
+      "text": "Steel desk, 48 x 24 x 30 inches.",
+      "category": "furniture",
+      "missing": [],
+      "actual": {
+        "category": "furniture",
+        "probability": 0.997,
+        "attributes": {
+          "brand": {
+            "value": "Steel desk",
+            "start": 0,
+            "end": 10
+          },
+          "dimensions": {
+            "value": "48 x 24 x 30 inches",
+            "start": 12,
+            "end": 31,
+            "normalized": "121.92 × 60.96 × 76.2 cm"
+          }
+        },
+        "issues": [
+          "Missing material"
+        ]
+      },
+      "categoryCorrect": true,
+      "missingFieldsPreserved": true
+    },
+    {
+      "text": "Birch stool, dimensions 400 x 400 x 450 mm.",
+      "category": "furniture",
+      "missing": [],
+      "actual": {
+        "category": "furniture",
+        "probability": 0.997,
+        "attributes": {
+          "brand": {
+            "value": "Birch",
+            "start": 0,
+            "end": 5
+          },
+          "dimensions": {
+            "value": "400 x 400 x 450 mm",
+            "start": 24,
+            "end": 42,
+            "normalized": "40 × 40 × 45 cm"
+          }
+        },
+        "issues": [
+          "Missing material"
+        ]
+      },
+      "categoryCorrect": true,
+      "missingFieldsPreserved": true
+    },
+    {
+      "text": "A handsome side table, dimensions 50 x 50 x 60 cm.",
+      "category": "furniture",
+      "missing": [
+        "material"
+      ],
+      "actual": {
+        "category": "furniture",
+        "probability": 0.999,
+        "attributes": {
+          "dimensions": {
+            "value": "50 x 50 x 60 cm",
+            "start": 34,
+            "end": 49
+          }
+        },
+        "issues": [
+          "Missing material"
+        ]
+      },
+      "categoryCorrect": true,
+      "missingFieldsPreserved": true
+    },
+    {
+      "text": "Solid walnut dining table. Dimensions available on request.",
+      "category": "furniture",
+      "missing": [
+        "dimensions"
+      ],
+      "actual": {
+        "category": "furniture",
+        "probability": 0.999,
+        "attributes": {},
+        "issues": [
+          "Missing material",
+          "Missing dimensions"
+        ]
+      },
+      "categoryCorrect": true,
+      "missingFieldsPreserved": true
+    },
+    {
+      "text": "Brand: Quietshore. USB-C microphone.",
+      "category": "audio",
+      "missing": [],
+      "actual": {
+        "category": "audio",
+        "probability": 0.997,
+        "attributes": {
+          "brand": {
+            "value": "Quietshore",
+            "start": 7,
+            "end": 17
+          },
+          "connectivity": {
+            "value": "USB-C",
+            "start": 19,
+            "end": 24
+          }
+        },
+        "issues": []
+      },
+      "categoryCorrect": true,
+      "missingFieldsPreserved": true
+    },
+    {
+      "text": "Brand: Echofield. Speaker with Bluetooth connectivity.",
+      "category": "audio",
+      "missing": [],
+      "actual": {
+        "category": "audio",
+        "probability": 0.999,
+        "attributes": {
+          "brand": {
+            "value": "Echofield",
+            "start": 7,
+            "end": 16
+          },
+          "connectivity": {
+            "value": "Bluetooth",
+            "start": 31,
+            "end": 40
+          }
+        },
+        "issues": []
+      },
+      "categoryCorrect": true,
+      "missingFieldsPreserved": true
+    },
+    {
+      "text": "Headphones with a wired 3.5 mm connection. No brand supplied.",
+      "category": "audio",
+      "missing": [
+        "brand"
+      ],
+      "actual": {
+        "category": "audio",
+        "probability": 0.987,
+        "attributes": {
+          "size": {
+            "value": "3.5 mm",
+            "start": 24,
+            "end": 30
+          },
+          "connectivity": {
+            "value": "wired",
+            "start": 18,
+            "end": 23
+          }
+        },
+        "issues": [
+          "Missing brand"
+        ]
+      },
+      "categoryCorrect": true,
+      "missingFieldsPreserved": true
+    },
+    {
+      "text": "Brand: Auralane. Over-ear headphones. Connection information unavailable.",
+      "category": "audio",
+      "missing": [
+        "connectivity"
+      ],
+      "actual": {
+        "category": "audio",
+        "probability": 0.991,
+        "attributes": {
+          "brand": {
+            "value": "Auralane",
+            "start": 7,
+            "end": 15
+          }
+        },
+        "issues": [
+          "Missing connectivity"
+        ]
+      },
+      "categoryCorrect": true,
+      "missingFieldsPreserved": true
+    },
+    {
+      "text": "Book an hour of business coaching.",
+      "category": "other",
+      "missing": [],
+      "actual": {
+        "category": "other",
+        "probability": 0.995,
+        "attributes": {},
+        "issues": [
+          "Choose a category outside this demo taxonomy"
+        ]
+      },
+      "categoryCorrect": true,
+      "missingFieldsPreserved": true
+    },
+    {
+      "text": "Brand: Mossplain. Sweater in cream alpaca wool, size L.",
+      "category": "apparel",
+      "missing": [],
+      "heldOut": true,
+      "actual": {
+        "category": "apparel",
+        "probability": 0.796,
+        "attributes": {
+          "brand": {
+            "value": "Mossplain",
+            "start": 7,
+            "end": 16
+          },
+          "material": {
+            "value": "alpaca wool",
+            "start": 35,
+            "end": 46
+          },
+          "size": {
+            "value": "l",
+            "start": 12,
+            "end": 13
+          },
+          "color": {
+            "value": "cream",
+            "start": 29,
+            "end": 34
+          }
+        },
+        "issues": []
+      },
+      "categoryCorrect": true,
+      "missingFieldsPreserved": true
+    },
+    {
+      "text": "Denim jacket in blue. Size not stated.",
+      "category": "apparel",
+      "missing": [
+        "size"
+      ],
+      "heldOut": true,
+      "actual": {
+        "category": "other",
+        "probability": 0.518,
+        "attributes": {
+          "color": {
+            "value": "blue",
+            "start": 16,
+            "end": 20
+          }
+        },
+        "issues": [
+          "Choose a category outside this demo taxonomy"
+        ]
+      },
+      "categoryCorrect": false,
+      "missingFieldsPreserved": true
+    },
+    {
+      "text": "Brand: Coastform. Orange cotton shorts, size M.",
+      "category": "apparel",
+      "missing": [],
+      "heldOut": true,
+      "actual": {
+        "category": "apparel",
+        "probability": 0.595,
+        "attributes": {
+          "brand": {
+            "value": "Coastform",
+            "start": 7,
+            "end": 16
+          },
+          "material": {
+            "value": "cotton",
+            "start": 25,
+            "end": 31
+          },
+          "size": {
+            "value": "m",
+            "start": 15,
+            "end": 16
+          },
+          "color": {
+            "value": "Orange",
+            "start": 18,
+            "end": 24
+          }
+        },
+        "issues": [
+          "Category score below the demo review threshold (75%)"
+        ]
+      },
+      "categoryCorrect": true,
+      "missingFieldsPreserved": true
+    },
+    {
+      "text": "Maple bench. Dimensions: 36 x 12 x 18 in.",
+      "category": "furniture",
+      "missing": [],
+      "heldOut": true,
+      "actual": {
+        "category": "furniture",
+        "probability": 0.99,
+        "attributes": {
+          "brand": {
+            "value": "Maple bench",
+            "start": 0,
+            "end": 11
+          },
+          "dimensions": {
+            "value": "36 x 12 x 18 in",
+            "start": 25,
+            "end": 40,
+            "normalized": "91.44 × 30.48 × 45.72 cm"
+          }
+        },
+        "issues": [
+          "Missing material"
+        ]
+      },
+      "categoryCorrect": true,
+      "missingFieldsPreserved": true
+    },
+    {
+      "text": "Dining chair. Seat height is adjustable. Material unspecified.",
+      "category": "furniture",
+      "missing": [
+        "material",
+        "dimensions"
+      ],
+      "heldOut": true,
+      "actual": {
+        "category": "furniture",
+        "probability": 0.997,
+        "attributes": {},
+        "issues": [
+          "Missing material",
+          "Missing dimensions"
+        ]
+      },
+      "categoryCorrect": true,
+      "missingFieldsPreserved": true
+    },
+    {
+      "text": "Brand: Stillwood. Bamboo shelf, 600 x 200 x 900 mm.",
+      "category": "furniture",
+      "missing": [],
+      "heldOut": true,
+      "actual": {
+        "category": "furniture",
+        "probability": 0.998,
+        "attributes": {
+          "brand": {
+            "value": "Stillwood",
+            "start": 7,
+            "end": 16
+          },
+          "material": {
+            "value": "Bamboo shelf",
+            "start": 18,
+            "end": 30
+          },
+          "dimensions": {
+            "value": "600 x 200 x 900 mm",
+            "start": 32,
+            "end": 50,
+            "normalized": "60 × 20 × 90 cm"
+          }
+        },
+        "issues": []
+      },
+      "categoryCorrect": true,
+      "missingFieldsPreserved": true
+    },
+    {
+      "text": "Brand: Pinewave. Portable speaker. Connection: Bluetooth 5.2.",
+      "category": "audio",
+      "missing": [],
+      "heldOut": true,
+      "actual": {
+        "category": "audio",
+        "probability": 0.997,
+        "attributes": {
+          "brand": {
+            "value": "Pinewave",
+            "start": 7,
+            "end": 15
+          },
+          "connectivity": {
+            "value": "Bluetooth 5.2",
+            "start": 47,
+            "end": 60
+          }
+        },
+        "issues": []
+      },
+      "categoryCorrect": true,
+      "missingFieldsPreserved": true
+    },
+    {
+      "text": "Brand: Valeaudio. Headphones, cable and connection specifications not provided.",
+      "category": "audio",
+      "missing": [
+        "connectivity"
+      ],
+      "heldOut": true,
+      "actual": {
+        "category": "other",
+        "probability": 0.515,
+        "attributes": {
+          "brand": {
+            "value": "Valeaudio",
+            "start": 7,
+            "end": 16
+          }
+        },
+        "issues": [
+          "Choose a category outside this demo taxonomy"
+        ]
+      },
+      "categoryCorrect": false,
+      "missingFieldsPreserved": true
+    },
+    {
+      "text": "Please cancel my subscription and refund last month.",
+      "category": "other",
+      "missing": [],
+      "heldOut": true,
+      "actual": {
+        "category": "other",
+        "probability": 0.996,
+        "attributes": {},
+        "issues": [
+          "Choose a category outside this demo taxonomy"
+        ]
+      },
+      "categoryCorrect": true,
+      "missingFieldsPreserved": true
+    },
+    {
+      "text": "A gift bundle containing both a cotton shirt and wireless headphones.",
+      "category": "other",
+      "missing": [],
+      "heldOut": true,
+      "actual": {
+        "category": "audio",
+        "probability": 0.939,
+        "attributes": {
+          "material": {
+            "value": "cotton shirt",
+            "start": 32,
+            "end": 44
+          }
+        },
+        "issues": [
+          "Missing brand",
+          "Missing connectivity"
+        ]
+      },
+      "categoryCorrect": false,
+      "missingFieldsPreserved": true
+    }
+  ]
+}

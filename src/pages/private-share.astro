@@ -1,0 +1,14 @@
+---
+import Demo from '../layouts/Demo.astro';
+import meta from '../demos/private-share/meta';
+import Island from '../demos/private-share/Demo';
+---
+<Demo meta={meta}>
+  <Island client:only="react" />
+  <div slot="notes">
+    <h2>Keep the context. Review the details.</h2>
+    <p>The entities endpoint looks for names, emails, phone numbers, account or order IDs, and street addresses. The demo checks every returned span against the original text before highlighting it. Your selections are replaced with literal [REDACTED] markers; overlapping selections are merged.</p>
+    <h3>Detection is a starting point</h3>
+    <p>Models can miss sensitive details or mark harmless text. Review the entire transcript, add missed text, and remove unnecessary selections before exporting. This demo does not certify that text is anonymous. Live detection sends the transcript to the milliseconds API; sample review and manual redactions run in your browser.</p>
+  </div>
+</Demo>

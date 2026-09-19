@@ -1,0 +1,116 @@
+{
+ "slug": "log-sentinel",
+ "title": "Log Sentinel",
+ "one_liner": "Every line of a synthetic seven-service log firehose is judged in real time (actionable, severity, category, security) and scored live against a regex/severity-level alerting baseline with hand-labelled ground truth.",
+ "platform": "web (vite/react) with a Node SSE stream server; the Node server holds the API key and runs the whole pipeline",
+ "what_it_does": "The page is a three-pane dark ops console. The left pane is a firehose of raw log lines from seven services (api-gateway JSON, payments JSON plus Java stack traces, auth logfmt, k8s events, postgres, nginx access logs, cron) replayed from a seeded deterministic generator at 1-400 lines/s (slider, default 40). Multi-line stack traces are grouped into one event in code. Each event is sent to Jev with four questions (actionable, severity 0-4, category, security). When the verdict returns, the line gets a severity color and an age badge (ms from emission to verdict). The middle pane groups actionable events into incident cards by service:category inside a 60 s window (in code), with first/last seen, count, max severity and a security pill. The right pane shows live metrics (events/s, judgments/s, in-flight, backlog, p50/p95/p99, errors), a batching calibration result (single vs batch x8, measured at startup), and a \"Regex rules vs Jev\" scoreboard with precision/recall computed continuously against the fixture ground truth, plus a list of regex mistakes (false pages and misses) and any Jev mistakes. A Storm button injects a 14-step payments-provider degradation that starts with INFO-level anomalies and only produces ERRORs after 5.4 s; a storm timeline shows when Jev first flagged it versus when regex first paged, and prints the lead in seconds. Controls: rate slider, concurrency slider, batch/single toggle, pause. MOCK=1 replays fixture labels without calling the API.",
+ "jev_questions": [
+  {
+   "key": "actionable (batched as e{i}_actionable)",
+   "type": "noul",
+   "instructions": "Should an on-call engineer look at the log line `events[i].line` (emitted by the service `events[i].service`) right now? Judge what the line means for the system, NOT its log level or the words it contains. A failed attempt that recovered, an expected or canary failure, a client hanging up (HTTP 499, context canceled), a single wrong password, a diagnostic dump, an idempotent duplicate-key retry, a 404 or a deprecation notice is NOT actionable even if it says ERROR or contains a stack trace. A line that looks successful but reveals silent failure (HTTP 200 with a 0-byte body on a checkout or payment path, backup wrote 0 bytes, reconciliation mismatch), a request that took many seconds (rt/urt of several seconds), capacity running out, replication lag, a certificate about to expire, a dangerous privilege grant or scale-down, credential stuffing or vulnerability scanning IS actionable even at INFO level or with a 2xx status. | true: A human should investigate now: the line indicates customer impact, silent failure, data loss or risk, capacity exhaustion, a dangerous change, or a security event. | false: Routine, expected, self-healed, or merely informational. Nobody needs to act on this line.",
+   "state_shape": "batch: {events:[{service,line}]} with keys e{i}_actionable/e{i}_severity/e{i}_category/e{i}_security, 5-16 events per request (default 8); single: {event:{service,line}} with unprefixed keys. Threshold: actionable if P >= 0.5."
+  },
+  {
+   "key": "severity (e{i}_severity)",
+   "type": "score",
+   "instructions": "How severe is the situation described by the log line `events[i].line` for the production system? Judge the consequence, not the log level: a successful retry or an expected canary failure is noise even if it says ERROR; a silent failure (backup wrote 0 bytes, HTTP 200 with an empty body on a payment path, reconciliation mismatch, replication lag, cert expiring) is at least degraded even at INFO; a routine autoscaler or deploy event with no failure is at most degraded.",
+   "options": [
+    "0 Noise: routine, expected, or already self-healed. Nothing is wrong.",
+    "1 Informational: worth knowing (a deprecation notice, a blocked scan, a one-off client error) but there is no service impact.",
+    "2 Degraded: performance, capacity, freshness or reliability is slipping, or a risky change was made. Customers are not failing yet.",
+    "3 Customer-impacting: some customers are failing, waiting far too long, or getting wrong or unknown results right now.",
+    "4 Outage: the service or a core dependency is down, or effectively every request is failing."
+   ],
+   "state_shape": "same batch state; score 0-4 rounded to SEVERITIES index [noise, informational, degraded, customer-impacting, outage]"
+  },
+  {
+   "key": "category (e{i}_category)",
+   "type": "choice",
+   "instructions": "What is the root-cause category of the log line `events[i].line`?",
+   "options": [
+    "deploy: A rollout, new image, or version change caused it.",
+    "capacity: A resource is running out or overloaded: memory, disk, connections, replicas, queue depth, replication lag, latency under load.",
+    "dependency_failure: An upstream provider or another service is failing, timing out, or returning bad or empty responses.",
+    "security: Authentication, authorization, privilege grants, scanning, credential stuffing or other abuse.",
+    "data_integrity: Data is missing, mismatched, unreconciled, stale, or a backup wrote nothing.",
+    "config: A configuration value, certificate, feature flag or scaling setting is wrong, dangerous or about to expire.",
+    "transient: A one-off blip that already recovered on its own (a retry that succeeded, a client that hung up).",
+    "noise: Normal operation. Nothing is wrong."
+   ],
+   "state_shape": "same batch state; answer.choice must be one of CATEGORIES, else falls back to noise; answer.confidence shown as categoryConfidence"
+  },
+  {
+   "key": "security (e{i}_security)",
+   "type": "noul",
+   "instructions": "Is the log line `events[i].line` security-relevant: credential attacks, vulnerability scanning or probing, privilege or scope grants, suspicious tokens, or abuse? | true: The line describes or strongly suggests a security event that a security or on-call engineer should know about. | false: Not a security matter (ordinary logins, refreshes, blocked rate limits and normal traffic are not security events).",
+   "state_shape": "same batch state; threshold P >= 0.5"
+  }
+ ],
+ "request_cadence": "Continuous stream. Default 40 lines/s, batched 8 events per request with a 40 ms linger, concurrency 8, so about 5 requests/s at default and up to ~25 requests/s at 200 lines/s. Each request carries 4 questions per event (32 answers per batch of 8). Startup calibration fires 16 single + 2 batch requests. Storm injects 14 events over 7.8 s on top of the stream. 429s trigger shared exponential backoff 250 ms -> 8 s and one requeue.",
+ "data_files": [
+  "/Users/blaget/projects/jev-experiments/log-sentinel/server/fixtures.ts (491 lines; 44 weighted log templates across 7 services with ground-truth labels, plus the 14-step STORM sequence; pure TS, no node imports; the whole dataset)",
+  "/Users/blaget/projects/jev-experiments/log-sentinel/server/rng.ts (31 lines; seeded mulberry32 so the stream is reproducible)",
+  "/Users/blaget/projects/jev-experiments/log-sentinel/screenshots/log-sentinel.jpg (485 KB; reference look)",
+  "/Users/blaget/projects/jev-experiments/log-sentinel/screenshots/log-sentinel-demo.webp (6.9 MB animated; too large to ship, reference only)"
+ ],
+ "ui_components": [
+  "App shell + header controls (rate/concurrency sliders, batch/single toggle, pause, Storm button, LIVE/MOCK badge, error chip): /Users/blaget/projects/jev-experiments/log-sentinel/src/App.tsx (App, Controls)",
+  "Firehose pane with follow-scroll and severity-colored lines: src/App.tsx (Firehose)",
+  "Incidents pane with storm timeline and IncidentCard: src/App.tsx (Incidents, IncidentCard)",
+  "MetricsPane: stat grid, batching calibration, Regex-vs-Jev scoreboard, mistakes lists: src/App.tsx (MetricsPane, Stat)",
+  "Reducer joining events to judgments by id (binary search from tail, 400-row cap): /Users/blaget/projects/jev-experiments/log-sentinel/src/lib/store.ts",
+  "Dark console stylesheet with severity tokens (--noise/--info/--degraded/--cust/--outage/--sec): /Users/blaget/projects/jev-experiments/log-sentinel/src/styles.css (580 lines)"
+ ],
+ "reusable_source": [
+  "/Users/blaget/projects/jev-experiments/log-sentinel/server/fixtures.ts (copy as-is; browser-safe)",
+  "/Users/blaget/projects/jev-experiments/log-sentinel/server/generator.ts (copy as-is; Generator.tick/emit/flush/injectStorm)",
+  "/Users/blaget/projects/jev-experiments/log-sentinel/server/grouper.ts (copy as-is; LineGrouper)",
+  "/Users/blaget/projects/jev-experiments/log-sentinel/server/regex.ts (copy as-is; regexPages + REGEX_RULES baseline)",
+  "/Users/blaget/projects/jev-experiments/log-sentinel/server/incidents.ts (copy as-is; IncidentTracker)",
+  "/Users/blaget/projects/jev-experiments/log-sentinel/server/metrics.ts (copy as-is; percentile, LatencyWindow, RateMeter, Confusion)",
+  "/Users/blaget/projects/jev-experiments/log-sentinel/server/rng.ts (copy as-is)",
+  "/Users/blaget/projects/jev-experiments/log-sentinel/shared/types.ts (copy; drop Calibration/BatchMode/ServerMessage or keep as internal action union)",
+  "/Users/blaget/projects/jev-experiments/log-sentinel/src/lib/store.ts (copy; feed actions directly instead of SSE)",
+  "/Users/blaget/projects/jev-experiments/log-sentinel/src/App.tsx (copy, then remove concurrency slider + batch/single toggle + calibration block, restyle)",
+  "/Users/blaget/projects/jev-experiments/log-sentinel/server/core.test.ts and src/lib/store.test.ts (vitest; keep for the pure modules)"
+ ],
+ "dm1_mapping": [
+  {
+   "jev_key": "actionable",
+   "dm1_route": "yes-no",
+   "dm1_body": "POST /yes-no {\"texts\": [\"[payments] {\\\"ts\\\":...,\\\"level\\\":\\\"ERROR\\\",\\\"msg\\\":\\\"charge attempt 1 failed: provider timeout; retry succeeded on attempt 2\\\",...}\", ... up to 32 lines, each prefixed \"[<service>] \"], \"statement\": \"An on-call engineer should investigate this log line right now.\", \"when_true\": \"The line shows customer impact, a silent failure (HTTP 200 with a 0-byte body on a payment or checkout path, a backup that wrote 0 bytes, a reconciliation mismatch), a request that took many seconds, capacity running out, replication lag, a certificate about to expire, a dangerous privilege grant or scale-down, credential stuffing or vulnerability scanning, even at INFO level or with a 2xx status.\", \"when_false\": \"The line is routine, expected, or already self-healed: a retry that succeeded, a client that hung up (HTTP 499, context canceled), a single wrong password, a canary failure, a diagnostic thread dump, a duplicate-key retry, a 404, a deprecation notice, or a startup probe, even if it says ERROR or contains a stack trace.\"} -> results[i].answer / results[i].probability; actionable = probability >= 0.5 (keep ACTIONABLE_THRESHOLD).",
+   "notes": "Service name goes into the text prefix because there is no separate state field. Multi-line stack traces are sent joined with \\n as one text; consider truncating traces to the head plus first 2 frames to save tokens."
+  },
+  {
+   "jev_key": "severity",
+   "dm1_route": "rate",
+   "dm1_body": "POST /rate {\"texts\": [same 32 prefixed lines], \"scale\": [\"Noise: routine, expected, or already self-healed. Nothing is wrong. A successful retry, an expected canary failure or a client hang-up is noise even if it says ERROR.\", \"Informational: worth knowing (a deprecation notice, a blocked scan, a one-off client error) but there is no service impact.\", \"Degraded: performance, capacity, freshness or reliability is slipping, or a risky change was made. Customers are not failing yet. A silent failure at INFO level (backup wrote 0 bytes, replication lag, cert expiring) is at least degraded.\", \"Customer-impacting: some customers are failing, waiting far too long, or getting wrong or unknown results right now (HTTP 200 with an empty body on a payment path, reconciliation mismatch, 5xx on checkout).\", \"Outage: the service or a core dependency is down, or effectively every request is failing.\"]} -> results[i].level is the SEVERITIES index; severityScore = results[i].score * 4.",
+   "notes": "Jev's question prose is folded into the level descriptions since /rate has no instruction field."
+  },
+  {
+   "jev_key": "category",
+   "dm1_route": "classify",
+   "dm1_body": "POST /classify {\"texts\": [same 32 prefixed lines], \"labels\": {\"deploy\": \"A rollout, new image, or version change caused it.\", \"capacity\": \"A resource is running out or overloaded: memory, disk, connections, replicas, queue depth, replication lag, latency under load.\", \"dependency_failure\": \"An upstream provider or another service is failing, timing out, or returning bad or empty responses.\", \"security\": \"Authentication, authorization, privilege grants, scanning, credential stuffing or other abuse.\", \"data_integrity\": \"Data is missing, mismatched, unreconciled, stale, or a backup wrote nothing.\", \"config\": \"A configuration value, certificate, feature flag or scaling setting is wrong, dangerous or about to expire.\", \"transient\": \"A one-off blip that already recovered on its own (a retry that succeeded, a client that hung up).\", \"noise\": \"Normal operation. Nothing is wrong.\"}} -> results[i].label, results[i].probability as categoryConfidence.",
+   "notes": "CATEGORY_CRITERIA maps 1:1 to described labels."
+  },
+  {
+   "jev_key": "security",
+   "dm1_route": "yes-no",
+   "dm1_body": "POST /yes-no {\"texts\": [same 32 prefixed lines], \"statement\": \"This log line describes a security event.\", \"when_true\": \"Credential attacks or credential stuffing, vulnerability scanning or probing, an admin or wildcard privilege or scope grant, a suspicious token, or abuse.\", \"when_false\": \"Ordinary logins, token refreshes, a single wrong password, a blocked rate limit, or normal traffic.\"} -> security = probability >= 0.5.",
+   "notes": "Optional fourth request. To save a request per batch derive security = (category === \"security\"); fixture truth agrees with this for every template. Ship derived first, add the yes-no call only if the scoreboard shows security misses."
+  }
+ ],
+ "browser_plan": "Move the whole pipeline into the browser as a React island; the only server piece is a thin proxy route (/api/dm1/:route) that adds the bearer key and forwards JSON to https://api.milliseconds.ai/v1/decision-machine-1/:route, passing back status, body, x-inference-ms and x-input-tokens. Copy fixtures/generator/grouper/regex/incidents/metrics/rng/types unchanged (all pure TS). Replace server/jev.ts with a browser judge(events) that sends the same batch of up to 32 prefixed lines to /yes-no (actionable), /rate (severity) and /classify (category) in parallel via the proxy, then zips results into Verdict[] (security derived from category, or a fourth /yes-no call). Rewrite pipeline.ts as a client-side scheduler: a setInterval generator tick at the chosen rate, a 300 ms linger that fills batches up to 32, a token bucket of 2 requests/s (one batch = 3 requests, so about 0.67 batches/s, ~21 events/s ceiling), max 2 batches in flight, and 429 handling that honours Retry-After, backs off 1 s -> 16 s, pauses the generator (not just the judge) so the backlog stays honest, shows a \"rate limited, shared demo key\" banner, and requeues the batch once. Delete the startup calibration and the batch/single toggle and concurrency slider; the Batching panel becomes a static explainer: \"32 lines x 3 routes per batch, 2 req/s budget\" with live x-inference-ms and x-input-tokens totals. Rate slider 1-20 lines/s, default 12. Keep the store reducer and all three panes; replace EventSource with direct dispatch. Keep the Storm button and timeline (first flag by decision-machine vs first regex page). Keep MOCK as a query flag (?mock=1) so the page still renders if the key is rotated. Style with the milliseconds site tokens instead of the Jev dark palette; keep severity colors as CSS variables. Show precision/recall honestly; do not hardcode the README numbers.",
+ "difficulty": "M",
+ "risks": [
+  "Ambiguous whether texts[] and statements[] combine in one /yes-no call; the plan assumes texts + a single statement per request. If they do combine, actionable + security fit in one request.",
+  "Rate budget: 3 requests per batch at 2 req/s caps sustained throughput near 21 lines/s, far below the original 40-150 lines/s story; the demo must frame the ceiling as the shared demo key, not the API. Multiple concurrent visitors share the org's 200 req/min, so one tab at full rate can starve others; add a per-tab cap (12 lines/s default) and keep the 429 banner clear.",
+  "Latency of a 32-text batch is unknown; if p50 is 500 ms or more, the firehose age badges will read 400-900 ms instead of ~200 ms. Show it, do not hide it.",
+  "Accuracy will not match the README's 100/100 claims: 8-way classify on terse JSON/logfmt lines may pick neighbours (capacity vs config on scale-down), and /rate with 5 verbose levels may land one level off. Incident grouping is by category, so category flips split incidents.",
+  "Multi-line Java stack traces (5-6 lines) cost 150-250 input tokens each across 3 routes; at 20 lines/s that is fine for the 1M tok/min budget but truncation to head + 2 frames is cheap insurance.",
+  "Storm timing: linger (300 ms) plus batch latency delays the first decision-machine flag; the lead over regex (first page at +5.4 s) should still be 4 s or more, but measure it before quoting a number.",
+  "The original Node server ran generator timing with setInterval at 20 ms; in a background browser tab timers throttle to 1 s, so the stream stalls when the tab is hidden. Pause on visibilitychange and say so.",
+  "The two screenshot assets are not usable (6.9 MB webp); take new screenshots after restyling."
+ ]
+}

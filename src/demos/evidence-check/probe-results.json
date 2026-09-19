@@ -1,0 +1,90 @@
+{
+  "date": "2026-09-19",
+  "endpoint": "verify",
+  "method": "Six serial live requests; at least three seconds between starts. Fictional sources. These are model observations, not assertions of accuracy.",
+  "cases": [
+    {
+      "field": "customer",
+      "value": "Northstar Design Ltd.",
+      "expected": "match",
+      "response": {
+        "matches": true,
+        "probability": 1,
+        "found": [
+          "Northstar Design Ltd."
+        ]
+      },
+      "sourceId": "agreement_with_terms"
+    },
+    {
+      "field": "annual_fee",
+      "value": "USD 24,000",
+      "expected": "source says USD 18,000",
+      "response": {
+        "matches": false,
+        "probability": 0,
+        "found": [
+          "USD 18,000"
+        ]
+      },
+      "sourceId": "agreement_with_terms"
+    },
+    {
+      "field": "renewal_date",
+      "value": "2027-04-01",
+      "expected": "source says 2027-03-01",
+      "response": {
+        "matches": false,
+        "probability": 0,
+        "found": [
+          "2027-03-01"
+        ]
+      },
+      "sourceId": "agreement_with_terms"
+    },
+    {
+      "field": "cancellation_notice",
+      "value": "60 days",
+      "expected": "not stated; source has Net 30 payment terms",
+      "response": {
+        "matches": false,
+        "probability": 0,
+        "found": [
+          "Net 30"
+        ]
+      },
+      "limitation": "Wrong field selected; review, not proof of contradiction.",
+      "sourceId": "agreement_with_terms"
+    },
+    {
+      "field": "cancellation_notice",
+      "value": "60 days",
+      "expected": "not stated; source has renewal date",
+      "response": {
+        "matches": false,
+        "probability": 0,
+        "found": [
+          "2027-03-01"
+        ]
+      },
+      "limitation": "Wrong field selected; review, not proof of contradiction.",
+      "sourceId": "agreement_without_terms"
+    },
+    {
+      "field": "cancellation_notice",
+      "value": "60 days",
+      "source": "A workshop booking for Cedar Studio. Contact: studio@example.test. No dates or commercial terms are provided.",
+      "expected": "not stated",
+      "response": {
+        "matches": false,
+        "probability": 0,
+        "found": []
+      }
+    }
+  ],
+  "conclusion": "Three stated-value cases behaved as expected. One of three absent-field cases returned no spans; two returned unrelated source spans. UI keeps different-value results as review prompts and warns of field-selection errors. Curated previews are labelled and never represented as live responses. No accuracy claim is made.",
+  "sources": {
+    "agreement_with_terms": "SERVICE AGREEMENT\nCustomer: Northstar Design Ltd.\nAnnual fee: USD 18,000.\nRenewal date: 2027-03-01.\nPayment terms: Net 30.\nThis agreement does not specify a cancellation notice period.",
+    "agreement_without_terms": "SERVICE AGREEMENT\nCustomer: Northstar Design Ltd.\nAnnual fee: USD 18,000.\nRenewal date: 2027-03-01."
+  }
+}

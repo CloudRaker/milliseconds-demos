@@ -1,0 +1,120 @@
+/* Commit Sentry. Every rule is scoped under .d-commit-sentry. The report keeps the
+   terminal layout of the original CLI (file table, risk bars, findings, timings),
+   restyled with the milliseconds.ai tokens. */
+
+.d-commit-sentry { display: flex; flex-direction: column; gap: 16px; }
+
+/* ---- controls -------------------------------------------------------- */
+
+.d-commit-sentry .cs-controls { display: grid; gap: 14px; grid-template-columns: minmax(0, 1fr) auto; align-items: end; }
+.d-commit-sentry .cs-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.d-commit-sentry .cs-field > label { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.d-commit-sentry .cs-field .input { font-family: var(--mono); font-size: 13px; }
+.d-commit-sentry .cs-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.d-commit-sentry .cs-toggle { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); cursor: pointer; white-space: nowrap; }
+.d-commit-sentry .cs-toggle input { accent-color: var(--purple-on-dark); }
+.d-commit-sentry .cs-hint { font-size: 12px; color: var(--muted); font-family: var(--mono); }
+
+.d-commit-sentry .cs-progress { display: flex; align-items: center; gap: 12px; font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.d-commit-sentry .cs-progress .bar { flex: 1; min-width: 80px; }
+.d-commit-sentry .cs-progress .bar > i { background: var(--purple-on-dark); }
+
+/* ---- verdict --------------------------------------------------------- */
+
+.d-commit-sentry .cs-verdict { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; padding: 14px 18px; border-radius: 12px; border: 1px solid var(--line); background: #ffffff05; }
+.d-commit-sentry .cs-verdict b { font-family: var(--mono); font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; padding: 5px 12px; border-radius: 6px; }
+.d-commit-sentry .cs-verdict[data-verdict="block"] b { background: #ff8a8a; color: #16070a; }
+.d-commit-sentry .cs-verdict[data-verdict="warn"] b { background: #f0b35a; color: #1a1205; }
+.d-commit-sentry .cs-verdict[data-verdict="pass"] b { background: #6fdc8c; color: #06180c; }
+.d-commit-sentry .cs-verdict[data-verdict="idle"] b { background: transparent; border: 1px solid var(--line); color: var(--muted); }
+.d-commit-sentry .cs-verdict span { font-size: 14px; color: var(--muted); }
+
+/* ---- two columns ----------------------------------------------------- */
+
+.d-commit-sentry .cs-cols { display: grid; gap: 16px; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); align-items: start; }
+@media (max-width: 1000px) { .d-commit-sentry .cs-cols { grid-template-columns: minmax(0, 1fr); } }
+.d-commit-sentry .cs-stack { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+
+/* ---- file table ------------------------------------------------------ */
+
+.d-commit-sentry .cs-files { width: 100%; border-collapse: collapse; font-size: 13px; }
+.d-commit-sentry .cs-files th { text-align: left; font: 600 10px var(--sans); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); padding: 0 8px 8px 0; font-weight: 600; }
+.d-commit-sentry .cs-files td { padding: 7px 8px 7px 0; border-top: 1px solid var(--line); vertical-align: middle; }
+.d-commit-sentry .cs-files tr { cursor: pointer; }
+.d-commit-sentry .cs-files tr[data-on="1"] td { background: #ffffff08; }
+.d-commit-sentry .cs-files tr:hover td { background: #ffffff0c; }
+.d-commit-sentry .cs-files .cs-path { font-family: var(--mono); font-size: 12px; color: var(--white); word-break: break-all; }
+.d-commit-sentry .cs-files .cs-num { font-family: var(--mono); color: var(--muted); text-align: right; width: 1%; }
+.d-commit-sentry .cs-riskcell { display: flex; align-items: center; gap: 8px; min-width: 150px; }
+.d-commit-sentry .cs-riskcell .bar { flex: 1; min-width: 56px; }
+.d-commit-sentry .cs-riskcell em { font-style: normal; font-family: var(--mono); font-size: 11px; width: 66px; }
+.d-commit-sentry .bar > i[data-level="0"], .d-commit-sentry .cs-riskcell em[data-level="0"] { color: var(--muted); }
+.d-commit-sentry .bar > i[data-level="0"] { background: var(--muted); }
+.d-commit-sentry .bar > i[data-level="1"] { background: #6fdc8c; }
+.d-commit-sentry .cs-riskcell em[data-level="1"] { color: #6fdc8c; }
+.d-commit-sentry .bar > i[data-level="2"] { background: #f0b35a; }
+.d-commit-sentry .cs-riskcell em[data-level="2"] { color: #f0b35a; }
+.d-commit-sentry .bar > i[data-level="3"] { background: #c08cff; }
+.d-commit-sentry .cs-riskcell em[data-level="3"] { color: #c08cff; }
+.d-commit-sentry .bar > i[data-level="4"] { background: #ff8a8a; }
+.d-commit-sentry .cs-riskcell em[data-level="4"] { color: #ff8a8a; }
+
+/* ---- diff viewer ----------------------------------------------------- */
+
+.d-commit-sentry .cs-hunk + .cs-hunk { margin-top: 14px; }
+.d-commit-sentry .cs-hunkhead { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.d-commit-sentry .cs-diff { margin: 0; border: 1px solid var(--line); border-radius: 10px; overflow-x: auto; background: #00000030; }
+.d-commit-sentry .cs-diff div { display: grid; grid-template-columns: 44px 1fr; font-family: var(--mono); font-size: 12px; line-height: 1.75; white-space: pre; }
+.d-commit-sentry .cs-diff i { font-style: normal; color: #ffffff40; text-align: right; padding-right: 10px; user-select: none; }
+.d-commit-sentry .cs-diff span { padding-right: 12px; color: var(--muted); }
+.d-commit-sentry .cs-diff div[data-k="+"] { background: #6fdc8c14; }
+.d-commit-sentry .cs-diff div[data-k="+"] span { color: #9ae6b0; }
+.d-commit-sentry .cs-diff div[data-k="-"] { background: #ff8a8a12; }
+.d-commit-sentry .cs-diff div[data-k="-"] span { color: #ffb0b0; }
+.d-commit-sentry .cs-diff div[data-off="1"] { background: #ff8a8a2e; box-shadow: inset 3px 0 0 #ff8a8a; }
+.d-commit-sentry .cs-diff div[data-off="1"] span { color: #ffd2d2; }
+
+/* ---- findings -------------------------------------------------------- */
+
+.d-commit-sentry .cs-finding { padding: 12px 0; border-top: 1px solid var(--line); }
+.d-commit-sentry .cs-finding:first-of-type { border-top: 0; padding-top: 0; }
+.d-commit-sentry .cs-findhead { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.d-commit-sentry .cs-findhead code { font-family: var(--mono); font-size: 12px; color: var(--white); }
+.d-commit-sentry .cs-labels { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 8px 0 0; font-size: 13px; }
+.d-commit-sentry .cs-labels span { color: var(--muted); }
+.d-commit-sentry .cs-labels b { font-weight: 500; }
+.d-commit-sentry .cs-labels b[data-sev="block"] { color: #ff8a8a; }
+.d-commit-sentry .cs-labels b[data-sev="warn"] { color: #f0b35a; }
+.d-commit-sentry .cs-quote { margin: 8px 0 0; padding-left: 12px; border-left: 2px solid var(--line); font-family: var(--mono); font-size: 12px; color: #9ae6b0; overflow-x: auto; white-space: pre; }
+
+/* ---- message cards ---------------------------------------- */
+
+.d-commit-sentry .cs-kv { display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; font-size: 13px; margin: 0; }
+.d-commit-sentry .cs-kv dt { color: var(--muted); }
+.d-commit-sentry .cs-kv dd { margin: 0; font-family: var(--mono); font-size: 12px; }
+
+/* ---- recorded replay + message coverage ------------------------------ */
+
+.d-commit-sentry .cs-replay { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin: 12px 0 0; font-size: 13px; color: var(--muted); }
+.d-commit-sentry .cs-claims { list-style: none; margin: 12px 0 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.d-commit-sentry .cs-claims li { display: grid; grid-template-columns: 44px 1fr; gap: 10px; font-size: 12px; color: var(--muted); }
+.d-commit-sentry .cs-claims b { font-family: var(--mono); font-weight: 400; text-align: right; color: #ff8a8a; }
+.d-commit-sentry .cs-claims li[data-on="1"] b { color: #6fdc8c; }
+.d-commit-sentry .cs-claims li[data-on="1"] span { color: var(--white); }
+
+.d-commit-sentry .panel, .d-commit-sentry .cs-stack { min-width: 0; }
+.d-commit-sentry .cs-table-scroll { overflow-x: auto; }
+.d-commit-sentry .cs-files { min-width: 580px; }
+.d-commit-sentry .cs-files .cs-path { min-width: 180px; word-break: normal; }
+.d-commit-sentry .cs-file-button { border: 0; padding: 4px 0; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; overflow-wrap: anywhere; }
+.d-commit-sentry .cs-file-button[aria-pressed="true"] { color: var(--white); }
+.d-commit-sentry .cs-file-button:focus-visible { outline: 2px solid var(--purple-on-dark); outline-offset: 3px; }
+.d-commit-sentry .cs-kv dd, .d-commit-sentry .cs-findhead code { min-width: 0; overflow-wrap: anywhere; }
+@media (max-width: 600px) {
+  .d-commit-sentry .panel { padding: 16px; }
+  .d-commit-sentry .cs-controls { grid-template-columns: minmax(0, 1fr); }
+  .d-commit-sentry .cs-actions { justify-content: space-between; }
+  .d-commit-sentry .cs-progress { flex-wrap: wrap; }
+  .d-commit-sentry .cs-kv { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  .d-commit-sentry .cs-kv dd { margin-bottom: 10px; }
+}

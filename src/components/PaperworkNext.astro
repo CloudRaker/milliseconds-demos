@@ -1,0 +1,68 @@
+---
+import { ArrowUpRightIcon } from '@phosphor-icons/react/ssr';
+const { slug } = Astro.props as { slug: string };
+const examples: Record<string, { title: string; description: string; links: { label: string; path: string; route: string }[] }> = {
+  'invoice-desk': {
+    title: 'Start with invoice PDFs',
+    description: 'Use Paperwork to extract invoice headers and line items with page citations. Then apply the review rules shown here.',
+    links: [{ label: 'Extract from invoices', path: 'extract', route: '/v1/extract' }],
+  },
+  'sales-intake': {
+    title: 'Bring attachments into the conversation',
+    description: 'Turn an attached brief, PDF or call recording into text with Paperwork. Use that context in your milliseconds intake workflow.',
+    links: [{ label: 'Parse documents and recordings', path: 'parse', route: '/v1/parse' }],
+  },
+  'catalog-studio': {
+    title: 'Build the catalog from supplier documents',
+    description: 'Extract product records from supplier PDFs with Paperwork, then use milliseconds to categorize the descriptions and find missing attributes.',
+    links: [{ label: 'Extract product records', path: 'extract', route: '/v1/extract' }],
+  },
+  'evidence-check': {
+    title: 'Trace the record back to the document',
+    description: 'Extract fields with Paperwork citations to the original page and region. Bring that source evidence into your record review.',
+    links: [{ label: 'Extract with source citations', path: 'extract#guaranteed-grounding', route: '/v1/extract' }],
+  },
+  'private-share': {
+    title: 'Redact the source file, too',
+    description: 'Extend this text workflow to PDFs and recordings. Paperwork creates a redacted file, removing detected PDF text or beeping or silencing detected speech.',
+    links: [{ label: 'Redact documents and audio', path: 'redact', route: '/v1/redact' }],
+  },
+  'returns-desk': {
+    title: 'Connect the receipt and the return form',
+    description: 'Extract receipt details with Paperwork before applying your return policy. After staff review, use confirmed values to fill your return form.',
+    links: [
+      { label: 'Extract receipt details', path: 'extract', route: '/v1/extract' },
+      { label: 'Fill a return form', path: 'fill', route: '/v1/fill' },
+    ],
+  },
+};
+const example = examples[slug];
+---
+{example && <aside class="paperwork-next" aria-labelledby="paperwork-heading">
+  <div class="paperwork-copy">
+    <p class="paperwork-eyebrow">Build further with CloudRaker · Paperwork API</p>
+    <h2 id="paperwork-heading">{example.title}</h2>
+    <p>{example.description}</p>
+  </div>
+  <div class="paperwork-links">
+    {example.links.map(link => <a href={`https://docs.cloudraker.com/paperwork/capabilities/${link.path}`} target="_blank" rel="noopener noreferrer">
+      <span>{link.label}<code>POST {link.route}</code></span><ArrowUpRightIcon size={20} aria-hidden="true" />
+    </a>)}
+  </div>
+  <p class="paperwork-account">Your milliseconds.ai account is also your <a href="https://app.cloudraker.com/" target="_blank" rel="noopener noreferrer">CloudRaker account</a>. <a href="https://docs.cloudraker.com/paperwork/developers/authentication" target="_blank" rel="noopener noreferrer">Set up a Paperwork API key</a>.</p>
+</aside>}
+<style>
+  .paperwork-next { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 22px 36px; margin-top: 36px; padding: 26px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+  .paperwork-eyebrow { color: var(--muted); font-size: 12px; margin-bottom: 10px; }
+  .paperwork-copy h2 { font-size: 23px; line-height: 1.25; letter-spacing: -.025em; margin-bottom: 10px; }
+  .paperwork-copy > p:last-child { color: var(--muted); font-size: 14px; line-height: 1.65; max-width: 64ch; }
+  .paperwork-links { display: grid; align-content: center; gap: 10px; }
+  .paperwork-links a { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 12px 15px; border: 1px solid var(--line); border-radius: 8px; font-size: 14px; }
+  .paperwork-links a:hover { border-color: var(--purple-on-dark); }
+  .paperwork-links svg { color: var(--purple-on-dark); flex-shrink: 0; }
+  .paperwork-links code { display: block; color: var(--muted); font-size: 11px; margin-top: 5px; }
+  .paperwork-account { grid-column: 1 / -1; padding-top: 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; line-height: 1.7; }
+  .paperwork-account a { color: var(--white); text-decoration: underline; text-underline-offset: 3px; }
+  .paperwork-next a:focus-visible { outline: 2px solid var(--purple-on-dark); outline-offset: 4px; }
+  @media (max-width: 700px) { .paperwork-next { grid-template-columns: 1fr; padding: 20px; gap: 18px; } .paperwork-copy h2 { font-size: 21px; } }
+</style>

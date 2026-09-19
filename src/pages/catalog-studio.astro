@@ -1,0 +1,15 @@
+---
+import Demo from '../layouts/Demo.astro';
+import meta from '../demos/catalog-studio/meta';
+import Island from '../demos/catalog-studio/Demo';
+---
+<Demo meta={meta}>
+  <Island client:only="react" />
+  <div slot="notes">
+    <h2>From descriptions to a searchable catalog</h2>
+    <p>Classify assigns a category. Extract reads stated attributes. Code checks category requirements and matches returned wording to the original description. Nothing is published.</p>
+    <h3>Demo scope</h3>
+    <p>Text-only listings in clothing, furniture and audio. A source match locates wording; it does not prove the model assigned it to the right attribute. Drafts need human review. Missing or ambiguous facts remain in the review queue. Unit conversion supports unambiguous dimensions in mm or inches, preserving the original.</p>
+    <p>See how structured records support the shopper experience in <a href="/instant-search/">Product Search</a>.</p>
+  </div>
+</Demo>

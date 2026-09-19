@@ -1,0 +1,1598 @@
+[
+  {
+    "demo": "ax-pilot",
+    "scenario": "sim-calculator",
+    "route": "classify",
+    "body": {
+      "text": "Goal: In Calculator compute 48*12.\nApp: Calculator.\nWindow: Calculator.\nFocused: nothing.\nModal sheet: no.\nVisible text: 0.\nText candidates: 48*12.\nAlready typed: none.\nFacts: 48*12 equals 576.\nPrevious actions: none.\nSelected right now: nothing.\nElements: e1 button 'All Clear'; e2 button 'Change Sign'; e3 button 'Percent'; e4 button 'Divide'; e5 button '7'; e6 button '8'; e7 button '9'; e8 button 'Multiply'; e9 button '4'; e10 button '5'; e11 button '6'; e12 button 'Subtract'; e13 button '1'; e14 button '2'; e15 button '3'; e16 button 'Add'; e17 button '0'; e18 button 'Point'; e19 button 'Equals'; e20 button 'Delete'.\nWhich single action advances the goal next?",
+      "labels": {
+        "e1 button 'All Clear'": "Press the button labelled 'All Clear'.",
+        "e2 button 'Change Sign'": "Press the button labelled 'Change Sign'.",
+        "e3 button 'Percent'": "Press the button labelled 'Percent'.",
+        "e4 button 'Divide'": "Press the button labelled 'Divide'.",
+        "e5 button '7'": "Press the button labelled '7'.",
+        "e6 button '8'": "Press the button labelled '8'.",
+        "e7 button '9'": "Press the button labelled '9'.",
+        "e8 button 'Multiply'": "Press the button labelled 'Multiply'.",
+        "e9 button '4'": "Press the button labelled '4'.",
+        "e10 button '5'": "Press the button labelled '5'.",
+        "e11 button '6'": "Press the button labelled '6'.",
+        "e12 button 'Subtract'": "Press the button labelled 'Subtract'.",
+        "e13 button '1'": "Press the button labelled '1'.",
+        "e14 button '2'": "Press the button labelled '2'.",
+        "e15 button '3'": "Press the button labelled '3'.",
+        "e16 button 'Add'": "Press the button labelled 'Add'.",
+        "e17 button '0'": "Press the button labelled '0'.",
+        "e18 button 'Point'": "Press the button labelled 'Point'.",
+        "e19 button 'Equals'": "Press the button labelled 'Equals'.",
+        "e20 button 'Delete'": "Press the button labelled 'Delete'.",
+        "type_text": "Type '48*12' into the focused control. The text is not there yet.",
+        "press_key": "Press a keyboard shortcut instead of an element, for example Return to submit text already typed.",
+        "done": "The goal is already visible in the state. Nothing more to do."
+      }
+    },
+    "recorded": {
+      "data": {
+        "label": "type_text",
+        "probability": 0.568,
+        "confidence": 0.605,
+        "scores": {
+          "e1 button 'All Clear'": 0.001,
+          "e2 button 'Change Sign'": 0,
+          "e3 button 'Percent'": 0,
+          "e4 button 'Divide'": 0,
+          "e5 button '7'": 0.001,
+          "e6 button '8'": 0.001,
+          "e7 button '9'": 0.001,
+          "e8 button 'Multiply'": 0.022,
+          "e9 button '4'": 0.001,
+          "e10 button '5'": 0,
+          "e11 button '6'": 0.001,
+          "e12 button 'Subtract'": 0,
+          "e13 button '1'": 0.008,
+          "e14 button '2'": 0.003,
+          "e15 button '3'": 0,
+          "e16 button 'Add'": 0.008,
+          "e17 button '0'": 0.008,
+          "e18 button 'Point'": 0.008,
+          "e19 button 'Equals'": 0.281,
+          "e20 button 'Delete'": 0.005,
+          "type_text": 0.568,
+          "press_key": 0.006,
+          "done": 0.076
+        }
+      },
+      "tokens": 743,
+      "generatedAt": "2026-09-19T16:22:49.131Z",
+      "modelMs": 224
+    },
+    "pinned": true
+  },
+  {
+    "demo": "ax-pilot",
+    "scenario": "sim-calculator",
+    "route": "yes-no",
+    "body": {
+      "text": "Goal: In Calculator compute 48*12.\nApp: Calculator.\nWindow: Calculator.\nFocused: nothing.\nModal sheet: no.\nVisible text: 0.\nText candidates: 48*12.\nAlready typed: none.\nFacts: 48*12 equals 576.\nPrevious actions: none.\nSelected right now: nothing.\nElements: e1 button 'All Clear'; e2 button 'Change Sign'; e3 button 'Percent'; e4 button 'Divide'; e5 button '7'; e6 button '8'; e7 button '9'; e8 button 'Multiply'; e9 button '4'; e10 button '5'; e11 button '6'; e12 button 'Subtract'; e13 button '1'; e14 button '2'; e15 button '3'; e16 button 'Add'; e17 button '0'; e18 button 'Point'; e19 button 'Equals'; e20 button 'Delete'.",
+      "statements": [
+        "The state above already shows this finished: In Calculator compute 48*12",
+        "Text from the text candidates still has to be typed into a field; it is not there yet.",
+        "The next action would delete, erase, send, pay for or permanently discard something."
+      ]
+    },
+    "recorded": {
+      "data": {
+        "results": [
+          {
+            "statement": "The state above already shows this finished: In Calculator compute 48*12",
+            "answer": true,
+            "probability": 0.694
+          },
+          {
+            "statement": "Text from the text candidates still has to be typed into a field; it is not there yet.",
+            "answer": false,
+            "probability": 0.269
+          },
+          {
+            "statement": "The next action would delete, erase, send, pay for or permanently discard something.",
+            "answer": false,
+            "probability": 0.023
+          }
+        ]
+      },
+      "tokens": 437,
+      "generatedAt": "2026-09-19T16:22:50.530Z",
+      "modelMs": 59
+    },
+    "pinned": true
+  },
+  {
+    "demo": "ax-pilot",
+    "scenario": "sim-calculator",
+    "route": "classify",
+    "body": {
+      "text": "Goal: In Calculator compute 48*12.\nApp: Calculator.\nWindow: Calculator.\nFocused: nothing.\nModal sheet: no.\nVisible text: 12.\nText candidates: 48*12.\nAlready typed: 48*12.\nFacts: 48*12 equals 576.\nPrevious actions: step 1 type_text '48*12'.\nSelected right now: nothing.\nElements: e1 button 'All Clear'; e2 button 'Change Sign'; e3 button 'Percent'; e4 button 'Divide'; e5 button '7'; e6 button '8'; e7 button '9'; e8 button 'Multiply'; e9 button '4'; e10 button '5'; e11 button '6'; e12 button 'Subtract'; e13 button '1'; e14 button '2'; e15 button '3'; e16 button 'Add'; e17 button '0'; e18 button 'Point'; e19 button 'Equals'; e20 button 'Delete'.\nWhich single action advances the goal next?",
+      "labels": {
+        "e1 button 'All Clear'": "Press the button labelled 'All Clear'.",
+        "e2 button 'Change Sign'": "Press the button labelled 'Change Sign'.",
+        "e3 button 'Percent'": "Press the button labelled 'Percent'.",
+        "e4 button 'Divide'": "Press the button labelled 'Divide'.",
+        "e5 button '7'": "Press the button labelled '7'.",
+        "e6 button '8'": "Press the button labelled '8'.",
+        "e7 button '9'": "Press the button labelled '9'.",
+        "e8 button 'Multiply'": "Press the button labelled 'Multiply'.",
+        "e9 button '4'": "Press the button labelled '4'.",
+        "e10 button '5'": "Press the button labelled '5'.",
+        "e11 button '6'": "Press the button labelled '6'.",
+        "e12 button 'Subtract'": "Press the button labelled 'Subtract'.",
+        "e13 button '1'": "Press the button labelled '1'.",
+        "e14 button '2'": "Press the button labelled '2'.",
+        "e15 button '3'": "Press the button labelled '3'.",
+        "e16 button 'Add'": "Press the button labelled 'Add'.",
+        "e17 button '0'": "Press the button labelled '0'.",
+        "e18 button 'Point'": "Press the button labelled 'Point'.",
+        "e19 button 'Equals'": "Press the button labelled 'Equals'.",
+        "e20 button 'Delete'": "Press the button labelled 'Delete'.",
+        "press_key": "Press a keyboard shortcut instead of an element, for example Return to submit text already typed.",
+        "done": "The goal is already visible in the state. Nothing more to do.",
+        "stuck": "No listed element or key can make progress toward the goal."
+      }
+    },
+    "recorded": {
+      "data": {
+        "label": "e19 button 'Equals'",
+        "probability": 0.842,
+        "confidence": 0.745,
+        "scores": {
+          "e1 button 'All Clear'": 0.001,
+          "e2 button 'Change Sign'": 0,
+          "e3 button 'Percent'": 0,
+          "e4 button 'Divide'": 0.001,
+          "e5 button '7'": 0,
+          "e6 button '8'": 0.001,
+          "e7 button '9'": 0.001,
+          "e8 button 'Multiply'": 0.005,
+          "e9 button '4'": 0,
+          "e10 button '5'": 0,
+          "e11 button '6'": 0.001,
+          "e12 button 'Subtract'": 0,
+          "e13 button '1'": 0.011,
+          "e14 button '2'": 0.005,
+          "e15 button '3'": 0,
+          "e16 button 'Add'": 0.011,
+          "e17 button '0'": 0.026,
+          "e18 button 'Point'": 0.023,
+          "e19 button 'Equals'": 0.842,
+          "e20 button 'Delete'": 0.029,
+          "press_key": 0.023,
+          "done": 0.005,
+          "stuck": 0.014
+        }
+      },
+      "tokens": 746,
+      "generatedAt": "2026-09-19T16:22:51.886Z",
+      "modelMs": 30
+    },
+    "pinned": true
+  },
+  {
+    "demo": "ax-pilot",
+    "scenario": "sim-calculator",
+    "route": "yes-no",
+    "body": {
+      "text": "Goal: In Calculator compute 48*12.\nApp: Calculator.\nWindow: Calculator.\nFocused: nothing.\nModal sheet: no.\nVisible text: 12.\nText candidates: 48*12.\nAlready typed: 48*12.\nFacts: 48*12 equals 576.\nPrevious actions: step 1 type_text '48*12'.\nSelected right now: nothing.\nElements: e1 button 'All Clear'; e2 button 'Change Sign'; e3 button 'Percent'; e4 button 'Divide'; e5 button '7'; e6 button '8'; e7 button '9'; e8 button 'Multiply'; e9 button '4'; e10 button '5'; e11 button '6'; e12 button 'Subtract'; e13 button '1'; e14 button '2'; e15 button '3'; e16 button 'Add'; e17 button '0'; e18 button 'Point'; e19 button 'Equals'; e20 button 'Delete'.",
+      "statements": [
+        "The state above already shows this finished: In Calculator compute 48*12",
+        "Text from the text candidates still has to be typed into a field; it is not there yet.",
+        "The next action would delete, erase, send, pay for or permanently discard something."
+      ]
+    },
+    "recorded": {
+      "data": {
+        "results": [
+          {
+            "statement": "The state above already shows this finished: In Calculator compute 48*12",
+            "answer": true,
+            "probability": 0.785
+          },
+          {
+            "statement": "Text from the text candidates still has to be typed into a field; it is not there yet.",
+            "answer": false,
+            "probability": 0.231
+          },
+          {
+            "statement": "The next action would delete, erase, send, pay for or permanently discard something.",
+            "answer": false,
+            "probability": 0.025
+          }
+        ]
+      },
+      "tokens": 443,
+      "generatedAt": "2026-09-19T16:22:53.265Z",
+      "modelMs": 48
+    },
+    "pinned": true
+  },
+  {
+    "demo": "ax-pilot",
+    "scenario": "sim-textedit",
+    "route": "classify",
+    "body": {
+      "text": "Goal: In TextEdit make a new document and type Hello from milliseconds.\nApp: TextEdit.\nWindow: TextEdit.\nFocused: nothing.\nModal sheet: no.\nVisible text: No document is open..\nText candidates: Hello from milliseconds.\nAlready typed: none.\nPrevious actions: none.\nThe goal asks to create something new, so an item that already exists does not satisfy it.\nSelected right now: nothing.\nElements: e1 button 'New Document'; e2 button 'Open…'.\nWhich single action advances the goal next?",
+      "labels": {
+        "e1 button 'New Document'": "Press the button labelled 'New Document'.",
+        "e2 button 'Open…'": "Press the button labelled 'Open…'.",
+        "press_key": "Press a keyboard shortcut instead of an element, for example Return to submit text already typed.",
+        "done": "The goal is already visible in the state. Nothing more to do."
+      }
+    },
+    "recorded": {
+      "data": {
+        "label": "e1 button 'New Document'",
+        "probability": 0.955,
+        "confidence": 0.839,
+        "scores": {
+          "e1 button 'New Document'": 0.955,
+          "e2 button 'Open…'": 0.004,
+          "press_key": 0.015,
+          "done": 0.026
+        }
+      },
+      "tokens": 414,
+      "generatedAt": "2026-09-19T16:22:54.410Z",
+      "modelMs": 25
+    },
+    "pinned": true
+  },
+  {
+    "demo": "ax-pilot",
+    "scenario": "sim-textedit",
+    "route": "yes-no",
+    "body": {
+      "text": "Goal: In TextEdit make a new document and type Hello from milliseconds.\nApp: TextEdit.\nWindow: TextEdit.\nFocused: nothing.\nModal sheet: no.\nVisible text: No document is open..\nText candidates: Hello from milliseconds.\nAlready typed: none.\nPrevious actions: none.\nThe goal asks to create something new, so an item that already exists does not satisfy it.\nSelected right now: nothing.\nElements: e1 button 'New Document'; e2 button 'Open…'.",
+      "statements": [
+        "The state above already shows this finished: In TextEdit make a new document and type Hello from milliseconds",
+        "Text from the text candidates still has to be typed into a field; it is not there yet.",
+        "The next action would delete, erase, send, pay for or permanently discard something."
+      ]
+    },
+    "recorded": {
+      "data": {
+        "results": [
+          {
+            "statement": "The state above already shows this finished: In TextEdit make a new document and type Hello from milliseconds",
+            "answer": false,
+            "probability": 0.166
+          },
+          {
+            "statement": "Text from the text candidates still has to be typed into a field; it is not there yet.",
+            "answer": true,
+            "probability": 0.585
+          },
+          {
+            "statement": "The next action would delete, erase, send, pay for or permanently discard something.",
+            "answer": false,
+            "probability": 0.046
+          }
+        ]
+      },
+      "tokens": 397,
+      "generatedAt": "2026-09-19T16:22:55.589Z",
+      "modelMs": 47
+    },
+    "pinned": true
+  },
+  {
+    "demo": "ax-pilot",
+    "scenario": "sim-textedit",
+    "route": "classify",
+    "body": {
+      "text": "Goal: In TextEdit make a new document and type Hello from milliseconds.\nApp: TextEdit.\nWindow: Untitled.\nFocused: e4 text area (focused).\nModal sheet: no.\nVisible text: none.\nText candidates: Hello from milliseconds.\nAlready typed: none.\nPrevious actions: step 1 press e1 button 'New Document'.\nSelected right now: nothing.\nElements: e1 check box 'bold' value=0; e2 check box 'italic' value=0; e3 pop up button 'typeface' value=Helvetica; e4 text area (focused).\nWhich single action advances the goal next?",
+      "labels": {
+        "e1 check box 'bold' value=0": "Press the check box labelled 'bold'. It currently reads 0.",
+        "e2 check box 'italic' value=0": "Press the check box labelled 'italic'. It currently reads 0.",
+        "e3 pop up button 'typeface' value=Helvetica": "Press the pop up button labelled 'typeface'. It currently reads Helvetica.",
+        "e4 text area (focused)": "Click into the text area with no label. It has keyboard focus.",
+        "type_text": "Type 'Hello from milliseconds' into the focused control. The text is not there yet.",
+        "press_key": "Press a keyboard shortcut instead of an element, for example Return to submit text already typed.",
+        "done": "The goal is already visible in the state. Nothing more to do."
+      }
+    },
+    "recorded": {
+      "data": {
+        "label": "type_text",
+        "probability": 0.909,
+        "confidence": 0.779,
+        "scores": {
+          "e1 check box 'bold' value=0": 0.001,
+          "e2 check box 'italic' value=0": 0.001,
+          "e3 pop up button 'typeface' value=Helvetica": 0.008,
+          "e4 text area (focused)": 0.026,
+          "type_text": 0.909,
+          "press_key": 0.024,
+          "done": 0.031
+        }
+      },
+      "tokens": 517,
+      "generatedAt": "2026-09-19T16:22:56.747Z",
+      "modelMs": 26
+    },
+    "pinned": true
+  },
+  {
+    "demo": "ax-pilot",
+    "scenario": "sim-textedit",
+    "route": "yes-no",
+    "body": {
+      "text": "Goal: In TextEdit make a new document and type Hello from milliseconds.\nApp: TextEdit.\nWindow: Untitled.\nFocused: e4 text area (focused).\nModal sheet: no.\nVisible text: none.\nText candidates: Hello from milliseconds.\nAlready typed: none.\nPrevious actions: step 1 press e1 button 'New Document'.\nSelected right now: nothing.\nElements: e1 check box 'bold' value=0; e2 check box 'italic' value=0; e3 pop up button 'typeface' value=Helvetica; e4 text area (focused).",
+      "statements": [
+        "The state above already shows this finished: In TextEdit make a new document and type Hello from milliseconds",
+        "Text from the text candidates still has to be typed into a field; it is not there yet.",
+        "The next action would delete, erase, send, pay for or permanently discard something."
+      ]
+    },
+    "recorded": {
+      "data": {
+        "results": [
+          {
+            "statement": "The state above already shows this finished: In TextEdit make a new document and type Hello from milliseconds",
+            "answer": false,
+            "probability": 0.441
+          },
+          {
+            "statement": "Text from the text candidates still has to be typed into a field; it is not there yet.",
+            "answer": true,
+            "probability": 0.814
+          },
+          {
+            "statement": "The next action would delete, erase, send, pay for or permanently discard something.",
+            "answer": false,
+            "probability": 0.032
+          }
+        ]
+      },
+      "tokens": 403,
+      "generatedAt": "2026-09-19T16:22:57.922Z",
+      "modelMs": 46
+    },
+    "pinned": true
+  },
+  {
+    "demo": "ax-pilot",
+    "scenario": "sim-safari",
+    "route": "classify",
+    "body": {
+      "text": "Goal: In Safari open a new tab and go to milliseconds.ai.\nApp: Safari.\nWindow: Start Page.\nFocused: nothing.\nModal sheet: no.\nVisible text: Start Page | Favorites · Frequently Visited · Privacy Report.\nText candidates: milliseconds.ai.\nAlready typed: none.\nPrevious actions: none.\nThe goal asks to create something new, so an item that already exists does not satisfy it.\nSelected right now: e1 tab 'Start Page' (selected).\nElements: e1 tab 'Start Page' (selected); e2 button 'New Tab'; e3 text field 'smart search field'.\nWhich single action advances the goal next?",
+      "labels": {
+        "e1 tab 'Start Page' (selected)": "Press the tab labelled 'Start Page'. It is already selected.",
+        "e2 button 'New Tab'": "Press the button labelled 'New Tab'.",
+        "e3 text field 'smart search field'": "Click into the text field labelled 'smart search field'.",
+        "press_key": "Press a keyboard shortcut instead of an element, for example Return to submit text already typed.",
+        "done": "The goal is already visible in the state. Nothing more to do."
+      }
+    },
+    "recorded": {
+      "data": {
+        "label": "e2 button 'New Tab'",
+        "probability": 0.997,
+        "confidence": 0.984,
+        "scores": {
+          "e1 tab 'Start Page' (selected)": 0.001,
+          "e2 button 'New Tab'": 0.997,
+          "e3 text field 'smart search field'": 0.001,
+          "press_key": 0.001,
+          "done": 0
+        }
+      },
+      "tokens": 469,
+      "generatedAt": "2026-09-19T16:22:59.405Z",
+      "modelMs": 36
+    },
+    "pinned": true
+  },
+  {
+    "demo": "ax-pilot",
+    "scenario": "sim-safari",
+    "route": "yes-no",
+    "body": {
+      "text": "Goal: In Safari open a new tab and go to milliseconds.ai.\nApp: Safari.\nWindow: Start Page.\nFocused: nothing.\nModal sheet: no.\nVisible text: Start Page | Favorites · Frequently Visited · Privacy Report.\nText candidates: milliseconds.ai.\nAlready typed: none.\nPrevious actions: none.\nThe goal asks to create something new, so an item that already exists does not satisfy it.\nSelected right now: e1 tab 'Start Page' (selected).\nElements: e1 tab 'Start Page' (selected); e2 button 'New Tab'; e3 text field 'smart search field'.",
+      "statements": [
+        "The state above already shows this finished: In Safari open a new tab and go to milliseconds.ai",
+        "Text from the text candidates still has to be typed into a field; it is not there yet.",
+        "The next action would delete, erase, send, pay for or permanently discard something."
+      ]
+    },
+    "recorded": {
+      "data": {
+        "results": [
+          {
+            "statement": "The state above already shows this finished: In Safari open a new tab and go to milliseconds.ai",
+            "answer": false,
+            "probability": 0.2
+          },
+          {
+            "statement": "Text from the text candidates still has to be typed into a field; it is not there yet.",
+            "answer": false,
+            "probability": 0.351
+          },
+          {
+            "statement": "The next action would delete, erase, send, pay for or permanently discard something.",
+            "answer": false,
+            "probability": 0.021
+          }
+        ]
+      },
+      "tokens": 416,
+      "generatedAt": "2026-09-19T16:23:00.767Z",
+      "modelMs": 48
+    },
+    "pinned": true
+  },
+  {
+    "demo": "ax-pilot",
+    "scenario": "sim-safari",
+    "route": "classify",
+    "body": {
+      "text": "Goal: In Safari open a new tab and go to milliseconds.ai.\nApp: Safari.\nWindow: Start Page.\nFocused: e4 text field 'smart search field' (focused).\nModal sheet: no.\nVisible text: Start Page | Favorites · Frequently Visited.\nText candidates: milliseconds.ai.\nAlready typed: none.\nPrevious actions: step 1 press e2 button 'New Tab'.\nSelected right now: e2 tab 'Start Page' (selected).\nElements: e1 tab 'Start Page'; e2 tab 'Start Page' (selected); e3 button 'New Tab'; e4 text field 'smart search field' (focused).\nWhich single action advances the goal next?",
+      "labels": {
+        "e1 tab 'Start Page'": "Press the tab labelled 'Start Page'.",
+        "e2 tab 'Start Page' (selected)": "Press the tab labelled 'Start Page'. It is already selected.",
+        "e3 button 'New Tab'": "Press the button labelled 'New Tab'.",
+        "e4 text field 'smart search field' (focused)": "Click into the text field labelled 'smart search field'. It has keyboard focus.",
+        "type_text": "Type 'milliseconds.ai' into the focused control. The text is not there yet.",
+        "press_key": "Press a keyboard shortcut instead of an element, for example Return to submit text already typed.",
+        "done": "The goal is already visible in the state. Nothing more to do."
+      }
+    },
+    "recorded": {
+      "data": {
+        "label": "e4 text field 'smart search field' (focused)",
+        "probability": 0.394,
+        "confidence": 0.155,
+        "scores": {
+          "e1 tab 'Start Page'": 0.055,
+          "e2 tab 'Start Page' (selected)": 0.054,
+          "e3 button 'New Tab'": 0.221,
+          "e4 text field 'smart search field' (focused)": 0.394,
+          "type_text": 0.115,
+          "press_key": 0.034,
+          "done": 0.128
+        }
+      },
+      "tokens": 514,
+      "generatedAt": "2026-09-19T16:23:01.991Z",
+      "modelMs": 35
+    },
+    "pinned": true
+  },
+  {
+    "demo": "ax-pilot",
+    "scenario": "sim-safari",
+    "route": "yes-no",
+    "body": {
+      "text": "Goal: In Safari open a new tab and go to milliseconds.ai.\nApp: Safari.\nWindow: Start Page.\nFocused: e4 text field 'smart search field' (focused).\nModal sheet: no.\nVisible text: Start Page | Favorites · Frequently Visited.\nText candidates: milliseconds.ai.\nAlready typed: none.\nPrevious actions: step 1 press e2 button 'New Tab'.\nSelected right now: e2 tab 'Start Page' (selected).\nElements: e1 tab 'Start Page'; e2 tab 'Start Page' (selected); e3 button 'New Tab'; e4 text field 'smart search field' (focused).",
+      "statements": [
+        "The state above already shows this finished: In Safari open a new tab and go to milliseconds.ai",
+        "Text from the text candidates still has to be typed into a field; it is not there yet.",
+        "The next action would delete, erase, send, pay for or permanently discard something."
+      ]
+    },
+    "recorded": {
+      "data": {
+        "results": [
+          {
+            "statement": "The state above already shows this finished: In Safari open a new tab and go to milliseconds.ai",
+            "answer": true,
+            "probability": 0.546
+          },
+          {
+            "statement": "Text from the text candidates still has to be typed into a field; it is not there yet.",
+            "answer": true,
+            "probability": 0.571
+          },
+          {
+            "statement": "The next action would delete, erase, send, pay for or permanently discard something.",
+            "answer": false,
+            "probability": 0.016
+          }
+        ]
+      },
+      "tokens": 412,
+      "generatedAt": "2026-09-19T16:23:03.140Z",
+      "modelMs": 35
+    },
+    "pinned": true
+  },
+  {
+    "demo": "ax-pilot",
+    "scenario": "sim-safari",
+    "route": "classify",
+    "body": {
+      "text": "Goal: In Safari open a new tab and go to milliseconds.ai.\nApp: Safari.\nWindow: Start Page.\nFocused: e4 text field 'smart search field' value=milliseconds.ai (focused).\nModal sheet: no.\nVisible text: Start Page | Favorites · Frequently Visited.\nText candidates: milliseconds.ai.\nAlready typed: milliseconds.ai.\nPrevious actions: step 1 press e2 button 'New Tab'; step 2 type_text 'milliseconds.ai' into e4.\nSelected right now: e2 tab 'Start Page' (selected).\nElements: e1 tab 'Start Page'; e2 tab 'Start Page' (selected); e3 button 'New Tab'; e4 text field 'smart search field' value=milliseconds.ai (focused).\nWhich single action advances the goal next?",
+      "labels": {
+        "e1 tab 'Start Page'": "Press the tab labelled 'Start Page'.",
+        "e2 tab 'Start Page' (selected)": "Press the tab labelled 'Start Page'. It is already selected.",
+        "e3 button 'New Tab'": "Press the button labelled 'New Tab'.",
+        "e4 text field 'smart search field' value=milliseconds.ai (focused)": "Click into the text field labelled 'smart search field'. It currently reads milliseconds.ai. It has keyboard focus.",
+        "press_key": "Press a keyboard shortcut, such as Return to submit the 'milliseconds.ai' already typed into the focused field."
+      }
+    },
+    "recorded": {
+      "data": {
+        "label": "e4 text field 'smart search field' value=milliseconds.ai (focused)",
+        "probability": 0.948,
+        "confidence": 0.843,
+        "scores": {
+          "e1 tab 'Start Page'": 0.001,
+          "e2 tab 'Start Page' (selected)": 0.005,
+          "e3 button 'New Tab'": 0.03,
+          "e4 text field 'smart search field' value=milliseconds.ai (focused)": 0.948,
+          "press_key": 0.016
+        }
+      },
+      "tokens": 517,
+      "generatedAt": "2026-09-19T16:23:04.610Z",
+      "modelMs": 29
+    },
+    "pinned": true
+  },
+  {
+    "demo": "ax-pilot",
+    "scenario": "sim-safari",
+    "route": "yes-no",
+    "body": {
+      "text": "Goal: In Safari open a new tab and go to milliseconds.ai.\nApp: Safari.\nWindow: Start Page.\nFocused: e4 text field 'smart search field' value=milliseconds.ai (focused).\nModal sheet: no.\nVisible text: Start Page | Favorites · Frequently Visited.\nText candidates: milliseconds.ai.\nAlready typed: milliseconds.ai.\nPrevious actions: step 1 press e2 button 'New Tab'; step 2 type_text 'milliseconds.ai' into e4.\nSelected right now: e2 tab 'Start Page' (selected).\nElements: e1 tab 'Start Page'; e2 tab 'Start Page' (selected); e3 button 'New Tab'; e4 text field 'smart search field' value=milliseconds.ai (focused).",
+      "statements": [
+        "The state above already shows this finished: In Safari open a new tab and go to milliseconds.ai",
+        "Text from the text candidates still has to be typed into a field; it is not there yet.",
+        "The next action would delete, erase, send, pay for or permanently discard something."
+      ]
+    },
+    "recorded": {
+      "data": {
+        "results": [
+          {
+            "statement": "The state above already shows this finished: In Safari open a new tab and go to milliseconds.ai",
+            "answer": true,
+            "probability": 0.817
+          },
+          {
+            "statement": "Text from the text candidates still has to be typed into a field; it is not there yet.",
+            "answer": true,
+            "probability": 0.557
+          },
+          {
+            "statement": "The next action would delete, erase, send, pay for or permanently discard something.",
+            "answer": false,
+            "probability": 0.013
+          }
+        ]
+      },
+      "tokens": 438,
+      "generatedAt": "2026-09-19T16:23:05.971Z",
+      "modelMs": 48
+    },
+    "pinned": true
+  },
+  {
+    "demo": "ax-pilot",
+    "scenario": "sim-notes",
+    "route": "classify",
+    "body": {
+      "text": "Goal: Create a new note titled Grocery list in Notes.\nApp: Notes.\nWindow: Notes.\nFocused: nothing.\nModal sheet: yes.\nVisible text: Welcome to Notes | Organize your thoughts, format with tables and checklists..\nText candidates: Grocery list.\nAlready typed: none.\nPrevious actions: none.\nThe goal asks to create something new, so an item that already exists does not satisfy it.\nSelected right now: nothing.\nElements: e1 button 'Continue'.\nWhich single action advances the goal next?",
+      "labels": {
+        "e1 button 'Continue'": "Press the button labelled 'Continue'.",
+        "press_key": "Press a keyboard shortcut instead of an element, for example Return to submit text already typed.",
+        "done": "The goal is already visible in the state. Nothing more to do."
+      }
+    },
+    "recorded": {
+      "data": {
+        "label": "e1 button 'Continue'",
+        "probability": 0.96,
+        "confidence": 0.83,
+        "scores": {
+          "e1 button 'Continue'": 0.96,
+          "press_key": 0.008,
+          "done": 0.032
+        }
+      },
+      "tokens": 397,
+      "generatedAt": "2026-09-19T16:23:07.392Z",
+      "modelMs": 28
+    },
+    "pinned": true
+  },
+  {
+    "demo": "ax-pilot",
+    "scenario": "sim-notes",
+    "route": "yes-no",
+    "body": {
+      "text": "Goal: Create a new note titled Grocery list in Notes.\nApp: Notes.\nWindow: Notes.\nFocused: nothing.\nModal sheet: yes.\nVisible text: Welcome to Notes | Organize your thoughts, format with tables and checklists..\nText candidates: Grocery list.\nAlready typed: none.\nPrevious actions: none.\nThe goal asks to create something new, so an item that already exists does not satisfy it.\nSelected right now: nothing.\nElements: e1 button 'Continue'.",
+      "statements": [
+        "The state above already shows this finished: Create a new note titled Grocery list in Notes",
+        "Text from the text candidates still has to be typed into a field; it is not there yet.",
+        "The next action would delete, erase, send, pay for or permanently discard something."
+      ]
+    },
+    "recorded": {
+      "data": {
+        "results": [
+          {
+            "statement": "The state above already shows this finished: Create a new note titled Grocery list in Notes",
+            "answer": false,
+            "probability": 0.22
+          },
+          {
+            "statement": "Text from the text candidates still has to be typed into a field; it is not there yet.",
+            "answer": true,
+            "probability": 0.514
+          },
+          {
+            "statement": "The next action would delete, erase, send, pay for or permanently discard something.",
+            "answer": false,
+            "probability": 0.015
+          }
+        ]
+      },
+      "tokens": 392,
+      "generatedAt": "2026-09-19T16:23:08.869Z",
+      "modelMs": 55
+    },
+    "pinned": true
+  },
+  {
+    "demo": "ax-pilot",
+    "scenario": "sim-notes",
+    "route": "classify",
+    "body": {
+      "text": "Goal: Create a new note titled Grocery list in Notes.\nApp: Notes.\nWindow: Notes.\nFocused: nothing.\nModal sheet: no.\nVisible text: none.\nText candidates: Grocery list.\nAlready typed: none.\nPrevious actions: step 1 press e1 button 'Continue'.\nSelected right now: nothing.\nElements: e1 button 'New Note'; e2 row 'Meeting notes'; e3 row 'Reading list'; e4 text area.\nWhich single action advances the goal next?",
+      "labels": {
+        "e1 button 'New Note'": "Press the button labelled 'New Note'.",
+        "e2 row 'Meeting notes'": "Select the row labelled 'Meeting notes'.",
+        "e3 row 'Reading list'": "Select the row labelled 'Reading list'.",
+        "e4 text area": "Click into the text area with no label.",
+        "press_key": "Press a keyboard shortcut instead of an element, for example Return to submit text already typed.",
+        "done": "The goal is already visible in the state. Nothing more to do."
+      }
+    },
+    "recorded": {
+      "data": {
+        "label": "e1 button 'New Note'",
+        "probability": 0.998,
+        "confidence": 0.99,
+        "scores": {
+          "e1 button 'New Note'": 0.998,
+          "e2 row 'Meeting notes'": 0,
+          "e3 row 'Reading list'": 0,
+          "e4 text area": 0,
+          "press_key": 0.002,
+          "done": 0
+        }
+      },
+      "tokens": 427,
+      "generatedAt": "2026-09-19T16:23:10.380Z",
+      "modelMs": 29
+    },
+    "pinned": true
+  },
+  {
+    "demo": "ax-pilot",
+    "scenario": "sim-notes",
+    "route": "yes-no",
+    "body": {
+      "text": "Goal: Create a new note titled Grocery list in Notes.\nApp: Notes.\nWindow: Notes.\nFocused: nothing.\nModal sheet: no.\nVisible text: none.\nText candidates: Grocery list.\nAlready typed: none.\nPrevious actions: step 1 press e1 button 'Continue'.\nSelected right now: nothing.\nElements: e1 button 'New Note'; e2 row 'Meeting notes'; e3 row 'Reading list'; e4 text area.",
+      "statements": [
+        "The state above already shows this finished: Create a new note titled Grocery list in Notes",
+        "Text from the text candidates still has to be typed into a field; it is not there yet.",
+        "The next action would delete, erase, send, pay for or permanently discard something."
+      ]
+    },
+    "recorded": {
+      "data": {
+        "results": [
+          {
+            "statement": "The state above already shows this finished: Create a new note titled Grocery list in Notes",
+            "answer": false,
+            "probability": 0.293
+          },
+          {
+            "statement": "Text from the text candidates still has to be typed into a field; it is not there yet.",
+            "answer": true,
+            "probability": 0.66
+          },
+          {
+            "statement": "The next action would delete, erase, send, pay for or permanently discard something.",
+            "answer": false,
+            "probability": 0.015
+          }
+        ]
+      },
+      "tokens": 372,
+      "generatedAt": "2026-09-19T16:23:11.567Z",
+      "modelMs": 56
+    },
+    "pinned": true
+  },
+  {
+    "demo": "ax-pilot",
+    "scenario": "sim-notes",
+    "route": "classify",
+    "body": {
+      "text": "Goal: Create a new note titled Grocery list in Notes.\nApp: Notes.\nWindow: Notes.\nFocused: e5 text area (focused).\nModal sheet: no.\nVisible text: New Note.\nText candidates: Grocery list.\nAlready typed: none.\nPrevious actions: step 1 press e1 button 'Continue'; step 2 press e1 button 'New Note'.\nSelected right now: e2 row 'New Note' (selected).\nElements: e1 button 'New Note'; e2 row 'New Note' (selected); e3 row 'Meeting notes'; e4 row 'Reading list'; e5 text area (focused).\nWhich single action advances the goal next?",
+      "labels": {
+        "e1 button 'New Note'": "Press the button labelled 'New Note'.",
+        "e2 row 'New Note' (selected)": "Select the row labelled 'New Note'. It is already selected.",
+        "e3 row 'Meeting notes'": "Select the row labelled 'Meeting notes'.",
+        "e4 row 'Reading list'": "Select the row labelled 'Reading list'.",
+        "e5 text area (focused)": "Click into the text area with no label. It has keyboard focus.",
+        "type_text": "Type 'Grocery list' into the focused control. The text is not there yet.",
+        "press_key": "Press a keyboard shortcut instead of an element, for example Return to submit text already typed.",
+        "done": "The goal is already visible in the state. Nothing more to do."
+      }
+    },
+    "recorded": {
+      "data": {
+        "label": "e5 text area (focused)",
+        "probability": 0.603,
+        "confidence": 0.397,
+        "scores": {
+          "e1 button 'New Note'": 0.176,
+          "e2 row 'New Note' (selected)": 0.045,
+          "e3 row 'Meeting notes'": 0.006,
+          "e4 row 'Reading list'": 0.003,
+          "e5 text area (focused)": 0.603,
+          "type_text": 0.102,
+          "press_key": 0.026,
+          "done": 0.039
+        }
+      },
+      "tokens": 513,
+      "generatedAt": "2026-09-19T16:23:13.025Z",
+      "modelMs": 26
+    },
+    "pinned": true
+  },
+  {
+    "demo": "ax-pilot",
+    "scenario": "sim-notes",
+    "route": "yes-no",
+    "body": {
+      "text": "Goal: Create a new note titled Grocery list in Notes.\nApp: Notes.\nWindow: Notes.\nFocused: e5 text area (focused).\nModal sheet: no.\nVisible text: New Note.\nText candidates: Grocery list.\nAlready typed: none.\nPrevious actions: step 1 press e1 button 'Continue'; step 2 press e1 button 'New Note'.\nSelected right now: e2 row 'New Note' (selected).\nElements: e1 button 'New Note'; e2 row 'New Note' (selected); e3 row 'Meeting notes'; e4 row 'Reading list'; e5 text area (focused).",
+      "statements": [
+        "The state above already shows this finished: Create a new note titled Grocery list in Notes",
+        "Text from the text candidates still has to be typed into a field; it is not there yet.",
+        "The next action would delete, erase, send, pay for or permanently discard something."
+      ]
+    },
+    "recorded": {
+      "data": {
+        "results": [
+          {
+            "statement": "The state above already shows this finished: Create a new note titled Grocery list in Notes",
+            "answer": true,
+            "probability": 0.613
+          },
+          {
+            "statement": "Text from the text candidates still has to be typed into a field; it is not there yet.",
+            "answer": true,
+            "probability": 0.71
+          },
+          {
+            "statement": "The next action would delete, erase, send, pay for or permanently discard something.",
+            "answer": false,
+            "probability": 0.021
+          }
+        ]
+      },
+      "tokens": 403,
+      "generatedAt": "2026-09-19T16:23:14.190Z",
+      "modelMs": 48
+    },
+    "pinned": true
+  },
+  {
+    "demo": "ax-pilot",
+    "scenario": "sim-system-settings",
+    "route": "classify",
+    "body": {
+      "text": "Goal: Open System Settings and turn on Dark Mode.\nApp: System Settings.\nWindow: System Settings.\nFocused: nothing.\nModal sheet: no.\nVisible text: General | Manage your overall setup and preferences for Mac, such as software updates, dev….\nText candidates: none.\nAlready typed: none.\nPrevious actions: none.\nSelected right now: e6 row 'General' (selected).\nElements: e1 row 'Sign in, with your Apple Account'; e2 row 'Wi-Fi'; e3 row 'Bluetooth'; e4 row 'Network'; e5 row 'Energy'; e6 row 'General' (selected); e7 row 'Accessibility'; e8 row 'Appearance'; e9 row 'Menu Bar'; e10 row 'Desktop & Dock'; e11 row 'Displays'; e12 row 'Spotlight'; e13 row 'Wallpaper'; e14 row 'Siri'; e15 row 'Notifications'; e16 search field; e17 button 'About'; e18 button 'Software Update'; e19 button 'Storage'; e20 button 'AppleCare & Warranty'; e21 button 'AirDrop & Continuity'; e22 button 'AutoFill & Passwords'; e23 button 'Date & Time'; e24 button 'Language & Region'; e25 button 'Login Items & Extensions'.\nWhich single action advances the goal next?",
+      "labels": {
+        "e1 row 'Sign in, with your Apple Account'": "Select the row labelled 'Sign in, with your Apple Account'.",
+        "e2 row 'Wi-Fi'": "Select the row labelled 'Wi-Fi'.",
+        "e3 row 'Bluetooth'": "Select the row labelled 'Bluetooth'.",
+        "e4 row 'Network'": "Select the row labelled 'Network'.",
+        "e5 row 'Energy'": "Select the row labelled 'Energy'.",
+        "e6 row 'General' (selected)": "Select the row labelled 'General'. It is already selected.",
+        "e7 row 'Accessibility'": "Select the row labelled 'Accessibility'.",
+        "e8 row 'Appearance'": "Select the row labelled 'Appearance'.",
+        "e9 row 'Menu Bar'": "Select the row labelled 'Menu Bar'.",
+        "e10 row 'Desktop & Dock'": "Select the row labelled 'Desktop & Dock'.",
+        "e11 row 'Displays'": "Select the row labelled 'Displays'.",
+        "e12 row 'Spotlight'": "Select the row labelled 'Spotlight'.",
+        "e13 row 'Wallpaper'": "Select the row labelled 'Wallpaper'.",
+        "e14 row 'Siri'": "Select the row labelled 'Siri'.",
+        "e15 row 'Notifications'": "Select the row labelled 'Notifications'.",
+        "e16 search field": "Click into the search field with no label.",
+        "e17 button 'About'": "Press the button labelled 'About'.",
+        "e18 button 'Software Update'": "Press the button labelled 'Software Update'.",
+        "e19 button 'Storage'": "Press the button labelled 'Storage'.",
+        "e20 button 'AppleCare & Warranty'": "Press the button labelled 'AppleCare & Warranty'.",
+        "e21 button 'AirDrop & Continuity'": "Press the button labelled 'AirDrop & Continuity'.",
+        "e22 button 'AutoFill & Passwords'": "Press the button labelled 'AutoFill & Passwords'.",
+        "e23 button 'Date & Time'": "Press the button labelled 'Date & Time'.",
+        "e24 button 'Language & Region'": "Press the button labelled 'Language & Region'.",
+        "e25 button 'Login Items & Extensions'": "Press the button labelled 'Login Items & Extensions'.",
+        "press_key": "Press a keyboard shortcut instead of an element, for example Return to submit text already typed.",
+        "done": "The goal is already visible in the state. Nothing more to do.",
+        "stuck": "No listed element or key can make progress toward the goal."
+      }
+    },
+    "recorded": {
+      "data": {
+        "label": "e8 row 'Appearance'",
+        "probability": 0.265,
+        "confidence": 0.388,
+        "scores": {
+          "e1 row 'Sign in, with your Apple Account'": 0.009,
+          "e2 row 'Wi-Fi'": 0.194,
+          "e3 row 'Bluetooth'": 0.012,
+          "e4 row 'Network'": 0.005,
+          "e5 row 'Energy'": 0.003,
+          "e6 row 'General' (selected)": 0.012,
+          "e7 row 'Accessibility'": 0.035,
+          "e8 row 'Appearance'": 0.265,
+          "e9 row 'Menu Bar'": 0,
+          "e10 row 'Desktop & Dock'": 0.002,
+          "e11 row 'Displays'": 0.058,
+          "e12 row 'Spotlight'": 0.001,
+          "e13 row 'Wallpaper'": 0.009,
+          "e14 row 'Siri'": 0.005,
+          "e15 row 'Notifications'": 0.001,
+          "e16 search field": 0.001,
+          "e17 button 'About'": 0.048,
+          "e18 button 'Software Update'": 0.015,
+          "e19 button 'Storage'": 0.001,
+          "e20 button 'AppleCare & Warranty'": 0,
+          "e21 button 'AirDrop & Continuity'": 0.003,
+          "e22 button 'AutoFill & Passwords'": 0.001,
+          "e23 button 'Date & Time'": 0.004,
+          "e24 button 'Language & Region'": 0.001,
+          "e25 button 'Login Items & Extensions'": 0.063,
+          "press_key": 0.253,
+          "done": 0,
+          "stuck": 0
+        }
+      },
+      "tokens": 1006,
+      "generatedAt": "2026-09-19T16:23:15.391Z",
+      "modelMs": 28
+    },
+    "pinned": true
+  },
+  {
+    "demo": "ax-pilot",
+    "scenario": "sim-system-settings",
+    "route": "yes-no",
+    "body": {
+      "text": "Goal: Open System Settings and turn on Dark Mode.\nApp: System Settings.\nWindow: System Settings.\nFocused: nothing.\nModal sheet: no.\nVisible text: General | Manage your overall setup and preferences for Mac, such as software updates, dev….\nText candidates: none.\nAlready typed: none.\nPrevious actions: none.\nSelected right now: e6 row 'General' (selected).\nElements: e1 row 'Sign in, with your Apple Account'; e2 row 'Wi-Fi'; e3 row 'Bluetooth'; e4 row 'Network'; e5 row 'Energy'; e6 row 'General' (selected); e7 row 'Accessibility'; e8 row 'Appearance'; e9 row 'Menu Bar'; e10 row 'Desktop & Dock'; e11 row 'Displays'; e12 row 'Spotlight'; e13 row 'Wallpaper'; e14 row 'Siri'; e15 row 'Notifications'; e16 search field; e17 button 'About'; e18 button 'Software Update'; e19 button 'Storage'; e20 button 'AppleCare & Warranty'; e21 button 'AirDrop & Continuity'; e22 button 'AutoFill & Passwords'; e23 button 'Date & Time'; e24 button 'Language & Region'; e25 button 'Login Items & Extensions'.",
+      "statements": [
+        "The state above already shows this finished: Open System Settings and turn on Dark Mode",
+        "Text from the text candidates still has to be typed into a field; it is not there yet.",
+        "The next action would delete, erase, send, pay for or permanently discard something."
+      ]
+    },
+    "recorded": {
+      "data": {
+        "results": [
+          {
+            "statement": "The state above already shows this finished: Open System Settings and turn on Dark Mode",
+            "answer": false,
+            "probability": 0.111
+          },
+          {
+            "statement": "Text from the text candidates still has to be typed into a field; it is not there yet.",
+            "answer": false,
+            "probability": 0.114
+          },
+          {
+            "statement": "The next action would delete, erase, send, pay for or permanently discard something.",
+            "answer": false,
+            "probability": 0.008
+          }
+        ]
+      },
+      "tokens": 537,
+      "generatedAt": "2026-09-19T16:23:16.575Z",
+      "modelMs": 51
+    },
+    "pinned": true
+  },
+  {
+    "demo": "ax-pilot",
+    "scenario": "sim-system-settings",
+    "route": "classify",
+    "body": {
+      "text": "Goal: Open System Settings and turn on Dark Mode.\nApp: System Settings.\nWindow: System Settings.\nFocused: nothing.\nModal sheet: no.\nVisible text: Appearance | Choose how windows and menus look on this Mac. | Appearance: Light.\nText candidates: none.\nAlready typed: none.\nPrevious actions: step 1 press e8 row 'Appearance'.\nSelected right now: e8 row 'Appearance' (selected); e17 radio button 'Light' value=1 (selected).\nElements: e1 row 'Sign in, with your Apple Account'; e2 row 'Wi-Fi'; e3 row 'Bluetooth'; e4 row 'Network'; e5 row 'Energy'; e6 row 'General'; e7 row 'Accessibility'; e8 row 'Appearance' (selected); e9 row 'Menu Bar'; e10 row 'Desktop & Dock'; e11 row 'Displays'; e12 row 'Spotlight'; e13 row 'Wallpaper'; e14 row 'Siri'; e15 row 'Notifications'; e16 search field; e17 radio button 'Light' value=1 (selected); e18 radio button 'Dark' value=0; e19 radio button 'Auto' value=0.\nWhich single action advances the goal next?",
+      "labels": {
+        "e1 row 'Sign in, with your Apple Account'": "Select the row labelled 'Sign in, with your Apple Account'.",
+        "e2 row 'Wi-Fi'": "Select the row labelled 'Wi-Fi'.",
+        "e3 row 'Bluetooth'": "Select the row labelled 'Bluetooth'.",
+        "e4 row 'Network'": "Select the row labelled 'Network'.",
+        "e5 row 'Energy'": "Select the row labelled 'Energy'.",
+        "e6 row 'General'": "Select the row labelled 'General'.",
+        "e7 row 'Accessibility'": "Select the row labelled 'Accessibility'.",
+        "e8 row 'Appearance' (selected)": "Select the row labelled 'Appearance'. It is already selected.",
+        "e9 row 'Menu Bar'": "Select the row labelled 'Menu Bar'.",
+        "e10 row 'Desktop & Dock'": "Select the row labelled 'Desktop & Dock'.",
+        "e11 row 'Displays'": "Select the row labelled 'Displays'.",
+        "e12 row 'Spotlight'": "Select the row labelled 'Spotlight'.",
+        "e13 row 'Wallpaper'": "Select the row labelled 'Wallpaper'.",
+        "e14 row 'Siri'": "Select the row labelled 'Siri'.",
+        "e15 row 'Notifications'": "Select the row labelled 'Notifications'.",
+        "e16 search field": "Click into the search field with no label.",
+        "e17 radio button 'Light' value=1 (selected)": "Press the radio button labelled 'Light'. It currently reads 1. It is already selected.",
+        "e18 radio button 'Dark' value=0": "Press the radio button labelled 'Dark'. It currently reads 0.",
+        "e19 radio button 'Auto' value=0": "Press the radio button labelled 'Auto'. It currently reads 0.",
+        "press_key": "Press a keyboard shortcut instead of an element, for example Return to submit text already typed.",
+        "done": "The goal is already visible in the state. Nothing more to do."
+      }
+    },
+    "recorded": {
+      "data": {
+        "label": "e17 radio button 'Light' value=1 (selected)",
+        "probability": 0.356,
+        "confidence": 0.376,
+        "scores": {
+          "e1 row 'Sign in, with your Apple Account'": 0.001,
+          "e2 row 'Wi-Fi'": 0.003,
+          "e3 row 'Bluetooth'": 0.002,
+          "e4 row 'Network'": 0.001,
+          "e5 row 'Energy'": 0.002,
+          "e6 row 'General'": 0.072,
+          "e7 row 'Accessibility'": 0.045,
+          "e8 row 'Appearance' (selected)": 0.268,
+          "e9 row 'Menu Bar'": 0.001,
+          "e10 row 'Desktop & Dock'": 0.009,
+          "e11 row 'Displays'": 0.115,
+          "e12 row 'Spotlight'": 0.002,
+          "e13 row 'Wallpaper'": 0.027,
+          "e14 row 'Siri'": 0.034,
+          "e15 row 'Notifications'": 0.015,
+          "e16 search field": 0.007,
+          "e17 radio button 'Light' value=1 (selected)": 0.356,
+          "e18 radio button 'Dark' value=0": 0.008,
+          "e19 radio button 'Auto' value=0": 0.002,
+          "press_key": 0.021,
+          "done": 0.008
+        }
+      },
+      "tokens": 862,
+      "generatedAt": "2026-09-19T16:23:17.736Z",
+      "modelMs": 38
+    },
+    "pinned": true
+  },
+  {
+    "demo": "ax-pilot",
+    "scenario": "sim-system-settings",
+    "route": "yes-no",
+    "body": {
+      "text": "Goal: Open System Settings and turn on Dark Mode.\nApp: System Settings.\nWindow: System Settings.\nFocused: nothing.\nModal sheet: no.\nVisible text: Appearance | Choose how windows and menus look on this Mac. | Appearance: Light.\nText candidates: none.\nAlready typed: none.\nPrevious actions: step 1 press e8 row 'Appearance'.\nSelected right now: e8 row 'Appearance' (selected); e17 radio button 'Light' value=1 (selected).\nElements: e1 row 'Sign in, with your Apple Account'; e2 row 'Wi-Fi'; e3 row 'Bluetooth'; e4 row 'Network'; e5 row 'Energy'; e6 row 'General'; e7 row 'Accessibility'; e8 row 'Appearance' (selected); e9 row 'Menu Bar'; e10 row 'Desktop & Dock'; e11 row 'Displays'; e12 row 'Spotlight'; e13 row 'Wallpaper'; e14 row 'Siri'; e15 row 'Notifications'; e16 search field; e17 radio button 'Light' value=1 (selected); e18 radio button 'Dark' value=0; e19 radio button 'Auto' value=0.",
+      "statements": [
+        "The state above already shows this finished: Open System Settings and turn on Dark Mode",
+        "Text from the text candidates still has to be typed into a field; it is not there yet.",
+        "The next action would delete, erase, send, pay for or permanently discard something."
+      ]
+    },
+    "recorded": {
+      "data": {
+        "results": [
+          {
+            "statement": "The state above already shows this finished: Open System Settings and turn on Dark Mode",
+            "answer": false,
+            "probability": 0.206
+          },
+          {
+            "statement": "Text from the text candidates still has to be typed into a field; it is not there yet.",
+            "answer": false,
+            "probability": 0.08
+          },
+          {
+            "statement": "The next action would delete, erase, send, pay for or permanently discard something.",
+            "answer": false,
+            "probability": 0.006
+          }
+        ]
+      },
+      "tokens": 511,
+      "generatedAt": "2026-09-19T16:23:19.105Z",
+      "modelMs": 50
+    },
+    "pinned": true
+  },
+  {
+    "demo": "ax-pilot",
+    "scenario": "sim-system-settings",
+    "route": "classify",
+    "body": {
+      "text": "Goal: Open System Settings and turn on Dark Mode.\nApp: System Settings.\nWindow: System Settings.\nFocused: nothing.\nModal sheet: no.\nVisible text: Appearance | Choose how windows and menus look on this Mac. | Appearance: Light.\nText candidates: none.\nAlready typed: none.\nPrevious actions: step 1 press e8 row 'Appearance'; step 2 press e17 radio button 'Light' value=1 (selected).\nSelected right now: e8 row 'Appearance' (selected); e17 radio button 'Light' value=1 (selected).\nElements: e1 row 'Sign in, with your Apple Account'; e2 row 'Wi-Fi'; e3 row 'Bluetooth'; e4 row 'Network'; e5 row 'Energy'; e6 row 'General'; e7 row 'Accessibility'; e8 row 'Appearance' (selected); e9 row 'Menu Bar'; e10 row 'Desktop & Dock'; e11 row 'Displays'; e12 row 'Spotlight'; e13 row 'Wallpaper'; e14 row 'Siri'; e15 row 'Notifications'; e16 search field; e17 radio button 'Light' value=1 (selected); e18 radio button 'Dark' value=0; e19 radio button 'Auto' value=0.\nWhich single action advances the goal next?",
+      "labels": {
+        "e1 row 'Sign in, with your Apple Account'": "Select the row labelled 'Sign in, with your Apple Account'.",
+        "e2 row 'Wi-Fi'": "Select the row labelled 'Wi-Fi'.",
+        "e3 row 'Bluetooth'": "Select the row labelled 'Bluetooth'.",
+        "e4 row 'Network'": "Select the row labelled 'Network'.",
+        "e5 row 'Energy'": "Select the row labelled 'Energy'.",
+        "e6 row 'General'": "Select the row labelled 'General'.",
+        "e7 row 'Accessibility'": "Select the row labelled 'Accessibility'.",
+        "e8 row 'Appearance' (selected)": "Select the row labelled 'Appearance'. It is already selected.",
+        "e9 row 'Menu Bar'": "Select the row labelled 'Menu Bar'.",
+        "e10 row 'Desktop & Dock'": "Select the row labelled 'Desktop & Dock'.",
+        "e11 row 'Displays'": "Select the row labelled 'Displays'.",
+        "e12 row 'Spotlight'": "Select the row labelled 'Spotlight'.",
+        "e13 row 'Wallpaper'": "Select the row labelled 'Wallpaper'.",
+        "e14 row 'Siri'": "Select the row labelled 'Siri'.",
+        "e15 row 'Notifications'": "Select the row labelled 'Notifications'.",
+        "e16 search field": "Click into the search field with no label.",
+        "e17 radio button 'Light' value=1 (selected)": "Press the radio button labelled 'Light'. It currently reads 1. It is already selected.",
+        "e18 radio button 'Dark' value=0": "Press the radio button labelled 'Dark'. It currently reads 0.",
+        "e19 radio button 'Auto' value=0": "Press the radio button labelled 'Auto'. It currently reads 0.",
+        "press_key": "Press a keyboard shortcut instead of an element, for example Return to submit text already typed.",
+        "done": "The goal is already visible in the state. Nothing more to do."
+      }
+    },
+    "recorded": {
+      "data": {
+        "label": "e17 radio button 'Light' value=1 (selected)",
+        "probability": 0.417,
+        "confidence": 0.392,
+        "scores": {
+          "e1 row 'Sign in, with your Apple Account'": 0,
+          "e2 row 'Wi-Fi'": 0.002,
+          "e3 row 'Bluetooth'": 0.002,
+          "e4 row 'Network'": 0.001,
+          "e5 row 'Energy'": 0.002,
+          "e6 row 'General'": 0.079,
+          "e7 row 'Accessibility'": 0.047,
+          "e8 row 'Appearance' (selected)": 0.185,
+          "e9 row 'Menu Bar'": 0.001,
+          "e10 row 'Desktop & Dock'": 0.012,
+          "e11 row 'Displays'": 0.142,
+          "e12 row 'Spotlight'": 0.002,
+          "e13 row 'Wallpaper'": 0.023,
+          "e14 row 'Siri'": 0.035,
+          "e15 row 'Notifications'": 0.021,
+          "e16 search field": 0.006,
+          "e17 radio button 'Light' value=1 (selected)": 0.417,
+          "e18 radio button 'Dark' value=0": 0.006,
+          "e19 radio button 'Auto' value=0": 0.001,
+          "press_key": 0.009,
+          "done": 0.006
+        }
+      },
+      "tokens": 877,
+      "generatedAt": "2026-09-19T16:23:20.255Z",
+      "modelMs": 28
+    },
+    "pinned": true
+  },
+  {
+    "demo": "ax-pilot",
+    "scenario": "sim-system-settings",
+    "route": "yes-no",
+    "body": {
+      "text": "Goal: Open System Settings and turn on Dark Mode.\nApp: System Settings.\nWindow: System Settings.\nFocused: nothing.\nModal sheet: no.\nVisible text: Appearance | Choose how windows and menus look on this Mac. | Appearance: Light.\nText candidates: none.\nAlready typed: none.\nPrevious actions: step 1 press e8 row 'Appearance'; step 2 press e17 radio button 'Light' value=1 (selected).\nSelected right now: e8 row 'Appearance' (selected); e17 radio button 'Light' value=1 (selected).\nElements: e1 row 'Sign in, with your Apple Account'; e2 row 'Wi-Fi'; e3 row 'Bluetooth'; e4 row 'Network'; e5 row 'Energy'; e6 row 'General'; e7 row 'Accessibility'; e8 row 'Appearance' (selected); e9 row 'Menu Bar'; e10 row 'Desktop & Dock'; e11 row 'Displays'; e12 row 'Spotlight'; e13 row 'Wallpaper'; e14 row 'Siri'; e15 row 'Notifications'; e16 search field; e17 radio button 'Light' value=1 (selected); e18 radio button 'Dark' value=0; e19 radio button 'Auto' value=0.",
+      "statements": [
+        "The state above already shows this finished: Open System Settings and turn on Dark Mode",
+        "Text from the text candidates still has to be typed into a field; it is not there yet.",
+        "The next action would delete, erase, send, pay for or permanently discard something."
+      ]
+    },
+    "recorded": {
+      "data": {
+        "results": [
+          {
+            "statement": "The state above already shows this finished: Open System Settings and turn on Dark Mode",
+            "answer": false,
+            "probability": 0.193
+          },
+          {
+            "statement": "Text from the text candidates still has to be typed into a field; it is not there yet.",
+            "answer": false,
+            "probability": 0.112
+          },
+          {
+            "statement": "The next action would delete, erase, send, pay for or permanently discard something.",
+            "answer": false,
+            "probability": 0.009
+          }
+        ]
+      },
+      "tokens": 526,
+      "generatedAt": "2026-09-19T16:23:21.427Z",
+      "modelMs": 48
+    },
+    "pinned": true
+  },
+  {
+    "demo": "ax-pilot",
+    "scenario": "recorded-calculator",
+    "route": "classify",
+    "body": {
+      "text": "Goal: In Calculator compute 48*12.\nApp: Calculator.\nWindow: Calculator.\nFocused: nothing.\nModal sheet: no.\nVisible text: 0.\nText candidates: 48*12.\nAlready typed: none.\nFacts: 48*12 equals 576.\nPrevious actions: none.\nSelected right now: nothing.\nElements: e1 button 'Delete'; e2 button 'All Clear'; e3 button 'Percent'; e4 button 'Divide'; e5 button '7'; e6 button '8'; e7 button '9'; e8 button 'Multiply'; e9 button '4'; e10 button '5'; e11 button '6'; e12 button 'Subtract'; e13 button '1'; e14 button '2'; e15 button '3'; e16 button 'Add'; e17 button 'Change Sign'; e18 button '0'; e19 button 'Point'; e20 button 'Equals'; e21 button 'Show Sidebar'; e22 button 'Mode'.\nWhich single action advances the goal next?",
+      "labels": {
+        "e1 button 'Delete'": "Press the button labelled 'Delete'.",
+        "e2 button 'All Clear'": "Press the button labelled 'All Clear'.",
+        "e3 button 'Percent'": "Press the button labelled 'Percent'.",
+        "e4 button 'Divide'": "Press the button labelled 'Divide'.",
+        "e5 button '7'": "Press the button labelled '7'.",
+        "e6 button '8'": "Press the button labelled '8'.",
+        "e7 button '9'": "Press the button labelled '9'.",
+        "e8 button 'Multiply'": "Press the button labelled 'Multiply'.",
+        "e9 button '4'": "Press the button labelled '4'.",
+        "e10 button '5'": "Press the button labelled '5'.",
+        "e11 button '6'": "Press the button labelled '6'.",
+        "e12 button 'Subtract'": "Press the button labelled 'Subtract'.",
+        "e13 button '1'": "Press the button labelled '1'.",
+        "e14 button '2'": "Press the button labelled '2'.",
+        "e15 button '3'": "Press the button labelled '3'.",
+        "e16 button 'Add'": "Press the button labelled 'Add'.",
+        "e17 button 'Change Sign'": "Press the button labelled 'Change Sign'.",
+        "e18 button '0'": "Press the button labelled '0'.",
+        "e19 button 'Point'": "Press the button labelled 'Point'.",
+        "e20 button 'Equals'": "Press the button labelled 'Equals'.",
+        "e21 button 'Show Sidebar'": "Press the button labelled 'Show Sidebar'.",
+        "e22 button 'Mode'": "Press the button labelled 'Mode'.",
+        "type_text": "Type '48*12' into the focused control. The text is not there yet.",
+        "press_key": "Press a keyboard shortcut instead of an element, for example Return to submit text already typed.",
+        "done": "The goal is already visible in the state. Nothing more to do."
+      }
+    },
+    "recorded": {
+      "data": {
+        "label": "type_text",
+        "probability": 0.51,
+        "confidence": 0.555,
+        "scores": {
+          "e1 button 'Delete'": 0.001,
+          "e2 button 'All Clear'": 0.001,
+          "e3 button 'Percent'": 0,
+          "e4 button 'Divide'": 0,
+          "e5 button '7'": 0,
+          "e6 button '8'": 0,
+          "e7 button '9'": 0,
+          "e8 button 'Multiply'": 0.001,
+          "e9 button '4'": 0,
+          "e10 button '5'": 0,
+          "e11 button '6'": 0,
+          "e12 button 'Subtract'": 0,
+          "e13 button '1'": 0.002,
+          "e14 button '2'": 0.002,
+          "e15 button '3'": 0,
+          "e16 button 'Add'": 0.003,
+          "e17 button 'Change Sign'": 0.026,
+          "e18 button '0'": 0.02,
+          "e19 button 'Point'": 0.006,
+          "e20 button 'Equals'": 0.125,
+          "e21 button 'Show Sidebar'": 0.015,
+          "e22 button 'Mode'": 0.032,
+          "type_text": 0.51,
+          "press_key": 0.005,
+          "done": 0.249
+        }
+      },
+      "tokens": 789,
+      "generatedAt": "2026-09-19T16:23:22.579Z",
+      "modelMs": 38
+    },
+    "pinned": true
+  },
+  {
+    "demo": "ax-pilot",
+    "scenario": "recorded-calculator",
+    "route": "yes-no",
+    "body": {
+      "text": "Goal: In Calculator compute 48*12.\nApp: Calculator.\nWindow: Calculator.\nFocused: nothing.\nModal sheet: no.\nVisible text: 0.\nText candidates: 48*12.\nAlready typed: none.\nFacts: 48*12 equals 576.\nPrevious actions: none.\nSelected right now: nothing.\nElements: e1 button 'Delete'; e2 button 'All Clear'; e3 button 'Percent'; e4 button 'Divide'; e5 button '7'; e6 button '8'; e7 button '9'; e8 button 'Multiply'; e9 button '4'; e10 button '5'; e11 button '6'; e12 button 'Subtract'; e13 button '1'; e14 button '2'; e15 button '3'; e16 button 'Add'; e17 button 'Change Sign'; e18 button '0'; e19 button 'Point'; e20 button 'Equals'; e21 button 'Show Sidebar'; e22 button 'Mode'.",
+      "statements": [
+        "The state above already shows this finished: In Calculator compute 48*12",
+        "Text from the text candidates still has to be typed into a field; it is not there yet.",
+        "The next action would delete, erase, send, pay for or permanently discard something."
+      ]
+    },
+    "recorded": {
+      "data": {
+        "results": [
+          {
+            "statement": "The state above already shows this finished: In Calculator compute 48*12",
+            "answer": true,
+            "probability": 0.751
+          },
+          {
+            "statement": "Text from the text candidates still has to be typed into a field; it is not there yet.",
+            "answer": false,
+            "probability": 0.191
+          },
+          {
+            "statement": "The next action would delete, erase, send, pay for or permanently discard something.",
+            "answer": false,
+            "probability": 0.022
+          }
+        ]
+      },
+      "tokens": 449,
+      "generatedAt": "2026-09-19T16:23:23.828Z",
+      "modelMs": 59
+    },
+    "pinned": true
+  },
+  {
+    "demo": "ax-pilot",
+    "scenario": "recorded-textedit",
+    "route": "classify",
+    "body": {
+      "text": "Goal: In TextEdit make a new document and type Hello from milliseconds.\nApp: TextEdit.\nWindow: Untitled.\nFocused: e1 text area (focused).\nModal sheet: no.\nVisible text: Untitled.\nText candidates: Hello from milliseconds.\nAlready typed: none.\nPrevious actions: none.\nThe goal asks to create something new, so an item that already exists does not satisfy it.\nSelected right now: nothing.\nElements: e1 text area (focused); e2 check box 'bold' value=0; e3 check box 'italic' value=0; e4 check box 'underline' value=0; e5 check box 'strikethrough' value=0; e6 pop up button 'typeface' value=Helvetica; e7 pop up button 'style' value=Regular; e8 combo box 'font size' value=12; e9 button 'font size'; e10 check box 'align left' value=1; e11 check box 'align center' value=0; e12 check box 'align right' value=0; e13 check box 'fully justify' value=0; e14 menu button 'list style'; e15 pop up button 'line spacing' value=1.0.\nWhich single action advances the goal next?",
+      "labels": {
+        "e1 text area (focused)": "Click into the text area with no label. It has keyboard focus.",
+        "e2 check box 'bold' value=0": "Press the check box labelled 'bold'. It currently reads 0.",
+        "e3 check box 'italic' value=0": "Press the check box labelled 'italic'. It currently reads 0.",
+        "e4 check box 'underline' value=0": "Press the check box labelled 'underline'. It currently reads 0.",
+        "e5 check box 'strikethrough' value=0": "Press the check box labelled 'strikethrough'. It currently reads 0.",
+        "e6 pop up button 'typeface' value=Helvetica": "Press the pop up button labelled 'typeface'. It currently reads Helvetica.",
+        "e7 pop up button 'style' value=Regular": "Press the pop up button labelled 'style'. It currently reads Regular.",
+        "e8 combo box 'font size' value=12": "Click into the combo box labelled 'font size'. It currently reads 12.",
+        "e9 button 'font size'": "Press the button labelled 'font size'.",
+        "e10 check box 'align left' value=1": "Press the check box labelled 'align left'. It currently reads 1.",
+        "e11 check box 'align center' value=0": "Press the check box labelled 'align center'. It currently reads 0.",
+        "e12 check box 'align right' value=0": "Press the check box labelled 'align right'. It currently reads 0.",
+        "e13 check box 'fully justify' value=0": "Press the check box labelled 'fully justify'. It currently reads 0.",
+        "e14 menu button 'list style'": "Press the menu button labelled 'list style'.",
+        "e15 pop up button 'line spacing' value=1.0": "Press the pop up button labelled 'line spacing'. It currently reads 1.0.",
+        "type_text": "Type 'Hello from milliseconds' into the focused control. The text is not there yet.",
+        "press_key": "Press a keyboard shortcut instead of an element, for example Return to submit text already typed.",
+        "done": "The goal is already visible in the state. Nothing more to do."
+      }
+    },
+    "recorded": {
+      "data": {
+        "label": "type_text",
+        "probability": 0.945,
+        "confidence": 0.891,
+        "scores": {
+          "e1 text area (focused)": 0.001,
+          "e2 check box 'bold' value=0": 0,
+          "e3 check box 'italic' value=0": 0.001,
+          "e4 check box 'underline' value=0": 0,
+          "e5 check box 'strikethrough' value=0": 0,
+          "e6 pop up button 'typeface' value=Helvetica": 0.001,
+          "e7 pop up button 'style' value=Regular": 0.001,
+          "e8 combo box 'font size' value=12": 0.002,
+          "e9 button 'font size'": 0,
+          "e10 check box 'align left' value=1": 0.001,
+          "e11 check box 'align center' value=0": 0.002,
+          "e12 check box 'align right' value=0": 0,
+          "e13 check box 'fully justify' value=0": 0.004,
+          "e14 menu button 'list style'": 0.005,
+          "e15 pop up button 'line spacing' value=1.0": 0,
+          "type_text": 0.945,
+          "press_key": 0.023,
+          "done": 0.012
+        }
+      },
+      "tokens": 933,
+      "generatedAt": "2026-09-19T16:23:25.059Z",
+      "modelMs": 28
+    },
+    "pinned": true
+  },
+  {
+    "demo": "ax-pilot",
+    "scenario": "recorded-textedit",
+    "route": "yes-no",
+    "body": {
+      "text": "Goal: In TextEdit make a new document and type Hello from milliseconds.\nApp: TextEdit.\nWindow: Untitled.\nFocused: e1 text area (focused).\nModal sheet: no.\nVisible text: Untitled.\nText candidates: Hello from milliseconds.\nAlready typed: none.\nPrevious actions: none.\nThe goal asks to create something new, so an item that already exists does not satisfy it.\nSelected right now: nothing.\nElements: e1 text area (focused); e2 check box 'bold' value=0; e3 check box 'italic' value=0; e4 check box 'underline' value=0; e5 check box 'strikethrough' value=0; e6 pop up button 'typeface' value=Helvetica; e7 pop up button 'style' value=Regular; e8 combo box 'font size' value=12; e9 button 'font size'; e10 check box 'align left' value=1; e11 check box 'align center' value=0; e12 check box 'align right' value=0; e13 check box 'fully justify' value=0; e14 menu button 'list style'; e15 pop up button 'line spacing' value=1.0.",
+      "statements": [
+        "The state above already shows this finished: In TextEdit make a new document and type Hello from milliseconds",
+        "Text from the text candidates still has to be typed into a field; it is not there yet.",
+        "The next action would delete, erase, send, pay for or permanently discard something."
+      ]
+    },
+    "recorded": {
+      "data": {
+        "results": [
+          {
+            "statement": "The state above already shows this finished: In TextEdit make a new document and type Hello from milliseconds",
+            "answer": false,
+            "probability": 0.158
+          },
+          {
+            "statement": "Text from the text candidates still has to be typed into a field; it is not there yet.",
+            "answer": true,
+            "probability": 0.786
+          },
+          {
+            "statement": "The next action would delete, erase, send, pay for or permanently discard something.",
+            "answer": false,
+            "probability": 0.024
+          }
+        ]
+      },
+      "tokens": 524,
+      "generatedAt": "2026-09-19T16:23:26.240Z",
+      "modelMs": 65
+    },
+    "pinned": true
+  },
+  {
+    "demo": "ax-pilot",
+    "scenario": "recorded-safari",
+    "route": "classify",
+    "body": {
+      "text": "Goal: In Safari open a new tab and go to milliseconds.ai.\nApp: Safari.\nWindow: Start Page.\nFocused: nothing.\nModal sheet: no.\nVisible text: Favorites | Suggestions | Start Page | Customize your wallpaper and sections that appear when creating new tabs. | Safari has not encountered any trackers in the last thirty days. Safari can hide….\nText candidates: milliseconds.ai.\nAlready typed: none.\nPrevious actions: none.\nThe goal asks to create something new, so an item that already exists does not satisfy it.\nSelected right now: nothing.\nElements: e1 button 'Close'; e2 button 'Customize Start Page'; e3 link value=Show More; e4 button 'Edit'; e5 button 'show sidebar'; e6 menu button 'Tab Group picker'; e7 button 'Show Search Menu'; e8 text field 'smart search field'; e9 button 'New Tab'; e10 button 'Tab Overview'; e11 menu item 'File > New Tab'; e12 menu item 'File > New Tab at End'.\nWhich single action advances the goal next?",
+      "labels": {
+        "e1 button 'Close'": "Press the button labelled 'Close'.",
+        "e2 button 'Customize Start Page'": "Press the button labelled 'Customize Start Page'.",
+        "e3 link value=Show More": "Press the link with no label. It currently reads Show More.",
+        "e4 button 'Edit'": "Press the button labelled 'Edit'.",
+        "e5 button 'show sidebar'": "Press the button labelled 'show sidebar'.",
+        "e6 menu button 'Tab Group picker'": "Press the menu button labelled 'Tab Group picker'.",
+        "e7 button 'Show Search Menu'": "Press the button labelled 'Show Search Menu'.",
+        "e8 text field 'smart search field'": "Click into the text field labelled 'smart search field'.",
+        "e9 button 'New Tab'": "Press the button labelled 'New Tab'.",
+        "e10 button 'Tab Overview'": "Press the button labelled 'Tab Overview'.",
+        "e11 menu item 'File > New Tab'": "Choose the menu item File > New Tab.",
+        "e12 menu item 'File > New Tab at End'": "Choose the menu item File > New Tab at End.",
+        "press_key": "Press a keyboard shortcut instead of an element, for example Return to submit text already typed.",
+        "done": "The goal is already visible in the state. Nothing more to do."
+      }
+    },
+    "recorded": {
+      "data": {
+        "label": "e9 button 'New Tab'",
+        "probability": 0.881,
+        "confidence": 0.767,
+        "scores": {
+          "e1 button 'Close'": 0.014,
+          "e2 button 'Customize Start Page'": 0.001,
+          "e3 link value=Show More": 0.018,
+          "e4 button 'Edit'": 0.002,
+          "e5 button 'show sidebar'": 0.02,
+          "e6 menu button 'Tab Group picker'": 0.002,
+          "e7 button 'Show Search Menu'": 0.01,
+          "e8 text field 'smart search field'": 0.025,
+          "e9 button 'New Tab'": 0.881,
+          "e10 button 'Tab Overview'": 0.017,
+          "e11 menu item 'File > New Tab'": 0.008,
+          "e12 menu item 'File > New Tab at End'": 0.001,
+          "press_key": 0.001,
+          "done": 0.001
+        }
+      },
+      "tokens": 739,
+      "generatedAt": "2026-09-19T16:23:27.453Z",
+      "modelMs": 38
+    },
+    "pinned": true
+  },
+  {
+    "demo": "ax-pilot",
+    "scenario": "recorded-safari",
+    "route": "yes-no",
+    "body": {
+      "text": "Goal: In Safari open a new tab and go to milliseconds.ai.\nApp: Safari.\nWindow: Start Page.\nFocused: nothing.\nModal sheet: no.\nVisible text: Favorites | Suggestions | Start Page | Customize your wallpaper and sections that appear when creating new tabs. | Safari has not encountered any trackers in the last thirty days. Safari can hide….\nText candidates: milliseconds.ai.\nAlready typed: none.\nPrevious actions: none.\nThe goal asks to create something new, so an item that already exists does not satisfy it.\nSelected right now: nothing.\nElements: e1 button 'Close'; e2 button 'Customize Start Page'; e3 link value=Show More; e4 button 'Edit'; e5 button 'show sidebar'; e6 menu button 'Tab Group picker'; e7 button 'Show Search Menu'; e8 text field 'smart search field'; e9 button 'New Tab'; e10 button 'Tab Overview'; e11 menu item 'File > New Tab'; e12 menu item 'File > New Tab at End'.",
+      "statements": [
+        "The state above already shows this finished: In Safari open a new tab and go to milliseconds.ai",
+        "Text from the text candidates still has to be typed into a field; it is not there yet.",
+        "The next action would delete, erase, send, pay for or permanently discard something."
+      ]
+    },
+    "recorded": {
+      "data": {
+        "results": [
+          {
+            "statement": "The state above already shows this finished: In Safari open a new tab and go to milliseconds.ai",
+            "answer": false,
+            "probability": 0.146
+          },
+          {
+            "statement": "Text from the text candidates still has to be typed into a field; it is not there yet.",
+            "answer": false,
+            "probability": 0.27
+          },
+          {
+            "statement": "The next action would delete, erase, send, pay for or permanently discard something.",
+            "answer": false,
+            "probability": 0.018
+          }
+        ]
+      },
+      "tokens": 512,
+      "generatedAt": "2026-09-19T16:23:28.731Z",
+      "modelMs": 70
+    },
+    "pinned": true
+  },
+  {
+    "demo": "ax-pilot",
+    "scenario": "recorded-notes",
+    "route": "classify",
+    "body": {
+      "text": "Goal: Create a new note titled Grocery list in Notes.\nApp: Notes.\nWindow: Notes.\nFocused: nothing.\nModal sheet: yes.\nVisible text: Notes | Great new tools for notes synced to your Apple Account. | Welcome to Notes | Organize Your Thoughts | Format your notes with tables, titles, checklists, and text styles. | Note to Self, or with Anyone | Invite others to view or make changes to a note. | Capture documents, audio, photos, and more for a richer Notes experience. | Add Almost Anything.\nText candidates: Grocery list.\nAlready typed: none.\nPrevious actions: none.\nThe goal asks to create something new, so an item that already exists does not satisfy it.\nSelected right now: nothing.\nElements: e1 button 'Continue'.\nWhich single action advances the goal next?",
+      "labels": {
+        "e1 button 'Continue'": "Press the button labelled 'Continue'.",
+        "press_key": "Press a keyboard shortcut instead of an element, for example Return to submit text already typed.",
+        "done": "The goal is already visible in the state. Nothing more to do."
+      }
+    },
+    "recorded": {
+      "data": {
+        "label": "e1 button 'Continue'",
+        "probability": 0.963,
+        "confidence": 0.838,
+        "scores": {
+          "e1 button 'Continue'": 0.963,
+          "press_key": 0.009,
+          "done": 0.028
+        }
+      },
+      "tokens": 470,
+      "generatedAt": "2026-09-19T16:23:29.881Z",
+      "modelMs": 26
+    },
+    "pinned": true
+  },
+  {
+    "demo": "ax-pilot",
+    "scenario": "recorded-notes",
+    "route": "yes-no",
+    "body": {
+      "text": "Goal: Create a new note titled Grocery list in Notes.\nApp: Notes.\nWindow: Notes.\nFocused: nothing.\nModal sheet: yes.\nVisible text: Notes | Great new tools for notes synced to your Apple Account. | Welcome to Notes | Organize Your Thoughts | Format your notes with tables, titles, checklists, and text styles. | Note to Self, or with Anyone | Invite others to view or make changes to a note. | Capture documents, audio, photos, and more for a richer Notes experience. | Add Almost Anything.\nText candidates: Grocery list.\nAlready typed: none.\nPrevious actions: none.\nThe goal asks to create something new, so an item that already exists does not satisfy it.\nSelected right now: nothing.\nElements: e1 button 'Continue'.",
+      "statements": [
+        "The state above already shows this finished: Create a new note titled Grocery list in Notes",
+        "Text from the text candidates still has to be typed into a field; it is not there yet.",
+        "The next action would delete, erase, send, pay for or permanently discard something."
+      ]
+    },
+    "recorded": {
+      "data": {
+        "results": [
+          {
+            "statement": "The state above already shows this finished: Create a new note titled Grocery list in Notes",
+            "answer": false,
+            "probability": 0.368
+          },
+          {
+            "statement": "Text from the text candidates still has to be typed into a field; it is not there yet.",
+            "answer": true,
+            "probability": 0.534
+          },
+          {
+            "statement": "The next action would delete, erase, send, pay for or permanently discard something.",
+            "answer": false,
+            "probability": 0.025
+          }
+        ]
+      },
+      "tokens": 466,
+      "generatedAt": "2026-09-19T16:23:31.355Z",
+      "modelMs": 61
+    },
+    "pinned": true
+  },
+  {
+    "demo": "ax-pilot",
+    "scenario": "recorded-systemsettings",
+    "route": "classify",
+    "body": {
+      "text": "Goal: Open System Settings and turn on Dark Mode.\nApp: System Settings.\nWindow: System Settings.\nFocused: nothing.\nModal sheet: no.\nVisible text: General | Manage your overall setup and preferences for Mac, such as software updates, dev….\nText candidates: none.\nAlready typed: none.\nPrevious actions: none.\nSelected right now: e6 row 'General' (selected).\nElements: e1 row 'Sign in, with your Apple Account'; e2 row 'Wi-Fi'; e3 row 'Bluetooth'; e4 row 'Network'; e5 row 'Energy'; e6 row 'General' (selected); e7 row 'Accessibility'; e8 row 'Appearance'; e9 row 'Menu Bar'; e10 row 'Desktop & Dock'; e11 row 'Displays'; e12 row 'Spotlight'; e13 row 'Wallpaper'; e14 row 'Siri'; e15 row 'Notifications'; e16 search field; e17 button 'About'; e18 button 'Software Update'; e19 button 'Storage'; e20 button 'AppleCare & Warranty'; e21 button 'AirDrop & Continuity'; e22 button 'AutoFill & Passwords'; e23 button 'Date & Time'; e24 button 'Language & Region'; e25 button 'Login Items & Extensions'.\nWhich single action advances the goal next?",
+      "labels": {
+        "e1 row 'Sign in, with your Apple Account'": "Select the row labelled 'Sign in, with your Apple Account'.",
+        "e2 row 'Wi-Fi'": "Select the row labelled 'Wi-Fi'.",
+        "e3 row 'Bluetooth'": "Select the row labelled 'Bluetooth'.",
+        "e4 row 'Network'": "Select the row labelled 'Network'.",
+        "e5 row 'Energy'": "Select the row labelled 'Energy'.",
+        "e6 row 'General' (selected)": "Select the row labelled 'General'. It is already selected.",
+        "e7 row 'Accessibility'": "Select the row labelled 'Accessibility'.",
+        "e8 row 'Appearance'": "Select the row labelled 'Appearance'.",
+        "e9 row 'Menu Bar'": "Select the row labelled 'Menu Bar'.",
+        "e10 row 'Desktop & Dock'": "Select the row labelled 'Desktop & Dock'.",
+        "e11 row 'Displays'": "Select the row labelled 'Displays'.",
+        "e12 row 'Spotlight'": "Select the row labelled 'Spotlight'.",
+        "e13 row 'Wallpaper'": "Select the row labelled 'Wallpaper'.",
+        "e14 row 'Siri'": "Select the row labelled 'Siri'.",
+        "e15 row 'Notifications'": "Select the row labelled 'Notifications'.",
+        "e16 search field": "Click into the search field with no label.",
+        "e17 button 'About'": "Press the button labelled 'About'.",
+        "e18 button 'Software Update'": "Press the button labelled 'Software Update'.",
+        "e19 button 'Storage'": "Press the button labelled 'Storage'.",
+        "e20 button 'AppleCare & Warranty'": "Press the button labelled 'AppleCare & Warranty'.",
+        "e21 button 'AirDrop & Continuity'": "Press the button labelled 'AirDrop & Continuity'.",
+        "e22 button 'AutoFill & Passwords'": "Press the button labelled 'AutoFill & Passwords'.",
+        "e23 button 'Date & Time'": "Press the button labelled 'Date & Time'.",
+        "e24 button 'Language & Region'": "Press the button labelled 'Language & Region'.",
+        "e25 button 'Login Items & Extensions'": "Press the button labelled 'Login Items & Extensions'.",
+        "press_key": "Press a keyboard shortcut instead of an element, for example Return to submit text already typed.",
+        "done": "The goal is already visible in the state. Nothing more to do.",
+        "stuck": "No listed element or key can make progress toward the goal."
+      }
+    },
+    "recorded": {
+      "data": {
+        "label": "e8 row 'Appearance'",
+        "probability": 0.269,
+        "confidence": 0.388,
+        "scores": {
+          "e1 row 'Sign in, with your Apple Account'": 0.008,
+          "e2 row 'Wi-Fi'": 0.194,
+          "e3 row 'Bluetooth'": 0.012,
+          "e4 row 'Network'": 0.005,
+          "e5 row 'Energy'": 0.003,
+          "e6 row 'General' (selected)": 0.012,
+          "e7 row 'Accessibility'": 0.035,
+          "e8 row 'Appearance'": 0.269,
+          "e9 row 'Menu Bar'": 0,
+          "e10 row 'Desktop & Dock'": 0.002,
+          "e11 row 'Displays'": 0.057,
+          "e12 row 'Spotlight'": 0.001,
+          "e13 row 'Wallpaper'": 0.009,
+          "e14 row 'Siri'": 0.005,
+          "e15 row 'Notifications'": 0.001,
+          "e16 search field": 0.001,
+          "e17 button 'About'": 0.047,
+          "e18 button 'Software Update'": 0.015,
+          "e19 button 'Storage'": 0.001,
+          "e20 button 'AppleCare & Warranty'": 0,
+          "e21 button 'AirDrop & Continuity'": 0.003,
+          "e22 button 'AutoFill & Passwords'": 0.001,
+          "e23 button 'Date & Time'": 0.004,
+          "e24 button 'Language & Region'": 0.001,
+          "e25 button 'Login Items & Extensions'": 0.063,
+          "press_key": 0.249,
+          "done": 0,
+          "stuck": 0
+        }
+      },
+      "tokens": 1006,
+      "generatedAt": "2026-09-19T16:23:32.550Z",
+      "modelMs": 56
+    },
+    "pinned": true
+  },
+  {
+    "demo": "ax-pilot",
+    "scenario": "recorded-systemsettings",
+    "route": "yes-no",
+    "body": {
+      "text": "Goal: Open System Settings and turn on Dark Mode.\nApp: System Settings.\nWindow: System Settings.\nFocused: nothing.\nModal sheet: no.\nVisible text: General | Manage your overall setup and preferences for Mac, such as software updates, dev….\nText candidates: none.\nAlready typed: none.\nPrevious actions: none.\nSelected right now: e6 row 'General' (selected).\nElements: e1 row 'Sign in, with your Apple Account'; e2 row 'Wi-Fi'; e3 row 'Bluetooth'; e4 row 'Network'; e5 row 'Energy'; e6 row 'General' (selected); e7 row 'Accessibility'; e8 row 'Appearance'; e9 row 'Menu Bar'; e10 row 'Desktop & Dock'; e11 row 'Displays'; e12 row 'Spotlight'; e13 row 'Wallpaper'; e14 row 'Siri'; e15 row 'Notifications'; e16 search field; e17 button 'About'; e18 button 'Software Update'; e19 button 'Storage'; e20 button 'AppleCare & Warranty'; e21 button 'AirDrop & Continuity'; e22 button 'AutoFill & Passwords'; e23 button 'Date & Time'; e24 button 'Language & Region'; e25 button 'Login Items & Extensions'.",
+      "statements": [
+        "The state above already shows this finished: Open System Settings and turn on Dark Mode",
+        "Text from the text candidates still has to be typed into a field; it is not there yet.",
+        "The next action would delete, erase, send, pay for or permanently discard something."
+      ]
+    },
+    "recorded": {
+      "data": {
+        "results": [
+          {
+            "statement": "The state above already shows this finished: Open System Settings and turn on Dark Mode",
+            "answer": false,
+            "probability": 0.11
+          },
+          {
+            "statement": "Text from the text candidates still has to be typed into a field; it is not there yet.",
+            "answer": false,
+            "probability": 0.114
+          },
+          {
+            "statement": "The next action would delete, erase, send, pay for or permanently discard something.",
+            "answer": false,
+            "probability": 0.008
+          }
+        ]
+      },
+      "tokens": 537,
+      "generatedAt": "2026-09-19T16:23:33.783Z",
+      "modelMs": 55
+    },
+    "pinned": true
+  }
+]

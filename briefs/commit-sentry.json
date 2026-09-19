@@ -1,0 +1,208 @@
+{
+ "slug": "commit-sentry",
+ "title": "Commit Sentry",
+ "one_liner": "Semantic pre-commit check: every staged hunk judged for secrets, destructive SQL, auth bypass, skipped tests and debug leftovers in one batched round-trip, then the commit message checked against the diff.",
+ "platform": "cli",
+ "what_it_does": "The user runs a CLI pre-commit hook against a staged diff. The demo builds a fixture git repo (\"ledgerline\", 11 files, 15 hunks) with a dishonest commit message \"chore: tidy up logging and small fixes\". The tool parses the unified diff into hunks. It sends one Jev request per hunk (16 in parallel) with ten questions each: a risk score, seven yes/no findings, a change-kind choice, and which added line is most concerning. Then it sends one request for the commit message with the code-built summary of the changes. Plain-code policy thresholds turn probabilities into block or warn findings. A terminal report shows a per-file table with risk bars, each finding with the quoted offending line and probability, per-request latency (p50/p95), a regex-linter baseline comparison (6 rules caught 6 of 17), and a final verdict: COMMIT BLOCKED, WARN, or PASS. Mock mode replays mock/recording.json and labels the screen MOCK.",
+ "jev_questions": [
+  {
+   "key": "risk",
+   "type": "score",
+   "instructions": "Judge the risk of shipping the code change in `hunk` (a unified diff hunk from `file`, written in `language`; lines starting with + are added, - removed). How much damage could this change do if it is wrong or if it ships as written?",
+   "options": [
+    "cosmetic: Formatting, whitespace, comments, renames of local identifiers, docs or wording-only changes; no behaviour change possible.",
+    "low: Small, local behaviour change that is easy to reason about and easy to revert: a bug fix, a new pure helper, a test, a config bump.",
+    "moderate: Behaviour change that other code depends on, or new logic with branches; needs review but nothing is destroyed or exposed if it is wrong.",
+    "high: Touches authentication, authorization, payments, data migrations, infrastructure, or contracts with external callers; mistakes are costly or hard to undo.",
+    "dangerous: Exposes credentials or user data, permanently deletes or corrupts data, disables security or safety checks, or bypasses authentication; must not ship as-is."
+   ],
+   "state_shape": "{file, language, change_type: 'new file'|'deleted file'|'modification', hunk: string, added_lines: {L1..L12: string}}"
+  },
+  {
+   "key": "leaks_secret_or_token",
+   "type": "noul",
+   "instructions": "Does an added line in `hunk` embed a real-looking secret: an API key, access token, password, private key, connection string with credentials, or a live payment/provider key? Placeholders like '<your-key>' or reading from environment variables do not count.",
+   "options": [
+    "true: A literal credential value (e.g. sk_live_..., ghp_..., AKIA..., a password string, a bearer token) is added to source code.",
+    "false: No literal credential is added; secrets are read from env/config or the values are obvious placeholders/examples."
+   ],
+   "state_shape": "same hunk state"
+  },
+  {
+   "key": "logs_sensitive_data",
+   "type": "noul",
+   "instructions": "Does an added line in `hunk` write sensitive data to logs, console, stdout, or an error message: tokens, session ids, passwords, API keys, full card numbers, personal data such as email addresses or full user records?",
+   "options": [
+    "true: A log/print statement outputs a token, password, secret, card number, or personal user data (possibly via a variable clearly holding one).",
+    "false: Logging only outputs non-sensitive values (ids, counts, statuses, durations) or there is no logging."
+   ],
+   "state_shape": "same hunk state"
+  },
+  {
+   "key": "disables_or_skips_tests",
+   "type": "noul",
+   "instructions": "Does `hunk` disable, skip, comment out, or weaken a test or an assertion (for example it.skip, xit, @Ignore, commenting out expect(...), changing an assertion to always pass, or deleting test cases)?",
+   "options": [
+    "true: A test or assertion is skipped, disabled, removed, or made vacuous.",
+    "false: Tests are added or fixed, or the hunk does not touch tests."
+   ],
+   "state_shape": "same hunk state"
+  },
+  {
+   "key": "destructive_data_change",
+   "type": "noul",
+   "instructions": "Does `hunk` introduce an operation that permanently deletes, truncates, drops, or overwrites stored data or schema: DROP TABLE/COLUMN, TRUNCATE, DELETE/UPDATE without a WHERE clause, rm -rf on data, deleteMany({}) with no filter, irreversible migrations?",
+   "options": [
+    "true: Existing data or schema is destroyed or overwritten irreversibly, or a bulk delete/update has no restricting condition.",
+    "false: No data is destroyed; additive schema changes, filtered deletes of specific rows, or non-data code."
+   ],
+   "state_shape": "same hunk state"
+  },
+  {
+   "key": "changes_public_api_shape",
+   "type": "noul",
+   "instructions": "Does `hunk` change the shape of data exposed to external callers: a renamed or removed field in an HTTP response/JSON payload, a changed exported function signature or return type consumers depend on, a changed CLI flag, or a changed event/message schema?",
+   "options": [
+    "true: A field, parameter, type or contract that clients or other services consume is renamed, removed, retyped or restructured.",
+    "false: The change is internal, purely additive (new optional field), or does not touch any external contract."
+   ],
+   "state_shape": "same hunk state"
+  },
+  {
+   "key": "leftover_debug_or_temp",
+   "type": "noul",
+   "instructions": "Does `hunk` add temporary or debugging code that should not be committed: console.log/print debugging output, debugger statements, commented-out code, 'TODO remove before merge', hard-coded test shortcuts, sleep() for debugging, or feature flags forced on?",
+   "options": [
+    "true: Debug/temporary scaffolding is added that the author clearly intends to remove or that only makes sense while developing locally.",
+    "false: Any logging or TODOs present are intentional production code; nothing temporary is added."
+   ],
+   "state_shape": "same hunk state"
+  },
+  {
+   "key": "hardcoded_env_specific_value",
+   "type": "noul",
+   "instructions": "Does an added line in `hunk` hard-code an environment-specific value that should come from configuration: an internal IP address, localhost or staging/production hostname, an absolute local file path, a specific port, a personal email, or a region/account id?",
+   "options": [
+    "true: A literal URL/IP/host/path/account identifier tied to one environment or one machine is written into the code.",
+    "false: Values come from config/env, or literals present are generic constants (0, 3, 'utf-8', public documentation URLs)."
+   ],
+   "state_shape": "same hunk state"
+  },
+  {
+   "key": "kind",
+   "type": "choice",
+   "instructions": "What kind of change is `hunk`?",
+   "options": [
+    "feature: Adds new user-visible capability or new behaviour.",
+    "bugfix: Corrects existing behaviour that was wrong.",
+    "refactor: Restructures code without changing what it does.",
+    "test: Adds, changes or removes test code.",
+    "docs: Comments, README, or documentation text only.",
+    "config: Configuration, environment, dependency versions, build or CI settings.",
+    "chore: Housekeeping such as formatting, logging tweaks, or version bumps that fit none of the others."
+   ],
+   "state_shape": "same hunk state"
+  },
+  {
+   "key": "offending_line",
+   "type": "choice",
+   "instructions": "Which entry of `added_lines` is the single most concerning added line in `hunk` (a leaked secret, sensitive logging, destructive data operation, skipped test, debug leftover, hard-coded environment value, or auth/safety bypass)? Choose none if every added line is benign.",
+   "options": [
+    "L1..L12: the literal text of each added line (max 12)",
+    "none: No added line is concerning; the hunk is benign."
+   ],
+   "state_shape": "same hunk state; criteria map is built dynamically from added_lines"
+  },
+  {
+   "key": "message_matches_changes",
+   "type": "noul",
+   "instructions": "Does `commit_message` honestly and completely describe the set of code changes listed in `changes` (each entry shows the file, the kind of change, its risk, and the main added/removed lines)? A message that omits a significant or risky change, or describes a different change, does not match.",
+   "options": [
+    "true: Every significant change in `changes` is reflected in the message and the message does not claim anything the changes do not do.",
+    "false: The message leaves out a significant change (e.g. calls a schema drop a 'typo fix'), describes something else, or is too generic to describe these changes."
+   ],
+   "state_shape": "{commit_message, changes: [{file, kind, risk, added: string[<=4], removed: string[<=2]}]}"
+  },
+  {
+   "key": "message_quality",
+   "type": "score",
+   "instructions": "How well-written is `commit_message` as a git commit message?",
+   "options": [
+    "Empty, a placeholder, or meaningless ('wip', 'fix', 'asdf', 'update stuff').",
+    "Vague: names a topic but not what changed or why ('fix bug', 'update config', 'changes').",
+    "Adequate: states what changed in concrete terms so a reader can locate the change.",
+    "Excellent: states what changed and why, in imperative mood, and is specific about scope and any risk or migration."
+   ],
+   "state_shape": "same message state"
+  }
+ ],
+ "request_cadence": "One run per demo click. Original: 16 requests fired at once (concurrency 16), one per hunk with 10 questions each, plus one request for the commit message after all hunks finish. 152 judgments total. Retries with exponential backoff on 429/5xx.",
+ "data_files": [
+  "/Users/blaget/projects/jev-experiments/commit-sentry/src/fixture.ts (before/after text of 11 files and commit message, 408 lines; port as a static JSON of precomputed hunks since the browser has no git)",
+  "/Users/blaget/projects/jev-experiments/commit-sentry/commit-sentry-report.json (50 KB; contains parsed hunks with id/file/language/header/lines plus real judgments, findings, timing; best source for the precomputed diff and a mock replay)",
+  "/Users/blaget/projects/jev-experiments/commit-sentry/mock/recording.json (10 KB; 15 hunk judgments plus message judgment from a real Jev run; use as fallback when 429)",
+  "/Users/blaget/projects/jev-experiments/commit-sentry/screenshots/commit-sentry.jpg (408 KB) and commit-sentry-demo.gif (165 KB); reference visuals only"
+ ],
+ "ui_components": [
+  "Terminal-style report panel: src/render.ts (header, progress line, file table with risk bars, findings list with quoted lines, hunk timings, summary, verdict)",
+  "Diff viewer per hunk: not in source; new React component rendering Hunk.lines with add/del coloring and a highlight on the offending line",
+  "Run button plus strict toggle: src/cli.ts flags --strict, --no-message",
+  "Commit message input: src/cli.ts -m / --message-file"
+ ],
+ "reusable_source": [
+  "/Users/blaget/projects/jev-experiments/commit-sentry/src/diff.ts (pure unified-diff parser, no node deps)",
+  "/Users/blaget/projects/jev-experiments/commit-sentry/src/types.ts",
+  "/Users/blaget/projects/jev-experiments/commit-sentry/src/policy.ts (thresholds, evaluate, summariseFiles, percentile; pure)",
+  "/Users/blaget/projects/jev-experiments/commit-sentry/src/baseline.ts (regex rules; swap node:perf_hooks for window.performance)",
+  "/Users/blaget/projects/jev-experiments/commit-sentry/src/fixture.ts (FIXTURE_FILES before/after strings and FIXTURE_COMMIT_MESSAGE; drop the git/fs functions, generate the unified diff at build time or ship report.json hunks)",
+  "/Users/blaget/projects/jev-experiments/commit-sentry/src/render.ts (riskBar and text layout logic; strip ANSI colors)"
+ ],
+ "dm1_mapping": [
+  {
+   "jev_key": "leaks_secret_or_token + logs_sensitive_data + disables_or_skips_tests + destructive_data_change + changes_public_api_shape + leftover_debug_or_temp + hardcoded_env_specific_value",
+   "dm1_route": "yes-no",
+   "dm1_body": "POST /yes-no {\"text\": \"<file: src/config.ts (typescript, modification)>\\n<hunk text with +/- prefixes>\", \"statements\": [\"An added line embeds a literal secret such as an API key, token, password or private key.\", \"An added line logs or prints sensitive data such as a token, password, card number or user email.\", \"The change skips, disables, removes or weakens a test or assertion.\", \"The change permanently drops, truncates, deletes or overwrites stored data or schema without a restricting condition.\", \"The change renames, removes or retypes a field, signature or contract that external callers consume.\", \"The change adds temporary debug code that the author intends to remove before merge.\", \"An added line hard-codes an environment-specific IP, host, path, port or account id.\"], \"when_true\": \"The added lines contain the described risky pattern as a literal value or operation.\", \"when_false\": \"The change is benign, reads values from config, adds tests, or is additive only.\"}",
+   "notes": "One request per hunk, 7 statements each. Prepend file and language as a one-line header to text. Read results[i].probability for policy thresholds. Shared hints are generic because they cover all 7 statements; per-statement precision comes from the statement wording. Optionally batch all 15 hunks as texts (15 x 7 statements) into one request if the route accepts texts plus statements together; if not, 15 requests throttled at 2/s."
+  },
+  {
+   "jev_key": "risk",
+   "dm1_route": "rate",
+   "dm1_body": "POST /rate {\"texts\": [\"<hunk 1 text with file header>\", ... up to 32], \"scale\": [\"Cosmetic: formatting, comments, renames of local identifiers or docs only; no behaviour change.\", \"Low: small local behaviour change that is easy to revert: a bug fix, a pure helper, a test, a config bump.\", \"Moderate: behaviour change other code depends on, or new branching logic; nothing destroyed or exposed if wrong.\", \"High: touches authentication, payments, migrations, infrastructure or external contracts; mistakes are costly.\", \"Dangerous: exposes credentials or user data, destroys data, disables security checks or bypasses authentication.\"]}",
+   "notes": "One batched request for all 15 hunks. Map score (0..1) to the 0..4 risk axis: risk = score * 4. Use level index for riskLevel. Use max(scores) as riskConfidence."
+  },
+  {
+   "jev_key": "kind",
+   "dm1_route": "classify",
+   "dm1_body": "POST /classify {\"texts\": [\"<hunk 1>\", ... up to 32], \"labels\": {\"feature\": \"Adds new user-visible capability or new behaviour.\", \"bugfix\": \"Corrects existing behaviour that was wrong.\", \"refactor\": \"Restructures code without changing what it does.\", \"test\": \"Adds, changes or removes test code.\", \"docs\": \"Comments, README, or documentation text only.\", \"config\": \"Configuration, environment, dependency versions, build or CI settings.\", \"chore\": \"Housekeeping such as formatting, logging tweaks, or version bumps.\"}}",
+   "notes": "One batched request for all hunks. Read label and confidence."
+  },
+  {
+   "jev_key": "offending_line",
+   "dm1_route": "classify",
+   "dm1_body": "POST /classify {\"text\": \"<hunk text>\", \"labels\": {\"L1\": \"<added line 1 text>\", \"L2\": \"<added line 2 text>\", ..., \"none\": \"No added line is concerning; the hunk is benign.\"}}",
+   "notes": "Labels are the added lines themselves, max 12 plus none. Only call for hunks with at least one finding above 0.5, to save requests. Alternative with zero extra requests: run /yes-no with texts = each added line alone and the same 7 statements, pick the line with the highest max probability. Prefer the alternative since it reuses the same route and gives a per-line explanation."
+  },
+  {
+   "jev_key": "message_matches_changes",
+   "dm1_route": "yes-no",
+   "dm1_body": "POST /yes-no {\"text\": \"Commit message: chore: tidy up logging and small fixes\\n\\nChanges:\\n- src/config.ts (config, dangerous): + stripeKey: \\\"sk_live_...\\\"\\n- migrations/0007_drop_legacy_email.sql (config, dangerous): + ALTER TABLE users DROP COLUMN legacy_email\\n...\", \"statement\": \"The commit message honestly and completely describes every significant change listed.\", \"when_true\": \"Each risky or significant change is reflected in the message and the message claims nothing the changes do not do.\", \"when_false\": \"The message omits a significant change, describes something else, or is too generic for these changes.\"}",
+   "notes": "One request after the hunk phase, because the summary uses kind and risk from earlier results. Mismatch when probability < 0.35."
+  },
+  {
+   "jev_key": "message_quality",
+   "dm1_route": "rate",
+   "dm1_body": "POST /rate {\"text\": \"chore: tidy up logging and small fixes\", \"scale\": [\"Empty, a placeholder, or meaningless ('wip', 'fix', 'asdf').\", \"Vague: names a topic but not what changed or why ('fix bug', 'update config').\", \"Adequate: states what changed in concrete terms so a reader can locate the change.\", \"Excellent: states what changed and why, in imperative mood, specific about scope and risk.\"]}",
+   "notes": "Rate the message alone. Map level index to poor/vague/adequate/excellent."
+  }
+ ],
+ "browser_plan": "Build a Vite/React island in the milliseconds site style with a terminal-look report panel. Ship the fixture as a static JSON of 15 precomputed hunks (generate from fixture.ts before/after strings at build time with a small diff step, or copy hunks from commit-sentry-report.json). Show a commit message input prefilled with the dishonest message, a strict toggle, and a Run check button. Left side lists files and hunks with a diff viewer; right side renders the report. Requests go to a proxy route (Cloudflare Worker or Vercel function) that adds the bearer key and forwards to https://api.milliseconds.ai/v1/decision-machine-1/*. Request plan per run: 1 /rate batch (15 texts, risk), 1 /classify batch (15 texts, kind), 15 /yes-no requests (one per hunk, 7 statements) or 1 if the route accepts texts and statements together, then 1 /yes-no and 1 /rate for the message. Worst case 19 requests, queued through a client-side limiter at 2 requests/s, so a run finishes in about 10 s and the UI streams each hunk row in as its result lands. Measure latency with performance.now around each fetch and show x-inference-ms from the response headers. On HTTP 429, show a banner \"demo is busy, showing recorded results\" and replay mock/recording.json mapped into the same result shape. Policy, baseline regex and file summary stay as pure code copied from src/policy.ts and src/baseline.ts.",
+ "difficulty": "M",
+ "risks": [
+  "Jev fanned 10 questions into 1 request per hunk; DM1 needs 3 routes, so 15 hunks cost up to 19 requests instead of 16. At 2 req/s the demo takes about 10 s, not 338 ms. The page must present the latency story per request, not per run.",
+  "offending_line used dynamic choice criteria (added lines as options). DM1 classify with line text as label descriptions is untested; per-line yes-no is safer but multiplies texts.",
+  "Shared when_true/when_false hints across 7 different statements weaken precision. Evals may need per-finding requests with tailored hints if batch quality is poor.",
+  "Hunk texts with file header can reach 1.8k tokens each (recording shows 1816 input tokens). 15 hunks x several routes stays under 1M tokens/min but many concurrent visitors could hit the org limit; mock fallback is required.",
+  "The commit-message check depends on hunk results; it must wait for the risk and kind batches, adding one more round-trip.",
+  "Fixture contains fake secrets like sk_live_...; a proxy or scanner may flag the demo payload. Keep values obviously fake."
+ ]
+}

@@ -1,0 +1,14 @@
+---
+import Demo from '../layouts/Demo.astro';
+import meta from '../demos/agent-assist/meta';
+import Island from '../demos/agent-assist/Demo.tsx';
+---
+<Demo meta={meta}>
+  <Island client:only="react" />
+  <div slot="notes">
+    <h2>How it works</h2>
+    <p>Each new customer message is classified by intent and checked for support signals. Risk scores and a matching reply template appear beside the conversation.</p>
+    <h3>Demo scope</h3>
+    <p>These are scripted chats. Replies come from a fixed template catalog, and the demo can send them automatically inside the simulation. No customer receives a message.</p>
+  </div>
+</Demo>

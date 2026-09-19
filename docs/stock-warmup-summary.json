@@ -1,0 +1,140 @@
+{
+  "startedAt": "2026-09-19T16:41:18.282Z",
+  "finishedAt": "2026-09-19T16:53:42.735Z",
+  "origin": "https://demo.milliseconds.ai",
+  "requests": 1338,
+  "successful": 1338,
+  "failed": 0,
+  "demos": {
+    "agent-assist": {
+      "requests": 10,
+      "cache": 0,
+      "sponsoredLive": 10
+    },
+    "ax-pilot": {
+      "requests": 34,
+      "cache": 34,
+      "sponsoredLive": 0
+    },
+    "catalog-studio": {
+      "requests": 2,
+      "cache": 0,
+      "sponsoredLive": 2
+    },
+    "commit-sentry": {
+      "requests": 6,
+      "cache": 6,
+      "sponsoredLive": 0
+    },
+    "dispatch": {
+      "requests": 36,
+      "cache": 0,
+      "sponsoredLive": 36
+    },
+    "evidence-check": {
+      "requests": 4,
+      "cache": 0,
+      "sponsoredLive": 4
+    },
+    "firehose": {
+      "requests": 9,
+      "cache": 0,
+      "sponsoredLive": 9
+    },
+    "inbox-blitz": {
+      "requests": 112,
+      "cache": 0,
+      "sponsoredLive": 112
+    },
+    "instant-search": {
+      "requests": 15,
+      "cache": 0,
+      "sponsoredLive": 15
+    },
+    "invoice-desk": {
+      "requests": 9,
+      "cache": 0,
+      "sponsoredLive": 9
+    },
+    "jev-lint": {
+      "requests": 98,
+      "cache": 4,
+      "sponsoredLive": 94
+    },
+    "judge-sheets": {
+      "requests": 180,
+      "cache": 10,
+      "sponsoredLive": 170
+    },
+    "launcher": {
+      "requests": 16,
+      "cache": 0,
+      "sponsoredLive": 16
+    },
+    "live-minutes": {
+      "requests": 12,
+      "cache": 0,
+      "sponsoredLive": 12
+    },
+    "log-sentinel": {
+      "requests": 8,
+      "cache": 0,
+      "sponsoredLive": 8
+    },
+    "modstream": {
+      "requests": 9,
+      "cache": 0,
+      "sponsoredLive": 9
+    },
+    "nl-palette": {
+      "requests": 209,
+      "cache": 0,
+      "sponsoredLive": 209
+    },
+    "private-share": {
+      "requests": 1,
+      "cache": 0,
+      "sponsoredLive": 1
+    },
+    "returns-desk": {
+      "requests": 8,
+      "cache": 0,
+      "sponsoredLive": 8
+    },
+    "sales-intake": {
+      "requests": 5,
+      "cache": 0,
+      "sponsoredLive": 5
+    },
+    "send-guard": {
+      "requests": 147,
+      "cache": 3,
+      "sponsoredLive": 144
+    },
+    "shell-guard": {
+      "requests": 170,
+      "cache": 3,
+      "sponsoredLive": 167
+    },
+    "swarm": {
+      "requests": 72,
+      "cache": 0,
+      "sponsoredLive": 72
+    },
+    "tower": {
+      "requests": 93,
+      "cache": 0,
+      "sponsoredLive": 93
+    },
+    "turbo-rerank": {
+      "requests": 11,
+      "cache": 0,
+      "sponsoredLive": 11
+    },
+    "voice-turn": {
+      "requests": 62,
+      "cache": 0,
+      "sponsoredLive": 62
+    }
+  }
+}

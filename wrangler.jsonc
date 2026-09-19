@@ -1,0 +1,28 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "milliseconds-demos",
+  "compatibility_date": "2026-09-16",
+  "workers_dev": false,
+  // No account_id here: set CLOUDFLARE_ACCOUNT_ID in the shell that deploys.
+  // The Worker only handles the API proxy; every other path is a static asset.
+  "main": "src/worker.ts",
+  "assets": { "directory": "./dist", "binding": "ASSETS", "not_found_handling": "404-page", "run_worker_first": ["/api/*"] },
+  // Default (local `wrangler dev`): no service binding, the Worker calls https://api.milliseconds.ai directly.
+  // PLAYGROUND_API_KEY sponsors only fixed registry examples; custom calls use x-ms-key.
+  "durable_objects": { "bindings": [{ "name": "EXAMPLES", "class_name": "ExampleStore" }] },
+  "migrations": [{ "tag": "v1-examples", "new_sqlite_classes": ["ExampleStore"] }],
+  "ratelimits": [{ "name": "RATE_LIMITER", "namespace_id": "1006", "simple": { "limit": 600, "period": 60 } }],
+  "vars": { "EXAMPLE_DAILY_BUDGET": "2000" },
+  "env": {
+    "production": {
+      "name": "milliseconds-demos",
+      "workers_dev": false,
+      "durable_objects": { "bindings": [{ "name": "EXAMPLES", "class_name": "ExampleStore" }] },
+      "ratelimits": [{ "name": "RATE_LIMITER", "namespace_id": "1006", "simple": { "limit": 600, "period": 60 } }],
+      "vars": { "EXAMPLE_DAILY_BUDGET": "2000" },
+      "routes": [{ "pattern": "demo.milliseconds.ai", "custom_domain": true }],
+      // Production only: service binding to the decision-machine Worker in the same account, so the proxy hop never leaves Cloudflare.
+      "services": [{ "binding": "API", "service": "decision-machine-production" }]
+    }
+  }
+}

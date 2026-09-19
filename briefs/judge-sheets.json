@@ -1,0 +1,307 @@
+{
+ "slug": "judge-sheets",
+ "title": "Judge Sheets \u2014 predictive spreadsheet columns",
+ "one_liner": "A Sheets-lookalike grid where typing a column header (\"Urgency\", \"Refund risk?\") fills the whole column with semantic judgments in seconds.",
+ "platform": "web (vite/react)",
+ "what_it_does": "The page opens a spreadsheet with two sheets. Reviews holds 300 synthetic product reviews. Leads holds 150 synthetic inbound B2B messages. Two columns ship pre-predicted: Sentiment on Reviews and Intent on Leads. The user clicks an empty header cell to the right of the text column and types a header such as \"Urgency\". After 120 ms of quiet, one classify request reads the header plus three sample rows and picks one of 14 prediction schemas. A chip under the cell shows the schema, its probability and the measured latency. On Enter the column fills with =JUDGE / =PICK / =RATE formulas for every data row, and the engine batches the pending judgments to the API. Cells render as \"Yes \u00b7 97%\" with red/green tint, a category label with confidence tint, or a level label on a red-to-green scale. A \"Column predicted\" card shows rows done, wall time, median and p95 latency, rows per second, and the \"one LLM prompt per cell\" baseline with a speedup multiple. Keep commits the column, Undo clears it, a dropdown re-interprets the header with another schema. Summary blocks (COUNT, AVERAGE, COUNTIF) recalculate as answers land. Formula bar, fill handle, Ctrl+Shift+D and column resize all work.",
+ "jev_questions": [
+  {
+   "key": "intent",
+   "type": "choice",
+   "instructions": "A spreadsheet user typed this column header above a column of free text. Which kind of prediction do they want in that column?",
+   "options": [
+    "sentiment / how positive or negative the text is",
+    "urgency / how quickly someone needs to follow up",
+    "topic / category of a product review",
+    "intent of an inbound message / what the sender wants",
+    "buying intent / how likely the sender is to purchase",
+    "emotional tone of the writer",
+    "priority / severity for a support or ops team",
+    "star rating the author would give (1 to 5)",
+    "whether the text reports a defect, damage or malfunction",
+    "whether the author would recommend the product",
+    "whether the author is likely to return the product or ask for a refund",
+    "whether the message is spam or unrelated",
+    "some other yes/no question (the header itself is the question)",
+    "some other quality rated low to high (the header names the quality)"
+   ],
+   "state_shape": "string: 'Column header: \"{header}\"\\n\\nSample rows of the text column next to it:\\n- {sample1}\\n- {sample2}\\n- {sample3}' (samples truncated at 160 chars)"
+  },
+  {
+   "key": "sentiment",
+   "type": "score",
+   "instructions": "Overall sentiment of this text",
+   "options": [
+    "very negative",
+    "negative",
+    "neutral",
+    "positive",
+    "very positive"
+   ],
+   "state_shape": "string: the review text"
+  },
+  {
+   "key": "urgency",
+   "type": "score",
+   "instructions": "How urgent is it for our team to follow up with this person?",
+   "options": [
+    "no follow-up needed",
+    "low",
+    "medium",
+    "high",
+    "urgent"
+   ],
+   "state_shape": "string: the review or message text"
+  },
+  {
+   "key": "topic",
+   "type": "choice",
+   "instructions": "What is the main topic of this text?",
+   "options": [
+    "shipping",
+    "quality",
+    "price",
+    "support",
+    "other"
+   ],
+   "state_shape": "string: the review text"
+  },
+  {
+   "key": "intent_schema",
+   "type": "choice",
+   "instructions": "This is an inbound message to a B2B software company. What does the sender want?",
+   "options": [
+    "pricing",
+    "demo request",
+    "support",
+    "partnership",
+    "job inquiry",
+    "spam"
+   ],
+   "state_shape": "string: the lead message"
+  },
+  {
+   "key": "buying",
+   "type": "score",
+   "instructions": "How strong is the sender's intent to purchase our product?",
+   "options": [
+    "no interest or unrelated",
+    "curious, just exploring",
+    "actively evaluating",
+    "ready to buy now"
+   ],
+   "state_shape": "string: the lead message"
+  },
+  {
+   "key": "tone",
+   "type": "choice",
+   "instructions": "What is the emotional tone of the writer?",
+   "options": [
+    "angry",
+    "disappointed",
+    "neutral",
+    "happy",
+    "delighted"
+   ],
+   "state_shape": "string: the text"
+  },
+  {
+   "key": "priority",
+   "type": "score",
+   "instructions": "How severe is the problem described, from a support team's point of view?",
+   "options": [
+    "none",
+    "low",
+    "medium",
+    "high",
+    "critical"
+   ],
+   "state_shape": "string: the text"
+  },
+  {
+   "key": "stars",
+   "type": "score",
+   "instructions": "How many stars out of five would the author give?",
+   "options": [
+    "1 star",
+    "2 stars",
+    "3 stars",
+    "4 stars",
+    "5 stars"
+   ],
+   "state_shape": "string: the review text"
+  },
+  {
+   "key": "defect",
+   "type": "noul",
+   "instructions": "Does the text report a defect, damage or malfunction of the product itself?",
+   "state_shape": "string: the review text"
+  },
+  {
+   "key": "recommend",
+   "type": "noul",
+   "instructions": "Would the author recommend the product to others?",
+   "state_shape": "string: the review text"
+  },
+  {
+   "key": "refund",
+   "type": "noul",
+   "instructions": "Is the author likely to return the product or ask for a refund?",
+   "state_shape": "string: the review text"
+  },
+  {
+   "key": "spam",
+   "type": "noul",
+   "instructions": "Is this message spam, a scam, or unrelated to the business?",
+   "state_shape": "string: the lead message"
+  },
+  {
+   "key": "yesno",
+   "type": "noul",
+   "instructions": "Answer this question about the text: {header}  (a '?' is appended when the header lacks one)",
+   "state_shape": "string: the text"
+  },
+  {
+   "key": "scale",
+   "type": "score",
+   "instructions": "Rate this text for: {header}",
+   "options": [
+    "none",
+    "low",
+    "medium",
+    "high",
+    "very high"
+   ],
+   "state_shape": "string: the text"
+  }
+ ],
+ "request_cadence": "Header chip: one choice request per header edit after a 120 ms debounce (in-flight request aborted on the next keystroke). Column fill: one systemone request per distinct source text with every pending question for that text fanned out inside it, so 300 rows = 300 requests, run through a 12-lane pool on the proxy. Workbook open: 450 requests (two seeded columns). Cache by (kind, text, instructions, options) makes re-interpretation free.",
+ "data_files": [
+  "/Users/blaget/projects/jev-experiments/judge-sheets/src/data/generate.ts (seeded mulberry32 generators: 300 reviews over 20 products, 150 leads over 9 intent templates; ~9 KB source, no data file on disk)",
+  "/Users/blaget/projects/jev-experiments/judge-sheets/src/data/workbook.ts (sheet layout, seeded columns, summary formulas; ~5 KB)",
+  "/Users/blaget/projects/jev-experiments/judge-sheets/screenshots/judge-sheets.jpg (528 KB) and judge-sheets-demo.webp (248 KB), Jev-branded; do not reuse"
+ ],
+ "ui_components": [
+  "App shell, header edit flow, intent debounce, keep/undo: /Users/blaget/projects/jev-experiments/judge-sheets/src/App.tsx",
+  "Virtualized grid with fill handle and column resize: /Users/blaget/projects/jev-experiments/judge-sheets/src/ui/Grid.tsx",
+  "Sheets-style title bar, toolbar, formula bar, sheet tabs, footer: /Users/blaget/projects/jev-experiments/judge-sheets/src/ui/Chrome.tsx",
+  "IntentChip, SmartFillCard (progress, p50/p95, rows/s, baseline), SpeedStatus: /Users/blaget/projects/jev-experiments/judge-sheets/src/ui/SmartFill.tsx",
+  "Icons and number/duration formatters: /Users/blaget/projects/jev-experiments/judge-sheets/src/ui/icons.tsx, src/ui/format.ts",
+  "Styles (737 lines, Google Sheets look; must be restyled to milliseconds.ai tokens): /Users/blaget/projects/jev-experiments/judge-sheets/src/styles.css"
+ ],
+ "reusable_source": [
+  "/Users/blaget/projects/jev-experiments/judge-sheets/src/engine/parser.ts",
+  "/Users/blaget/projects/jev-experiments/judge-sheets/src/engine/evaluator.ts",
+  "/Users/blaget/projects/jev-experiments/judge-sheets/src/engine/functions.ts",
+  "/Users/blaget/projects/jev-experiments/judge-sheets/src/engine/workbook.ts",
+  "/Users/blaget/projects/jev-experiments/judge-sheets/src/engine/refs.ts",
+  "/Users/blaget/projects/jev-experiments/judge-sheets/src/engine/values.ts",
+  "/Users/blaget/projects/jev-experiments/judge-sheets/src/engine/jev.ts (cache + batchSpecs; change grouping key from text to question, see plan)",
+  "/Users/blaget/projects/jev-experiments/judge-sheets/src/data/generate.ts",
+  "/Users/blaget/projects/jev-experiments/judge-sheets/src/data/workbook.ts",
+  "/Users/blaget/projects/jev-experiments/judge-sheets/src/ui/Grid.tsx",
+  "/Users/blaget/projects/jev-experiments/judge-sheets/src/ui/Chrome.tsx",
+  "/Users/blaget/projects/jev-experiments/judge-sheets/src/ui/icons.tsx",
+  "/Users/blaget/projects/jev-experiments/judge-sheets/src/ui/format.ts",
+  "/Users/blaget/projects/jev-experiments/judge-sheets/src/lib/store.ts (drops Health/jev-latest fields only)",
+  "/Users/blaget/projects/jev-experiments/judge-sheets/server/pool.ts",
+  "/Users/blaget/projects/jev-experiments/judge-sheets/src/engine/engine.test.ts, src/data/data.test.ts (keep as-is)"
+ ],
+ "dm1_mapping": [
+  {
+   "jev_key": "intent",
+   "dm1_route": "classify",
+   "dm1_body": "{\"text\":\"Column header: \\\"Urgency\\\"\\n\\nSample rows of the text column next to it:\\n- Absolutely terrible. The box showed up ten days late...\\n- ...\\n- ...\",\"labels\":{\"Sentiment\":\"sentiment, how positive or negative the text is\",\"Urgency\":\"urgency, how quickly someone needs to follow up\",\"Topic\":\"topic or category of a product review\",\"Intent\":\"intent of an inbound message, what the sender wants\",\"Buying intent\":\"buying intent, how likely the sender is to purchase\",\"Tone\":\"emotional tone of the writer\",\"Priority\":\"priority or severity for a support or ops team\",\"Star rating\":\"star rating the author would give, 1 to 5\",\"Defect?\":\"whether the text reports a defect, damage or malfunction\",\"Recommends?\":\"whether the author would recommend the product\",\"Refund risk?\":\"whether the author is likely to return the product or ask for a refund\",\"Spam?\":\"whether the message is spam or unrelated\",\"Yes / no\":\"some other yes/no question, the header itself is the question\",\"Low / high\":\"some other quality rated low to high, the header names the quality\"}}",
+   "notes": "Response label maps to schema.id by label name; probability drives the chip percent. Keep the header on its own first line so the classifier weights it over the samples. One request per debounce, abort on next keystroke."
+  },
+  {
+   "jev_key": "sentiment",
+   "dm1_route": "rate",
+   "dm1_body": "{\"texts\":[...up to 32 review texts],\"scale\":[\"very negative, furious or telling others to avoid it\",\"negative, disappointed or would not buy again\",\"neutral, mixed or indifferent\",\"positive, happy and would recommend\",\"very positive, delighted and enthusiastic\"]}",
+   "notes": "Cell value = score * 4 to keep the 0..4 expected-level semantics the summary block (AVERAGE, COUNTIF <1.5, >=2.5) relies on; level index gives the label."
+  },
+  {
+   "jev_key": "urgency",
+   "dm1_route": "rate",
+   "dm1_body": "{\"texts\":[...],\"scale\":[\"no follow-up needed, the person is satisfied or the message needs no reply\",\"low urgency, a reply can wait a week\",\"medium urgency, a reply is expected within days\",\"high urgency, an unhappy person or a deadline this week\",\"urgent, a furious customer, a broken product or a decision due today\"]}"
+  },
+  {
+   "jev_key": "topic",
+   "dm1_route": "classify",
+   "dm1_body": "{\"texts\":[...],\"labels\":{\"shipping\":\"delivery speed, tracking, packaging or damage in transit\",\"quality\":\"build quality, materials, durability or defects\",\"price\":\"cost, value for money or price changes\",\"support\":\"customer service, replacements or help desk experience\",\"other\":\"color, size, instructions, companion app or anything else\"}}"
+  },
+  {
+   "jev_key": "intent_schema",
+   "dm1_route": "classify",
+   "dm1_body": "{\"texts\":[...lead messages],\"labels\":{\"pricing\":\"asks for a price, a quote, a tier cost or a discount\",\"demo request\":\"asks for a demo, walkthrough or product session\",\"support\":\"an existing customer with a bug, login or account problem\",\"partnership\":\"proposes a reseller, integration or co-marketing partnership\",\"job inquiry\":\"asks about hiring, internships or open roles\",\"spam\":\"unsolicited SEO, outsourcing, traffic or domain offers\"}}",
+   "notes": "Label names must stay exactly these strings; the Leads summary COUNTIF matches on them."
+  },
+  {
+   "jev_key": "buying",
+   "dm1_route": "rate",
+   "dm1_body": "{\"texts\":[...],\"scale\":[\"no interest or unrelated, a support ticket, job inquiry or spam\",\"curious and just exploring, no plans to buy\",\"actively evaluating, comparing vendors or piloting\",\"ready to buy now, budget approved, asks for quote or contract\"]}",
+   "notes": "Cell value = score * 3."
+  },
+  {
+   "jev_key": "tone",
+   "dm1_route": "classify",
+   "dm1_body": "{\"texts\":[...],\"labels\":{\"angry\":\"furious, hostile or demanding\",\"disappointed\":\"let down, underwhelmed or regretful\",\"neutral\":\"matter of fact, no strong emotion\",\"happy\":\"pleased and satisfied\",\"delighted\":\"thrilled, enthusiastic, exceeded expectations\"}}"
+  },
+  {
+   "jev_key": "priority",
+   "dm1_route": "rate",
+   "dm1_body": "{\"texts\":[...],\"scale\":[\"no problem described\",\"low severity, a minor annoyance or cosmetic issue\",\"medium severity, a feature that partly fails\",\"high severity, the product cannot be used as intended\",\"critical, safety risk, data loss or an outage for an existing customer\"]}"
+  },
+  {
+   "jev_key": "stars",
+   "dm1_route": "rate",
+   "dm1_body": "{\"texts\":[...],\"scale\":[\"1 star, terrible, returning it\",\"2 stars, disappointed\",\"3 stars, fine, average\",\"4 stars, good, would recommend\",\"5 stars, outstanding, love it\"]}",
+   "notes": "Display level index + 1 as the star count."
+  },
+  {
+   "jev_key": "defect",
+   "dm1_route": "yes-no",
+   "dm1_body": "{\"texts\":[...],\"statement\":\"The text reports a defect, damage or malfunction of the product itself.\",\"when_true\":\"A part broke, cracked, leaks, stopped working, shuts off or arrived damaged.\",\"when_false\":\"Complaints are only about shipping, price, support, color or size, or there is no complaint.\"}",
+   "notes": "Cell value = probability; confidence = |p-0.5|*2 as before."
+  },
+  {
+   "jev_key": "recommend",
+   "dm1_route": "yes-no",
+   "dm1_body": "{\"texts\":[...],\"statement\":\"The author would recommend the product to others.\",\"when_true\":\"Says would recommend, would buy again, or is clearly happy with it.\",\"when_false\":\"Says avoid, save your money, returning it, or is clearly disappointed.\"}"
+  },
+  {
+   "jev_key": "refund",
+   "dm1_route": "yes-no",
+   "dm1_body": "{\"texts\":[...],\"statement\":\"The author is likely to return the product or ask for a refund.\",\"when_true\":\"Mentions returning it, wanting money back, or a serious defect with anger.\",\"when_false\":\"Is satisfied, or only mentions a minor gripe that is not a deal-breaker.\"}"
+  },
+  {
+   "jev_key": "spam",
+   "dm1_route": "yes-no",
+   "dm1_body": "{\"texts\":[...lead messages],\"statement\":\"This message is spam, a scam or unrelated to the business.\",\"when_true\":\"Unsolicited SEO, backlink, traffic, offshore development or domain listing offers.\",\"when_false\":\"A real question about pricing, demos, support, partnership or jobs.\"}"
+  },
+  {
+   "jev_key": "yesno",
+   "dm1_route": "yes-no",
+   "dm1_body": "{\"texts\":[...],\"statement\":\"{header rewritten as a declarative}\"}  e.g. header \"Mentions a competitor?\" -> {\"statement\":\"The text mentions a competitor.\"}",
+   "notes": "Client rewrite rule: strip trailing '?', if header starts with a verb (Mentions/Asks/Is/Has/Wants...) prefix 'The text ' and lower-case the first letter; otherwise 'The text is about {header}.' No hints. Shown in the card so the user can edit the statement before Keep."
+  },
+  {
+   "jev_key": "scale",
+   "dm1_route": "rate",
+   "dm1_body": "{\"texts\":[...],\"scale\":[\"no {header} at all\",\"low {header}\",\"medium {header}\",\"high {header}\",\"very high {header}\"]}  e.g. header \"Enthusiasm\" -> [\"no enthusiasm at all\",\"low enthusiasm\",\"medium enthusiasm\",\"high enthusiasm\",\"very high enthusiasm\"]",
+   "notes": "Header lower-cased into each level. Level labels rendered as none/low/medium/high/very high."
+  }
+ ],
+ "browser_plan": "Keep the app as a Vite/React island in the demos repo at /sheets. Copy src/engine, src/data, src/ui/Grid, Chrome, icons, format and store.ts as-is. Replace src/styles.css tokens with the milliseconds.ai site tokens from ~/projects/cloudraker-spring-2026 (fonts, colors, radius); keep the grid geometry. Drop server/* except pool.ts. Proxy: one Cloudflare Worker (or the demos site's existing /api proxy) exposing POST /api/dm1/:route that forwards the JSON body to https://api.milliseconds.ai/v1/decision-machine-1/:route with the bearer key from a secret, passes back status, body and the x-inference-ms / x-input-tokens headers. Rewrite src/lib/predict.ts: keep SCHEMAS but store a dm1 body builder per schema (route + statement/hints, labels or scale) and the display mapping above; replace classifyIntent with one POST /api/dm1/classify. Rewrite src/lib/jevClient.ts as dm1Client.ts: batchSpecs now groups pending specs by question key (kind + instructions + options) instead of by text, then slices each group into chunks of 32 texts; each chunk is one request with texts:[...]. 300 rows = 10 requests, 450 rows on open = 15 requests. A single client-side token bucket allows 2 requests per second (500 ms spacing) with 4 in flight max; the header chip request bypasses the queue but still counts. On 429 read Retry-After (default 2 s), pause the bucket, show 'Rate limited, resuming in Ns' in the card and footer, and requeue the chunk; after 3 failed attempts write #RATE into the cells and offer Retry in the card. Latency per request = x-inference-ms; p50/p95/rows-per-s stats stay as before. Cache key = (route, text, body-without-texts) so re-interpreting a header stays free. Yes-no answers map to JUDGE values (probability), classify to PICK values (label, scores), rate to RATE values (score*(levels-1), level). Add a 'How it works' drawer under the card showing the exact JSON body sent for the current column, a curl line, and a link to the docs.",
+ "difficulty": "L",
+ "risks": [
+  "Free-form 'Yes / no' schema depends on rewriting a header question into a declarative statement; the heuristic will misfire on odd headers, so expose the statement for editing before Keep.",
+  "Free-form 'Low / high' scale injects the header into level descriptions; some headers read poorly and quality may drop versus the fixed schemas.",
+  "Rate scores are 0..1 weighted position, not 0..N expected level; summary formulas that threshold at 1.5 and 2.5 need the score*(N-1) conversion applied consistently.",
+  "Org-wide 200 req/min limit is shared across all demo pages and visitors; workbook open costs 15 requests per visitor, so consider lazy-predicting the seeded columns only when a sheet is visible, or shipping the seeded columns as cached values.",
+  "Batching by question instead of by text means a review column of 3 predicted columns costs 3x the requests of Jev's fan-out; still 30 requests for 300 rows, under the budget.",
+  "The 'one LLM prompt per cell' baseline (4 s per cell) is a marketing number; keep it labelled as an assumption.",
+  "The intent classifier over 14 described labels was tuned for Jev choice; classify may need label descriptions rebalanced so 'Yes / no' and 'Low / high' do not win over the specific schemas.",
+  "Formula engine tests reference JUDGE/PICK/RATE names and the JevSpec shape; keep the names so tests and the formula bar stay meaningful."
+ ]
+}

@@ -1,0 +1,14 @@
+---
+import Demo from '../layouts/Demo.astro';
+import meta from '../demos/tower/meta';
+import Island from '../demos/tower/Demo.tsx';
+---
+<Demo meta={meta}>
+  <Island client:only="react" />
+  <div slot="notes">
+    <h2>How it works</h2>
+    <p>Local simulation code predicts conflicts. The model selects an instruction for each aircraft that needs attention, and the simulator applies it while tracking separation and arrivals.</p>
+    <h3>Demo scope</h3>
+    <p>The aircraft and airspace are fictional. Separation rules, physics and traffic are simplified for the demo. The controller can make unsafe choices and is not suitable for real aviation.</p>
+  </div>
+</Demo>

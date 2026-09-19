@@ -1,0 +1,14 @@
+---
+import Demo from '../layouts/Demo.astro';
+import meta from '../demos/commit-sentry/meta';
+import Island from '../demos/commit-sentry/Demo.tsx';
+---
+<Demo meta={meta}>
+  <Island client:only="react" />
+  <div slot="notes">
+    <h2>How it works</h2>
+    <p>The demo checks a sample diff in batches, combining line-level signals, change categories and risk ratings. A policy turns those signals into findings and a pass, warning or block decision.</p>
+    <h3>Demo scope</h3>
+    <p>The diff is a sample, and no repository is changed. Destructive SQL signals are advisory because they do not reliably distinguish safe queries. A passing result is not a complete security review.</p>
+  </div>
+</Demo>

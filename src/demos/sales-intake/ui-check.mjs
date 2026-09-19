@@ -1,0 +1,37 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+const { chromium } = await import(process.env.PLAYWRIGHT_MODULE || '/Users/blaget/.agents/skills/gstack/node_modules/playwright/index.mjs');
+import { SAMPLES, sampleLeads } from './fixtures.ts';
+const browser=await chromium.launch({headless:true});
+const page=await browser.newPage({viewport:{width:1440,height:1050}});
+const dir='/tmp/ms-build-sales-intake-qa';fs.mkdirSync(dir,{recursive:true});
+let calls=0,classification=0,mode='normal';
+page.on('pageerror',error=>{throw error});
+await page.route('**/api/run',async route=>{
+ calls++;const {body,route:capability}=route.request().postDataJSON();
+ if(mode==='slow') await new Promise(r=>setTimeout(r,1800));
+ if(mode==='error') return route.fulfill({status:503,contentType:'application/json',body:JSON.stringify({error:{message:'Service unavailable. Retry this inbox.'}})});
+ if(mode==='invalid') return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({results:[]})});
+ const leads=sampleLeads();let data;
+ if(capability==='yes-no') data={results:leads.map(l=>({results:['sales','support','careers','vendor'].map(intent=>({answer:intent===l.intent,probability:intent===l.intent?.99:.01}))}))};
+ else if(capability==='extract') data={results:leads.map(l=>({data:Object.fromEntries(Object.entries(l.facts).map(([k,v])=>[k,v.value||null]))}))};
+ else {const dim=classification++%3;data={results:body.texts.map((_,i)=>({label:dim<0?leads[i].intent:leads[i].fit[dim],probability:.99,confidence:.98,scores:{}}))};}
+ await route.fulfill({status:200,contentType:'application/json',headers:{'x-input-tokens':'100','x-inference-ms':'120'},body:JSON.stringify(data)}).catch(()=>{});
+});
+await page.goto(`${process.env.QA_BASE || 'http://127.0.0.1:4332'}/sales-intake/`);
+await page.getByRole('button',{name:'Run inbox live'}).waitFor();
+assert.equal(calls,0);assert.ok(await page.getByText('Sample preview · curated results. No API calls have been made.').isVisible());
+await page.getByRole('button',{name:'Run inbox live'}).click();assert.equal(calls,0);assert.equal(await page.locator('.key-panel').getAttribute('open'),'');
+await page.evaluate(()=>{document.querySelector('.key-panel').open=false;localStorage.setItem('ms.apiKey','sk-ms-testing1234567890123456789012345');});
+await page.getByRole('button',{name:'Show source for Company'}).click();assert.equal(await page.locator('.si-evidence mark').innerText(),'Northstar Foods');
+await page.locator('#si-weight-0').fill('80');assert.equal(calls,0);
+await page.screenshot({path:dir+'/desktop.png',fullPage:true});
+await page.setViewportSize({width:390,height:844});await page.screenshot({path:dir+'/mobile.png',fullPage:true});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+await page.getByRole('button',{name:'Run inbox live'}).click();await page.getByText('Live run complete · 6 messages processed. Review the drafts before using them.').waitFor();assert.equal(calls,5);
+await page.locator('#si-criterion-0').fill('Needs sales analytics');assert.equal(await page.locator('.si-row-meta').first().innerText(),'Not processed');assert.equal(await page.locator('.si-facts').count(),0);
+await page.getByRole('button',{name:'Reset sample'}).click();await page.locator('#si-source').fill('Own edited message');assert.equal(await page.locator('.si-facts').count(),0);
+await page.getByRole('button',{name:'Reset sample'}).click();mode='error';await page.getByRole('button',{name:'Run inbox live'}).click();await page.getByText('Service unavailable. Retry this inbox.').waitFor();assert.equal(await page.locator('.si-facts').count(),0);
+mode='normal';classification=0;await page.getByRole('button',{name:'Run inbox live'}).click();await page.getByText('Live run complete · 6 messages processed. Review the drafts before using them.').waitFor();
+mode='slow';classification=0;await page.getByRole('button',{name:'Run inbox live'}).click();await page.getByRole('button',{name:'Stop',exact:true}).click();await page.getByText('Stopped. No incomplete results were added to the queue. Run again to retry.').waitFor();await page.waitForTimeout(2000);assert.equal(await page.locator('.si-facts').count(),0);
+mode='invalid';await page.getByRole('button',{name:'Run inbox live'}).click();await page.getByText('The model returned an incomplete batch. Retry the inbox.').waitFor();
+console.log('Sales UI: zero-call sample, evidence, mobile overflow, five calls, invalidation, failure/retry, cancellation and malformed response passed.');await browser.close();

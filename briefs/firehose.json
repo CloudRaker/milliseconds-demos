@@ -1,0 +1,114 @@
+{
+ "slug": "firehose",
+ "title": "Chat Firehose Moderation Console",
+ "one_liner": "A dark ops console that judges a simulated Twitch-scale chat stream in real time: six yes/no signals plus a language label per message, with policy thresholds applied in the browser.",
+ "platform": "web (vite/react)",
+ "what_it_does": "The page shows a terminal-styled console with three columns: firehose, mod-queue, streamer-feed. The user presses START. A seeded generator (mulberry32, seed 2024) emits chat lines at a slider-set rate, in eight languages and nine hidden categories (hype, emote, question, chatter, spam, scam, harassment, spoiler, selfpromo). Every message goes through one Jev request with six nouls (harassment, spam_or_scam, spoiler, question_for_streamer, needs_mod_attention, positive_hype) and one choice (language). The browser stores raw probabilities per message. Policy lives in code: mod queue = needs_mod_attention >= 0.60 or harassment >= 0.50; streamer feed = question_for_streamer >= 0.80 and harassment < 0.50 and spam_or_scam < 0.5; spoiler shield blurs rows with spoiler >= 0.80 until hover. Moving a threshold slider re-filters thousands of already-judged rows with zero new requests. A stats strip shows ingest rate, judged rate, backlog, in-flight, API p50/p95, e2e p50/p95, a latency histogram, tokens per message and estimated cost per hour. Toggles: \"slow LLM +2s\" (backlog explodes, fallback rises), \"heuristic only\" (regex baseline, visibly worse). Mod cards show four probability bars, a reason badge (harassment, spam / scam, spoiler, review), language tag, and Timeout/Delete/Ignore buttons that write to a local action ticker. Messages that wait more than 4 s or overflow the backlog are shed to a regex heuristic and marked HEURISTIC.",
+ "jev_questions": [
+  {
+   "key": "harassment",
+   "type": "noul",
+   "instructions": "Is `message.text` harassment: an insult, threat, slur, or demeaning attack aimed at the streamer or another chatter?",
+   "state_shape": "{stream:{streamer,game,title,rules}, message:{user,text}}; criteria true: 'Personal attack, hate, threat, telling someone to quit/die'; false: 'Banter, criticism of a play, hype, or anything not aimed at a person'"
+  },
+  {
+   "key": "spam_or_scam",
+   "type": "noul",
+   "instructions": "Is `message.text` spam or a scam: repeated flooding, giveaway/gift-card/crypto bait, phishing or suspicious links, or unsolicited advertising?",
+   "state_shape": "same state; criteria true: 'Copypasta floods, fake giveaways, phishing links, selling followers, self-promotion of another channel'; false: 'Normal chat, a few emotes, a genuine question'"
+  },
+  {
+   "key": "spoiler",
+   "type": "noul",
+   "instructions": "Does `message.text` reveal a spoiler: a plot twist, ending, boss, or match result that the streamer or viewers have not reached yet?",
+   "state_shape": "same state; no criteria"
+  },
+  {
+   "key": "question_for_streamer",
+   "type": "noul",
+   "instructions": "Is `message.text` a genuine question addressed to the streamer that they could answer on stream (gear, settings, plans, opinions, how-to)?",
+   "state_shape": "same state; criteria true: 'A real question the streamer would want to see'; false: 'Rhetorical, spam, an insult phrased as a question, or not a question'"
+  },
+  {
+   "key": "needs_mod_attention",
+   "type": "noul",
+   "instructions": "Should a human moderator look at `message.text`? Yes if it breaks `stream.rules` (harassment, scam or phishing, self-promotion or links, spoilers, flooding).",
+   "state_shape": "same state; stream.rules = 'be respectful; no spoilers; no self-promotion, links or giveaways; no flooding'"
+  },
+  {
+   "key": "positive_hype",
+   "type": "noul",
+   "instructions": "Is `message.text` positive hype: excitement, praise, celebration, or encouragement for the streamer?",
+   "state_shape": "same state"
+  },
+  {
+   "key": "language",
+   "type": "choice",
+   "instructions": "Which language is `message.text` mainly written in? Emote-only or symbol-only messages count as english.",
+   "options": [
+    "english",
+    "spanish",
+    "portuguese",
+    "german",
+    "french",
+    "russian",
+    "japanese",
+    "korean",
+    "other"
+   ],
+   "state_shape": "same state; criteria map with null descriptions"
+  }
+ ],
+ "request_cadence": "One Jev request per message (7 questions fanned out per call), 300 msg/s default with 96 in flight over a WebSocket; ceiling ~300 req/s. Client sheds after 4 s queue wait or 3000 backlog.",
+ "data_files": [
+  "/Users/blaget/projects/jev-experiments/jev-firehose/src/generator.ts (176 lines; the whole seeded corpus, 9 categories x 8 languages, stream context; copy as-is)",
+  "/Users/blaget/projects/jev-experiments/jev-firehose/screenshot-console.png (598 KB, reference layout only)",
+  "/Users/blaget/projects/jev-experiments/jev-firehose/screenshot-policy.png (511 KB, reference)",
+  "/Users/blaget/projects/jev-experiments/jev-firehose/screenshot-slow-llm.png (543 KB, reference)",
+  "/Users/blaget/projects/jev-experiments/jev-firehose/demo.mp4 (23.5 MB, do not ship)"
+ ],
+ "ui_components": [
+  "App (top bar with start/pause, rate slider, in-flight slider, slow-LLM toggle, heuristic-only toggle, seed input, reset): /Users/blaget/projects/jev-experiments/jev-firehose/src/App.tsx",
+  "Strip (stat boxes: ingest, judged, backlog, in-flight, api p50/p95, e2e p50/p95, tokens/msg, $/h, histogram bars): src/App.tsx lines ~230-280",
+  "Firehose column (42 newest rows, language tag, spoiler blur): src/App.tsx lines 117-135",
+  "Mod-queue column (cards with reason badge, four bars, Timeout/Delete/Ignore): src/App.tsx lines 137-171",
+  "Streamer-feed column with collapseDuplicates (+N asked the same): src/App.tsx lines 173-194",
+  "Footer status bar with tmux-style windows and action ticker: src/App.tsx lines 196-220",
+  "Terminal theme (dark, mono, green/red/amber accents): /Users/blaget/projects/jev-experiments/jev-firehose/src/style.css"
+ ],
+ "reusable_source": [
+  "/Users/blaget/projects/jev-experiments/jev-firehose/src/generator.ts",
+  "/Users/blaget/projects/jev-experiments/jev-firehose/src/policy.ts",
+  "/Users/blaget/projects/jev-experiments/jev-firehose/src/stats.ts",
+  "/Users/blaget/projects/jev-experiments/jev-firehose/src/store.ts (swap transport and USD_PER_INPUT_TOKEN import; otherwise as-is)",
+  "/Users/blaget/projects/jev-experiments/jev-firehose/src/pool.ts (JudgePool class as-is; replace createSocketTransport and parseJudgment call)",
+  "/Users/blaget/projects/jev-experiments/jev-firehose/src/jev.ts (heuristicJudgment, Judgment type, LANGS; drop questions/parseJudgment)",
+  "/Users/blaget/projects/jev-experiments/jev-firehose/src/App.tsx (UI shell; restyle)",
+  "/Users/blaget/projects/jev-experiments/jev-firehose/src/generator.test.ts, pool.test.ts (keep)"
+ ],
+ "dm1_mapping": [
+  {
+   "jev_key": "harassment + spam_or_scam + spoiler + question_for_streamer + needs_mod_attention + positive_hype",
+   "dm1_route": "yes-no",
+   "dm1_body": "POST /yes-no {\"texts\":[<up to 32 message texts>],\"statements\":[\"The message insults, threatens, or demeans the streamer or another chatter.\",\"The message is spam or a scam: flooding, a fake giveaway, a phishing link, or unsolicited advertising.\",\"The message reveals a story spoiler or a match result.\",\"The message is a sincere question the streamer could answer on stream.\",\"The message breaks the chat rules: harassment, scam, links or self-promotion, spoilers, or flooding.\",\"The message is positive hype or praise for the streamer.\"],\"when_true\":\"The text does the thing the statement names, in any language.\",\"when_false\":\"Normal chat, banter, a few emotes, or a genuine question.\"} -> {results:[{results:[{statement,answer,probability} x6]} x32]}. Map probability of each statement index to the six Judgment fields.",
+   "notes": "No state object exists on this route, so the stream context (game, rules) moves into the statement text. One request judges 32 messages x 6 statements = 192 judgments. Hints are shared by the batch, so keep them generic. Verify response nesting shape for texts+statements against the live API on first call."
+  },
+  {
+   "jev_key": "language",
+   "dm1_route": "classify",
+   "dm1_body": "POST /classify {\"texts\":[<same 32 texts>],\"labels\":{\"english\":\"Written in English, or emote-only / symbol-only text\",\"spanish\":\"Written in Spanish\",\"portuguese\":\"Written in Portuguese\",\"german\":\"Written in German\",\"french\":\"Written in French\",\"russian\":\"Written in Russian (Cyrillic)\",\"japanese\":\"Written in Japanese (kana/kanji)\",\"korean\":\"Written in Korean (hangul)\",\"other\":\"Any other language\"}} -> {results:[{label,probability,confidence,scores}]}. label -> Judgment.language, probability -> languageConfidence.",
+   "notes": "Optional under load: language is display-only. The cheap fallback is the regex script detector in heuristicJudgment, which is already correct for JA/KO/RU. Make language an optional second request per batch, off by default above 32 msg/s."
+  }
+ ],
+ "browser_plan": "Keep the same three-column terminal console, restyled with the milliseconds.ai tokens from ~/projects/cloudraker-spring-2026. Keep generator.ts, policy.ts, stats.ts, store.ts, pool.ts and App.tsx. Replace the per-message WebSocket transport with a batching transport: JudgePool.pump() drains up to 32 queued messages into one /yes-no call (texts + 6 statements), then one /classify call for language on the same 32 texts. Replace the 'in-flight' slider with a fixed scheduler: one batch request every 500 ms (2 req/s). With language on, alternate yes-no and classify, so 32 messages per second. With language off (heuristic script detection), 64 messages per second. Set the rate slider range to 0..64, default 30. Proxy: one Cloudflare Worker or Vite middleware at /api/dm1/:route that adds the bearer key, forwards the JSON body, copies x-inference-ms and x-input-tokens into the JSON reply, and retries 429 once after retry-after. On 429 the pool pauses dispatch for retry-after seconds, shows an amber 'rate limited' state in the strip, and the 4 s shed rule moves the waiting rows to the heuristic. Drop the 'in-flight' concept from the strip; show 'batch size', 'req/s', 'msg/req'. Tokens/msg and $/h come from x-input-tokens divided by batch size. The 'slow LLM +2s' toggle still adds 2 s per batch result. The 'heuristic only' toggle remains the zero-request baseline. Latency histogram uses x-inference-ms per batch. Parse: for each message index i, judgment = six probabilities from results[i].results[k].probability, language from classify results[i].label. Self-check: one vitest that feeds a fake transport returning a 32-item shape and asserts the pool maps probabilities to the right fields.",
+ "difficulty": "M",
+ "risks": [
+  "Throughput drops from 300 msg/s to ~32-64 msg/s under the 200 req/min org-wide limit; the README's speed story must be reframed as 'judgments per request' (192 per call) rather than messages per second.",
+  "Shared org rate limit: several visitors at once will hit 429 quickly; the 2 req/s budget must be per-tab-conservative (for example 1 req/s per tab) and the UI must show rate limiting honestly.",
+  "yes-no has no state context; spoiler and self-promotion judgments lose the stream.game and stream.rules grounding. Statement wording must carry the rules. Expect lower recall on selfpromo and spoiler; re-check the 50-card precision sample after the port.",
+  "when_true/when_false hints are shared across all 6 statements in one batch; hints per statement are not possible, so hints must stay generic.",
+  "Exact nested response shape for texts + statements on /yes-no is unverified in this brief; confirm on the first live call before writing the parser.",
+  "Non-English harassment and spoiler texts (JA/KO/RU) may score lower on decision-machine-1 than on Jev; keep the heuristic language detector as fallback.",
+  "Cost display: Jev pricing constant ($0.042/M input tokens) must be replaced with milliseconds.ai pricing or hidden."
+ ]
+}

@@ -1,0 +1,231 @@
+{
+ "slug": "send-guard",
+ "title": "Send Guard",
+ "one_liner": "A Slack-style composer that judges every typing pause for secrets, PII, commitments, leaks and tone, then turns the Send button green, amber or red before the next word.",
+ "platform": "web (vite/react)",
+ "what_it_does": "The page renders a pixel-faithful Slack-style workspace for an invented \"Northwind\" org. The sidebar lists four judged channels: #customer-acme (Slack Connect, external customer), #eng-internal (private, internal), a DM with Jordan Lee (customer) and #public-community (public). The user picks a channel and types in the composer. After a 120 ms typing pause the app sends one request with the channel context, the draft and up to 8 regex-located candidate spans (emails, URLs, key-like tokens, phones, money, dates). The judge returns ten core answers plus one yes/no per span. Code policy (src/lib/policy.ts) turns those answers into send/warn/block with explicit thresholds. Culprit spans get a red wavy underline in the composer via a mirrored highlight layer, a reason line appears under the text, and the Send button turns green, amber (\"Send anyway\") or red (\"Blocked\"). A Send Guard pane on the right shows verdict cards, judgment chips with percentages, span verdicts, a regex-only \"classic DLP\" comparison toggle, a latency HUD (p50/p95, judgments/s, histogram) and a replay table. A Replay button types six prepared scenarios character by character and records expected vs actual verdict.",
+ "jev_questions": [
+  {
+   "key": "contains_secret_or_credential",
+   "type": "noul",
+   "instructions": "Does `draft` contain a secret or credential: an API key, access token, password, private key, connection string, or similar value that grants access to a system?",
+   "options": [
+    "true: The draft includes the actual secret value (even partially redacted values like sk-live-... count).",
+    "false: No credential value appears; merely mentioning that keys exist does not count."
+   ],
+   "state_shape": "{channel:{name,audience}, draft, spans:[{id,kind,text}]}"
+  },
+  {
+   "key": "contains_customer_pii",
+   "type": "noul",
+   "instructions": "Does `draft` contain personal data about a customer or end user: a named person's email address, phone number, home address, card or account number, government ID, or health details?",
+   "options": [
+    "true: Identifiable personal data about a specific individual appears in the draft.",
+    "false: No personal data, or only the author's own company contact details."
+   ],
+   "state_shape": "same"
+  },
+  {
+   "key": "makes_binding_commitment",
+   "type": "noul",
+   "instructions": "Does the author of `draft` make a binding commitment to the recipient: promising a refund, a specific delivery or fix date, a discount or price, or that a feature will definitely ship?",
+   "options": [
+    "true: A firm promise with words like 'guaranteed', 'will', 'by Friday', 'we'll refund', or a stated price/discount.",
+    "false: No promise, or clearly non-committal language ('we're looking into it', 'no ETA yet')."
+   ],
+   "state_shape": "same"
+  },
+  {
+   "key": "discloses_confidential_internal_info",
+   "type": "noul",
+   "instructions": "Given that `channel.audience` describes who can read this message, does `draft` disclose confidential internal company information to people outside the company: unreleased roadmap, internal pricing or margins, unannounced incidents, other customers' names or deals, internal staffing or legal matters?",
+   "options": [
+    "true: Internal-only information is being shared with an external or public audience.",
+    "false: Either the audience is internal, or the content is already public / not confidential."
+   ],
+   "state_shape": "same"
+  },
+  {
+   "key": "tone",
+   "type": "score",
+   "instructions": "What is the emotional tone of `draft` toward its reader?",
+   "options": [
+    "Warm: friendly, appreciative, empathetic.",
+    "Neutral: professional and matter-of-fact.",
+    "Curt: terse, dismissive, or impatient.",
+    "Hostile: angry, insulting, sarcastic, blaming, or threatening."
+   ],
+   "state_shape": "same"
+  },
+  {
+   "key": "is_appropriate_for_audience",
+   "type": "noul",
+   "instructions": "Considering `channel.name` and `channel.audience`, is `draft` appropriate to send to this audience as written (content, confidentiality, and professionalism together)?",
+   "options": [
+    "true: A reasonable manager would be fine seeing this sent to this channel.",
+    "false: Wrong channel for this content, or content a manager would not want this audience to see."
+   ],
+   "state_shape": "same"
+  },
+  {
+   "key": "is_incomplete_or_cut_off",
+   "type": "noul",
+   "instructions": "Does `draft` look unfinished: a sentence that stops mid-thought, a dangling placeholder like TODO or [name], or an obvious missing attachment/link that the text refers to?",
+   "options": [
+    "true: The message is clearly not finished being written.",
+    "false: The message reads as complete (even if short)."
+   ],
+   "state_shape": "same"
+  },
+  {
+   "key": "contains_hedging_that_undermines",
+   "type": "noul",
+   "instructions": "Does `draft` contain hedging that undermines the author's own message, such as 'I think maybe', 'not sure but', 'this might be wrong', or apologising for asking?",
+   "options": [
+    "true: Excessive hedging that makes the author sound unsure of a statement they are making.",
+    "false: Confident wording, or appropriate uncertainty about a genuinely open question."
+   ],
+   "state_shape": "same"
+  },
+  {
+   "key": "legal_or_compliance_risk",
+   "type": "score",
+   "instructions": "How much legal or compliance risk does sending `draft` to `channel.audience` create for the author's company (contractual promises, regulatory or privacy violations, defamation, admissions of fault, discriminatory remarks)?",
+   "options": [
+    "None: ordinary business communication.",
+    "Minor: slightly loose wording a lawyer might tighten.",
+    "Material: an enforceable promise, an admission of liability, or personal data shared without need.",
+    "Severe: clear regulatory/privacy breach, leaked credentials, defamation, or discriminatory content."
+   ],
+   "state_shape": "same"
+  },
+  {
+   "key": "should_block_send",
+   "type": "choice",
+   "instructions": "Taking `channel.audience` into account, should this `draft` be sent as written, sent after the author reviews a warning, or blocked outright?",
+   "options": [
+    "send: Safe, professional, and appropriate for this audience.",
+    "warn: Sendable but risky: a commitment, a curt tone, unfinished text, or borderline content the author should double-check.",
+    "block: Must not be sent: leaked credentials, customer personal data to the wrong audience, hostile tone to a customer, or confidential information leaving the company."
+   ],
+   "state_shape": "same"
+  },
+  {
+   "key": "span_N (one per regex span, up to 8)",
+   "type": "noul",
+   "instructions": "The text of `draft` contains the {kind} fragment {text} at `spans` entry \"{id}\". Given `channel.audience`, is this exact fragment something that should not be sent as-is: a real credential, a customer's personal data, or a specific amount or date the author is committing to?",
+   "options": [
+    "true: This fragment is the (or a) reason the message is risky.",
+    "false: This fragment is harmless in context (e.g. the author's own work email, a public URL, a casual mention of a day)."
+   ],
+   "state_shape": "same; spans from src/lib/spans.ts findSpans()"
+  }
+ ],
+ "request_cadence": "One POST per typing pause (120 ms debounce), with 10 core questions plus up to 8 span questions in a single Jev request. Stale in-flight requests are aborted. Measured run: 81 pauses, 826 judgments, p50 105 ms end to end. Replay types six drafts character by character, so it produces roughly 3 to 8 requests per second.",
+ "data_files": [
+  "/Users/blaget/projects/jev-experiments/send-guard/src/lib/scenarios.ts (49 lines, 6 replay drafts with expected verdicts)",
+  "/Users/blaget/projects/jev-experiments/send-guard/src/lib/channels.ts (93 lines, 7 channels with audience and Slack metadata)",
+  "/Users/blaget/projects/jev-experiments/send-guard/src/lib/seed.ts (68 lines, invented people and message history per channel)",
+  "/Users/blaget/projects/jev-experiments/send-guard/screenshots/send-guard-demo.webp and send-guard.jpg (reference visuals)"
+ ],
+ "ui_components": [
+  "Shell (top bar, workspace rail, sidebar): /Users/blaget/projects/jev-experiments/send-guard/src/Shell.tsx",
+  "Messages (channel header, timeline): /Users/blaget/projects/jev-experiments/send-guard/src/Messages.tsx",
+  "Composer (mirrored highlight layer, reason line, green/amber/red Send): /Users/blaget/projects/jev-experiments/send-guard/src/Composer.tsx",
+  "GuardPanel (verdict cards, chips, spans, regex toggle, replay table): /Users/blaget/projects/jev-experiments/send-guard/src/GuardPanel.tsx",
+  "Chips: /Users/blaget/projects/jev-experiments/send-guard/src/Chips.tsx",
+  "Latency HUD: /Users/blaget/projects/jev-experiments/send-guard/src/Latency.tsx",
+  "Icons incl. custom Relay logo: /Users/blaget/projects/jev-experiments/send-guard/src/Icons.tsx",
+  "App (state, replay driver): /Users/blaget/projects/jev-experiments/send-guard/src/App.tsx",
+  "Styles (1606 lines, --zoom 1.15): /Users/blaget/projects/jev-experiments/send-guard/src/style.css"
+ ],
+ "reusable_source": [
+  "/Users/blaget/projects/jev-experiments/send-guard/src/lib/spans.ts (+ spans.test.ts)",
+  "/Users/blaget/projects/jev-experiments/send-guard/src/lib/stats.ts (+ stats.test.ts)",
+  "/Users/blaget/projects/jev-experiments/send-guard/src/lib/channels.ts",
+  "/Users/blaget/projects/jev-experiments/send-guard/src/lib/seed.ts",
+  "/Users/blaget/projects/jev-experiments/send-guard/src/lib/scenarios.ts",
+  "/Users/blaget/projects/jev-experiments/send-guard/src/lib/types.ts (drop Jev Answer union, keep Channel/Span/Verdict)",
+  "/Users/blaget/projects/jev-experiments/send-guard/src/lib/policy.ts (keep structure, swap noulOf/scoreOf/choiceOf readers for DM1 result readers)",
+  "/Users/blaget/projects/jev-experiments/send-guard/src/Shell.tsx, Messages.tsx, Composer.tsx, Chips.tsx, Latency.tsx, Icons.tsx (pure UI, no Jev coupling)",
+  "/Users/blaget/projects/jev-experiments/send-guard/src/useGuard.ts (keep debounce and AbortController, change fetch body and response parsing)"
+ ],
+ "dm1_mapping": [
+  {
+   "jev_key": "context (state.channel + draft)",
+   "dm1_route": "yes-no",
+   "dm1_body": "DM1 has no state field. Every call shares one text: \"Channel: #customer-acme. Audience: external customer (Slack Connect channel shared with Acme Corp, a paying customer).\\n\\nDraft message:\\n<draft>\". Audience lines: internal -> \"internal only (employees of the author's company)\"; public -> \"public (anyone on the internet can read it)\".",
+   "notes": "The audience sentence carries the premise that Jev read from channel.audience."
+  },
+  {
+   "jev_key": "contains_secret_or_credential",
+   "dm1_route": "yes-no",
+   "dm1_body": "{text, statements:[\"The draft message contains an actual secret value such as an API key, access token, password, private key or connection string.\"], when_true:\"The draft contains this risky content for this audience.\", when_false:\"The draft is safe on this point for this audience.\"} (batched in call A, see below)"
+  },
+  {
+   "jev_key": "contains_customer_pii",
+   "dm1_route": "yes-no",
+   "dm1_body": "statement: \"The draft message contains a named person's email, phone number, home address, card or account number, government ID or health details.\""
+  },
+  {
+   "jev_key": "makes_binding_commitment",
+   "dm1_route": "yes-no",
+   "dm1_body": "statement: \"The author promises a refund, a specific delivery or fix date, a discount or price, or that a feature will definitely ship.\""
+  },
+  {
+   "jev_key": "discloses_confidential_internal_info",
+   "dm1_route": "yes-no",
+   "dm1_body": "statement: \"The draft shares confidential internal company information (roadmap, internal pricing or margins, unannounced incidents, other customers' deals, staffing or legal matters) with people outside the company.\""
+  },
+  {
+   "jev_key": "is_appropriate_for_audience",
+   "dm1_route": "yes-no",
+   "dm1_body": "statement (inverted so the batch hints line up): \"The draft is inappropriate for this channel's audience in content, confidentiality or professionalism.\"",
+   "notes": "Policy reads it as a risk flag; the original 'fits audience' chip shows 1 - probability."
+  },
+  {
+   "jev_key": "is_incomplete_or_cut_off",
+   "dm1_route": "yes-no",
+   "dm1_body": "statement: \"The draft is unfinished: it stops mid-thought, contains a placeholder like TODO or [name], or refers to a missing attachment or link.\""
+  },
+  {
+   "jev_key": "contains_hedging_that_undermines",
+   "dm1_route": "yes-no",
+   "dm1_body": "statement: \"The author hedges in a way that undermines their own message, such as 'I think maybe', 'not sure but' or apologising for asking.\""
+  },
+  {
+   "jev_key": "tone",
+   "dm1_route": "rate",
+   "dm1_body": "{text, scale:[\"Warm: friendly, appreciative, empathetic.\",\"Neutral: professional and matter-of-fact.\",\"Curt: terse, dismissive or impatient.\",\"Hostile: angry, insulting, sarcastic, blaming or threatening.\"]} -> use level index as the 0..3 score; thresholds toneCurt 1.6 and toneHostile 2.5 map to level >= 2 and level >= 3.",
+   "notes": "Fires only when the draft settles (1.5 s idle). While typing, call A carries two proxy statements: \"The tone toward the reader is curt, dismissive or impatient.\" and \"The tone toward the reader is hostile, insulting, sarcastic or threatening.\""
+  },
+  {
+   "jev_key": "legal_or_compliance_risk",
+   "dm1_route": "rate",
+   "dm1_body": "{text, scale:[\"None: ordinary business communication.\",\"Minor: slightly loose wording a lawyer might tighten.\",\"Material: an enforceable promise, an admission of liability, or personal data shared without need.\",\"Severe: clear regulatory or privacy breach, leaked credentials, defamation or discriminatory content.\"]} -> level index; legalWarn = level >= 2, legalBlock = level >= 3.",
+   "notes": "Also settle-only. Typing-time proxies in call A: \"Sending this creates material legal risk: an enforceable promise, an admission of liability or unneeded personal data.\" and \"Sending this creates severe legal or compliance risk: a privacy breach, leaked credentials, defamation or discriminatory content.\""
+  },
+  {
+   "jev_key": "should_block_send",
+   "dm1_route": "classify",
+   "dm1_body": "{text, labels:{send:\"Safe, professional and appropriate for this audience. Send as written.\", warn:\"Sendable but risky: a commitment, a curt tone, unfinished text or borderline content the author should double-check first.\", block:\"Must not be sent: leaked credentials, customer personal data to the wrong audience, hostile tone to a customer, or confidential information leaving the company.\"}} -> label + scores drive the verdict card; policy keeps hard rules above it (escalate only).",
+   "notes": "Call B, one request per pause."
+  },
+  {
+   "jev_key": "span_N",
+   "dm1_route": "yes-no",
+   "dm1_body": "Appended to call A statements, one per span (max 8): \"The {kind} fragment \\\"{text}\\\" in the draft is a real credential, a customer's personal data, or a specific amount or date the author commits to for this audience.\" Same shared when_true/when_false hints. Result probability >= 0.55 marks the span as a culprit (red wavy underline).",
+   "notes": "Select, do not generate: code locates spans, the API only answers per span."
+  }
+ ],
+ "browser_plan": "Port as a route on demo.milliseconds.ai in the milliseconds site style (cloudraker-spring-2026 tokens, fonts and dark theme) while keeping the Slack-style chrome from Shell.tsx, Messages.tsx and Composer.tsx. Replace server/jev.ts with a thin proxy: POST /api/dm1/:route on the site's Cloudflare Worker (site already deploys there). The proxy allowlists yes-no, classify and rate, adds the bearer key from a secret, caps texts to 32 and text to 4000 chars, and passes 429 back with retry-after. The browser builds the bodies. Per typing pause the client sends exactly two requests: call A = POST /yes-no with the shared text and up to 11 core statements plus up to 8 span statements (max 19, under the 32 cap) with shared hints; call B = POST /classify with the send/warn/block labels. On settle (1.5 s idle) it sends two more: /rate tone and /rate legal, which fill the 4-level chips. Throttle: raise the debounce from 120 ms to 400 ms and gate on in-flight, so a new pause never fires while A and B are outstanding; that holds a single typist at about 2 requests/s. Replay: type each scenario at 30 ms per char but judge only at word boundaries and on the final draft, so six scenarios cost roughly 60 requests. A client token bucket (2 tokens/s, burst 4) sits under all of it. On HTTP 429 the client keeps the last verdict, shows a \"rate limited, retrying\" badge in the pane, backs off with retry-after or 1 s doubling, and pauses replay. Latency HUD keeps clientMs from performance.now() and reads x-inference-ms and x-input-tokens from the proxy response headers for apiMs. Regex-only DLP toggle stays as-is. Add a \"How it works\" strip that shows the actual call A and call B bodies live, since the demo's job is to sell the API.",
+ "difficulty": "M",
+ "risks": [
+  "No state field in DM1: the channel audience must live inside the text, so the wording of the audience sentence needs a quick eval on the six scenarios (especially the pricing leak in #customer-acme vs the same text in #eng-internal).",
+  "Shared when_true/when_false hints across the whole batch lose the per-question criteria Jev had; the inverted is_appropriate_for_audience statement and the tone/legal proxy statements need threshold tuning against the scenario table.",
+  "Four calls per settled draft (yes-no, classify, rate, rate) plus replay can hit the org-wide 200 req/min limit when several visitors use the page at once; the client bucket protects one tab only, so the proxy should also count requests per minute and shed load with 429.",
+  "Latency story changes: two round trips per pause instead of one; if p50 exceeds the typing pause, the ambient feel degrades to a lagging spellchecker. Measure before shipping and drop call B to settle-only if needed.",
+  "The span statements quote the fragment verbatim; a 1000+ char pasted key or URL inflates tokens. Truncate fragment text to 60 chars in the statement.",
+  "style.css is 1606 lines of Slack-specific chrome; restyling to milliseconds tokens without breaking the mirrored highlight layer in Composer.tsx is the main UI effort."
+ ]
+}

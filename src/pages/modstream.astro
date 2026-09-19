@@ -1,0 +1,14 @@
+---
+import Demo from '../layouts/Demo.astro';
+import meta from '../demos/modstream/meta';
+import Island from '../demos/modstream/Demo.tsx';
+---
+<Demo meta={meta}>
+  <Island client:only="react" />
+  <div slot="notes">
+    <h2>How it works</h2>
+    <p>Messages wait for batched checks covering abuse, spam, safety and severity. A policy uses those results to release, hold, hide or escalate a message. Threshold changes update stored judgments without another request.</p>
+    <h3>Demo scope</h3>
+    <p>The chat is simulated. Abuse and personal distress can be confused, especially with indirect wording or unfamiliar slang. Some content remains held for human review; inspect decisions before applying this policy elsewhere.</p>
+  </div>
+</Demo>

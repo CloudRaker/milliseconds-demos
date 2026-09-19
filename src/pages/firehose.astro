@@ -1,0 +1,14 @@
+---
+import Demo from '../layouts/Demo.astro';
+import meta from '../demos/firehose/meta';
+import Island from '../demos/firehose/Demo.tsx';
+---
+<Demo meta={meta}>
+  <Island client:only="react" />
+  <div slot="notes">
+    <h2>How it works</h2>
+    <p>Messages are classified in batches. Flagged messages receive a severity check, and moderation thresholds decide which messages enter the review queue. Changing a threshold reuses the existing judgments.</p>
+    <h3>Demo scope</h3>
+    <p>The chat is simulated. Mixed intent, slang and multilingual messages can be misread. Messages handled by local fallback rules are labeled, and high traffic can exceed the model’s processing capacity.</p>
+  </div>
+</Demo>

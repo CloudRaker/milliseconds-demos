@@ -1,0 +1,128 @@
+{
+ "slug": "instant-search",
+ "title": "Instant Search: semantic re-rank on every keystroke",
+ "one_liner": "Search-as-you-type over 5,000 synthetic products; a local BM25 index returns 30 candidates and the API re-ranks them and reads shopper intent inside the keystroke budget, side by side with lexical-only results.",
+ "platform": "web (vite/react)",
+ "what_it_does": "The page shows one search box, five example-query chips, a metrics strip and two result columns. On every keystroke, MiniSearch (BM25-style, prefix + fuzzy, stemming, stopwords, max 6 per product type) retrieves the top 30 candidates from a seeded 5,000-product catalog in about 1 ms. The left column paints those 30 in lexical order at once. The right column sends one Jev request with 35 questions: 30 five-level relevance scores (one per candidate) plus intent department, wants_cheap, wants_premium, is_gift and sort_preference. When the answer lands (~150 ms p50), rank.ts combines lexical norm, relevance score, category bonus, cheap/premium price bonus and gift bonus with confidence gates, pushes candidates under a relevance floor to the bottom, and applies an inferred price_low/price_high/rating sort within relevance bands. Each right-column row shows the score, a five-segment probability bar, and a green/red delta versus its lexical position. A SequenceGate drops stale answers, an InFlightLimiter caps 4 concurrent requests and keeps only the newest held keystroke, and the previous right column stays painted and dimmed until a fresh answer arrives. The header shows retriever ms, API last/p50/p95, time to paint, decisions per second, requests, stale/skipped, tokens and cost per 1k searches. Sliders re-weight the ranking locally with no new requests. Two baselines exist: heuristics only (regexes, no API) and a simulated 2.5 s LLM that shows how late a slow model lands. Example chips type their query character by character at 70 ms/char.",
+ "jev_questions": [
+  {
+   "key": "rel_0 \u2026 rel_29",
+   "type": "score",
+   "instructions": "How well does the product at `candidates[N]` satisfy the shopper's search `query`? Judge what the product is for and its stated features against what the shopper wants, including who it is for and any constraint they mention. Sharing a word with the query does not make it a match.",
+   "options": [
+    "Unrelated to what the shopper asked for",
+    "Same general area but not what they asked for",
+    "Partially matches; would work in a pinch",
+    "Good match for the request",
+    "Exactly what they asked for"
+   ],
+   "state_shape": "{ query: string, candidates: [{ id, title, description, category, price_usd, rating }] x30 } \u2014 one question per candidates[N]; answer {score 0..4, confidence, probabilities{'0'..'4'}}"
+  },
+  {
+   "key": "intent_category",
+   "type": "choice",
+   "instructions": "Which store department is the shopper's `query` looking in?",
+   "options": [
+    "electronics: Audio, phones and phone accessories, keyboards, mice, computers, cameras, gadgets",
+    "kitchen: Cooking, coffee, drinkware, insulated bottles and tumblers, food storage",
+    "outdoors: Hiking, camping, sports, cycling, travel gear, clothing for the outdoors",
+    "toys: Children's toys, games, kits and gifts for kids",
+    "office: Desks, chairs, stationery, paper, work-from-home furniture and accessories",
+    "any: The query does not point to one department"
+   ],
+   "state_shape": "same state; reads state.query only; answer {choice, confidence, probabilities}"
+  },
+  {
+   "key": "wants_cheap",
+   "type": "noul",
+   "instructions": "Does the shopper's `query` ask for a cheap, budget, inexpensive or affordable product?",
+   "options": [
+    "true: The query contains a word meaning low price, such as cheap, budget, affordable, inexpensive, under a dollar amount",
+    "false: No price preference is stated, or the shopper wants something premium"
+   ],
+   "state_shape": "state.query; answer {noul: 0..1}"
+  },
+  {
+   "key": "wants_premium",
+   "type": "noul",
+   "instructions": "Does the shopper's `query` ask for a premium, high-end, luxury, professional or best-quality product?",
+   "options": [
+    "true: The query contains a word meaning high quality or high price, such as premium, high-end, best, pro, luxury",
+    "false: No quality tier is stated, or the shopper wants something cheap"
+   ],
+   "state_shape": "state.query; answer {noul: 0..1}"
+  },
+  {
+   "key": "is_gift",
+   "type": "noul",
+   "instructions": "Does the shopper's `query` say the product is a gift or present for another person?",
+   "options": [
+    "true: The query mentions a gift, present, or buying for a named person such as a child, friend, mom or coworker",
+    "false: The shopper appears to be buying for themselves or does not say"
+   ],
+   "state_shape": "state.query; answer {noul: 0..1}"
+  },
+  {
+   "key": "sort_preference",
+   "type": "choice",
+   "instructions": "How should the results for the shopper's `query` be ordered?",
+   "options": [
+    "relevance: No ordering preference is stated; best match first",
+    "price_low: The shopper wants cheap or budget options, so lowest price first",
+    "price_high: The shopper wants premium or top-tier options, so highest price first",
+    "rating: The shopper asks for the best-rated, most reliable or best-reviewed options"
+   ],
+   "state_shape": "state.query; answer {choice, confidence, probabilities}"
+  }
+ ],
+ "request_cadence": "One Jev request per keystroke (35 questions: 30 score + 5 query-level, ~7,800 input tokens, ~640 output). Up to 4 requests in flight; extra keystrokes are skipped, only the newest is held. Example chips type at 70 ms/char, so a 38-char query fires up to ~14 requests/s in bursts (146 requests for the five examples, 29 stale/skipped). Sliders never send requests.",
+ "data_files": [
+  "/Users/blaget/projects/jev-experiments/jev-instant-search/src/catalog.ts \u2014 no data file; deterministic generator (mulberry32, CATALOG_SEED=20260917, CATALOG_SIZE=5000, 36 KB source, ~60 archetypes across 5 categories). Copy as-is, ids like el-0031 stay stable.",
+  "/Users/blaget/projects/jev-experiments/jev-instant-search/src/examples.ts \u2014 the 5 example queries (7 lines).",
+  "/Users/blaget/projects/jev-experiments/jev-instant-search/README.md \u2014 hand-labelled top-5 eval tables for the 5 queries (E/G/P/S/U); reuse as the offline relevance check after the port.",
+  "/Users/blaget/projects/jev-experiments/jev-instant-search/docs/01-coffee.png \u2026 08-full-page-sliders.png, typing.gif, demo.mp4 \u2014 reference screenshots of the original UI (0.3\u20130.6 MB each PNG, 2.1 MB gif, 6.8 MB mp4); visual reference only, do not ship."
+ ],
+ "ui_components": [
+  "App shell, mode buttons, search bar with seq status, example chips, metrics strip, two columns, slider panel \u2014 /Users/blaget/projects/jev-experiments/jev-instant-search/src/App.tsx (321 lines, one file, all components inline)",
+  "Metric tile \u2014 App.tsx `Metric`",
+  "Column (title, judgment subtitle, stale dimming) \u2014 App.tsx `Column`",
+  "Row (rank, title, \u25b2/\u25bc delta vs lexical, category chip, price, rating, lex score, 5-segment probability bar) \u2014 App.tsx `Row`",
+  "Slider \u2014 App.tsx `Slider`",
+  "Styles \u2014 /Users/blaget/projects/jev-experiments/jev-instant-search/src/styles.css (82 lines, replace with milliseconds site tokens)"
+ ],
+ "reusable_source": [
+  "/Users/blaget/projects/jev-experiments/jev-instant-search/src/catalog.ts (copy verbatim)",
+  "/Users/blaget/projects/jev-experiments/jev-instant-search/src/retriever.ts (copy verbatim; needs minisearch 7.2.0)",
+  "/Users/blaget/projects/jev-experiments/jev-instant-search/src/sequence.ts (copy verbatim: SequenceGate, LatencyStats, InFlightLimiter)",
+  "/Users/blaget/projects/jev-experiments/jev-instant-search/src/rank.ts (copy verbatim if the port keeps the ParsedAnswers shape: relevance Map<id,{score 0..4, confidence, probabilities[5]}> + QueryJudgment)",
+  "/Users/blaget/projects/jev-experiments/jev-instant-search/src/examples.ts",
+  "/Users/blaget/projects/jev-experiments/jev-instant-search/src/jev.ts \u2014 keep RELEVANCE_LEVELS, INTENTS, SORTS, CandidateState, QueryJudgment, ParsedAnswers, heuristicQueryJudgment and the regexes; replace buildRequest/parseAnswers/MODEL/price constant",
+  "Tests: src/catalog.test.ts, src/retriever.test.ts, src/rank.test.ts, src/sequence.test.ts (no network, copy verbatim); src/jev.test.ts needs rewriting for the new request/parse shape",
+  "App.tsx \u2014 component structure reusable, but the effect that calls rerank() needs the debounce + 2-request dispatch described in browser_plan"
+ ],
+ "dm1_mapping": [
+  {
+   "jev_key": "rel_0 \u2026 rel_29",
+   "dm1_route": "rate",
+   "dm1_body": "POST /rate\n{\n  \"texts\": [\n    \"Shopper search: \\\"cheap headphones that dont leak sound\\\"\\nProduct: Aurex Over-Ear Headphones Wired. Closed-back cups keep your music from leaking to people nearby. 40 hour battery. Folds flat. black. Category: electronics. Price: $38.12. Rating: 5.0\",\n    \"... one string per candidate, 30 total, same query prefix in each ...\"\n  ],\n  \"scale\": [\n    \"Unrelated to what the shopper searched for\",\n    \"Same general area but not what they searched for\",\n    \"Partially matches the search; would work in a pinch\",\n    \"Good match for the search\",\n    \"Exactly what the shopper searched for\"\n  ]\n}\n-> {results:[{score:0..1, level:0..4, scores:[5]}]} ; map score*4 -> Jev score, level/scores -> probability bar, results[i] -> candidates[i].id",
+   "notes": "The API has no shared state, so the query is repeated in every text (~30 x 25 tokens overhead, ~2.5k input tokens per request vs 7.8k on Jev). Scale is shared by the batch, so the scale text says 'the search' instead of naming a path. Keep the 'sharing a word is not a match' guidance out of the scale; it does not transfer. Relevance floor slider (0..4) compares against score*4. One request per settled query."
+  },
+  {
+   "jev_key": "wants_cheap, wants_premium, is_gift, sort_preference (rating cue), intent_category",
+   "dm1_route": "yes-no",
+   "dm1_body": "POST /yes-no\n{\n  \"text\": \"cheap headphones that dont leak sound\",\n  \"statements\": [\n    \"The shopper asks for a cheap, budget, inexpensive or affordable product.\",\n    \"The shopper asks for a premium, high-end, luxury, professional or best-quality product.\",\n    \"The shopper says the product is a gift or present for another person.\",\n    \"The shopper asks for the best-rated, most reliable or best-reviewed product.\",\n    \"The shopper is looking in the electronics department: audio, phones and phone accessories, keyboards, mice, computers, cameras, gadgets.\",\n    \"The shopper is looking in the kitchen department: cooking, coffee, drinkware, insulated bottles and tumblers, food storage.\",\n    \"The shopper is looking in the outdoors department: hiking, camping, sports, cycling, travel gear, outdoor clothing.\",\n    \"The shopper is looking in the toys department: children's toys, games, kits and gifts for kids.\",\n    \"The shopper is looking in the office department: desks, chairs, stationery, paper, work-from-home furniture and accessories.\"\n  ],\n  \"when_true\": \"The search text states it explicitly, in its own words.\",\n  \"when_false\": \"The search text does not mention it, or says the opposite.\"\n}\n-> {results:[{statement, answer, probability}] x9}\nwantsCheap = p[0]; wantsPremium = p[1]; isGift = p[2]; rating cue = p[3]\nintent = argmax(p[4..8]) if max >= GATE.intent (0.45) else 'any'; intentConfidence = that max\nsort = p[3]>=0.5 ? 'rating' : wantsCheap>=0.6 ? 'price_low' : wantsPremium>=0.6 ? 'price_high' : 'relevance'; sortConfidence = the probability used",
+   "notes": "Folds all five query-level Jev questions into one yes-no batch so a settled query costs 2 requests, not 4. sort_preference is derived in code (same rule as heuristicQueryJudgment in jev.ts), so no classify call. Hints are shared by the batch, so they stay generic. Alternative if eval quality on intent is weak: a third request POST /classify {text: query, labels:{electronics:'Audio, phones...', kitchen:'...', outdoors:'...', toys:'...', office:'...', any:'The query does not point to one department'}} -> {label, probability, scores}; that raises the budget to 3 requests per settled query, so lengthen the dispatch interval to 1.5 s."
+  }
+ ],
+ "browser_plan": "Repo layout: Vite + React 19 island inside the demo.milliseconds.ai site (style tokens, fonts and components from ~/projects/cloudraker-spring-2026), served by a Cloudflare Worker that also hosts the proxy. Proxy: POST /api/dm1/{rate|yes-no} only (allowlist), forwards body unchanged to https://api.milliseconds.ai/v1/decision-machine-1/{route} with Authorization: Bearer ${DM1_API_KEY} from the Worker secret, passes back status, body, x-inference-ms and x-input-tokens; rejects bodies over 64 KB and non-POST; key never enters the bundle. Client per keystroke: run MiniSearch and paint the left column at once (unchanged). Right column: trailing debounce 400 ms, then one dispatch group = two parallel requests (POST /rate with texts[30], POST /yes-no with statements[9]), tagged with the SequenceGate seq. InFlightLimiter(max 1) holds only the newest group; a minimum 1,000 ms gap between dispatches keeps a single visitor at or under 2 req/s. Cache dispatch results by trimmed lowercased query so chip re-clicks and backspaces cost zero requests. On 429 or 5xx: paint the heuristic fallback (heuristicQueryJudgment + lexical order), show a 'rate limited, lexical + heuristics' badge in the column subtitle, back off with 2 s, 4 s, 8 s before the next dispatch. Keep the metrics strip but rename: retriever ms, API last/p50/p95 (from x-inference-ms and wall time), to paint measured from dispatch (state the debounce separately as 'settle 400 ms'), decisions/s = 39 decisions / p50 (30 rate + 9 yes-no), requests, stale/skipped, tokens in (sum of x-input-tokens). Drop the $ cost tile unless milliseconds.ai pricing is confirmed; show tokens instead. Keep the sliders, relevance floor, apply-inferred-sort toggle, the heuristics-only baseline and the simulated 2.5 s LLM baseline. Example chips type at 70 ms/char, so the right column updates once per chip (after settle) plus once per pause; that is honest to the budget and still shows the re-rank landing well under a second. Ship tests: catalog, retriever, rank, sequence verbatim; add one test for the new parse (results[i] -> candidate id, level -> probabilities) and one for the sort derivation.",
+ "difficulty": "M",
+ "risks": [
+  "No shared state across texts: the query is duplicated in all 30 rate texts. Per-request tokens drop (~2.5k vs 7.8k) but the scale must be generic; test the five README queries against the hand labels before shipping, the 'sharing a word is not a match' instruction cannot be expressed.",
+  "Per-keystroke feel is gone. Jev fired one request per keystroke; the 200 req/min org-wide limit forces a 400 ms debounce plus 1 s dispatch gap. Copy on the page must say 'per pause', not 'per keystroke'.",
+  "Org-wide limit shared by all visitors: five concurrent visitors typing can exhaust 200/min. The proxy should add a tiny Durable Object or KV token bucket and return 429 early with Retry-After; the client must degrade to heuristics without errors on screen.",
+  "Intent folded into yes-no statements is unproven; classify with described labels is the recommended route for multi-way judgments. Evaluate both on the five queries; if classify wins, budget 3 requests per settle.",
+  "Rate response 'scores' shape (array vs object keyed by level) must be checked against a live call before the probability bar code is written.",
+  "Cost tile: Jev used $0.042/M input tokens; milliseconds.ai price is not in this repo. Do not print a made-up number.",
+  "The 2.5 s simulated LLM baseline is a fixed sleep; keep it labelled as simulated."
+ ]
+}

@@ -1,0 +1,182 @@
+{
+ "slug": "inbox-blitz",
+ "title": "Sift: inbox triage and plain-English labels",
+ "one_liner": "A Gmail-style inbox of 500 synthetic emails. Type an intent, get a label. Run a fixed 7-dimension triage pass that sorts the inbox into lanes and shows where keyword rules fail.",
+ "platform": "web (vite/react)",
+ "what_it_does": "The page shows a Gmail-faithful inbox with 500 deterministic synthetic emails (seed 20260917) plus 21 hand-written traps. The user presses `/` and types an intent such as \"customers threatening to cancel\". The server fans out one yes/no judgment per email and streams match probabilities back as NDJSON. Code applies the label at probability >= 0.5, marks 0.5 to 0.8 as borderline, filters the inbox to matches, and sorts rows by match probability when the run ends. Several labels AND together with no new inference. A menu item \"Triage inbox\" runs seven fixed judgments per email in one request: category, needs reply, urgency, sentiment, phishing, churn, refund. Code computes a priority score from slider weights, routes each email to a lane (Priority, Needs review under 0.7 category confidence, FYI, Spam), and surfaces phishing at the top. A keyword-rule baseline runs in the browser; a \"Rules != Jev\" lane lists disagreements with the full body so the user sees who is right. A HUD shows judged count, elapsed time, p50/p95 latency, tokens and cost. Keyboard: j/k move, e archive, r toggle reply flag, b toggle rules.",
+ "jev_questions": [
+  {
+   "key": "category",
+   "type": "choice",
+   "instructions": "Read `email.subject` and `email.body`. Which single category best describes what this email is primarily about? Judge the sender's actual purpose, not incidental words.",
+   "options": [
+    "billing: A customer's charges, invoices, payments, duplicate charges, refunds or subscription pricing problems",
+    "bug: A customer reports that a product feature is broken, erroring, down, slow or behaving incorrectly",
+    "feature_request: A customer asks for new functionality or an improvement that does not exist yet",
+    "sales_lead: A prospect or existing customer wants to buy, upgrade, get a quote, book a demo or discuss a contract",
+    "security: Security alerts, suspected account compromise, vulnerability reports, suspicious logins, 2FA or credential problems",
+    "legal_privacy: Legal notices, GDPR/CCPA data requests, data deletion, subpoenas, DPA or terms questions",
+    "spam_marketing: Unsolicited marketing, cold sales outreach, promotional newsletters, phishing, scams or impersonation attempts from outside senders",
+    "internal: A coworker writing from our own company domain (northwind.cloud) about operations, meetings, HR, IT, planning or team logistics",
+    "other: Anything that fits none of the above, e.g. thank-you notes, offboarding/export requests, misdirected mail, community or press requests"
+   ],
+   "state_shape": "{ email: { from: \"Name <addr>\", subject, body } }"
+  },
+  {
+   "key": "needs_reply",
+   "type": "noul",
+   "instructions": "Does the sender of `email` expect a human at our company to write back? Mass mailings, automated notifications, newsletters and marketing blasts do not expect a reply.",
+   "options": [
+    "true: A specific person is waiting for an answer, decision or confirmation from us",
+    "false: No reply is expected: automated, informational, bulk or marketing message"
+   ],
+   "state_shape": "{ email: { from, subject, body } }"
+  },
+  {
+   "key": "urgency",
+   "type": "score",
+   "instructions": "How quickly does this email need action from our team, based on the real situation the sender describes (ignore sarcastic or ironic framing and marketing pressure tactics like fake deadlines)?",
+   "options": [
+    "Can wait a week",
+    "This week",
+    "Today",
+    "Right now"
+   ],
+   "state_shape": "{ email: { from, subject, body } }; answer.score is 0..3 probability-weighted"
+  },
+  {
+   "key": "sentiment",
+   "type": "score",
+   "instructions": "What is the sender's actual emotional tone toward our company? Read past politeness formulas and sarcasm to the underlying attitude.",
+   "options": [
+    "Friendly",
+    "Neutral",
+    "Frustrated",
+    "Furious"
+   ],
+   "state_shape": "{ email: { from, subject, body } }; answer.score is 0..3"
+  },
+  {
+   "key": "is_phishing_or_scam",
+   "type": "noul",
+   "instructions": "Is this email a phishing attempt or scam: does it try to trick the recipient into clicking a suspicious link, entering credentials, paying a fake invoice, buying gift cards, or acting on a fake authority (fake CEO, fake bank, fake vendor)?",
+   "options": [
+    "true: Deceptive message designed to steal credentials, money or data",
+    "false: Legitimate message from who it claims to be, including pushy or fear-based marketing and cold sales pitches that only ask for a meeting or a purchase from a real company"
+   ],
+   "state_shape": "{ email: { from, subject, body } }"
+  },
+  {
+   "key": "mentions_churn_or_cancel",
+   "type": "noul",
+   "instructions": "Does the sender say they are cancelling, will cancel, are switching to a competitor, or are seriously considering leaving our product or service?",
+   "options": [
+    "true: The sender themselves is cancelling, leaving or threatening to leave",
+    "false: No cancellation or churn intent from the sender (mentions of cancellation in marketing copy, newsletters or someone else's story do not count)"
+   ],
+   "state_shape": "{ email: { from, subject, body } }"
+  },
+  {
+   "key": "asks_for_refund",
+   "type": "noul",
+   "instructions": "Does the sender ask our company to refund, reverse or credit back money they paid?",
+   "options": [
+    "true: The sender wants their money back or a credit for a charge",
+    "false: No request for money back (a refund mentioned in marketing text or a policy description does not count)"
+   ],
+   "state_shape": "{ email: { from, subject, body } }"
+  },
+  {
+   "key": "match (intentQuestion)",
+   "type": "noul",
+   "instructions": "An inbox operator wants to find emails that match this description: \"${intent}\". Read `email.from`, `email.subject` and `email.body`. Does this email genuinely match the description, judged by what the sender actually means and intends rather than by surface keywords?",
+   "options": [
+    "true: The email clearly fits the operator's description",
+    "false: The email does not fit the description, or only mentions related words in passing, sarcastically, in quoted history or in marketing copy"
+   ],
+   "state_shape": "{ email: { from, subject, body } }; intent is free text, max 200 chars; SUGGESTED_INTENTS in src/lib/labels.ts"
+  }
+ ],
+ "request_cadence": "Triage: one request per email carrying all 7 questions, 12 in flight, 500 requests per pass (~5.3 s, ~100 req/s). Label: one request per email per intent, 12 in flight, 500 requests per intent (~5.5 s). Streamed back as NDJSON; UI batches updates every 50 ms.",
+ "data_files": [
+  "/Users/blaget/projects/jev-experiments/inbox-blitz/src/data/emails.ts (31 KB, deterministic generator, 500 emails, seed 20260917; ~8% become quoted-history threads)",
+  "/Users/blaget/projects/jev-experiments/inbox-blitz/src/data/traps.ts (10 KB, 21 hand-written traps that defeat keyword rules; each has a `trap` note)",
+  "/Users/blaget/projects/jev-experiments/inbox-blitz/server/mock-answers.json (231 KB, recorded Jev triage answers keyed by email id; useful only as a reference for expected lanes, not replayable against DM1)"
+ ],
+ "ui_components": [
+  "App shell, topbar, intent search pill, lane nav, email list, reader, stats rail: /Users/blaget/projects/jev-experiments/inbox-blitz/src/App.tsx (39 KB, single file)",
+  "EmailRow, Preview, JudgmentBadges, RuleBadges, LabelChips, NavItem, Dim: same file, lines 568-860",
+  "Streaming hooks: /Users/blaget/projects/jev-experiments/inbox-blitz/src/useTriage.ts and src/useLabels.ts",
+  "Gmail light theme: /Users/blaget/projects/jev-experiments/inbox-blitz/src/style.css (22 KB)"
+ ],
+ "reusable_source": [
+  "/Users/blaget/projects/jev-experiments/inbox-blitz/src/data/emails.ts",
+  "/Users/blaget/projects/jev-experiments/inbox-blitz/src/data/traps.ts",
+  "/Users/blaget/projects/jev-experiments/inbox-blitz/src/lib/types.ts (keep Judgment shape; urgency/sentiment stay 0..3)",
+  "/Users/blaget/projects/jev-experiments/inbox-blitz/src/lib/priority.ts (pure; no change)",
+  "/Users/blaget/projects/jev-experiments/inbox-blitz/src/lib/rules.ts (pure keyword baseline; no change)",
+  "/Users/blaget/projects/jev-experiments/inbox-blitz/src/lib/labels.ts (isMatch, intersect, pending, sortByMatch, summarize, labelName, SUGGESTED_INTENTS; drop nothing)",
+  "/Users/blaget/projects/jev-experiments/inbox-blitz/src/lib/stats.ts (replace USD_PER_INPUT_TOKEN with the milliseconds price)",
+  "/Users/blaget/projects/jev-experiments/inbox-blitz/src/lib/*.test.ts (vitest, pure)"
+ ],
+ "dm1_mapping": [
+  {
+   "jev_key": "category",
+   "dm1_route": "classify",
+   "dm1_body": "POST /classify {\"texts\":[\"From: Ava Kowalski <ava.kowalski@bluefinanalytics.com>\\nSubject: ...\\n\\n<body>\", ...up to 32], \"labels\":{\"billing\":\"A customer's charges, invoices, payments, duplicate charges, refunds or subscription pricing problems\",\"bug\":\"A customer reports that a product feature is broken, erroring, down, slow or behaving incorrectly\",\"feature_request\":\"A customer asks for new functionality or an improvement that does not exist yet\",\"sales_lead\":\"A prospect or existing customer wants to buy, upgrade, get a quote, book a demo or discuss a contract\",\"security\":\"Security alerts, suspected account compromise, vulnerability reports, suspicious logins, 2FA or credential problems\",\"legal_privacy\":\"Legal notices, GDPR/CCPA data requests, data deletion, subpoenas, DPA or terms questions\",\"spam_marketing\":\"Unsolicited marketing, cold sales outreach, promotional newsletters, phishing, scams or impersonation attempts from outside senders\",\"internal\":\"A coworker writing from our own company domain northwind.cloud about operations, meetings, HR, IT, planning or team logistics\",\"other\":\"Thank-you notes, offboarding or export requests, misdirected mail, community or press requests, anything else\"}}",
+   "notes": "Map results[i].label -> category, results[i].confidence -> categoryConfidence (needsHuman threshold 0.7 unchanged), results[i].scores -> categoryProbabilities. Label descriptions carry the instruction; keep the northwind.cloud domain in the internal description."
+  },
+  {
+   "jev_key": "needs_reply",
+   "dm1_route": "yes-no",
+   "dm1_body": "POST /yes-no {\"texts\":[...32 emails], \"statement\":\"The sender expects a person at our company to write back.\", \"when_true\":\"A specific person waits for an answer, decision or confirmation from us.\", \"when_false\":\"Automated, bulk, newsletter or marketing message; no reply expected.\"}",
+   "notes": "results[i].probability -> needsReply."
+  },
+  {
+   "jev_key": "urgency",
+   "dm1_route": "rate",
+   "dm1_body": "POST /rate {\"texts\":[...32 emails], \"scale\":[\"Can wait a week: no real deadline, or the sender says there is no rush\",\"This week: a real request that should be handled within days\",\"Today: the sender is blocked or losing money and needs action today\",\"Right now: production is down, a live incident or a security breach; act immediately. Ignore sarcastic framing and fake marketing deadlines\"]}",
+   "notes": "score is 0..1; store urgency = score * 3 so priority.ts and rules.ts comparisons stay unchanged. confidence -> urgencyConfidence (max of scores)."
+  },
+  {
+   "jev_key": "sentiment",
+   "dm1_route": "rate",
+   "dm1_body": "POST /rate {\"texts\":[...32 emails], \"scale\":[\"Friendly: warm, thankful or positive toward our company\",\"Neutral: matter-of-fact, no strong feeling\",\"Frustrated: annoyed, disappointed or sarcastic under polite wording\",\"Furious: angry, insulting, threatening or shouting\"]}",
+   "notes": "sentiment = score * 3. Read past politeness formulas: put that in the Frustrated description, since there is no instruction field."
+  },
+  {
+   "jev_key": "is_phishing_or_scam",
+   "dm1_route": "yes-no",
+   "dm1_body": "POST /yes-no {\"texts\":[...32 emails], \"statement\":\"This email is a phishing attempt or a scam.\", \"when_true\":\"It tries to steal credentials, money or data: fake login link, fake invoice, gift cards, fake CEO, bank or vendor.\", \"when_false\":\"A real company writing as itself, including pushy or fear-based marketing and cold sales pitches that only ask for a meeting or purchase.\"}",
+   "notes": "Include From line in the text so lookalike domains such as micros0ft-secure.com are visible."
+  },
+  {
+   "jev_key": "mentions_churn_or_cancel",
+   "dm1_route": "yes-no",
+   "dm1_body": "POST /yes-no {\"texts\":[...32 emails], \"statement\":\"The sender is cancelling, switching to a competitor or seriously considering leaving.\", \"when_true\":\"The sender themselves says they will cancel, leave or switch.\", \"when_false\":\"No churn intent from the sender; the word cancel in marketing copy, a newsletter or someone else's story does not count.\"}"
+  },
+  {
+   "jev_key": "asks_for_refund",
+   "dm1_route": "yes-no",
+   "dm1_body": "POST /yes-no {\"texts\":[...32 emails], \"statement\":\"The sender asks us to refund, reverse or credit back money they paid.\", \"when_true\":\"The sender wants their money back or a credit for a charge.\", \"when_false\":\"No request for money back; a refund mentioned in marketing text or a policy description does not count.\"}"
+  },
+  {
+   "jev_key": "match (intentQuestion)",
+   "dm1_route": "yes-no",
+   "dm1_body": "POST /yes-no {\"texts\":[...32 emails], \"statement\":\"This email matches the description: <intent>.\", \"when_true\":\"What the sender actually means and intends fits the description.\", \"when_false\":\"It does not fit, or only mentions related words in passing, sarcastically, in quoted history or in marketing copy.\"}",
+   "notes": "For the 10 SUGGESTED_INTENTS ship hand-written declaratives instead of the template, e.g. \"customers threatening to cancel\" -> statement \"The sender threatens to cancel or leave.\"; \"someone asking for a refund\" -> \"The sender asks for a refund.\"; \"production is down or broken for them\" -> \"The sender reports that the product is down or broken for them.\"; \"phishing or a scam\" -> \"This email is a phishing attempt or a scam.\"; \"sarcastic or passive-aggressive tone\" -> \"The sender is sarcastic or passive-aggressive.\"; \"newsletters I can ignore\" -> \"This is a newsletter that needs no reply.\". Free text falls back to the template; 200 char cap stays."
+  }
+ ],
+ "browser_plan": "Build a Vite + React 19 page at demo.milliseconds.ai/inbox-blitz. Keep the Gmail-shaped layout (lane nav, list, reader, stats rail) but restyle with the milliseconds design tokens and fonts from ~/projects/cloudraker-spring-2026 (DESIGN.md, apps/milliseconds). Copy src/data, src/lib and the tests as-is; drop server/jev.ts and the NDJSON streaming. Proxy: one Cloudflare Worker route /api/dm1/:route that forwards the JSON body to https://api.milliseconds.ai/v1/decision-machine-1/:route with the server-side bearer key, allow-lists the 8 route names, caps body at 32 texts, and passes back status, body, x-inference-ms and x-input-tokens. The key never reaches the browser. Client: a small queue (src/lib/dm1Queue.ts) that releases one request every 500 ms (2 req/s) and runs at most 2 in flight. Each email becomes text = `From: ${from} <${fromEmail}>\\nSubject: ${subject}\\n\\n${body}`; chunk into batches of 32. Triage: for each batch send the 7 route calls in the queue in this order: classify, then the four yes-no statements, then the two rate calls, so lanes populate early; merge the seven results into one Judgment per email and patch the row when the seventh lands. Intent label: one yes-no call per batch with the intent statement, 16 calls per intent, about 8 s; update matches as each batch returns and keep the existing 50 ms UI tick. Default the demo to the first 128 emails (4 batches, 28 triage requests, about 14 s) with a \"Triage all 500\" toggle (112 requests, about 56 s) so the full pass stays under the 1M tokens/min org budget. On HTTP 429 the queue pauses for retry-after (default 5 s), shows a banner \"Shared demo limit reached, resuming in Ns\", and resumes from the same batch; the proxy returns 429 unchanged. Stats rail uses x-inference-ms for p50/p95 and x-input-tokens for tokens and cost; label the throughput as emails per second, not requests. Keep keyboard shortcuts and the keyword-rules comparison; they run in the browser only.",
+ "difficulty": "L",
+ "risks": [
+  "Throughput drops from ~100 req/s to 2 req/s. The original story is 500 emails in 5 s; the port must reframe it as batches of 32 with a visible progress bar, or the demo feels slow.",
+  "Seven separate routes replace one 7-question request. A row is complete only after all seven batch calls; partial judgments must render without breaking priority.ts (guard on undefined).",
+  "Token budget: 500 emails x ~250 tokens x 7 routes is ~875k tokens per full pass, close to the 1M tokens/min org limit shared by all visitors. Default to 128 emails.",
+  "rate score is 0..1 weighted position; multiply by 3 or every threshold in priority.ts and rules.ts (urgency < 1, off-by-one-level disagreements) silently breaks.",
+  "No instruction field on classify/rate: the nuance in the Jev instructions (ignore sarcasm, ignore fake deadlines) must live inside label and scale descriptions and needs a probe run on the 21 traps to confirm.",
+  "Free-text intents become a templated statement, which is longer than the ideal short declarative; quality on unusual intents may be lower than the hand-written suggested ones.",
+  "yes-no hints are shared per batch, so the four boolean statements cannot share one request; each needs its own call.",
+  "Trap fixture references northwind.cloud as the company domain; keep that string in the internal label description or internal classification breaks."
+ ]
+}

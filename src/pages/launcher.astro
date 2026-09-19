@@ -1,0 +1,14 @@
+---
+import Demo from '../layouts/Demo.astro';
+import meta from '../demos/launcher/meta';
+import Island from '../demos/launcher/Demo.tsx';
+---
+<Demo meta={meta}>
+  <Island client:only="react" />
+  <div slot="notes">
+    <h2>How it works</h2>
+    <p>A local candidate list supplies the available items. The model ranks those items, checks whether the request is ready to act on and identifies requests for multiple items.</p>
+    <h3>Demo scope</h3>
+    <p>The items and actions are simulated. Opening a result previews its action inside the demo. The model cannot find files or apps outside the sample catalog.</p>
+  </div>
+</Demo>

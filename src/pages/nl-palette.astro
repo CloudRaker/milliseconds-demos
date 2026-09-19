@@ -1,0 +1,14 @@
+---
+import Demo from '../layouts/Demo.astro';
+import meta from '../demos/nl-palette/meta';
+import Island from '../demos/nl-palette/Demo.tsx';
+---
+<Demo meta={meta}>
+  <Island client:only="react" />
+  <div slot="notes">
+    <h2>How it works</h2>
+    <p>The model matches your request to one of the editor’s supported commands. When needed, it selects an argument such as a theme or font-size change. Destructive commands require confirmation.</p>
+    <h3>Demo scope</h3>
+    <p>Only your command request is sent for interpretation, not the note contents. Uncertain matches require an explicit selection. Commands act on this demo editor and its sample notes.</p>
+  </div>
+</Demo>

@@ -1,0 +1,167 @@
+{
+ "slug": "live-minutes",
+ "title": "Live Minutes (Fern)",
+ "one_liner": "Meeting notes that write themselves as you talk: every finished sentence is judged and lands as an action item, decision, question or risk within a fraction of a second.",
+ "platform": "web (vite/react)",
+ "what_it_does": "The page shows one centred column: meeting header (title, four attendees, date, Start button, speed toggles 1x/4x/all-at-once, replay/live-mic switch), a chronological feed of note cards, one line of measured numbers, and a caption strip. In Replay mode a seeded 180-utterance, 12-minute, 4-person product standup plays on a timer. Each utterance, as it \"finishes\", is sent to the judge with context (speaker, previous 3 utterances, recent decisions, today/sprint-end/launch dates, attendees). The judge answers seven questions at once: kind (action/decision/question/risk/update/chat), assignee, has_deadline, deadline_kind, reverses_earlier_decision, is_blocked, importance. Plain TypeScript then resolves the owner (speaker_themself -> speaker), maps deadline_kind to a real ISO date from the text (src/lib/deadline.ts), gates the owner behind a confidence threshold (<0.6 shows an amber \"Who owns this?\" chip with per-attendee probabilities the user can click to fix), and strikes through a prior decision when a later one reverses it. Cards show the label, sentence, owner, resolved due date, Blocked flag and a measured end-of-sentence -> on-screen latency. The stats line shows notes count, sentences judged, p50/p95 latency and live/mock source. Live-mic mode uses Chrome Web Speech, segments sentences in code (src/lib/segment.ts), and judges each complete sentence the same way. Keyboard: s start/stop, x reset, r/m replay/mic, 1/4/a speeds.",
+ "jev_questions": [
+  {
+   "key": "kind",
+   "type": "choice",
+   "instructions": "Classify `utterance` (said by `speaker` in a product standup) by what a human note-taker would record from it. Use `previous_3_utterances` only for context; judge the utterance itself. Tie-breaks: warns AND assigns follow-up -> action_item; accepting work just assigned to speaker -> action_item; un-agreed proposal -> status_update; bare agreement ('agreed','deal','sounds good') -> chit_chat; handing the floor / agenda logistics -> chit_chat; recap of already-assigned work -> status_update.",
+   "options": [
+    "action_item: Commits a specific person to concrete follow-up work after the meeting (\"I'll send the doc\", \"can you check the logs by Friday?\", \"Marcus, take the migration\", \"someone needs to file a ticket\").",
+    "decision: The group or lead settles what to do or how (\"let's go with X\", \"we're not shipping Y this sprint\", \"scrap that, keep the old flow\"). Not a task for one person, not a mere proposal.",
+    "open_question: Raises an unresolved question or asks for information the utterance does not answer.",
+    "risk: Warns about a specific thing that could go wrong, slip, break or block the work.",
+    "status_update: Reports facts, progress or a proposal without a new commitment or decision.",
+    "chit_chat: Greetings, jokes, small talk, acknowledgements, reactions, or logistics of the call itself."
+   ],
+   "state_shape": "{today, current_sprint_ends, launch_date, attendees:[{name,role}], speaker, previous_3_utterances:[{speaker,text}], recent_decisions:[string], utterance}"
+  },
+  {
+   "key": "assignee",
+   "type": "choice",
+   "instructions": "If `utterance` assigns, requests, or takes on a task, who is responsible for doing it? If it is not a task, answer unassigned.",
+   "options": [
+    "speaker_themself: The speaker (<name>) commits to doing the task personally: \"I'll take that\", \"I can do it\", \"let me handle it\".",
+    "<each other attendee by name>: <Name> (<role>) is asked to do it or accepts it, or the speaker says <First> will do it.",
+    "unassigned: A task is raised but nobody specific owns it yet (\"someone should...\", \"we need to...\"), or the utterance is not a task at all."
+   ],
+   "state_shape": "same state; criteria built dynamically per speaker from attendees"
+  },
+  {
+   "key": "has_deadline",
+   "type": "noul",
+   "instructions": "Does `utterance` state a due date or time frame for the follow-up work being committed to (e.g. \"by Friday\", \"end of next sprint\", \"before launch\", \"tomorrow\", \"by EOD\", \"right after this\")? criteria.true: A due date, day, or time frame by which the assigned work must be done is stated. criteria.false: No due date for the work: no time reference at all, or the date mentioned is about something else (the launch schedule, an email date, a past event, the meeting itself), or the utterance is not a task.",
+   "state_shape": "same state"
+  },
+  {
+   "key": "deadline_kind",
+   "type": "choice",
+   "instructions": "What kind of due date does `utterance` set for the follow-up work being committed to? Answer none if no deadline is set for the work (dates that are merely discussed as content do not count).",
+   "options": [
+    "specific_date: A named day or date: \"Friday\", \"tomorrow\", \"tonight\", \"Monday morning\", \"the 24th\", \"October 1st\", \"today\", \"right after this\", \"EOD\".",
+    "this_week: \"this week\", \"end of week\", \"EOW\", \"in the next couple of days\".",
+    "next_sprint: \"next sprint\", \"end of next sprint\", \"by sprint end\", \"before sprint planning\".",
+    "before_launch: \"before launch\", \"before we ship\", \"pre-launch\", \"before go-live\".",
+    "end_of_quarter: \"end of quarter\", \"EOQ\", \"by end of Q3\", \"before the quarter closes\".",
+    "none: No deadline mentioned."
+   ],
+   "state_shape": "same state"
+  },
+  {
+   "key": "reverses_earlier_decision",
+   "type": "noul",
+   "instructions": "Does `utterance` itself decide to reverse, cancel, or replace a decision or plan that was agreed earlier (see `recent_decisions` and `previous_3_utterances`)? criteria.true: The speaker decides to undo or change something previously agreed: \"actually, scrap that\", \"let's not do X after all\", \"forget Friday, we'll ship Monday\". criteria.false: It does not change an earlier decision: confirms the plan, merely proposes or asks about a change, sets a new plan where none existed, or is unrelated.",
+   "state_shape": "same state; recent_decisions is the last 3 live decisions"
+  },
+  {
+   "key": "is_blocked",
+   "type": "noul",
+   "instructions": "Does the speaker report that work is blocked right now: stuck and unable to proceed until another team, a vendor, an approval, or a dependency delivers? criteria.true: Explicitly stuck now: \"the ticket with infra isn't moving\", \"blocked on the vendor\", \"the staging API rate-limits us so we can't run it\". criteria.false: Not a current blocker: a deadline or ordering, a hypothetical risk, a request, a question, or work simply in progress.",
+   "state_shape": "same state"
+  },
+  {
+   "key": "importance",
+   "type": "score",
+   "instructions": "How important is `utterance` for the team to remember after the meeting?",
+   "options": [
+    "Trivial: small talk, a joke, or a detail nobody needs to remember.",
+    "Minor: useful context but low stakes; nothing changes if it is forgotten.",
+    "Notable: affects the team's plan, a deliverable, or an owner's work this sprint.",
+    "Critical: affects the launch date, customers, revenue, compliance, or a hard deadline."
+   ],
+   "state_shape": "same state; score is stored but never rendered in the UI"
+  }
+ ],
+ "request_cadence": "One Jev request per utterance (7 questions fanned out in that single call). Replay 1x: ~0.25 req/s (180 utterances over 12 min). Replay 4x: ~1 req/s. \"All at once\": 180 requests in parallel through a concurrency-12 limiter (~20 req/s). Live mic: one request per segmented sentence. Proxy adds 6 s per-attempt timeout and exponential backoff on 429/529/5xx (max 5 attempts).",
+ "data_files": [
+  "/Users/blaget/projects/jev-experiments/live-minutes/src/data/transcript.ts (20 KB, 180 labelled utterances with ground truth kind/assignee/deadline/reverses/blocked, MEETING context, timing builder; reuse as-is)",
+  "/Users/blaget/projects/jev-experiments/live-minutes/server/mock-answers.json (268 KB, Jev-shaped recorded answers keyed by sha1(utterance); only useful as an offline fallback if converted to DM1 shape, otherwise drop)",
+  "/Users/blaget/projects/jev-experiments/live-minutes/public/fonts/InterVariable.woff2 (Inter font, replace with milliseconds site fonts)",
+  "/Users/blaget/projects/jev-experiments/live-minutes/screenshots/live-minutes.jpg and live-minutes-demo.webp (reference visuals only)"
+ ],
+ "ui_components": [
+  "Header (title, attendees, date, start/stop, speed 1x/4x/all, replay/mic switch, health badge) \u2014 src/components/Header.tsx (113 lines)",
+  "Notes feed \u2014 src/components/Notes.tsx (39 lines)",
+  "NoteCard (label, sentence, owner chip with candidate popover, due date, Blocked flag, Reversed strikethrough, per-card latency) \u2014 src/components/NoteCard.tsx (171 lines)",
+  "Pulse stats line (notes, judged, p50/p95, source) \u2014 src/components/Pulse.tsx (32 lines)",
+  "Caption strip (current utterance + label, mic interim text) \u2014 src/components/Caption.tsx (44 lines)",
+  "App shell + key bindings \u2014 src/App.tsx (82 lines)",
+  "Styles (691 lines, replace with milliseconds site tokens) \u2014 src/styles.css"
+ ],
+ "reusable_source": [
+  "/Users/blaget/projects/jev-experiments/live-minutes/src/data/transcript.ts",
+  "/Users/blaget/projects/jev-experiments/live-minutes/src/lib/deadline.ts",
+  "/Users/blaget/projects/jev-experiments/live-minutes/src/lib/deadline.test.ts",
+  "/Users/blaget/projects/jev-experiments/live-minutes/src/lib/segment.ts",
+  "/Users/blaget/projects/jev-experiments/live-minutes/src/lib/speech.ts",
+  "/Users/blaget/projects/jev-experiments/live-minutes/src/lib/aggregate.ts",
+  "/Users/blaget/projects/jev-experiments/live-minutes/src/lib/aggregate.test.ts",
+  "/Users/blaget/projects/jev-experiments/live-minutes/src/lib/queue.ts",
+  "/Users/blaget/projects/jev-experiments/live-minutes/src/lib/stats.ts",
+  "/Users/blaget/projects/jev-experiments/live-minutes/src/lib/keyword.ts",
+  "/Users/blaget/projects/jev-experiments/live-minutes/src/lib/types.ts (drop the Jev answer types, keep Kind/DeadlineKind/MeetingContext/Utterance)",
+  "/Users/blaget/projects/jev-experiments/live-minutes/src/components/labels.ts",
+  "/Users/blaget/projects/jev-experiments/live-minutes/src/components/NoteCard.tsx",
+  "/Users/blaget/projects/jev-experiments/live-minutes/src/components/Notes.tsx",
+  "/Users/blaget/projects/jev-experiments/live-minutes/src/components/Caption.tsx",
+  "/Users/blaget/projects/jev-experiments/live-minutes/src/components/Pulse.tsx"
+ ],
+ "dm1_mapping": [
+  {
+   "jev_key": "kind",
+   "dm1_route": "classify",
+   "dm1_body": "POST /classify {\"texts\":[\"Speaker: Marcus Lee (Backend Engineer). Previous: Priya Nair: \\\"Any issues so far?\\\" | ... Utterance: \\\"Marcus, can you write up the rounding discrepancy and send it to finance before end of day tomorrow?\\\"\", ...up to 32], \"labels\":{\"action_item\":\"The utterance commits a specific person (the speaker or an attendee) to concrete follow-up work after the meeting, or accepts work just assigned to the speaker: 'I'll send the doc', 'can you check the logs by Friday?', 'Marcus, take the migration', 'yep, by tomorrow', 'someone needs to file a ticket'.\",\"decision\":\"The group or the lead settles what to do or how: 'let's go with X', 'we're not shipping Y this sprint', 'scrap that, keep the old flow'. A conclusion the team will act on, not a task for one person and not a mere proposal.\",\"open_question\":\"The utterance raises an unresolved question about the work or asks for information it does not answer: 'do we know if legal signed off?', 'threshold, one percent or two?'\",\"risk\":\"The utterance warns about a specific thing that could go wrong, slip, break, or block the work: a bug, flaky tests, a dependency on another team, an at-risk deadline, a compliance gap.\",\"status_update\":\"The utterance reports facts, progress, an un-agreed proposal, or recaps already-assigned work, with no new commitment or decision: 'the migration ran fine', 'my proposal was five percent'.\",\"chit_chat\":\"Greetings, jokes, small talk, bare agreement ('sounds good', 'agreed', 'deal'), reactions, handing the floor, or logistics of the call itself ('Dev, you're up', 'can I raise something?').\"}}",
+   "notes": "Text carries speaker + previous 3 utterances as a short prefix; the utterance itself is the last quoted sentence. Tie-breaks are folded into label descriptions. Use response.probability as kindConfidence and scores as kindProbabilities."
+  },
+  {
+   "jev_key": "assignee",
+   "dm1_route": "classify",
+   "dm1_body": "POST /classify {\"texts\":[same prefixed texts as kind, only for rows classified action_item, or all rows in the window], \"labels\":{\"Marcus Lee\":\"Marcus Lee (Backend Engineer) is asked to do the task, accepts it, or the speaker says Marcus will do it. If Marcus is the speaker and says 'I'll take that' / 'I can do it', this is Marcus.\",\"Sofia Alvarez\":\"Sofia Alvarez (Product Manager) is asked to do it, accepts it, or someone says Sofia will do it, or Sofia is the speaker and commits personally.\",\"Dev Okafor\":\"...\",\"Priya Nair\":\"...\",\"unassigned\":\"A task is raised but nobody specific owns it yet ('someone should...', 'we need to...'), or the utterance is not a task at all.\"}}",
+   "notes": "DM1 has no dynamic speaker_themself option; instead the text prefix states the speaker and each attendee label description says 'or <Name> is the speaker and commits personally'. Labels are fixed for the whole meeting so texts batching works. Owner uncertain when probability < 0.6 or label is unassigned; scores gives the per-attendee candidates for the 'Who owns this?' chip. For live mic add the mic speaker name ('You') as a label."
+  },
+  {
+   "jev_key": "has_deadline",
+   "dm1_route": "classify",
+   "dm1_body": "Folded into deadline_kind: hasDeadline = (deadline_kind.label !== 'none' && probability >= 0.5). resolve.ts already required deadline_kind !== 'none', so the separate noul is redundant. Optional strict version: POST /yes-no {\"texts\":[utterances], \"statement\":\"The utterance sets a due date for the follow-up work.\", \"when_true\":\"A day, date, or time frame by which the assigned work must be done is stated: by Friday, tomorrow, end of next sprint, before launch, EOD.\", \"when_false\":\"No due date for the work: no time reference, or the date is about something else (the launch schedule, a past event, the meeting itself), or the utterance is not a task.\"}",
+   "notes": "Dropping this saves one request per window. Keep the yes-no body as an AND gate only if eval shows deadline_kind alone produces false positives."
+  },
+  {
+   "jev_key": "deadline_kind",
+   "dm1_route": "classify",
+   "dm1_body": "POST /classify {\"texts\":[raw utterances, no prefix needed], \"labels\":{\"specific_date\":\"The work is due on a named day or date: 'Friday', 'tomorrow', 'tonight', 'Monday morning', 'the 24th', 'October 1st', 'today', 'right after this', 'EOD'.\",\"this_week\":\"The work is due 'this week', 'end of week', 'EOW', or 'in the next couple of days'.\",\"next_sprint\":\"The work is due 'next sprint', 'end of next sprint', 'by sprint end', or 'before sprint planning'.\",\"before_launch\":\"The work is due 'before launch', 'before we ship', 'pre-launch', or 'before go-live'.\",\"end_of_quarter\":\"The work is due 'end of quarter', 'EOQ', 'by end of Q3', or 'before the quarter closes'.\",\"none\":\"No deadline is set for the follow-up work. Dates that are merely discussed as content (the launch schedule, an email date, a past event) do not count.\"}}",
+   "notes": "Result label feeds src/lib/deadline.ts unchanged to resolve a real ISO date."
+  },
+  {
+   "jev_key": "reverses_earlier_decision",
+   "dm1_route": "yes-no",
+   "dm1_body": "POST /yes-no {\"texts\":[\"Recent decisions: 'ship the flag at 10% Friday' | 'keep the old address form'. Utterance by Priya Nair: \\\"Actually, scrap Friday, let's move the rollout to Monday.\\\"\", ...], \"statement\":\"The speaker reverses or replaces a decision that was agreed earlier.\", \"when_true\":\"The speaker decides to undo or change something previously agreed: 'actually, scrap that', 'let's not do X after all', 'forget Friday, we'll ship Monday', 'let's move it to Tuesday'.\", \"when_false\":\"The utterance confirms the plan, only proposes or asks about a change, sets a new plan where none existed, or is unrelated to any earlier decision.\"}",
+   "notes": "Text includes the last 3 live decisions as a prefix. answer:true with probability >= 0.5 -> reverses. Only needed for rows classified decision; can run on all rows in the window to avoid a second round trip."
+  },
+  {
+   "jev_key": "is_blocked",
+   "dm1_route": "yes-no",
+   "dm1_body": "POST /yes-no {\"texts\":[raw utterances], \"statement\":\"The speaker reports that the work is blocked right now.\", \"when_true\":\"Explicitly stuck now, waiting on another team, a vendor, an approval, or a dependency: 'the ticket with infra isn't moving', 'blocked on the vendor', 'the staging API rate-limits us so we can't run it'.\", \"when_false\":\"Not a current blocker: a deadline or ordering ('before we go to 25%'), a hypothetical risk, a request for someone to do something, a question, or work that is simply in progress.\"}",
+   "notes": "answer:true -> Blocked flag; a blocked status_update surfaces in the risks bucket (bucketFor unchanged)."
+  },
+  {
+   "jev_key": "importance",
+   "dm1_route": "rate",
+   "dm1_body": "POST /rate {\"texts\":[raw utterances], \"scale\":[\"Trivial: small talk, a joke, or a detail nobody needs to remember.\",\"Minor: useful context but low stakes; nothing changes if it is forgotten.\",\"Notable: affects the team's plan, a deliverable, or an owner's work this sprint.\",\"Critical: affects the launch date, customers, revenue, compliance, or a hard deadline.\"]}",
+   "notes": "The original UI never renders importance. Drop it from the live loop to save a request per window; optionally show it as a small dot on cards if we want a /rate showcase."
+  }
+ ],
+ "browser_plan": "Same Vite/React single-column page, restyled with the milliseconds.ai tokens. Copy transcript.ts, deadline.ts, segment.ts, speech.ts, aggregate.ts, queue.ts, stats.ts, keyword.ts and the five components nearly as-is. Replace server/jev.ts + client.ts with a Cloudflare Worker proxy (demo.milliseconds.ai/api/dm1/*) that holds the bearer key, forwards to https://api.milliseconds.ai/v1/decision-machine-1/{route}, passes x-inference-ms and x-input-tokens back, and returns 429 to the browser untouched. Replace the per-utterance fan-out with a batching scheduler in useMeeting.ts: utterances accumulate in a window; every 500 ms (or when 32 are queued) the window flushes as 5 requests: /classify kind (texts, prefixed with speaker + previous 3), /classify assignee (texts, fixed attendee labels), /classify deadline_kind (texts), /yes-no reverses (texts prefixed with recent decisions), /yes-no is_blocked (texts). A token-bucket limiter caps outbound at 2 req/s, so a full 5-request window takes 2.5 s; at 1x (0.25 utt/s) windows hold 1 utterance and cards land ~0.6-1.5 s after the sentence, at 4x (1 utt/s) windows hold ~3, and \"all at once\" sends 180 utterances as 6 windows of 30 in ~30 requests over ~15 s. To cut requests, a second option is sequential gating: only kind runs for every window, then assignee + deadline_kind run only on action_item rows and reverses only on decision rows (most windows then cost 2-3 requests). Show the batch size and the measured end-of-sentence -> on-screen p50/p95 honestly in the Pulse line, plus x-inference-ms p50 from headers, so the demo tells the truth about batching latency. On 429: back off with exponential delay (200 ms * 2^n, max 4 s, jitter), keep the window queued, turn the badge amber \"rate limited, retrying\", and never drop utterances. resolveJudgment maps DM1 responses (label/probability/scores, answer/probability) to the existing Judgment shape so aggregate.ts and NoteCard stay unchanged. Live mic keeps the Web Speech path; each segmented sentence enters the same window. Ship a mock mode using ground truth from transcript.ts as a fallback when the proxy is down.",
+ "difficulty": "M",
+ "risks": [
+  "Headline latency changes: the original promises ~150 ms end-of-sentence -> on-screen with one 7-question request; at 2 req/s and 5 routes per window, the realistic figure is 0.6-2.5 s. The demo copy must be rewritten around that number.",
+  "DM1 has no state object; speaker, previous utterances and recent decisions must be packed into the text prefix. Context-heavy judgments (reverses_earlier_decision, assignee via speaker_themself) may lose accuracy versus the Jev 98.9% / 96% baselines; run scripts/eval.ts ported to DM1 before publishing numbers.",
+  "The assignee 'speaker_themself' option is dynamic per speaker in Jev; DM1 labels must be fixed for texts batching, so the label descriptions have to cover the 'speaker commits personally' case in prose.",
+  "yes-no hints are shared per batch, so each yes-no statement needs its own request; combining reverses and is_blocked as statements[] would lose the hints.",
+  "'All at once' mode with 180 utterances is 30 requests minimum; the shared 200 req/min org limit means a handful of concurrent visitors can trigger 429s. The proxy should add a per-IP cap and the UI must degrade gracefully.",
+  "Live mic requires Chrome Web Speech; the 'You' speaker must be added to the assignee labels at runtime, and today's date must replace MEETING.today for deadline resolution.",
+  "mock-answers.json is Jev-shaped and cannot be reused without conversion; use transcript.ts ground truth as the offline fallback instead."
+ ]
+}

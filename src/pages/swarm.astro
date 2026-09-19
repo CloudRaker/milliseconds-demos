@@ -1,0 +1,14 @@
+---
+import Demo from '../layouts/Demo.astro';
+import meta from '../demos/swarm/meta';
+import Island from '../demos/swarm/Demo.tsx';
+---
+<Demo meta={meta}>
+  <Island client:only="react" />
+  <div slot="notes">
+    <h2>How it works</h2>
+    <p>Each agent’s surroundings are described in text. Batched model checks assess danger, nearby prey and whether a boost is useful. Local code handles movement, collisions and cooldowns.</p>
+    <h3>Demo scope</h3>
+    <p>The arena is simulated. Personality labels identify agents but do not affect the model’s decisions. If an answer becomes stale, local movement rules keep the simulation running.</p>
+  </div>
+</Demo>

@@ -1,0 +1,444 @@
+/* inbox-blitz: the Gmail shape of the original, restyled on the milliseconds.ai
+   dark surface. Everything is scoped under .d-inbox-blitz. */
+.d-inbox-blitz {
+  display: grid;
+  gap: 16px;
+}
+
+/* --- controls ------------------------------------------------------------ */
+.d-inbox-blitz .ib-controls {
+  display: grid;
+  gap: 14px;
+}
+.d-inbox-blitz .ib-run {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.d-inbox-blitz .ib-size {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+.d-inbox-blitz .ib-size .select {
+  width: auto;
+  padding: 8px 10px;
+  font-size: 14px;
+}
+.d-inbox-blitz .ib-plan {
+  font-family: var(--mono);
+  font-size: 12px;
+}
+.d-inbox-blitz .ib-controls .error {
+  margin: 0;
+}
+
+/* --- intent search ------------------------------------------------------- */
+.d-inbox-blitz .ib-search-row {
+  display: flex;
+  gap: 10px;
+}
+.d-inbox-blitz .ib-search-row .btn {
+  flex: none;
+}
+.d-inbox-blitz .ib-suggest {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+.d-inbox-blitz .ib-suggest .tag {
+  cursor: pointer;
+  background: transparent;
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 12px;
+  font-weight: 400;
+}
+.d-inbox-blitz .ib-suggest .tag:hover:not([disabled]) {
+  border-color: var(--purple-on-dark);
+}
+.d-inbox-blitz .ib-suggest .tag[disabled] {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* --- three-column body --------------------------------------------------- */
+.d-inbox-blitz .ib-app {
+  display: grid;
+  grid-template-columns: 210px minmax(0, 1.3fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+@media (max-width: 1100px) {
+  .d-inbox-blitz .ib-app {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --- lane nav ------------------------------------------------------------ */
+/* minmax(0, 1fr): without it the implicit track sizes to the widest child's
+   max-content (the shortcut line) and every row overflows the panel. */
+.d-inbox-blitz .ib-nav {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2px;
+  padding: 14px;
+  position: sticky;
+  top: 16px;
+}
+.d-inbox-blitz .ib-nav-section {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2px;
+}
+.d-inbox-blitz .ib-nav-section .panel-title {
+  margin-bottom: 6px;
+}
+.d-inbox-blitz .ib-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 7px 10px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font: 400 14px var(--sans);
+  text-align: left;
+  cursor: pointer;
+}
+.d-inbox-blitz .ib-nav-item:hover {
+  background: #ffffff0d;
+  color: var(--white);
+}
+.d-inbox-blitz .ib-nav-item.active {
+  background: #6d4aff26;
+  color: var(--white);
+  font-weight: 500;
+}
+.d-inbox-blitz .ib-nav-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.d-inbox-blitz .ib-nav-item b {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 400;
+}
+.d-inbox-blitz .ib-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex: none;
+}
+.d-inbox-blitz kbd {
+  font-family: var(--mono);
+  font-size: 11px;
+  padding: 1px 5px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  color: var(--muted);
+}
+.d-inbox-blitz .ib-hint {
+  font-size: 12px;
+  line-height: 1.6;
+  margin: 8px 0 0;
+}
+.d-inbox-blitz .ib-keys {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+/* --- agreement panel ----------------------------------------------------- */
+.d-inbox-blitz .ib-agree {
+  margin-top: 8px;
+}
+.d-inbox-blitz .ib-agree-big {
+  font-family: var(--mono);
+  font-size: 26px;
+  margin: 0;
+  color: var(--white);
+}
+.d-inbox-blitz .ib-agree-big span {
+  font-size: 12px;
+}
+.d-inbox-blitz .ib-agree-row {
+  display: grid;
+  grid-template-columns: 74px 1fr 32px;
+  gap: 6px;
+  align-items: center;
+  margin-top: 6px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.d-inbox-blitz .ib-agree-row b {
+  font-family: var(--mono);
+  font-weight: 400;
+  text-align: right;
+}
+
+/* --- list ---------------------------------------------------------------- */
+.d-inbox-blitz .ib-list-panel {
+  padding: 14px;
+  min-width: 0;
+}
+.d-inbox-blitz .ib-list {
+  max-height: 620px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+.d-inbox-blitz .ib-row {
+  display: grid;
+  grid-template-columns: 130px minmax(0, 1fr) 62px;
+  gap: 10px;
+  align-items: baseline;
+  padding: 9px 10px;
+  border-radius: 8px;
+  border-left: 2px solid transparent;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--muted);
+}
+.d-inbox-blitz .ib-row:hover {
+  background: #ffffff0a;
+}
+.d-inbox-blitz .ib-row.selected {
+  background: #6d4aff1f;
+  border-left-color: var(--purple-on-dark);
+}
+.d-inbox-blitz .ib-row.unread .ib-from,
+.d-inbox-blitz .ib-row.unread .ib-subj {
+  color: var(--white);
+  font-weight: 500;
+}
+.d-inbox-blitz .ib-row.archived {
+  opacity: 0.45;
+}
+.d-inbox-blitz .ib-row.disagree {
+  border-left-color: #f0b35a;
+}
+.d-inbox-blitz .ib-from {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.d-inbox-blitz .ib-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+.d-inbox-blitz .ib-snip {
+  color: #8c8895;
+}
+.d-inbox-blitz .ib-date {
+  font-family: var(--mono);
+  font-size: 11px;
+  text-align: right;
+}
+
+/* --- badges -------------------------------------------------------------- */
+.d-inbox-blitz .ib-chips {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+.d-inbox-blitz .ib-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.d-inbox-blitz .ib-badge.soft {
+  border-style: dashed;
+}
+.d-inbox-blitz .ib-lowconf {
+  font-style: normal;
+  color: #f0b35a;
+}
+.d-inbox-blitz .ib-badge.cat {
+  color: #9db8ff;
+  border-color: #9db8ff44;
+}
+.d-inbox-blitz .ib-badge.cat-spam_marketing,
+.d-inbox-blitz .ib-badge.cat-security {
+  color: #f0b35a;
+  border-color: #f0b35a44;
+}
+.d-inbox-blitz .ib-badge.urg-0,
+.d-inbox-blitz .ib-badge.urg-1 {
+  color: var(--muted);
+}
+.d-inbox-blitz .ib-badge.urg-2 {
+  color: #f0b35a;
+  border-color: #f0b35a44;
+}
+.d-inbox-blitz .ib-badge.urg-3 {
+  color: #ff8a8a;
+  border-color: #ff8a8a55;
+}
+.d-inbox-blitz .ib-badge.sent-0 {
+  color: #6fdc8c;
+  border-color: #6fdc8c44;
+}
+.d-inbox-blitz .ib-badge.sent-2,
+.d-inbox-blitz .ib-badge.sent-3 {
+  color: #ff8a8a;
+  border-color: #ff8a8a55;
+}
+.d-inbox-blitz .ib-badge.flag {
+  color: var(--white);
+  border-color: #6d4aff66;
+}
+.d-inbox-blitz .ib-badge.phish {
+  color: #ff8a8a;
+  border-color: #ff8a8a55;
+}
+.d-inbox-blitz .ib-badge.dis {
+  color: #f0b35a;
+  border-color: #f0b35a66;
+}
+.d-inbox-blitz .ib-badge.pending {
+  opacity: 0.6;
+}
+
+/* --- reader -------------------------------------------------------------- */
+.d-inbox-blitz .ib-reader {
+  padding: 18px;
+  max-height: 720px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  min-width: 0;
+}
+.d-inbox-blitz .ib-pv-head h3 {
+  margin: 0 0 4px;
+  font-size: 19px;
+}
+.d-inbox-blitz .ib-pv-head p {
+  margin: 0;
+  font-size: 13px;
+  word-break: break-word;
+}
+.d-inbox-blitz .ib-trap {
+  margin: 14px 0 0;
+  padding: 10px 12px;
+  border-left: 2px solid #f0b35a;
+  background: #f0b35a12;
+  border-radius: 0 8px 8px 0;
+  font-size: 13px;
+  color: #f0b35a;
+}
+.d-inbox-blitz .ib-body {
+  margin: 14px 0 18px;
+  padding: 12px 14px;
+  background: #ffffff08;
+  border-radius: 10px;
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.75;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: var(--white);
+}
+.d-inbox-blitz .ib-reader .panel-title {
+  margin: 18px 0 8px;
+}
+.d-inbox-blitz .ib-dims {
+  display: grid;
+  gap: 2px;
+  margin-top: 10px;
+}
+.d-inbox-blitz .ib-dim {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 8px;
+  padding: 5px 8px;
+  border-radius: 6px;
+  font-size: 13px;
+}
+.d-inbox-blitz .ib-dims.with-rules .ib-dim {
+  grid-template-columns: 110px 1fr 1fr;
+}
+.d-inbox-blitz .ib-dim.head {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+}
+.d-inbox-blitz .ib-dim.dis {
+  background: #f0b35a14;
+}
+.d-inbox-blitz .ib-d-name {
+  color: var(--muted);
+}
+.d-inbox-blitz .ib-d-model {
+  color: var(--white);
+  font-family: var(--mono);
+  font-size: 12px;
+}
+.d-inbox-blitz .ib-d-rule {
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 12px;
+}
+.d-inbox-blitz .ib-prob {
+  display: grid;
+  grid-template-columns: 100px 1fr 40px;
+  gap: 8px;
+  align-items: center;
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.d-inbox-blitz .ib-prob b {
+  font-family: var(--mono);
+  font-weight: 400;
+  text-align: right;
+  color: var(--white);
+}
+
+/* Keep the inbox usable as a compact mail app at every viewport width. */
+.d-inbox-blitz, .d-inbox-blitz .panel { min-width: 0; }
+.d-inbox-blitz .ib-search-row .input { min-width: 0; flex: 1; }
+.d-inbox-blitz .ib-suggest .tag { white-space: normal; text-align: left; }
+.d-inbox-blitz .ib-row:focus-visible { outline: 2px solid var(--purple-on-dark); outline-offset: -2px; }
+.d-inbox-blitz .ib-dim { grid-template-columns: minmax(90px, 0.8fr) minmax(0, 1fr); overflow-wrap: anywhere; }
+@media (max-width: 1100px) {
+  .d-inbox-blitz .ib-nav { position: static; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); }
+  .d-inbox-blitz .ib-keys, .d-inbox-blitz .ib-nav-section { grid-column: 1 / -1; }
+  .d-inbox-blitz .ib-list { max-height: 360px; }
+}
+@media (max-width: 560px) {
+  .d-inbox-blitz .ib-row { grid-template-columns: minmax(0, 1fr) auto; gap: 4px 8px; padding: 12px 8px; }
+  .d-inbox-blitz .ib-text { grid-column: 1 / -1; grid-row: 2; white-space: normal; }
+  .d-inbox-blitz .ib-date { grid-column: 2; grid-row: 1; }
+  .d-inbox-blitz .ib-chips { display: flex; margin-bottom: 4px; }
+  .d-inbox-blitz .ib-snip { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .d-inbox-blitz .ib-search-row { flex-wrap: wrap; }
+  .d-inbox-blitz .ib-search-row .input { flex-basis: 100%; }
+  .d-inbox-blitz .ib-reader { padding: 16px; max-height: none; }
+}

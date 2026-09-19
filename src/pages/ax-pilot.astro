@@ -1,0 +1,14 @@
+---
+import Demo from '../layouts/Demo.astro';
+import meta from '../demos/ax-pilot/meta';
+import Island from '../demos/ax-pilot/Demo.tsx';
+---
+<Demo meta={meta}>
+  <Island client:only="react" />
+  <div slot="notes">
+    <h2>How it works</h2>
+    <p>The model reads a text representation of the app’s accessibility tree and selects the next action. Stock goals replay recorded model responses for free. With your own key, custom goals use live inference. In both modes, the demo applies each action and checks the updated app state.</p>
+    <h3>Demo scope</h3>
+    <p>The app runs inside this page and does not control your computer. The recorded examples contain accessibility trees captured from macOS apps. Completion judgments can be wrong; inspect the final app state.</p>
+  </div>
+</Demo>

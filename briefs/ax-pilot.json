@@ -1,0 +1,156 @@
+{
+ "slug": "ax-pilot",
+ "title": "AX Pilot: pixel-free computer use",
+ "one_liner": "A pilot that drives an app through its accessibility tree, one batched judgment per step, about 100 ms per decision instead of a 3 s vision LLM.",
+ "platform": "macos-swift",
+ "what_it_does": "The user picks one of five preset goals (Calculator 48*12, TextEdit new document and type text, Safari new tab to a URL, Notes create a titled note, System Settings turn on Dark Mode) or types a custom goal. The app launches the target macOS app and reads its AXUIElement tree. TreeFlattener prunes it to at most 60 actionable elements with ids e1..eN, plus 14 lines of visible text and goal-relevant menu items. StateBuilder builds a compact JSON state (goal, step, app, window title, focused element, visible_text, elements, text_candidates, already_typed, previous_actions, arithmetic facts). One POST /v1/systemone carries 5-6 questions: which element or pseudo-action next, which key, goal reached, needs text input, is destructive, and which text candidate. AnswerHandler applies code-owned thresholds and a destructive guard, then Pilot executes the action with AX press, set value, or CGEvent keys. The loop repeats every ~250 ms settle until goal_reached, done, stuck, blocked, Stop or Escape, or 30 steps. A floating HUD shows last/p50/p95 latency, steps per second, request count, tokens, cost, the chosen action and its source (jev or fallback), and the full next_element probability bars. A yellow overlay highlights the chosen element. A \"Simulated 3 s LLM\" mode adds delay to the same decisions to make the speed difference visible; \"Heuristic only\" runs the fallback with zero requests.",
+ "jev_questions": [
+  {
+   "key": "next_element",
+   "type": "choice",
+   "instructions": "Given the goal, the frontmost app state and previous_actions, which single element should be activated next, or which pseudo-action applies? Prefer the element that directly advances the goal; pick done only if the goal is already visible in the state; pick stuck only if nothing listed can help.",
+   "options": [
+    "e1..eN (each option description is the element summary, e.g. \"button 'Dark' (selected)\")",
+    "type_text: Type one of text_candidates into the focused text input (only when a text input is focused)",
+    "press_key: Press a keyboard shortcut chosen by the key question instead of touching an element (e.g. Return to submit text already typed into the focused field)",
+    "scroll: Scroll the frontmost view down to reveal more elements",
+    "done: The goal is fully achieved; nothing more to do",
+    "stuck: No listed element or key can make progress toward the goal"
+   ],
+   "state_shape": "{goal, step, frontmost_app, window_title, focused_element, modal_sheet_open, visible_text[], elements[{id, role, label?, value?, focused?, selected?, destructive?}], text_candidates[], already_typed[], previous_actions[{step, action, target?}] (last 8), note? (create goals), facts? {\"48*12 equals\": \"576\"}}"
+  },
+  {
+   "key": "key",
+   "type": "choice",
+   "instructions": "If the next step is press_key, which shortcut advances the goal in this app? Return confirms or navigates, Cmd+N makes a new document or note, Cmd+T opens a new tab, Cmd+L focuses the address bar, Escape dismisses a sheet or menu.",
+   "options": [
+    "Return",
+    "Escape",
+    "Tab",
+    "Space",
+    "Delete",
+    "Down",
+    "Up",
+    "Cmd+N",
+    "Cmd+T",
+    "Cmd+L",
+    "Cmd+A",
+    "Cmd+W",
+    "Cmd+Comma"
+   ],
+   "state_shape": "same state object"
+  },
+  {
+   "key": "goal_reached",
+   "type": "noul",
+   "instructions": "Does the current UI state (window_title, visible_text, element labels and values, selected flags, already_typed) show that the goal has been fully achieved? A setting counts only if the option the goal names is the one marked selected; a created item counts only if previous_actions shows it being created.",
+   "options": [
+    "true: The state already shows the goal is achieved",
+    "false: More steps are still required"
+   ],
+   "state_shape": "same state object"
+  },
+  {
+   "key": "needs_text_input",
+   "type": "noul",
+   "instructions": "Does the next step require typing text from text_candidates into a text input?",
+   "options": [
+    "true: Typing is the next step",
+    "false: The next step is not typing"
+   ],
+   "state_shape": "same state object"
+  },
+  {
+   "key": "is_destructive",
+   "type": "noul",
+   "instructions": "Would the most likely next action delete, erase, send, pay for, purchase or otherwise irreversibly change something that the goal did not explicitly ask for?",
+   "options": [
+    "true: The next action is destructive or irreversible",
+    "false: The next action is safe and reversible"
+   ],
+   "state_shape": "same state object"
+  },
+  {
+   "key": "text",
+   "type": "choice",
+   "instructions": "If text must be typed now, which candidate from the goal belongs in the focused input? (only sent when text_candidates.count > 1)",
+   "options": [
+    "<candidate string>: Type '<candidate>' (one per code-extracted candidate, max 6)"
+   ],
+   "state_shape": "same state object"
+  }
+ ],
+ "request_cadence": "One POST per pilot step with 5-6 questions batched. A step is about 1-1.5 s wall clock (250 ms settle + 40-350 ms AX read + ~100 ms Jev). A run is 2-7 steps, so 2-7 requests. Input is ~2 k tokens per request. Each request races a 900 ms deadline; on timeout, error or HTTP 429 the deterministic fallback acts.",
+ "data_files": [
+  "/Users/blaget/projects/jev-experiments/jev-ax-pilot/Tests/Fixtures/Calculator.json (39 KB, 105 nodes, recorded AX tree)",
+  "/Users/blaget/projects/jev-experiments/jev-ax-pilot/Tests/Fixtures/TextEdit.json (65 KB, 177 nodes)",
+  "/Users/blaget/projects/jev-experiments/jev-ax-pilot/Tests/Fixtures/Notes.json (75 KB, 199 nodes, has welcome sheet)",
+  "/Users/blaget/projects/jev-experiments/jev-ax-pilot/Tests/Fixtures/SystemSettings.json (117 KB, 273 nodes, General pane)",
+  "/Users/blaget/projects/jev-experiments/jev-ax-pilot/Tests/Fixtures/Safari.json (119 KB, 293 nodes, start page)",
+  "/Users/blaget/projects/jev-experiments/jev-ax-pilot/docs/calculator-48x12.gif (477 KB, hero animation)",
+  "/Users/blaget/projects/jev-experiments/jev-ax-pilot/docs/*.png (1-1.8 MB each, 5 result screenshots; too large to ship, use as reference only)"
+ ],
+ "ui_components": [
+  "Control panel: presets list, custom goal field, mode picker (live / simulated 3 s LLM / heuristic only), Stop button, step log \u2014 /Users/blaget/projects/jev-experiments/jev-ax-pilot/Sources/ContentView.swift",
+  "HUD: goal, status, step/30, last/p50/p95 latency, steps/s, requests (failed), tokens, cost, action + source, next_element probability bars \u2014 /Users/blaget/projects/jev-experiments/jev-ax-pilot/Sources/HUDView.swift",
+  "Highlight overlay: yellow rectangle on the chosen element's frame \u2014 /Users/blaget/projects/jev-experiments/jev-ax-pilot/Sources/JevAXPilotApp.swift",
+  "Permission panel (AX trust) \u2014 not needed in the browser"
+ ],
+ "reusable_source": [
+  "/Users/blaget/projects/jev-experiments/jev-ax-pilot/Sources/TreeFlattener.swift \u2014 port to TS as-is: actionable roles, ignored subroles, destructive words, elementCap 60, contextCap 14, summary(), Goal.tokens/relevance/createsSomething, derivedLabel. Works on the recorded fixtures and on a DOM walk mapped to the same AXNode shape.",
+  "/Users/blaget/projects/jev-experiments/jev-ax-pilot/Sources/TextCandidates.swift \u2014 port to TS: quoted spans, verb spans, URLs, arithmetic evaluated in code (use a tiny safe evaluator, not eval).",
+  "/Users/blaget/projects/jev-experiments/jev-ax-pilot/Sources/AnswerHandler.swift \u2014 port to TS: thresholds (goal_reached 0.8, done 0.5, needs_text 0.5, destructive 0.5, min choice 0.12, maxRepeats 2, maxWaits 3), fallback heuristic, guardAction, runnerUpElement, canFinish.",
+  "/Users/blaget/projects/jev-experiments/jev-ax-pilot/Sources/StateBuilder.swift \u2014 state object builder; the questions part is replaced by the dm1_mapping below.",
+  "/Users/blaget/projects/jev-experiments/jev-ax-pilot/Sources/Metrics.swift \u2014 percentiles, steps/s, tokens; cost constant changes to milliseconds pricing.",
+  "/Users/blaget/projects/jev-experiments/jev-ax-pilot/Sources/AXNode.swift \u2014 the fixture JSON shape (role, subrole, title, value, description, enabled, focused, selected, frame [[x,y],[w,h]], actions, children); reuse the decoder defaults."
+ ],
+ "dm1_mapping": [
+  {
+   "jev_key": "next_element",
+   "dm1_route": "classify",
+   "dm1_body": "POST /classify {\"text\": \"Goal: In Calculator compute 48*12. App: Calculator. Window: Calculator. Focused: e1 group. Modal sheet: no. Visible text: 0. Text candidates: 48*12. Already typed: none. Facts: 48*12 equals 576. Previous actions: step 1 press button '4'; step 2 press button '8'. Which single action advances the goal next?\", \"labels\": {\"e1 button '1'\": \"Press the button labelled 1 in Calculator.\", \"e2 button '\u00d7'\": \"Press the multiply button.\", \"...\": \"...\", \"type_text\": \"Type one of the text candidates into the focused text input. Only valid when a text input is focused.\", \"press_key\": \"Press a keyboard shortcut instead of an element, for example Return to submit text already typed.\", \"scroll\": \"Scroll the view down to reveal more elements.\", \"done\": \"The goal is already visible in the state. Nothing more to do.\", \"stuck\": \"No listed element or key can make progress toward the goal.\"}}",
+   "notes": "Cap elements at 55 so 55 + 5 pseudo labels stay under 64. Label name = id + summary (unique). Label description = one imperative sentence built in code from role, label, value, focused and selected. The goal and state go in text; classify has no instruction field. Response scores{} feeds the HUD probability bars, label feeds choice, probability feeds confidence. Add the note for create goals as a sentence in text."
+  },
+  {
+   "jev_key": "key",
+   "dm1_route": "classify",
+   "dm1_body": "POST /classify {\"text\": \"<same state text>. The next step is a keyboard shortcut. Which shortcut advances the goal?\", \"labels\": {\"Return\": \"Confirm the focused field or navigate to the typed URL.\", \"Escape\": \"Dismiss a sheet, dialog or menu.\", \"Tab\": \"Move focus to the next control.\", \"Space\": \"Toggle the focused control.\", \"Delete\": \"Delete the character before the cursor.\", \"Down\": \"Move selection down.\", \"Up\": \"Move selection up.\", \"Cmd+N\": \"Make a new document or note.\", \"Cmd+T\": \"Open a new browser tab.\", \"Cmd+L\": \"Focus the address bar.\", \"Cmd+A\": \"Select all text.\", \"Cmd+W\": \"Close the window or tab.\", \"Cmd+Comma\": \"Open the app settings.\"}}",
+   "notes": "Send this call only after next_element returned press_key. Saves one request on most steps. Jev sent it every step."
+  },
+  {
+   "jev_key": "goal_reached",
+   "dm1_route": "yes-no",
+   "dm1_body": "POST /yes-no {\"text\": \"<state text including window title, visible text, element labels with values and selected flags, already typed, previous actions>\", \"statements\": [\"The UI state already shows the goal is fully achieved.\", \"The next step is typing text into a text input.\", \"The most likely next action is destructive or irreversible.\"], \"when_true\": \"The state shows the exact outcome the goal names: the named option is marked selected, or the created item appears in previous actions, or typing is the required next step, or the next action deletes, sends, pays or erases something the goal did not ask for.\", \"when_false\": \"More steps are still required, or typing is not next, or the next action is safe and reversible.\"}",
+   "notes": "All three Nouls go in one /yes-no call with statements[]. Hints are shared by the batch, so keep them generic; the statements carry the specifics. results[0].probability = goal_reached, results[1] = needs_text_input, results[2] = is_destructive. If evals show the shared hints hurt, split into three separate short statement calls only on the step that needs them."
+  },
+  {
+   "jev_key": "needs_text_input",
+   "dm1_route": "yes-no",
+   "dm1_body": "statement 2 of the batch above: \"The next step is typing text from the text candidates into a text input.\"",
+   "notes": "Same /yes-no call as goal_reached."
+  },
+  {
+   "jev_key": "is_destructive",
+   "dm1_route": "yes-no",
+   "dm1_body": "statement 3 of the batch above: \"The most likely next action would delete, erase, send, pay for, purchase or irreversibly change something the goal did not ask for.\"",
+   "notes": "Same /yes-no call as goal_reached. Code-level destructive guard (label word list) stays in code and runs first."
+  },
+  {
+   "jev_key": "text",
+   "dm1_route": "classify",
+   "dm1_body": "POST /classify {\"text\": \"<state text>. Text must be typed now into the focused input. Which candidate from the goal belongs there?\", \"labels\": {\"Grocery list\": \"Type 'Grocery list' into the focused input.\", \"typesafe.ai\": \"Type 'typesafe.ai' into the focused input.\"}}",
+   "notes": "Only when text_candidates.length > 1 and the decision is type_text. Most presets have one candidate, so this call is rare. Candidates need 2+ labels; with one candidate skip the call."
+  }
+ ],
+ "browser_plan": "Build a page with a simulated macOS desktop on the left and the HUD on the right, in the milliseconds.ai site style. The simulated apps are small React components with real DOM controls and aria roles: Calculator (keypad + display), TextEdit (new-document button, text area), Safari (tab bar, address bar, fake page that 'loads' after 800 ms), Notes (welcome sheet, iCloud prompt, note list, title field), System Settings (sidebar rows, Appearance pane with Light/Dark/Auto buttons). The 'AX reader' is a DOM walk over the active app's container: every button, input, textarea, link, [role=row], [role=tab] becomes an AXNode {role, title (aria-label or textContent), value, enabled, focused, selected (aria-pressed/selected), frame (getBoundingClientRect), children}. Map HTML roles to the AX role names so the ported TreeFlattener runs unchanged. Actions execute on the DOM: click(), set input value + input event, dispatch a key event, scroll. A yellow highlight div positions from the element frame. The step log and HUD reuse the Metrics port; latency comes from x-inference-ms and the fetch round trip. Add a 'Replay recorded tree' tab that loads the five fixture JSON files and runs the decision loop read-only, so visitors see real macOS trees judged by the API without a fake app. Keep the three modes: live, simulated 3 s LLM (setTimeout on the same answer), heuristic only (zero requests). Per step send at most two requests: one /classify (next_element, elements as described labels) and one /yes-no with three statements; /classify for key or text only when the decision needs it. Route both through a Cloudflare Worker proxy at demo.milliseconds.ai/api/dm1/* that adds the bearer key and forwards x-inference-ms and x-input-tokens headers. Throttle with a single client-side queue: minimum 500 ms between request starts, so the loop runs about one step per second and 2 requests/s. The settle delay drops to 0 because the DOM is synchronous; the queue gap replaces it. On HTTP 429, read Retry-After, mark the step 'fallback', run the ported heuristic, and pause the queue for the retry window; show a banner 'Rate limited, using heuristic fallback' in the HUD. Goals are limited to the five presets plus a custom field; the custom field uses the same TextCandidates port.",
+ "difficulty": "L",
+ "risks": [
+  "classify has a 64-label limit; Safari and System Settings trees produce up to 60 elements plus 5 pseudo actions. Cap elements at 55 with goal-relevance ranking, which is already in TreeFlattener.rank.",
+  "Label names carry no instruction; the decision quality depends on the generated per-element descriptions. Budget an eval pass on the five fixtures with expected first actions (New Tab, Cmd+N, Appearance row, 4 key, New Note).",
+  "Long Jev-style question prose does not transfer. The state text must stay compact and declarative, or classify scores flatten.",
+  "Sharing when_true/when_false across three different statements can dilute the yes-no hints. If goal_reached over-triggers, split that statement into its own call and accept 3 requests/step on those steps.",
+  "A fake app is not a real app; visitors may read it as staged. The replay tab with real recorded trees offsets this. Say clearly on the page which is which.",
+  "Two requests per step with a 500 ms gap gives ~1 step/s; five concurrent visitors reach the 200 req/min org limit. The 429 fallback path must work on day one and the HUD must show it.",
+  "Cost figure: Jev billed input tokens only at $0.042/M. Replace the constant with milliseconds pricing or show tokens only."
+ ]
+}

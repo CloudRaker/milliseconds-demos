@@ -1,0 +1,133 @@
+[
+  {
+    "route": "extract",
+    "status": 200,
+    "data": {
+      "data": {
+        "invoice_number": "NB-1042",
+        "vendor": "Northstar Studio",
+        "customer": "Harbor Works",
+        "date": "2026-09-12",
+        "po": "PO-208",
+        "currency": "USD",
+        "subtotal": 2400,
+        "tax": 120,
+        "total": 2520,
+        "terms": "Net 30"
+      }
+    },
+    "tokens": "498"
+  },
+  {
+    "route": "answer",
+    "status": 200,
+    "data": {
+      "results": [
+        {
+          "question": "What is the invoice number printed on this invoice?",
+          "answer": "NB-1042",
+          "probability": 0.994,
+          "start": 25,
+          "end": 32
+        },
+        {
+          "question": "What is the supplier or vendor issuing this invoice, not the company billed?",
+          "answer": "Northstar Studio",
+          "probability": 0.972,
+          "start": 41,
+          "end": 57
+        },
+        {
+          "question": "What is the customer or company being billed?",
+          "answer": "Harbor Works",
+          "probability": 0.981,
+          "start": 69,
+          "end": 81
+        },
+        {
+          "question": "What is the date this invoice was issued?",
+          "answer": "2026-09-12",
+          "probability": 0.999,
+          "start": 96,
+          "end": 106
+        },
+        {
+          "question": "What is the purchase order reference number?",
+          "answer": "PO-208",
+          "probability": 0.994,
+          "start": 123,
+          "end": 129
+        },
+        {
+          "question": "What is the explicit three letter currency code?",
+          "answer": "USD",
+          "probability": 0.996,
+          "start": 140,
+          "end": 143
+        },
+        {
+          "question": "What is the subtotal before tax?",
+          "answer": "2400.00",
+          "probability": 0.982,
+          "start": 154,
+          "end": 161
+        },
+        {
+          "question": "What is the total tax amount?",
+          "answer": "120.00",
+          "probability": 0.985,
+          "start": 167,
+          "end": 173
+        },
+        {
+          "question": "What is the final total amount due including tax?",
+          "answer": "2520.00",
+          "probability": 0.97,
+          "start": 185,
+          "end": 192
+        },
+        {
+          "question": "What is the payment terms printed on the invoice?",
+          "answer": "Net 30",
+          "probability": 0.972,
+          "start": 208,
+          "end": 214
+        }
+      ]
+    },
+    "tokens": "409"
+  },
+  {
+    "route": "verify",
+    "status": 200,
+    "data": {
+      "matches": true,
+      "probability": 0.979,
+      "found": [
+        "2520.00",
+        "2400.00",
+        "120.00"
+      ]
+    },
+    "tokens": "300"
+  },
+  {
+    "route": "extract",
+    "status": 200,
+    "data": {
+      "data": {
+        "invoice_number": "NB-1042",
+        "vendor": "Harbor Works",
+        "customer": null,
+        "date": "2026-09-12",
+        "po": null,
+        "currency": "USD",
+        "subtotal": 2400,
+        "tax": 120,
+        "total": 2520,
+        "terms": "Net 30"
+      }
+    },
+    "tokens": "485"
+  }
+]

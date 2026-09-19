@@ -1,0 +1,387 @@
+{
+  "checkedAt": "2026-09-19 14:21 UTC",
+  "baseUrl": "https://demo.milliseconds.ai",
+  "workerVersion": "d4ddb5b1-f5ee-4b87-84e1-a1be2c51c0a8",
+  "results": [
+    {
+      "slug": "agent-assist",
+      "successfulRequests": 5,
+      "allHttp200": true,
+      "reportedInputTokens": 2409,
+      "displayedInputTokens": "2,409",
+      "displayedCostUSD": "$0.000096",
+      "tokensMatch": true,
+      "costMatches": true,
+      "browserErrors": [],
+      "desktopWidth": {
+        "width": 1440,
+        "scroll": 1440
+      },
+      "mobileWidth": {
+        "width": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "slug": "ax-pilot",
+      "successfulRequests": 6,
+      "allHttp200": true,
+      "reportedInputTokens": 3558,
+      "displayedInputTokens": "3,558",
+      "displayedCostUSD": "$0.000142",
+      "tokensMatch": true,
+      "costMatches": true,
+      "browserErrors": [],
+      "desktopWidth": {
+        "width": 1440,
+        "scroll": 1440
+      },
+      "mobileWidth": {
+        "width": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "slug": "commit-sentry",
+      "successfulRequests": 6,
+      "allHttp200": true,
+      "reportedInputTokens": 6347,
+      "displayedInputTokens": "6,347",
+      "displayedCostUSD": "$0.000254",
+      "tokensMatch": true,
+      "costMatches": true,
+      "browserErrors": [],
+      "desktopWidth": {
+        "width": 1440,
+        "scroll": 1440
+      },
+      "mobileWidth": {
+        "width": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "slug": "dispatch",
+      "successfulRequests": 12,
+      "allHttp200": true,
+      "reportedInputTokens": 5271,
+      "displayedInputTokens": "5,271",
+      "displayedCostUSD": "$0.000211",
+      "tokensMatch": true,
+      "costMatches": true,
+      "browserErrors": [],
+      "desktopWidth": {
+        "width": 1440,
+        "scroll": 1440
+      },
+      "mobileWidth": {
+        "width": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "slug": "firehose",
+      "successfulRequests": 11,
+      "allHttp200": true,
+      "reportedInputTokens": 8331,
+      "displayedInputTokens": "8,331",
+      "displayedCostUSD": "$0.000333",
+      "tokensMatch": true,
+      "costMatches": true,
+      "browserErrors": [],
+      "desktopWidth": {
+        "width": 1440,
+        "scroll": 1440
+      },
+      "mobileWidth": {
+        "width": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "slug": "inbox-blitz",
+      "successfulRequests": 4,
+      "allHttp200": true,
+      "reportedInputTokens": 11745,
+      "displayedInputTokens": "11,745",
+      "displayedCostUSD": "$0.000470",
+      "tokensMatch": true,
+      "costMatches": true,
+      "browserErrors": [],
+      "desktopWidth": {
+        "width": 1440,
+        "scroll": 1440
+      },
+      "mobileWidth": {
+        "width": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "slug": "instant-search",
+      "successfulRequests": 3,
+      "allHttp200": true,
+      "reportedInputTokens": 2589,
+      "displayedInputTokens": "2,589",
+      "displayedCostUSD": "$0.000104",
+      "tokensMatch": true,
+      "costMatches": true,
+      "browserErrors": [],
+      "desktopWidth": {
+        "width": 1440,
+        "scroll": 1440
+      },
+      "mobileWidth": {
+        "width": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "slug": "jev-lint",
+      "successfulRequests": 4,
+      "allHttp200": true,
+      "reportedInputTokens": 2108,
+      "displayedInputTokens": "2,108",
+      "displayedCostUSD": "$0.000084",
+      "tokensMatch": true,
+      "costMatches": true,
+      "browserErrors": [],
+      "desktopWidth": {
+        "width": 1440,
+        "scroll": 1440
+      },
+      "mobileWidth": {
+        "width": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "slug": "judge-sheets",
+      "successfulRequests": 14,
+      "allHttp200": true,
+      "reportedInputTokens": 17919,
+      "displayedInputTokens": "17,919",
+      "displayedCostUSD": "$0.000717",
+      "tokensMatch": true,
+      "costMatches": true,
+      "browserErrors": [],
+      "desktopWidth": {
+        "width": 1440,
+        "scroll": 1440
+      },
+      "mobileWidth": {
+        "width": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "slug": "launcher",
+      "successfulRequests": 2,
+      "allHttp200": true,
+      "reportedInputTokens": 819,
+      "displayedInputTokens": "819",
+      "displayedCostUSD": "$0.000033",
+      "tokensMatch": true,
+      "costMatches": true,
+      "browserErrors": [],
+      "desktopWidth": {
+        "width": 1440,
+        "scroll": 1440
+      },
+      "mobileWidth": {
+        "width": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "slug": "live-minutes",
+      "successfulRequests": 12,
+      "allHttp200": true,
+      "reportedInputTokens": 9255,
+      "displayedInputTokens": "9,255",
+      "displayedCostUSD": "$0.000370",
+      "tokensMatch": true,
+      "costMatches": true,
+      "browserErrors": [],
+      "desktopWidth": {
+        "width": 1440,
+        "scroll": 1440
+      },
+      "mobileWidth": {
+        "width": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "slug": "log-sentinel",
+      "successfulRequests": 16,
+      "allHttp200": true,
+      "reportedInputTokens": 13585,
+      "displayedInputTokens": "13,585",
+      "displayedCostUSD": "$0.000543",
+      "tokensMatch": true,
+      "costMatches": true,
+      "browserErrors": [],
+      "desktopWidth": {
+        "width": 1440,
+        "scroll": 1440
+      },
+      "mobileWidth": {
+        "width": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "slug": "modstream",
+      "successfulRequests": 12,
+      "allHttp200": true,
+      "reportedInputTokens": 4669,
+      "displayedInputTokens": "4,669",
+      "displayedCostUSD": "$0.000187",
+      "tokensMatch": true,
+      "costMatches": true,
+      "browserErrors": [],
+      "desktopWidth": {
+        "width": 1440,
+        "scroll": 1440
+      },
+      "mobileWidth": {
+        "width": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "slug": "nl-palette",
+      "successfulRequests": 2,
+      "allHttp200": true,
+      "reportedInputTokens": 2926,
+      "displayedInputTokens": "2,926",
+      "displayedCostUSD": "$0.000117",
+      "tokensMatch": true,
+      "costMatches": true,
+      "browserErrors": [],
+      "desktopWidth": {
+        "width": 1440,
+        "scroll": 1440
+      },
+      "mobileWidth": {
+        "width": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "slug": "send-guard",
+      "successfulRequests": 3,
+      "allHttp200": true,
+      "reportedInputTokens": 1232,
+      "displayedInputTokens": "1,232",
+      "displayedCostUSD": "$0.000049",
+      "tokensMatch": true,
+      "costMatches": true,
+      "browserErrors": [],
+      "desktopWidth": {
+        "width": 1440,
+        "scroll": 1440
+      },
+      "mobileWidth": {
+        "width": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "slug": "shell-guard",
+      "successfulRequests": 3,
+      "allHttp200": true,
+      "reportedInputTokens": 884,
+      "displayedInputTokens": "884",
+      "displayedCostUSD": "$0.000035",
+      "tokensMatch": true,
+      "costMatches": true,
+      "browserErrors": [],
+      "desktopWidth": {
+        "width": 1440,
+        "scroll": 1440
+      },
+      "mobileWidth": {
+        "width": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "slug": "swarm",
+      "successfulRequests": 10,
+      "allHttp200": true,
+      "reportedInputTokens": 5637,
+      "displayedInputTokens": "5,637",
+      "displayedCostUSD": "$0.000225",
+      "tokensMatch": true,
+      "costMatches": true,
+      "browserErrors": [],
+      "desktopWidth": {
+        "width": 1440,
+        "scroll": 1440
+      },
+      "mobileWidth": {
+        "width": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "slug": "tower",
+      "successfulRequests": 18,
+      "allHttp200": true,
+      "reportedInputTokens": 9174,
+      "displayedInputTokens": "9,174",
+      "displayedCostUSD": "$0.000367",
+      "tokensMatch": true,
+      "costMatches": true,
+      "browserErrors": [],
+      "desktopWidth": {
+        "width": 1440,
+        "scroll": 1440
+      },
+      "mobileWidth": {
+        "width": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "slug": "turbo-rerank",
+      "successfulRequests": 2,
+      "allHttp200": true,
+      "reportedInputTokens": 4495,
+      "displayedInputTokens": "4,495",
+      "displayedCostUSD": "$0.000180",
+      "tokensMatch": true,
+      "costMatches": true,
+      "browserErrors": [],
+      "desktopWidth": {
+        "width": 1440,
+        "scroll": 1440
+      },
+      "mobileWidth": {
+        "width": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "slug": "voice-turn",
+      "successfulRequests": 11,
+      "allHttp200": true,
+      "reportedInputTokens": 3538,
+      "displayedInputTokens": "3,538",
+      "displayedCostUSD": "$0.000142",
+      "tokensMatch": true,
+      "costMatches": true,
+      "browserErrors": [],
+      "desktopWidth": {
+        "width": 1440,
+        "scroll": 1440
+      },
+      "mobileWidth": {
+        "width": 390,
+        "scroll": 390
+      }
+    }
+  ]
+}

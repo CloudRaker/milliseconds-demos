@@ -1,0 +1,683 @@
+/* NL Palette. Everything is scoped under .d-nl-palette. The editor pane keeps the
+   experiment's four themes as local variables on .shellwrap[data-theme]; the page
+   chrome around it stays the milliseconds.ai dark surface. */
+.d-nl-palette {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.d-nl-palette .metrics {
+  align-items: center;
+}
+.d-nl-palette .metrics-cta {
+  margin-left: auto;
+}
+.d-nl-palette kbd {
+  font: 500 11px var(--mono);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 1px 5px;
+  color: var(--muted);
+}
+
+/* ---------- editor shell ---------- */
+.d-nl-palette .shellwrap {
+  --ed-bg: #141419;
+  --ed-panel: #1b1b21;
+  --ed-text: #e8e5e0;
+  --ed-dim: #94919c;
+  --ed-line: #ffffff1f;
+  --ed-accent: var(--purple-on-dark);
+  position: relative;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--ed-bg);
+  color: var(--ed-text);
+}
+.d-nl-palette .shellwrap[data-theme="light"] {
+  --ed-bg: #fbfaf8;
+  --ed-panel: #f0eeea;
+  --ed-text: #1b1a1f;
+  --ed-dim: #6a6771;
+  --ed-line: #0000001f;
+  --ed-accent: #3c11bd;
+}
+.d-nl-palette .shellwrap[data-theme="sepia"] {
+  --ed-bg: #f5ecd9;
+  --ed-panel: #ebe0c8;
+  --ed-text: #3a2f21;
+  --ed-dim: #7c6b52;
+  --ed-line: #3a2f2126;
+  --ed-accent: #8a5a12;
+}
+.d-nl-palette .shellwrap[data-theme="high_contrast"] {
+  --ed-bg: #000;
+  --ed-panel: #0a0a0a;
+  --ed-text: #ffe500;
+  --ed-dim: #cfbd00;
+  --ed-line: #ffe50055;
+  --ed-accent: #ffe500;
+}
+.d-nl-palette .edwork {
+  display: flex;
+  min-height: 460px;
+}
+.d-nl-palette .edside,
+.d-nl-palette .edoutline {
+  width: 210px;
+  flex: none;
+  padding: 12px 10px;
+  background: var(--ed-panel);
+  overflow: auto;
+  max-height: 560px;
+}
+.d-nl-palette .edside {
+  border-right: 1px solid var(--ed-line);
+}
+.d-nl-palette .edoutline {
+  border-left: 1px solid var(--ed-line);
+}
+.d-nl-palette .edside-title {
+  font: 600 10px var(--sans);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ed-dim);
+  margin: 10px 0 6px;
+}
+.d-nl-palette .edside-title:first-child {
+  margin-top: 0;
+}
+.d-nl-palette .ednote,
+.d-nl-palette .edoutline-row {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  width: 100%;
+  text-align: left;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  font: 400 13px var(--sans);
+  cursor: pointer;
+}
+.d-nl-palette .ednote:hover,
+.d-nl-palette .edoutline-row:hover {
+  background: color-mix(in srgb, var(--ed-accent) 16%, transparent);
+}
+.d-nl-palette .ednote.on {
+  background: color-mix(in srgb, var(--ed-accent) 26%, transparent);
+}
+.d-nl-palette .ednote-title {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.d-nl-palette .edpin {
+  color: var(--ed-accent);
+  width: 10px;
+}
+.d-nl-palette .edsmall {
+  font: 400 11px var(--mono);
+  color: var(--ed-dim);
+}
+.d-nl-palette .edkv {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2px 10px;
+  margin: 0;
+  font: 400 12px var(--mono);
+}
+.d-nl-palette .edkv dt {
+  color: var(--ed-dim);
+}
+.d-nl-palette .edkv dd {
+  margin: 0;
+  text-align: right;
+}
+.d-nl-palette .edmain {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.d-nl-palette .edtabs {
+  display: flex;
+  gap: 2px;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--ed-line);
+  background: var(--ed-panel);
+}
+.d-nl-palette .edtab {
+  padding: 5px 12px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--ed-dim);
+  font: 400 13px var(--sans);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.d-nl-palette .edtab.on {
+  background: var(--ed-bg);
+  color: var(--ed-text);
+}
+.d-nl-palette .edtab.ghost {
+  font-family: var(--mono);
+  font-size: 11px;
+  border: 1px solid var(--ed-line);
+}
+.d-nl-palette .edgrow {
+  flex: 1;
+}
+.d-nl-palette .edprompt {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 8px;
+  border-bottom: 1px solid var(--ed-line);
+  background: var(--ed-panel);
+}
+.d-nl-palette .edprompt .input {
+  max-width: 220px;
+  background: var(--ed-bg);
+  color: var(--ed-text);
+  border-color: var(--ed-line);
+}
+.d-nl-palette .edprompt .btn {
+  color: var(--ed-text);
+  border-color: var(--ed-line);
+  padding: 7px 14px;
+  font-size: 13px;
+}
+.d-nl-palette .edpanes {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr;
+  min-height: 0;
+}
+.d-nl-palette .edpanes.preview,
+.d-nl-palette .edpanes.split {
+  grid-template-columns: 1fr 1fr;
+}
+.d-nl-palette .edpanes.preview.split {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+.d-nl-palette .edpane {
+  display: flex;
+  min-width: 0;
+  border-right: 1px solid var(--ed-line);
+}
+.d-nl-palette .edgutter {
+  padding: 14px 8px 14px 12px;
+  text-align: right;
+  color: var(--ed-dim);
+  /* Same metrics as the textarea, or the numbers drift away from the lines they count. */
+  font: inherit;
+  font-family: var(--mono);
+  line-height: 1.65;
+  user-select: none;
+  max-height: 560px;
+  overflow: hidden;
+}
+.d-nl-palette .edgutter .cur {
+  color: var(--ed-accent);
+}
+.d-nl-palette .edpane textarea {
+  flex: 1;
+  min-width: 0;
+  min-height: 440px;
+  max-height: 560px;
+  resize: none;
+  border: 0;
+  outline: none;
+  padding: 14px 16px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-family: var(--mono);
+  line-height: 1.65;
+}
+.d-nl-palette .edpane.font-serif textarea {
+  font-family: Georgia, "Times New Roman", serif;
+}
+.d-nl-palette .edpane.font-sans textarea {
+  font-family: var(--sans);
+}
+.d-nl-palette .edpane textarea.nowrap {
+  white-space: pre;
+  overflow-x: auto;
+}
+.d-nl-palette .edpane.typewriter textarea {
+  padding-block: 120px;
+}
+.d-nl-palette .edminimap {
+  width: 44px;
+  flex: none;
+  padding: 14px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  border-left: 1px solid var(--ed-line);
+}
+.d-nl-palette .edminimap div {
+  height: 2px;
+  background: var(--ed-dim);
+}
+.d-nl-palette .edpreview {
+  padding: 14px 18px;
+  overflow: auto;
+  max-height: 560px;
+  border-left: 1px solid var(--ed-line);
+  font-size: 14px;
+  line-height: 1.6;
+}
+.d-nl-palette .edpreview h1,
+.d-nl-palette .edpreview h2,
+.d-nl-palette .edpreview h3 {
+  letter-spacing: -0.02em;
+  margin: 14px 0 6px;
+}
+.d-nl-palette .edpreview h1 { font-size: 22px; }
+.d-nl-palette .edpreview h2 { font-size: 18px; }
+.d-nl-palette .edpreview h3 { font-size: 15px; }
+.d-nl-palette .edpreview code,
+.d-nl-palette .edpreview pre {
+  font-family: var(--mono);
+  font-size: 12px;
+  background: color-mix(in srgb, var(--ed-text) 10%, transparent);
+  padding: 1px 4px;
+  border-radius: 4px;
+}
+.d-nl-palette .edpreview pre { padding: 10px; overflow: auto; }
+.d-nl-palette .edpreview blockquote {
+  margin: 10px 0;
+  padding-left: 12px;
+  border-left: 2px solid var(--ed-accent);
+  color: var(--ed-dim);
+}
+.d-nl-palette .edpreview table { border-collapse: collapse; font-size: 13px; }
+.d-nl-palette .edpreview td { border: 1px solid var(--ed-line); padding: 4px 8px; }
+.d-nl-palette .edstatus {
+  display: flex;
+  gap: 16px;
+  padding: 6px 12px;
+  border-top: 1px solid var(--ed-line);
+  background: var(--ed-panel);
+  font: 400 11px var(--mono);
+  color: var(--ed-dim);
+}
+.d-nl-palette .shellwrap.zen .edside,
+.d-nl-palette .shellwrap.zen .edoutline,
+.d-nl-palette .shellwrap.zen .edtabs {
+  display: none;
+}
+/* Toggle Full Screen: the editor fills the window and covers the page. Esc puts it back. */
+.d-nl-palette .shellwrap.fullscreen {
+  position: fixed;
+  inset: 0;
+  /* Under the palette overlay and the confirm dialog, both at 40. */
+  z-index: 30;
+  border-radius: 0;
+  border: 0;
+}
+.d-nl-palette .shellwrap.fullscreen .edwork {
+  height: 100vh;
+}
+/* The panes are capped in the page; full screen is the one place they should grow. */
+.d-nl-palette .shellwrap.fullscreen .edside,
+.d-nl-palette .shellwrap.fullscreen .edoutline,
+.d-nl-palette .shellwrap.fullscreen .edgutter,
+.d-nl-palette .shellwrap.fullscreen .edpreview,
+.d-nl-palette .shellwrap.fullscreen .edpane textarea {
+  max-height: none;
+}
+.d-nl-palette .edfsout {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  z-index: 1;
+}
+.d-nl-palette .edtoast {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: var(--ink);
+  border: 1px solid var(--line);
+  color: var(--white);
+  font-size: 13px;
+}
+
+/* ---------- palette overlay ---------- */
+.d-nl-palette .pal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: #05050799;
+  backdrop-filter: blur(3px);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 10vh 16px 16px;
+}
+.d-nl-palette .pal {
+  width: min(760px, 100%);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: 0 24px 80px #000000aa;
+  overflow: hidden;
+}
+.d-nl-palette .pal-input-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--line);
+}
+.d-nl-palette .pal-caret {
+  color: var(--white);
+  font: 500 18px var(--mono);
+}
+.d-nl-palette .pal-input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: 0;
+  outline: none;
+  color: var(--white);
+  font: 400 17px var(--sans);
+}
+.d-nl-palette .pal-modes {
+  display: flex;
+  gap: 2px;
+  flex: none;
+}
+.d-nl-palette .pal-modes button {
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font: 500 11px var(--sans);
+  cursor: pointer;
+}
+.d-nl-palette .pal-modes button.on {
+  border-color: var(--line);
+  color: var(--white);
+}
+.d-nl-palette .pal-status {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--line);
+  font-size: 12px;
+}
+.d-nl-palette .pal-status .mono {
+  font-size: 11px;
+}
+.d-nl-palette .pal-spin {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid var(--line);
+  border-top-color: var(--purple-on-dark);
+  animation: pal-spin 700ms linear infinite;
+  margin-left: auto;
+}
+@keyframes pal-spin {
+  to { transform: rotate(360deg); }
+}
+.d-nl-palette .pal-groups {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--line);
+}
+.d-nl-palette .pal-group {
+  font: 400 11px var(--mono);
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 2px 9px;
+}
+.d-nl-palette .pal-group.on {
+  color: var(--white);
+  border-color: var(--purple-on-dark);
+}
+.d-nl-palette .pal-group i {
+  font-style: normal;
+  color: var(--white);
+}
+.d-nl-palette .pal-cols {
+  display: grid;
+  grid-template-columns: 1fr;
+  max-height: 46vh;
+  overflow: auto;
+}
+.d-nl-palette .pal-cols.two {
+  grid-template-columns: 1fr 1fr;
+}
+.d-nl-palette .pal-cols.stale {
+  opacity: 0.55;
+}
+.d-nl-palette .pal-list {
+  list-style: none;
+  margin: 0;
+  padding: 6px;
+  min-width: 0;
+}
+.d-nl-palette .pal-cols.two .pal-list + .pal-list {
+  border-left: 1px solid var(--line);
+}
+.d-nl-palette .pal-coltitle,
+.d-nl-palette .pal-empty {
+  padding: 6px 10px;
+  font: 600 10px var(--sans);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.d-nl-palette .pal-empty {
+  font: 400 13px var(--sans);
+  letter-spacing: 0;
+  text-transform: none;
+}
+.d-nl-palette .pal-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+.d-nl-palette .pal-row.cur {
+  background: #ffffff0f;
+}
+.d-nl-palette .pal-row.top {
+  box-shadow: inset 2px 0 0 var(--purple-on-dark);
+}
+.d-nl-palette .pal-row.pickme {
+  border: 1px dashed var(--line);
+  padding: 7px 9px;
+}
+.d-nl-palette .pal-title {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.d-nl-palette .pal-group-name {
+  font: 400 11px var(--mono);
+  color: var(--muted);
+  flex: none;
+}
+.d-nl-palette .pal-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 128px;
+  flex: none;
+}
+.d-nl-palette .pal-bar .bar {
+  flex: 1;
+}
+.d-nl-palette .pal-bar b {
+  font: 400 11px var(--mono);
+  color: var(--white);
+  width: 34px;
+  text-align: right;
+}
+.d-nl-palette .pal-foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 9px 14px;
+  border-top: 1px solid var(--line);
+  font-size: 12px;
+}
+.d-nl-palette .pal.confirm {
+  width: min(460px, 100%);
+  padding: 22px;
+}
+.d-nl-palette .pal.confirm h3 {
+  margin: 0 0 8px;
+}
+.d-nl-palette .pal.confirm p {
+  font-size: 14px;
+  margin: 0 0 10px;
+}
+.d-nl-palette .confirm-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+/* ---------- benchmark ---------- */
+.d-nl-palette .bench-head {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.d-nl-palette .bench-lede {
+  max-width: 68ch;
+  font-size: 14px;
+  margin: 0;
+}
+.d-nl-palette .bench-actions {
+  display: flex;
+  gap: 8px;
+}
+.d-nl-palette .bench-score {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  margin: 18px 0;
+}
+.d-nl-palette .score {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+.d-nl-palette .score .panel-title {
+  margin: 0;
+}
+.d-nl-palette .score-big {
+  font: 400 clamp(28px, 3.4vw, 42px)/1 var(--mono);
+  color: var(--white);
+}
+.d-nl-palette .score-big small {
+  font-size: 0.45em;
+  color: var(--muted);
+}
+.d-nl-palette .bench-table-wrap {
+  max-height: 420px;
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+.d-nl-palette .bench-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.d-nl-palette .bench-table th {
+  position: sticky;
+  top: 0;
+  background: var(--surface);
+  text-align: left;
+  font: 600 10px var(--sans);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--line);
+}
+.d-nl-palette .bench-table td {
+  padding: 7px 10px;
+  border-bottom: 1px solid #ffffff12;
+  vertical-align: top;
+}
+.d-nl-palette .bench-table .hit {
+  color: #6fdc8c;
+}
+.d-nl-palette .bench-table .miss {
+  color: #ff8a8a;
+}
+
+@media (max-width: 900px) {
+  .d-nl-palette .edside,
+  .d-nl-palette .edoutline,
+  .d-nl-palette .edminimap {
+    display: none;
+  }
+  .d-nl-palette .edpanes.preview,
+  .d-nl-palette .edpanes.split,
+  .d-nl-palette .pal-cols.two {
+    grid-template-columns: 1fr;
+  }
+  .d-nl-palette .pal-backdrop {
+    padding: 6vh 12px 12px;
+  }
+}
+
+.d-nl-palette .edtabs { overflow-x: auto; }
+.d-nl-palette .edstatus, .d-nl-palette .edprompt { flex-wrap: wrap; }
+.d-nl-palette .pal { max-height: 88dvh; overflow-y: auto; }
+.d-nl-palette .pal-title { white-space: normal; flex-wrap: wrap; overflow-wrap: anywhere; }
+.d-nl-palette .bench-table { min-width: 600px; }
+@media (max-width: 560px) {
+  .d-nl-palette .pal-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; }
+  .d-nl-palette .pal-group-name { grid-column: 1; grid-row: 2; }
+  .d-nl-palette .pal-bar { width: 76px; }
+  .d-nl-palette .pal-input { font-size: 16px; }
+  .d-nl-palette .edtoast { width: calc(100% - 24px); border-radius: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .d-nl-palette .pal-spin { animation: none; }
+}
+
+.d-nl-palette .pal-examples { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px 16px; border-bottom: 1px solid var(--line); }
+.d-nl-palette .pal-examples .btn { padding: 6px 10px; font-size: 12px; white-space: normal; text-align: left; }

@@ -1,0 +1,14 @@
+---
+import Demo from '../layouts/Demo.astro';
+import meta from '../demos/dispatch/meta';
+import Island from '../demos/dispatch/Demo.tsx';
+---
+<Demo meta={meta}>
+  <Island client:only="react" />
+  <div slot="notes">
+    <h2>How it works</h2>
+    <p>The model assigns a category, severity and response package to incoming reports. Local rules merge nearby duplicates and dispatch available units on the map.</p>
+    <h3>Demo scope</h3>
+    <p>The city, reports and response units are fictional. Routing rules and model judgments can miss context; this is an interactive simulation, not an emergency service.</p>
+  </div>
+</Demo>

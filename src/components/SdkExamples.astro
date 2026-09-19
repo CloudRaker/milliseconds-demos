@@ -1,0 +1,110 @@
+---
+import { Code } from 'astro:components';
+import pierreDarkSoft from '@pierre/theme/pierre-dark-soft';
+import { CopyIcon, CodeIcon, CaretDownIcon } from '@phosphor-icons/react/ssr';
+import { samplesForDemo, SDK_LANGUAGES } from '../lib/sdk-samples';
+import type { DemoMeta } from '../demos/meta';
+const { meta } = Astro.props as { meta: DemoMeta };
+const samples = samplesForDemo(meta.slug, meta.routes);
+// Same Shiki/Pierre theme as rakerone-web; syntax tokens are rendered at build time.
+const theme = { ...pierreDarkSoft, colors: { ...pierreDarkSoft.colors, 'editor.background': '#19191d' } };
+---
+<details id="sdk-examples" class="sdk-examples">
+  <summary><CodeIcon size={20} aria-hidden="true" />Build with the SDK<span>TypeScript · Python · dm1</span><CaretDownIcon className="sdk-chevron" size={16} aria-hidden="true" /></summary>
+  <div class="sdk-body">
+    <p>Use these API building blocks in your own app. Each sample is one request from this demo’s supplied inputs. Your code owns the surrounding workflow, validation and actions.</p>
+    <p class="muted">Copied samples call the live API with <code>MS_API_KEY</code> and use your quota. Keep the key on your server. The free demo cache is only for this site.</p>
+    <div class="sdk-controls">
+      <div role="tablist" aria-label="Code sample language">
+        {SDK_LANGUAGES.map((language, i) => <button type="button" role="tab" id={`sdk-tab-${language.id}`} aria-selected={i === 0 ? 'true' : 'false'} aria-controls={`sdk-panel-${language.id}`} tabindex={i === 0 ? 0 : -1} data-sdk-language={language.id}>{language.label}</button>)}
+      </div>
+      <label>API request<select data-sdk-route>{samples.map(sample => <option value={sample.route}>/{sample.route}</option>)}</select></label>
+    </div>
+    {SDK_LANGUAGES.map((language, i) => <section role="tabpanel" id={`sdk-panel-${language.id}`} aria-labelledby={`sdk-tab-${language.id}`} hidden={i !== 0} data-sdk-panel={language.id}>
+      <div class="sdk-install"><span>Install · set your key</span><Code code={`${language.install}\nexport MS_API_KEY="your-api-key"`} lang="bash" theme={theme} /></div>
+      {samples.map((sample, j) => <div data-sdk-sample={sample.route} hidden={j !== 0}>
+        <div class="sdk-code-head"><span>{language.id === 'typescript' ? 'example.ts' : language.id === 'python' ? 'example.py' : 'Terminal'}</span><button class="btn" type="button" data-sdk-copy><CopyIcon size={16} aria-hidden="true" /><span>Copy code</span></button></div>
+        <div class="sdk-code" tabindex="0" role="region" aria-label={`${language.label} ${sample.route} code`}><Code code={sample.code[language.id]} lang={language.syntax} theme={theme} /></div>
+      </div>)}
+      <p class="sdk-footer"><a href={language.docs} target="_blank" rel="noopener noreferrer">{language.label} documentation</a><span>{language.id === 'typescript' ? 'Node 22+: node --experimental-strip-types example.ts' : language.id === 'python' ? 'Run: python example.py' : 'Run in a shell after installing dm1.'}</span></p>
+    </section>)}
+    <p class="sdk-copy-status muted" role="status" aria-live="polite"></p>
+  </div>
+</details>
+<script>
+  import { trackDemoEvent } from '../lib/demo-events';
+  const root = document.querySelector<HTMLElement>('.sdk-examples');
+  if (root) {
+    document.addEventListener('click', event => {
+      if (event.target instanceof Element && event.target.closest('a[href="#sdk-examples"]')) root.setAttribute('open', '');
+    });
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('[data-sdk-language]')];
+    function clearCopyStatus() {
+      root!.querySelector<HTMLElement>('.sdk-copy-status')!.textContent = '';
+      for (const label of root!.querySelectorAll('[data-sdk-copy] span')) label.textContent = 'Copy code';
+    }
+    function select(tab: HTMLButtonElement) {
+      clearCopyStatus();
+      for (const other of tabs) { const active = other === tab; other.setAttribute('aria-selected', String(active)); other.tabIndex = active ? 0 : -1; }
+      for (const panel of root!.querySelectorAll<HTMLElement>('[data-sdk-panel]')) panel.hidden = panel.dataset.sdkPanel !== tab.dataset.sdkLanguage;
+    }
+    tabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => select(tab));
+      tab.addEventListener('keydown', event => {
+        const next = event.key === 'ArrowRight' ? (index + 1) % tabs.length : event.key === 'ArrowLeft' ? (index + tabs.length - 1) % tabs.length : event.key === 'Home' ? 0 : event.key === 'End' ? tabs.length - 1 : -1;
+        if (next < 0) return;
+        event.preventDefault(); select(tabs[next]); tabs[next].focus();
+      });
+    });
+    root.querySelector<HTMLSelectElement>('[data-sdk-route]')?.addEventListener('change', event => {
+      clearCopyStatus();
+      const value = (event.target as HTMLSelectElement).value;
+      for (const sample of root.querySelectorAll<HTMLElement>('[data-sdk-sample]')) sample.hidden = sample.dataset.sdkSample !== value;
+    });
+    for (const button of root.querySelectorAll<HTMLButtonElement>('[data-sdk-copy]')) button.addEventListener('click', async () => {
+      const code = button.closest('[data-sdk-sample]')?.querySelector('pre')?.textContent ?? '';
+      const status = root.querySelector<HTMLElement>('.sdk-copy-status')!;
+      try {
+        await navigator.clipboard.writeText(code); status.textContent = 'Code copied.'; button.querySelector('span')!.textContent = 'Copied';
+        const slug = document.querySelector<HTMLElement>('[data-demo-slug]')?.dataset.demoSlug;
+        if (slug) trackDemoEvent(slug, 'code_copied');
+      } catch { status.textContent = 'Copy unavailable. Select the code and copy it manually.'; }
+    });
+  }
+</script>
+<style>
+  .sdk-examples { border: 1px solid var(--line); border-radius: 14px; background: var(--surface); min-width: 0; }
+  .sdk-examples > summary { display: flex; align-items: center; gap: 12px; padding: 22px 24px; cursor: pointer; font-weight: 600; list-style: none; }
+  .sdk-examples > summary::-webkit-details-marker { display: none; }
+  .sdk-examples > summary svg { color: var(--purple-on-dark); flex-shrink: 0; }
+  .sdk-examples[open] > summary :global(.sdk-chevron) { transform: rotate(180deg); }
+  .sdk-examples > summary span { margin-left: auto; color: var(--muted); font-size: 13px; font-weight: 400; }
+  .sdk-body { padding: 0 24px 20px; }
+  .sdk-body > p { max-width: 90ch; margin: 0 0 12px; font-size: 14px; line-height: 1.6; }
+  .sdk-controls { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin: 22px 0 16px; }
+  [role="tablist"] { display: flex; gap: 4px; padding: 4px; border: 1px solid var(--line); border-radius: 10px; }
+  [role="tab"] { padding: 9px 14px; color: var(--muted); border: 0; background: transparent; border-radius: 6px; cursor: pointer; font: inherit; font-size: 14px; }
+  [role="tab"][aria-selected="true"] { color: #fff; background: var(--purple); }
+  .sdk-controls label { display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--muted); }
+  .sdk-controls select { padding: 8px 12px; background: var(--ink); color: var(--white); border: 1px solid var(--line); border-radius: 8px; font: inherit; max-width: 100%; }
+  .sdk-install { padding: 14px 16px; border: 1px solid var(--line); border-radius: 10px; margin-bottom: 16px; overflow: auto; }
+  .sdk-install > span, .sdk-code-head > span { color: var(--muted); font-family: var(--mono); font-size: 12px; }
+  .sdk-install :global(pre) { margin: 10px 0 0; padding: 0; background: transparent !important; font-size: 13px; line-height: 1.7; }
+  .sdk-code-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 16px; border: 1px solid var(--line); border-bottom: 0; border-radius: 10px 10px 0 0; }
+  .sdk-code-head .btn { gap: 7px; font-size: 12px; min-height: 36px; }
+  .sdk-code { border: 1px solid var(--line); border-radius: 0 0 10px 10px; overflow: auto; max-height: 480px; }
+  .sdk-code :global(pre) { margin: 0; padding: 18px; font-size: 13px; line-height: 1.7; width: max-content; min-width: 100%; box-sizing: border-box; }
+  .sdk-footer { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: 13px; margin: 16px 0 0; }
+  .sdk-footer span { color: var(--muted); overflow-wrap: anywhere; }
+  .sdk-copy-status { min-height: 1.6em; margin: 12px 0 0 !important; }
+  @media (max-width: 600px) {
+    .sdk-examples > summary { padding: 18px 16px; flex-wrap: wrap; }
+    .sdk-examples[open] > summary :global(.sdk-chevron) { transform: rotate(180deg); }
+  .sdk-examples > summary span { width: 100%; margin-left: 32px; }
+    .sdk-body { padding: 0 16px 16px; }
+    .sdk-controls { align-items: stretch; }
+    [role="tablist"] { width: 100%; }
+    [role="tab"] { flex: 1; padding: 9px 8px; }
+    .sdk-controls label { justify-content: space-between; width: 100%; }
+  }
+</style>

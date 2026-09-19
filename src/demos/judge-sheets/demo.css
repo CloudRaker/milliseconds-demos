@@ -1,0 +1,432 @@
+/* Judge Sheets. Grid geometry ported from the Jev experiment's styles.css
+   (Google Sheets look), repainted with the milliseconds.ai tokens. Every rule
+   is scoped under .d-judge-sheets. */
+.d-judge-sheets {
+  --js-line: #ffffff18;
+  --js-head: #ffffff08;
+  --js-accent: var(--purple-on-dark);
+  --js-cellfont: var(--sans);
+  --js-row-h: 27px;
+}
+.d-judge-sheets .js-app {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ------------------------------------------------------------- toolbar */
+.d-judge-sheets .js-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.d-judge-sheets .js-doc {
+  font-size: 17px;
+  letter-spacing: -0.02em;
+}
+.d-judge-sheets .js-toolbar .btn {
+  padding: 8px 16px;
+  margin-left: auto;
+}
+.d-judge-sheets .js-queue {
+  font-family: var(--mono);
+  font-size: 12px;
+  min-width: 15ch;
+}
+.d-judge-sheets .js-error {
+  margin: 0;
+}
+
+/* ---------------------------------------------------------- formula bar */
+.d-judge-sheets .js-formulabar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--js-line);
+  border-radius: 8px;
+  padding: 4px 8px;
+  background: #ffffff05;
+}
+.d-judge-sheets .js-namebox {
+  min-width: 9ch;
+  font-size: 12px;
+  color: var(--muted);
+  border-right: 1px solid var(--js-line);
+  padding-right: 8px;
+}
+.d-judge-sheets .js-fx {
+  font-size: 12px;
+  color: var(--muted);
+}
+.d-judge-sheets .js-formulainput {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: 0;
+  outline: none;
+  color: var(--white);
+  font-size: 13px;
+  padding: 4px 0;
+}
+
+/* ----------------------------------------------------------------- grid */
+.d-judge-sheets .grid {
+  position: relative;
+  overflow: hidden;
+  outline: none;
+  height: 480px;
+  border: 1px solid var(--js-line);
+  border-radius: 10px;
+  background: var(--ink);
+  user-select: none;
+}
+.d-judge-sheets .grid:focus-visible {
+  outline: 2px solid var(--js-accent);
+  outline-offset: 1px;
+}
+.d-judge-sheets .corner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: var(--js-head);
+  border-right: 1px solid var(--js-line);
+  border-bottom: 1px solid var(--js-line);
+  z-index: 4;
+}
+.d-judge-sheets .colheads {
+  position: absolute;
+  top: 0;
+  overflow: hidden;
+  background: var(--js-head);
+  border-bottom: 1px solid var(--js-line);
+  z-index: 3;
+}
+.d-judge-sheets .colhead {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font: 11px var(--mono);
+  color: var(--muted);
+  border-right: 1px solid var(--js-line);
+  cursor: pointer;
+}
+.d-judge-sheets .colhead.active {
+  color: var(--white);
+  background: #ffffff12;
+}
+.d-judge-sheets .colhead.full {
+  color: var(--white);
+  background: var(--purple);
+}
+.d-judge-sheets .resize {
+  position: absolute;
+  right: -3px;
+  top: 0;
+  width: 7px;
+  height: 100%;
+  cursor: col-resize;
+  z-index: 2;
+}
+.d-judge-sheets .resize:hover,
+.d-judge-sheets .resize.on {
+  background: var(--js-accent);
+  opacity: 0.7;
+}
+.d-judge-sheets .rowheads {
+  position: absolute;
+  left: 0;
+  overflow: hidden;
+  background: var(--js-head);
+  border-right: 1px solid var(--js-line);
+  z-index: 3;
+}
+.d-judge-sheets .rowhead {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font: 11px var(--mono);
+  color: var(--muted);
+  border-bottom: 1px solid var(--js-line);
+  cursor: pointer;
+}
+.d-judge-sheets .rowhead.active {
+  color: var(--white);
+  background: #ffffff12;
+}
+.d-judge-sheets .body {
+  position: absolute;
+  overflow: auto;
+  scrollbar-color: #ffffff30 transparent;
+}
+.d-judge-sheets .canvas {
+  position: relative;
+}
+.d-judge-sheets .cell {
+  position: absolute;
+  padding: 0 6px;
+  line-height: 26px;
+  border-right: 1px solid var(--js-line);
+  border-bottom: 1px solid var(--js-line);
+  white-space: nowrap;
+  overflow: hidden;
+  font: 13px var(--js-cellfont);
+  color: var(--white);
+}
+.d-judge-sheets .cell.headrow {
+  font-weight: 600;
+  color: var(--white);
+}
+.d-judge-sheets .cell.num {
+  text-align: right;
+  font-family: var(--mono);
+  font-size: 12px;
+}
+.d-judge-sheets .cell.jev {
+  font-size: 12px;
+  font-family: var(--mono);
+}
+.d-judge-sheets .cell.ghost {
+  font-style: italic;
+}
+.d-judge-sheets .cell.error {
+  color: #ff8a8a;
+  font-family: var(--mono);
+  font-size: 12px;
+}
+.d-judge-sheets .cell.pending {
+  background: linear-gradient(90deg, #ffffff06 0%, #ffffff14 50%, #ffffff06 100%);
+  background-size: 200% 100%;
+  animation: js-shimmer 1.4s linear infinite;
+}
+@keyframes js-shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -100% 0;
+  }
+}
+.d-judge-sheets .cell.sel {
+  box-shadow: inset 0 0 0 100px #6d4aff1f;
+}
+.d-judge-sheets .cell.fillpreview {
+  box-shadow: inset 0 0 0 100px #6d4aff14;
+}
+.d-judge-sheets .selbox {
+  position: absolute;
+  border: 1px solid var(--js-accent);
+  pointer-events: none;
+  z-index: 2;
+}
+.d-judge-sheets .activebox {
+  position: absolute;
+  border: 2px solid var(--js-accent);
+  pointer-events: none;
+  z-index: 2;
+}
+.d-judge-sheets .fillhandle {
+  position: absolute;
+  right: -4px;
+  bottom: -4px;
+  width: 7px;
+  height: 7px;
+  background: var(--js-accent);
+  border: 1px solid var(--ink);
+  cursor: crosshair;
+  pointer-events: auto;
+}
+.d-judge-sheets .celleditor {
+  position: absolute;
+  z-index: 5;
+  background: var(--ink);
+  border: 2px solid var(--js-accent);
+  outline: none;
+  padding: 0 4px;
+  font: 13px var(--js-cellfont);
+  color: var(--white);
+}
+.d-judge-sheets .anchored {
+  position: absolute;
+  z-index: 6;
+}
+
+/* --------------------------------------------------- predictive overlays */
+.d-judge-sheets .js-chip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  border: 1px solid #6d4aff66;
+  background: #17141f;
+  box-shadow: 0 10px 30px #00000066;
+  font-size: 13px;
+  white-space: nowrap;
+}
+.d-judge-sheets .js-chip.pending {
+  border-color: var(--js-line);
+}
+.d-judge-sheets .js-chip .mono {
+  font-size: 11px;
+}
+.d-judge-sheets .js-card {
+  width: 330px;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid #6d4aff55;
+  background: #17141f;
+  box-shadow: 0 18px 48px #00000077;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+.d-judge-sheets .js-cardhead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+}
+.d-judge-sheets .js-x {
+  background: none;
+  border: 0;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+}
+.d-judge-sheets .js-x:hover {
+  color: var(--white);
+}
+.d-judge-sheets .js-cardrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  flex-wrap: wrap;
+}
+.d-judge-sheets .js-cardheader {
+  font-weight: 600;
+}
+.d-judge-sheets .js-select {
+  width: auto;
+  flex: 1;
+  min-width: 120px;
+  padding: 5px 8px;
+  font-size: 13px;
+}
+.d-judge-sheets .js-scale,
+.d-judge-sheets .js-baseline {
+  margin: 0;
+  font-size: 12px;
+}
+.d-judge-sheets .js-statement {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 11px;
+}
+.d-judge-sheets .js-statement .input {
+  padding: 6px 8px;
+  font-size: 12px;
+}
+.d-judge-sheets .js-bar {
+  margin: 2px 0;
+}
+.d-judge-sheets .js-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 12px;
+}
+.d-judge-sheets .js-stats span {
+  display: flex;
+  flex-direction: column;
+}
+.d-judge-sheets .js-stats b {
+  font-family: var(--mono);
+  font-size: 17px;
+  font-weight: 400;
+  color: var(--white);
+}
+.d-judge-sheets .js-stats small {
+  font-size: 11px;
+  color: var(--muted);
+}
+.d-judge-sheets .js-speed {
+  margin-left: 6px;
+}
+.d-judge-sheets .js-cardactions {
+  display: flex;
+  gap: 8px;
+}
+.d-judge-sheets .js-cardactions .btn {
+  padding: 7px 16px;
+  font-size: 13px;
+}
+
+/* ------------------------------------------------------------ sheet tabs */
+.d-judge-sheets .js-tabs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.d-judge-sheets .js-tab {
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--js-line);
+  background: transparent;
+  color: var(--muted);
+  font: 500 13px var(--sans);
+  cursor: pointer;
+}
+.d-judge-sheets .js-tab.on {
+  color: var(--white);
+  border-color: #6d4aff66;
+  background: #6d4aff1a;
+}
+.d-judge-sheets .js-status {
+  margin-left: auto;
+  font-size: 11px;
+}
+
+@media (max-width: 760px) {
+  .d-judge-sheets .grid {
+    height: 380px;
+  }
+  .d-judge-sheets .js-card {
+    width: 270px;
+  }
+  .d-judge-sheets .js-status {
+    display: none;
+  }
+}
+
+.d-judge-sheets, .d-judge-sheets .js-app { min-width: 0; }
+.d-judge-sheets .js-start { display: grid; gap: 8px; padding: 16px; border: 1px solid var(--line); border-radius: 12px; }
+.d-judge-sheets .js-start label { font-size: 14px; font-weight: 500; }
+.d-judge-sheets .js-start p { font-size: 13px; line-height: 1.5; margin: 0; }
+.d-judge-sheets .js-start-row { display: flex; gap: 10px; }
+.d-judge-sheets .js-start-row .input { flex: 1; min-width: 0; }
+.d-judge-sheets .js-start-row .btn { flex: none; }
+.d-judge-sheets .js-card { width: 100%; box-shadow: none; }
+.d-judge-sheets .js-chip { max-width: 290px; white-space: normal; flex-wrap: wrap; border-radius: 12px; }
+.d-judge-sheets .js-status { display: block; line-height: 1.5; }
+@media (max-width: 560px) {
+  .d-judge-sheets .js-app { padding: 12px; }
+  .d-judge-sheets .js-start { padding: 12px; }
+  .d-judge-sheets .js-start-row { flex-direction: column; }
+  .d-judge-sheets .js-start-row .btn { justify-content: center; }
+  .d-judge-sheets .js-toolbar .btn { margin-left: 0; }
+  .d-judge-sheets .js-queue { width: 100%; }
+  .d-judge-sheets .js-cardactions { flex-wrap: wrap; }
+  .d-judge-sheets .js-status { width: 100%; margin-left: 0; }
+}
+@media (prefers-reduced-motion: reduce) { .d-judge-sheets .cell.pending { animation: none; } }

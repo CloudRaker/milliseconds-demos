@@ -1,0 +1,14 @@
+---
+import Demo from '../layouts/Demo.astro';
+import meta from '../demos/jev-lint/meta';
+import Island from '../demos/jev-lint/Demo.tsx';
+---
+<Demo meta={meta}>
+  <Island client:only="react" />
+  <div slot="notes">
+    <h2>How it works</h2>
+    <p>The model judges code lines in batches. Local syntax checks narrow the findings to supported patterns, and the editor marks lines that clear the reporting threshold. Auto-lint can check edits as you type.</p>
+    <h3>Demo scope</h3>
+    <p>This demo has a narrow scope: injections and hardcoded secrets. It does not detect logic, null-handling, error-handling or performance defects. Scores can vary with batch contents; review each finding.</p>
+  </div>
+</Demo>

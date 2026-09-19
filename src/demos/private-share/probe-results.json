@@ -1,0 +1,49 @@
+{
+  "date": "2026-09-19",
+  "request": {
+    "text": "Customer: Hi, I’m Maya Chen. The weekly export stops at 80%.\n\nAgent: I can send a reproduction to our integration vendor. Which account is affected?\n\nCustomer: My email is maya.chen@example.com and my account is NW-2048. You can call +1 202 555 0148.\n\nAgent: Thanks. We can reproduce this when the date filter is set to last month. The workaround is to export one week at a time.",
+    "types": {
+      "person": "A person’s full name",
+      "email": "An email address",
+      "phone": "A telephone number",
+      "account_id": "A customer account, order, or ticket identifier",
+      "address": "A street or postal address"
+    }
+  },
+  "response": {
+    "entities": [
+      {
+        "type": "person",
+        "text": "Maya Chen",
+        "probability": 1,
+        "start": 18,
+        "end": 27
+      },
+      {
+        "type": "email",
+        "text": "maya.chen@example.com",
+        "probability": 0.995,
+        "start": 172,
+        "end": 193
+      },
+      {
+        "type": "account_id",
+        "text": "NW-2048",
+        "probability": 0.995,
+        "start": 212,
+        "end": 219
+      },
+      {
+        "type": "phone",
+        "text": "+1 202 555 0148",
+        "probability": 1,
+        "start": 234,
+        "end": 249
+      }
+    ]
+  },
+  "notes": [
+    "Single serial live probe of shipped sample. Additional short Unicode, negative and repeated-mention probes passed; this is not a recall guarantee.",
+    "Offsets are Unicode code points. All probabilities are retained; no cutoff hides low-confidence spans."
+  ]
+}

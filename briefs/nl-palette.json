@@ -1,0 +1,148 @@
+{
+ "slug": "nl-palette",
+ "title": "NL Palette",
+ "one_liner": "A command palette for a Markdown editor that understands what you mean, re-ranked on every keystroke pause, with a 30-case live benchmark against fzf-style fuzzy.",
+ "platform": "web (vite/react)",
+ "what_it_does": "The page is a working Markdown notes editor with sidebar, tabs, outline, four themes, zoom, preview, zen mode and 66 commands. The user presses Ctrl/Cmd+K and types plain English such as \"make this louder\" or \"get rid of the sidebar\". After a 100 ms debounce the app sends {query, app_state} to a Node proxy, which asks Jev six questions in one call: which command (choice over 66 ids), four speculative argument slots (font delta, theme, heading level, export format) and one noul \"is this destructive\". Stale in-flight requests abort. The list re-ranks by command probability with a live probability bar, and the top row shows an argument preview like \"Change Font Size by +2 pt\". A confidence gate at 0.55 controls Enter: above it Enter runs the top item; below it the top-3 show dashed and Enter needs an explicit arrow or hover pick. Destructive commands or is_destructive >= 0.5 open a confirm dialog. Tab cycles Jev / side-by-side / fuzzy-only modes; the footer shows session p50/p95 latency measured with performance.now(). A Benchmark panel runs 30 phrasings through both approaches with concurrency 8 and shows accuracy@1, argument accuracy, mean/p50/p95 latency, elapsed and queries/s (Jev 100% vs fuzzy 20%).",
+ "jev_questions": [
+  {
+   "key": "command",
+   "type": "choice",
+   "instructions": "{task: \"The user typed `query` into the command palette of a Markdown notes editor. Which editor command do they want to run?\", notes: [\"Match on meaning, not on exact words; users describe the effect they want.\", \"`app_state` describes the editor right now. A request to hide something that is visible, or show something that is hidden, means the toggle for that thing.\", \"Requests about text size mean the editor font size; requests about the whole window or interface being bigger/smaller mean zoom.\"]}",
+   "options": [
+    "66 command ids from src/shared/commands.ts, criterion = `${title}: ${description}` each, e.g. toggle_sidebar, toggle_outline, toggle_status_bar, toggle_minimap, toggle_line_numbers, toggle_word_wrap, toggle_preview, toggle_zen_mode, toggle_fullscreen, zoom_in, zoom_out, reset_zoom, split_editor, close_split, set_theme, change_font_size, reset_font_size, toggle_ligatures, cycle_font_family, toggle_typewriter_mode, set_heading, toggle_bold, toggle_italic, toggle_strikethrough, toggle_inline_code, insert_code_block, toggle_bullet_list, toggle_numbered_list, toggle_task_list, toggle_blockquote, insert_link, insert_image, insert_table, insert_horizontal_rule, insert_date, clear_formatting, uppercase_selection, lowercase_selection, title_case_selection, sort_lines, remove_duplicate_lines, trim_trailing_whitespace, join_lines, duplicate_line, delete_line, move_line_up, move_line_down, undo, redo, select_all, find, find_replace, go_to_line, toggle_spell_check, new_note, save_note, export_note, rename_note, delete_note, toggle_pin_note, close_tab, close_other_tabs, reopen_closed_tab, next_tab, previous_tab, toggle_autosave"
+   ],
+   "state_shape": "{query: string (<=300 chars), app_state: {sidebar_visible, outline_visible, preview_visible, zen_mode: boolean, theme: string, font_size: number, zoom_percent: number, selection_exists: boolean, open_tabs: number, word_wrap, line_numbers, spell_check, autosave: boolean}}"
+  },
+  {
+   "key": "font_size_delta",
+   "type": "choice",
+   "instructions": "If the user is asking to change the text or font size, by how many points and in which direction? Small nudges are 2 points; 'a lot', 'much', or 'way' bigger/smaller is 4 points. Making text bigger, larger, louder or more readable is positive; smaller, tinier or more compact is negative.",
+   "options": [
+    "-4: Much smaller text: shrink the font by 4 points",
+    "-2: Slightly smaller text: shrink the font by 2 points",
+    "+2: Slightly bigger text: grow the font by 2 points",
+    "+4: Much bigger text: grow the font by 4 points"
+   ],
+   "state_shape": "same {query, app_state}"
+  },
+  {
+   "key": "theme",
+   "type": "choice",
+   "instructions": "If the user is asking to change the color theme, which theme do they want? Night, black or dim means dark; day, bright or white means light; warm, paper or vintage means sepia; accessibility or maximum readability means high contrast. If they just want a different look than the current `app_state.theme`, pick the most common alternative (dark when currently light, light otherwise).",
+   "options": [
+    "dark: Dark theme: dark background, light text (night mode)",
+    "light: Light theme: white background, dark text (day mode)",
+    "sepia: Sepia theme: warm cream paper-like background",
+    "high_contrast: High contrast theme: black and yellow for maximum legibility"
+   ],
+   "state_shape": "same {query, app_state}"
+  },
+  {
+   "key": "heading_level",
+   "type": "choice",
+   "instructions": "If the user is asking to make a heading, which level? Title, top, biggest or main heading is 1; section or subheading is 2; subsection is 3. Words like 'h4', 'level 5', 'smallest heading' name the level directly.",
+   "options": [
+    "1: Heading level 1 (H1, the largest title)",
+    "2: Heading level 2 (H2)",
+    "3: Heading level 3 (H3)",
+    "4: Heading level 4 (H4)",
+    "5: Heading level 5 (H5)",
+    "6: Heading level 6 (H6, the smallest heading)"
+   ],
+   "state_shape": "same {query, app_state}"
+  },
+  {
+   "key": "export_format",
+   "type": "choice",
+   "instructions": "If the user is asking to export or download the note, which file format do they want? A printable or shareable document is PDF; a web page is HTML; raw text without markup is plain text; keeping the .md source is Markdown.",
+   "options": [
+    "markdown: Markdown (.md) source file",
+    "html: HTML web page",
+    "pdf: PDF document for printing or sharing",
+    "plain_text: Plain text (.txt) with all markup stripped"
+   ],
+   "state_shape": "same {query, app_state}"
+  },
+  {
+   "key": "is_destructive",
+   "type": "noul",
+   "instructions": "Does the user's `query` ask for something that would permanently discard content or close work (deleting a note, deleting lines, closing tabs)? criteria.true: The request removes, deletes, discards or closes something for good. criteria.false: The request only shows, changes, formats, navigates or can be trivially undone.",
+   "state_shape": "same {query, app_state}"
+  }
+ ],
+ "request_cadence": "One POST /api/resolve per keystroke pause (100 ms debounce, stale requests aborted) carrying all 6 questions in one Jev systemone call, ~3.2k input tokens. Benchmark: 30 queries at concurrency 8, one call each. Proxy retries 429/529 up to 4 times with backoff.",
+ "data_files": [
+  "/Users/blaget/projects/jev-experiments/nl-palette/src/data/benchmark.ts (30 cases: query, expected command id, optional expectedArg; ~1 KB)",
+  "/Users/blaget/projects/jev-experiments/nl-palette/src/shared/commands.ts (66 commands with title, description, group, shortcut, arg slot, destructive flag; ~9 KB)",
+  "/Users/blaget/projects/jev-experiments/nl-palette/src/editor/seed.ts (seed notes for the editor; 84 lines)",
+  "/Users/blaget/projects/jev-experiments/nl-palette/screenshots/nl-palette.jpg (149 KB), nl-palette-benchmark.jpg (316 KB), nl-palette-demo.webp (695 KB)"
+ ],
+ "ui_components": [
+  "Palette (query input, ranked list with probability bars, argument preview, confidence gate, Tab mode cycle, latency footer): /Users/blaget/projects/jev-experiments/nl-palette/src/components/Palette.tsx",
+  "Benchmark panel (30-case run, accuracy@1, args, mean/p50/p95, elapsed, q/s table): /Users/blaget/projects/jev-experiments/nl-palette/src/components/Benchmark.tsx",
+  "App shell: editor textarea, sidebar, tabs, outline, preview, themes, confirm dialog, find/replace/go-to-line prompts: /Users/blaget/projects/jev-experiments/nl-palette/src/App.tsx",
+  "Styles (771 lines, themes dark/light/sepia/high_contrast): /Users/blaget/projects/jev-experiments/nl-palette/src/styles.css"
+ ],
+ "reusable_source": [
+  "/Users/blaget/projects/jev-experiments/nl-palette/src/shared/commands.ts",
+  "/Users/blaget/projects/jev-experiments/nl-palette/src/shared/fuzzy.ts",
+  "/Users/blaget/projects/jev-experiments/nl-palette/src/shared/stats.ts",
+  "/Users/blaget/projects/jev-experiments/nl-palette/src/data/benchmark.ts",
+  "/Users/blaget/projects/jev-experiments/nl-palette/src/editor/model.ts (drop the AppState type import from questions.ts, define it locally)",
+  "/Users/blaget/projects/jev-experiments/nl-palette/src/editor/execute.ts",
+  "/Users/blaget/projects/jev-experiments/nl-palette/src/editor/seed.ts",
+  "/Users/blaget/projects/jev-experiments/nl-palette/src/shared/resolve.ts (rewrite resolveAnswers to read classify scores; keep describeArg, previewLabel, gates)",
+  "/Users/blaget/projects/jev-experiments/nl-palette/src/lib/jev.ts (mapWithConcurrency only)",
+  "/Users/blaget/projects/jev-experiments/nl-palette/src/App.tsx (editor chrome; swap palette hook)"
+ ],
+ "dm1_mapping": [
+  {
+   "jev_key": "command",
+   "dm1_route": "classify",
+   "dm1_body": "POST /classify {\"text\": \"Editor state: sidebar visible, outline hidden, preview hidden, theme light, font 14pt, zoom 100%, no selection, 3 tabs, word wrap on, line numbers on, spell check on.\\nUser typed in the command palette: \\\"get rid of the sidebar\\\"\", \"labels\": {\"toggle_sidebar\": \"Toggle Sidebar: Show or hide the left-hand file explorer panel (the sidebar with the note list).\", \"toggle_outline\": \"Toggle Outline Panel: Show or hide the document outline of headings on the right.\", ... one entry per command, `${title}: ${description}` ...}} -> {label, probability, confidence, scores:{id: score}}. Rank = scores sorted desc, top 8. Gate = probability >= 0.55.",
+   "notes": "classify caps labels at 64; there are 66 commands. Drop toggle_fullscreen (cannot work inside the page anyway) and toggle_ligatures to reach 64, or use classify-tree with the 10 groups as level 1 and commands as level 2 (keeps all 66, but only the chosen group gets level-2 scores, so cross-group top-8 ranking is lost). Recommend the 64-label classify. The Jev notes about app_state and text-size-vs-zoom go into the text prefix and into label descriptions (zoom_in: \"...whole interface, not the text size\")."
+  },
+  {
+   "jev_key": "font_size_delta",
+   "dm1_route": "classify",
+   "dm1_body": "POST /classify {\"text\": \"<same text as command>\", \"labels\": {\"-4\": \"Much smaller text: shrink the font by 4 points (a lot, way, much smaller)\", \"-2\": \"Slightly smaller text: shrink the font by 2 points\", \"+2\": \"Slightly bigger text: grow the font by 2 points (bigger, larger, louder, more readable)\", \"+4\": \"Much bigger text: grow the font by 4 points (a lot, way, much bigger)\"}}",
+   "notes": "Fire only when the top command is change_font_size, chained after the command result. Not speculative like Jev."
+  },
+  {
+   "jev_key": "theme",
+   "dm1_route": "classify",
+   "dm1_body": "POST /classify {\"text\": \"<same text as command>\", \"labels\": {\"dark\": \"Dark theme: dark background, light text (night, black, dim)\", \"light\": \"Light theme: white background, dark text (day, bright, white)\", \"sepia\": \"Sepia theme: warm cream paper-like background (warm, paper, vintage)\", \"high_contrast\": \"High contrast theme: black and yellow for maximum legibility (accessibility, readable)\"}}",
+   "notes": "Fire only when top command is set_theme. The 'different look than current theme' rule: handle in code, if query has no theme word and scores are flat, pick dark when app_state.theme is light, else light."
+  },
+  {
+   "jev_key": "heading_level",
+   "dm1_route": "classify",
+   "dm1_body": "POST /classify {\"text\": \"<same text as command>\", \"labels\": {\"1\": \"Heading level 1, H1, the largest: title, top, biggest or main heading\", \"2\": \"Heading level 2, H2: section or subheading\", \"3\": \"Heading level 3, H3: subsection\", \"4\": \"Heading level 4, H4\", \"5\": \"Heading level 5, H5\", \"6\": \"Heading level 6, H6, the smallest heading\"}}",
+   "notes": "Fire only when top command is set_heading."
+  },
+  {
+   "jev_key": "export_format",
+   "dm1_route": "classify",
+   "dm1_body": "POST /classify {\"text\": \"<same text as command>\", \"labels\": {\"markdown\": \"Markdown (.md) source file, keep the source\", \"html\": \"HTML web page\", \"pdf\": \"PDF document for printing or sharing\", \"plain_text\": \"Plain text (.txt) with all markup stripped, raw text\"}}",
+   "notes": "Fire only when top command is export_note."
+  },
+  {
+   "jev_key": "is_destructive",
+   "dm1_route": "yes-no",
+   "dm1_body": "POST /yes-no {\"text\": \"<same text as command>\", \"statement\": \"The request permanently discards content or closes work.\", \"when_true\": \"The request removes, deletes, discards or closes something for good.\", \"when_false\": \"The request only shows, changes, formats, navigates or can be trivially undone.\"} -> {answer, probability}. wantsConfirmation = command.destructive || probability >= 0.5.",
+   "notes": "Do not fire per keystroke. Fire once on Enter before executing, only when the chosen command is not already flagged destructive. Skip it entirely for commands flagged destructive (already confirm)."
+  }
+ ],
+ "browser_plan": "Same shape as the original: a Vite/React page on demo.milliseconds.ai/nl-palette with the real editor, Ctrl/Cmd+K palette, side-by-side fuzzy mode and Benchmark panel. Copy editor/, shared/commands.ts, fuzzy.ts, stats.ts, data/benchmark.ts as-is. Replace server/jev.ts + server/index.ts with one proxy route (Cloudflare Worker or Node) that forwards POST /api/dm1/:route to https://api.milliseconds.ai/v1/decision-machine-1/:route with the bearer key, passes through x-inference-ms and x-input-tokens headers, and returns 429 as-is. Client: build one text string from app_state + query, POST /classify with 64 described labels. Debounce 250 ms (not 100), abort stale requests, and add a client-side gate of one in-flight request plus a minimum 500 ms spacing between sends (about 2 req/s). Rank from scores, gate at probability >= 0.55, argument preview from a chained second classify only when the top command has an arg slot (change_font_size, set_theme, set_heading, export_note). Destructive check: one yes-no on Enter. On HTTP 429 show a 'Rate limited, retrying' pill, back off using retry-after, keep the last ranking visible, and fall back to fuzzy results labeled FUZZY. Benchmark: one POST /classify with texts: [30 prefixed queries] (one request, 30 results), then four batched arg calls (texts of the 2 font, 2 theme, 2 heading, 2 export cases) = 5 requests total instead of 30. Compute accuracy@1, arg accuracy, and latency from x-inference-ms plus performance.now(). Fuzzy baseline runs in the browser unchanged. Style with the milliseconds.ai tokens from ~/projects/cloudraker-spring-2026 instead of styles.css; keep the four editor themes as scoped CSS variables inside the editor pane.",
+ "difficulty": "L",
+ "risks": [
+  "classify limit of 64 labels vs 66 commands: must drop or merge 2 commands, or use classify-tree and lose cross-group ranking.",
+  "No state field in DM1: app_state must be prose in the text; disambiguation (hide vs show, text size vs zoom) depends on label descriptions and may be weaker than Jev's structured notes.",
+  "Latency: the demo needs a full round trip well under 300 ms for search-as-you-type feel; two chained calls (command + arg) double that on arg commands.",
+  "Rate limit is org-wide (200 req/min): several concurrent visitors typing will hit 429; the client throttle helps but cannot prevent it, so fuzzy fallback and the 429 pill are required.",
+  "Benchmark accuracy will differ from the README's 100% claim; the page must show measured numbers, not the Jev figures.",
+  "Speculative arg slots are gone: the arg preview appears one request later than the ranking.",
+  "Fuzzy scorer and editor executor are large (143 + 375 lines) but pure; port risk is low, styling risk is moderate (771 lines of CSS to re-theme)."
+ ]
+}

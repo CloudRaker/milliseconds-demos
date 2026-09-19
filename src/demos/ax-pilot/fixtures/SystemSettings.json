@@ -1,0 +1,5254 @@
+{
+ "appName": "System Settings",
+ "bundleIdentifier": "com.apple.systempreferences",
+ "root": {
+  "enabled": true,
+  "frame": [
+   [
+    0,
+    0
+   ],
+   [
+    0,
+    0
+   ]
+  ],
+  "role": "AXApplication",
+  "title": "System Settings",
+  "children": [
+   {
+    "actions": [
+     "AXRaise"
+    ],
+    "enabled": true,
+    "frame": [
+     [
+      438,
+      259
+     ],
+     [
+      723,
+      625
+     ]
+    ],
+    "identifier": "main",
+    "role": "AXWindow",
+    "subrole": "AXStandardWindow",
+    "children": [
+     {
+      "enabled": true,
+      "frame": [
+       [
+        438,
+        259
+       ],
+       [
+        723,
+        625
+       ]
+      ],
+      "role": "AXGroup",
+      "subrole": "AXHostingView",
+      "children": [
+       {
+        "enabled": true,
+        "frame": [
+         [
+          438,
+          259
+         ],
+         [
+          723,
+          625
+         ]
+        ],
+        "identifier": "main, SidebarNavigationSplitView",
+        "role": "AXSplitGroup",
+        "children": [
+         {
+          "enabled": true,
+          "frame": [
+           [
+            446,
+            267
+           ],
+           [
+            215,
+            609
+           ]
+          ],
+          "role": "AXGroup",
+          "subrole": "AXHostingView",
+          "children": [
+           {
+            "actions": [
+             "AXScrollLeftByPage",
+             "AXScrollRightByPage",
+             "AXScrollUpByPage",
+             "AXScrollDownByPage"
+            ],
+            "enabled": true,
+            "frame": [
+             [
+              446,
+              357
+             ],
+             [
+              215,
+              519
+             ]
+            ],
+            "role": "AXScrollArea",
+            "children": [
+             {
+              "actions": [
+               "AXShowMenu"
+              ],
+              "description": "Sidebar",
+              "enabled": true,
+              "focused": true,
+              "frame": [
+               [
+                446,
+                357
+               ],
+               [
+                215,
+                519
+               ]
+              ],
+              "role": "AXOutline",
+              "children": [
+               {
+                "actions": [
+                 "AXShowDefaultUI",
+                 "AXShowAlternateUI"
+                ],
+                "enabled": true,
+                "frame": [
+                 [
+                  446,
+                  357
+                 ],
+                 [
+                  215,
+                  0
+                 ]
+                ],
+                "role": "AXRow",
+                "subrole": "AXOutlineRow",
+                "children": [
+                 {
+                  "enabled": true,
+                  "focused": true,
+                  "frame": [
+                   [
+                    456,
+                    357
+                   ],
+                   [
+                    195,
+                    0
+                   ]
+                  ],
+                  "role": "AXCell",
+                  "children": [
+                   {
+                    "enabled": true,
+                    "frame": [
+                     [
+                      460,
+                      357
+                     ],
+                     [
+                      199,
+                      0
+                     ]
+                    ],
+                    "role": "AXGroup",
+                    "subrole": "AXHostingView"
+                   }
+                  ]
+                 }
+                ]
+               },
+               {
+                "actions": [
+                 "AXShowDefaultUI",
+                 "AXShowAlternateUI"
+                ],
+                "enabled": true,
+                "frame": [
+                 [
+                  446,
+                  357
+                 ],
+                 [
+                  215,
+                  46
+                 ]
+                ],
+                "role": "AXRow",
+                "subrole": "AXOutlineRow",
+                "children": [
+                 {
+                  "enabled": true,
+                  "focused": true,
+                  "frame": [
+                   [
+                    456,
+                    357
+                   ],
+                   [
+                    195,
+                    46
+                   ]
+                  ],
+                  "role": "AXCell",
+                  "children": [
+                   {
+                    "actions": [
+                     "AXShowMenu"
+                    ],
+                    "enabled": true,
+                    "frame": [
+                     [
+                      462,
+                      361
+                     ],
+                     [
+                      174,
+                      38
+                     ]
+                    ],
+                    "identifier": "com.apple.systempreferences.AppleIDSettings*AppleIDSettings",
+                    "role": "AXStaticText",
+                    "value": "Sign in, with your Apple\u00a0Account"
+                   }
+                  ]
+                 }
+                ]
+               },
+               {
+                "actions": [
+                 "AXShowDefaultUI",
+                 "AXShowAlternateUI"
+                ],
+                "enabled": true,
+                "frame": [
+                 [
+                  446,
+                  416
+                 ],
+                 [
+                  215,
+                  0
+                 ]
+                ],
+                "role": "AXRow",
+                "subrole": "AXOutlineRow",
+                "children": [
+                 {
+                  "enabled": true,
+                  "focused": true,
+                  "frame": [
+                   [
+                    456,
+                    416
+                   ],
+                   [
+                    195,
+                    0
+                   ]
+                  ],
+                  "role": "AXCell",
+                  "children": [
+                   {
+                    "enabled": true,
+                    "frame": [
+                     [
+                      460,
+                      416
+                     ],
+                     [
+                      199,
+                      0
+                     ]
+                    ],
+                    "role": "AXGroup",
+                    "subrole": "AXHostingView"
+                   }
+                  ]
+                 }
+                ]
+               },
+               {
+                "actions": [
+                 "AXShowDefaultUI",
+                 "AXShowAlternateUI"
+                ],
+                "enabled": true,
+                "frame": [
+                 [
+                  446,
+                  416
+                 ],
+                 [
+                  215,
+                  32
+                 ]
+                ],
+                "role": "AXRow",
+                "subrole": "AXOutlineRow",
+                "children": [
+                 {
+                  "enabled": true,
+                  "focused": true,
+                  "frame": [
+                   [
+                    456,
+                    416
+                   ],
+                   [
+                    195,
+                    32
+                   ]
+                  ],
+                  "role": "AXCell",
+                  "children": [
+                   {
+                    "actions": [
+                     "AXShowMenu"
+                    ],
+                    "enabled": true,
+                    "frame": [
+                     [
+                      467,
+                      424
+                     ],
+                     [
+                      55,
+                      16
+                     ]
+                    ],
+                    "identifier": "com.apple.wifi-settings-extension",
+                    "role": "AXStaticText",
+                    "value": "Wi\u2011Fi"
+                   }
+                  ]
+                 }
+                ]
+               },
+               {
+                "actions": [
+                 "AXShowDefaultUI",
+                 "AXShowAlternateUI"
+                ],
+                "enabled": true,
+                "frame": [
+                 [
+                  446,
+                  448
+                 ],
+                 [
+                  215,
+                  32
+                 ]
+                ],
+                "role": "AXRow",
+                "subrole": "AXOutlineRow",
+                "children": [
+                 {
+                  "enabled": true,
+                  "focused": true,
+                  "frame": [
+                   [
+                    456,
+                    448
+                   ],
+                   [
+                    195,
+                    32
+                   ]
+                  ],
+                  "role": "AXCell",
+                  "children": [
+                   {
+                    "actions": [
+                     "AXShowMenu"
+                    ],
+                    "enabled": true,
+                    "frame": [
+                     [
+                      467,
+                      456
+                     ],
+                     [
+                      81,
+                      16
+                     ]
+                    ],
+                    "identifier": "com.apple.BluetoothSettings",
+                    "role": "AXStaticText",
+                    "value": "Bluetooth"
+                   }
+                  ]
+                 }
+                ]
+               },
+               {
+                "actions": [
+                 "AXShowDefaultUI",
+                 "AXShowAlternateUI"
+                ],
+                "enabled": true,
+                "frame": [
+                 [
+                  446,
+                  480
+                 ],
+                 [
+                  215,
+                  32
+                 ]
+                ],
+                "role": "AXRow",
+                "subrole": "AXOutlineRow",
+                "children": [
+                 {
+                  "enabled": true,
+                  "focused": true,
+                  "frame": [
+                   [
+                    456,
+                    480
+                   ],
+                   [
+                    195,
+                    32
+                   ]
+                  ],
+                  "role": "AXCell",
+                  "children": [
+                   {
+                    "actions": [
+                     "AXShowMenu"
+                    ],
+                    "enabled": true,
+                    "frame": [
+                     [
+                      467,
+                      488
+                     ],
+                     [
+                      73,
+                      16
+                     ]
+                    ],
+                    "identifier": "com.apple.Network-Settings.extension",
+                    "role": "AXStaticText",
+                    "value": "Network"
+                   }
+                  ]
+                 }
+                ]
+               },
+               {
+                "actions": [
+                 "AXShowDefaultUI",
+                 "AXShowAlternateUI"
+                ],
+                "enabled": true,
+                "frame": [
+                 [
+                  446,
+                  512
+                 ],
+                 [
+                  215,
+                  32
+                 ]
+                ],
+                "role": "AXRow",
+                "subrole": "AXOutlineRow",
+                "children": [
+                 {
+                  "enabled": true,
+                  "focused": true,
+                  "frame": [
+                   [
+                    456,
+                    512
+                   ],
+                   [
+                    195,
+                    32
+                   ]
+                  ],
+                  "role": "AXCell",
+                  "children": [
+                   {
+                    "actions": [
+                     "AXShowMenu"
+                    ],
+                    "enabled": true,
+                    "frame": [
+                     [
+                      461,
+                      516
+                     ],
+                     [
+                      71,
+                      24
+                     ]
+                    ],
+                    "identifier": "com.apple.Battery-Settings.extension*BatteryPreferences",
+                    "role": "AXStaticText",
+                    "value": "Energy"
+                   }
+                  ]
+                 }
+                ]
+               },
+               {
+                "actions": [
+                 "AXShowDefaultUI",
+                 "AXShowAlternateUI"
+                ],
+                "enabled": true,
+                "frame": [
+                 [
+                  446,
+                  557
+                 ],
+                 [
+                  215,
+                  0
+                 ]
+                ],
+                "role": "AXRow",
+                "subrole": "AXOutlineRow",
+                "children": [
+                 {
+                  "enabled": true,
+                  "focused": true,
+                  "frame": [
+                   [
+                    456,
+                    557
+                   ],
+                   [
+                    195,
+                    0
+                   ]
+                  ],
+                  "role": "AXCell",
+                  "children": [
+                   {
+                    "enabled": true,
+                    "frame": [
+                     [
+                      460,
+                      557
+                     ],
+                     [
+                      199,
+                      0
+                     ]
+                    ],
+                    "role": "AXGroup",
+                    "subrole": "AXHostingView"
+                   }
+                  ]
+                 }
+                ]
+               },
+               {
+                "actions": [
+                 "AXShowDefaultUI",
+                 "AXShowAlternateUI"
+                ],
+                "enabled": true,
+                "frame": [
+                 [
+                  446,
+                  557
+                 ],
+                 [
+                  215,
+                  32
+                 ]
+                ],
+                "role": "AXRow",
+                "selected": true,
+                "subrole": "AXOutlineRow",
+                "children": [
+                 {
+                  "enabled": true,
+                  "focused": true,
+                  "frame": [
+                   [
+                    456,
+                    557
+                   ],
+                   [
+                    195,
+                    32
+                   ]
+                  ],
+                  "role": "AXCell",
+                  "selected": true,
+                  "children": [
+                   {
+                    "actions": [
+                     "AXShowMenu"
+                    ],
+                    "enabled": true,
+                    "frame": [
+                     [
+                      461,
+                      561
+                     ],
+                     [
+                      76,
+                      24
+                     ]
+                    ],
+                    "identifier": "com.apple.systempreferences.GeneralSettings",
+                    "role": "AXStaticText",
+                    "value": "General"
+                   }
+                  ]
+                 }
+                ]
+               },
+               {
+                "actions": [
+                 "AXShowDefaultUI",
+                 "AXShowAlternateUI"
+                ],
+                "enabled": true,
+                "frame": [
+                 [
+                  446,
+                  589
+                 ],
+                 [
+                  215,
+                  32
+                 ]
+                ],
+                "role": "AXRow",
+                "subrole": "AXOutlineRow",
+                "children": [
+                 {
+                  "enabled": true,
+                  "focused": true,
+                  "frame": [
+                   [
+                    456,
+                    589
+                   ],
+                   [
+                    195,
+                    32
+                   ]
+                  ],
+                  "role": "AXCell",
+                  "children": [
+                   {
+                    "actions": [
+                     "AXShowMenu"
+                    ],
+                    "enabled": true,
+                    "frame": [
+                     [
+                      467,
+                      597
+                     ],
+                     [
+                      98,
+                      16
+                     ]
+                    ],
+                    "identifier": "com.apple.Accessibility-Settings.extension",
+                    "role": "AXStaticText",
+                    "value": "Accessibility"
+                   }
+                  ]
+                 }
+                ]
+               },
+               {
+                "actions": [
+                 "AXShowDefaultUI",
+                 "AXShowAlternateUI"
+                ],
+                "enabled": true,
+                "frame": [
+                 [
+                  446,
+                  621
+                 ],
+                 [
+                  215,
+                  32
+                 ]
+                ],
+                "role": "AXRow",
+                "subrole": "AXOutlineRow",
+                "children": [
+                 {
+                  "enabled": true,
+                  "focused": true,
+                  "frame": [
+                   [
+                    456,
+                    621
+                   ],
+                   [
+                    195,
+                    32
+                   ]
+                  ],
+                  "role": "AXCell",
+                  "children": [
+                   {
+                    "actions": [
+                     "AXShowMenu"
+                    ],
+                    "enabled": true,
+                    "frame": [
+                     [
+                      467,
+                      629
+                     ],
+                     [
+                      95,
+                      16
+                     ]
+                    ],
+                    "identifier": "com.apple.Appearance-Settings.extension",
+                    "role": "AXStaticText",
+                    "value": "Appearance"
+                   }
+                  ]
+                 }
+                ]
+               },
+               {
+                "actions": [
+                 "AXShowDefaultUI",
+                 "AXShowAlternateUI"
+                ],
+                "enabled": true,
+                "frame": [
+                 [
+                  446,
+                  653
+                 ],
+                 [
+                  215,
+                  32
+                 ]
+                ],
+                "role": "AXRow",
+                "subrole": "AXOutlineRow",
+                "children": [
+                 {
+                  "enabled": true,
+                  "focused": true,
+                  "frame": [
+                   [
+                    456,
+                    653
+                   ],
+                   [
+                    195,
+                    32
+                   ]
+                  ],
+                  "role": "AXCell",
+                  "children": [
+                   {
+                    "actions": [
+                     "AXShowMenu"
+                    ],
+                    "enabled": true,
+                    "frame": [
+                     [
+                      467,
+                      661
+                     ],
+                     [
+                      80,
+                      16
+                     ]
+                    ],
+                    "identifier": "com.apple.ControlCenter-Settings.extension",
+                    "role": "AXStaticText",
+                    "value": "Menu Bar"
+                   }
+                  ]
+                 }
+                ]
+               },
+               {
+                "actions": [
+                 "AXShowDefaultUI",
+                 "AXShowAlternateUI"
+                ],
+                "enabled": true,
+                "frame": [
+                 [
+                  446,
+                  685
+                 ],
+                 [
+                  215,
+                  32
+                 ]
+                ],
+                "role": "AXRow",
+                "subrole": "AXOutlineRow",
+                "children": [
+                 {
+                  "enabled": true,
+                  "focused": true,
+                  "frame": [
+                   [
+                    456,
+                    685
+                   ],
+                   [
+                    195,
+                    32
+                   ]
+                  ],
+                  "role": "AXCell",
+                  "children": [
+                   {
+                    "actions": [
+                     "AXShowMenu"
+                    ],
+                    "enabled": true,
+                    "frame": [
+                     [
+                      467,
+                      693
+                     ],
+                     [
+                      120,
+                      16
+                     ]
+                    ],
+                    "identifier": "com.apple.Desktop-Settings.extension",
+                    "role": "AXStaticText",
+                    "value": "Desktop & Dock"
+                   }
+                  ]
+                 }
+                ]
+               },
+               {
+                "actions": [
+                 "AXShowDefaultUI",
+                 "AXShowAlternateUI"
+                ],
+                "enabled": true,
+                "frame": [
+                 [
+                  446,
+                  717
+                 ],
+                 [
+                  215,
+                  32
+                 ]
+                ],
+                "role": "AXRow",
+                "subrole": "AXOutlineRow",
+                "children": [
+                 {
+                  "enabled": true,
+                  "focused": true,
+                  "frame": [
+                   [
+                    456,
+                    717
+                   ],
+                   [
+                    195,
+                    32
+                   ]
+                  ],
+                  "role": "AXCell",
+                  "children": [
+                   {
+                    "actions": [
+                     "AXShowMenu"
+                    ],
+                    "enabled": true,
+                    "frame": [
+                     [
+                      467,
+                      725
+                     ],
+                     [
+                      73,
+                      16
+                     ]
+                    ],
+                    "identifier": "com.apple.Displays-Settings.extension",
+                    "role": "AXStaticText",
+                    "value": "Displays"
+                   }
+                  ]
+                 }
+                ]
+               },
+               {
+                "actions": [
+                 "AXShowDefaultUI",
+                 "AXShowAlternateUI"
+                ],
+                "enabled": true,
+                "frame": [
+                 [
+                  446,
+                  749
+                 ],
+                 [
+                  215,
+                  32
+                 ]
+                ],
+                "role": "AXRow",
+                "subrole": "AXOutlineRow",
+                "children": [
+                 {
+                  "enabled": true,
+                  "focused": true,
+                  "frame": [
+                   [
+                    456,
+                    749
+                   ],
+                   [
+                    195,
+                    32
+                   ]
+                  ],
+                  "role": "AXCell",
+                  "children": [
+                   {
+                    "actions": [
+                     "AXShowMenu"
+                    ],
+                    "enabled": true,
+                    "frame": [
+                     [
+                      467,
+                      757
+                     ],
+                     [
+                      77,
+                      16
+                     ]
+                    ],
+                    "identifier": "com.apple.Spotlight-Settings.extension",
+                    "role": "AXStaticText",
+                    "value": "Spotlight"
+                   }
+                  ]
+                 }
+                ]
+               },
+               {
+                "actions": [
+                 "AXShowDefaultUI",
+                 "AXShowAlternateUI"
+                ],
+                "enabled": true,
+                "frame": [
+                 [
+                  446,
+                  781
+                 ],
+                 [
+                  215,
+                  32
+                 ]
+                ],
+                "role": "AXRow",
+                "subrole": "AXOutlineRow",
+                "children": [
+                 {
+                  "enabled": true,
+                  "focused": true,
+                  "frame": [
+                   [
+                    456,
+                    781
+                   ],
+                   [
+                    195,
+                    32
+                   ]
+                  ],
+                  "role": "AXCell",
+                  "children": [
+                   {
+                    "actions": [
+                     "AXShowMenu"
+                    ],
+                    "enabled": true,
+                    "frame": [
+                     [
+                      467,
+                      789
+                     ],
+                     [
+                      83,
+                      16
+                     ]
+                    ],
+                    "identifier": "com.apple.Wallpaper-Settings.extension",
+                    "role": "AXStaticText",
+                    "value": "Wallpaper"
+                   }
+                  ]
+                 }
+                ]
+               },
+               {
+                "actions": [
+                 "AXShowDefaultUI",
+                 "AXShowAlternateUI"
+                ],
+                "enabled": true,
+                "frame": [
+                 [
+                  446,
+                  813
+                 ],
+                 [
+                  215,
+                  32
+                 ]
+                ],
+                "role": "AXRow",
+                "subrole": "AXOutlineRow",
+                "children": [
+                 {
+                  "enabled": true,
+                  "focused": true,
+                  "frame": [
+                   [
+                    456,
+                    813
+                   ],
+                   [
+                    195,
+                    32
+                   ]
+                  ],
+                  "role": "AXCell",
+                  "children": [
+                   {
+                    "actions": [
+                     "AXShowMenu"
+                    ],
+                    "enabled": true,
+                    "frame": [
+                     [
+                      461,
+                      817
+                     ],
+                     [
+                      48,
+                      24
+                     ]
+                    ],
+                    "identifier": "com.apple.Siri-Settings.extension*siri-non-sae",
+                    "role": "AXStaticText",
+                    "value": "Siri"
+                   }
+                  ]
+                 }
+                ]
+               },
+               {
+                "actions": [
+                 "AXShowDefaultUI",
+                 "AXShowAlternateUI"
+                ],
+                "enabled": true,
+                "frame": [
+                 [
+                  446,
+                  858
+                 ],
+                 [
+                  215,
+                  0
+                 ]
+                ],
+                "role": "AXRow",
+                "subrole": "AXOutlineRow",
+                "children": [
+                 {
+                  "enabled": true,
+                  "focused": true,
+                  "frame": [
+                   [
+                    456,
+                    858
+                   ],
+                   [
+                    195,
+                    0
+                   ]
+                  ],
+                  "role": "AXCell",
+                  "children": [
+                   {
+                    "enabled": true,
+                    "frame": [
+                     [
+                      460,
+                      858
+                     ],
+                     [
+                      199,
+                      0
+                     ]
+                    ],
+                    "role": "AXGroup",
+                    "subrole": "AXHostingView"
+                   }
+                  ]
+                 }
+                ]
+               },
+               {
+                "actions": [
+                 "AXShowDefaultUI",
+                 "AXShowAlternateUI"
+                ],
+                "enabled": true,
+                "frame": [
+                 [
+                  446,
+                  858
+                 ],
+                 [
+                  215,
+                  32
+                 ]
+                ],
+                "role": "AXRow",
+                "subrole": "AXOutlineRow",
+                "children": [
+                 {
+                  "enabled": true,
+                  "focused": true,
+                  "frame": [
+                   [
+                    456,
+                    858
+                   ],
+                   [
+                    195,
+                    32
+                   ]
+                  ],
+                  "role": "AXCell",
+                  "children": [
+                   {
+                    "actions": [
+                     "AXShowMenu"
+                    ],
+                    "enabled": true,
+                    "frame": [
+                     [
+                      467,
+                      866
+                     ],
+                     [
+                      99,
+                      16
+                     ]
+                    ],
+                    "identifier": "com.apple.Notifications-Settings.extension",
+                    "role": "AXStaticText",
+                    "value": "Notifications"
+                   }
+                  ]
+                 }
+                ]
+               },
+               {
+                "actions": [
+                 "AXShowDefaultUI",
+                 "AXShowAlternateUI"
+                ],
+                "enabled": true,
+                "frame": [
+                 [
+                  446,
+                  890
+                 ],
+                 [
+                  215,
+                  32
+                 ]
+                ],
+                "role": "AXRow",
+                "subrole": "AXOutlineRow",
+                "children": [
+                 {
+                  "enabled": true,
+                  "focused": true,
+                  "frame": [
+                   [
+                    456,
+                    890
+                   ],
+                   [
+                    195,
+                    32
+                   ]
+                  ],
+                  "role": "AXCell",
+                  "children": [
+                   {
+                    "actions": [
+                     "AXShowMenu"
+                    ],
+                    "enabled": true,
+                    "frame": [
+                     [
+                      0,
+                      1200
+                     ],
+                     [
+                      0,
+                      0
+                     ]
+                    ],
+                    "identifier": "com.apple.Sound-Settings.extension",
+                    "role": "AXStaticText",
+                    "value": "Sound"
+                   }
+                  ]
+                 }
+                ]
+               },
+               {
+                "actions": [
+                 "AXShowDefaultUI",
+                 "AXShowAlternateUI"
+                ],
+                "enabled": true,
+                "frame": [
+                 [
+                  446,
+                  922
+                 ],
+                 [
+                  215,
+                  32
+                 ]
+                ],
+                "role": "AXRow",
+                "subrole": "AXOutlineRow",
+                "children": [
+                 {
+                  "enabled": true,
+                  "focused": true,
+                  "frame": [
+                   [
+                    456,
+                    922
+                   ],
+                   [
+                    195,
+                    32
+                   ]
+                  ],
+                  "role": "AXCell",
+                  "children": [
+                   {
+                    "actions": [
+                     "AXShowMenu"
+                    ],
+                    "enabled": true,
+                    "frame": [
+                     [
+                      0,
+                      1200
+                     ],
+                     [
+                      0,
+                      0
+                     ]
+                    ],
+                    "identifier": "com.apple.Focus-Settings.extension",
+                    "role": "AXStaticText",
+                    "value": "Focus"
+                   }
+                  ]
+                 }
+                ]
+               },
+               {
+                "actions": [
+                 "AXShowDefaultUI",
+                 "AXShowAlternateUI"
+                ],
+                "enabled": true,
+                "frame": [
+                 [
+                  446,
+                  954
+                 ],
+                 [
+                  215,
+                  32
+                 ]
+                ],
+                "role": "AXRow",
+                "subrole": "AXOutlineRow",
+                "children": [
+                 {
+                  "enabled": true,
+                  "focused": true,
+                  "frame": [
+                   [
+                    456,
+                    954
+                   ],
+                   [
+                    195,
+                    32
+                   ]
+                  ],
+                  "role": "AXCell",
+                  "children": [
+                   {
+                    "actions": [
+                     "AXShowMenu"
+                    ],
+                    "enabled": true,
+                    "frame": [
+                     [
+                      0,
+                      1200
+                     ],
+                     [
+                      0,
+                      0
+                     ]
+                    ],
+                    "identifier": "com.apple.Screen-Time-Settings.extension",
+                    "role": "AXStaticText",
+                    "value": "Screen Time"
+                   }
+                  ]
+                 }
+                ]
+               },
+               {
+                "actions": [
+                 "AXShowDefaultUI",
+                 "AXShowAlternateUI"
+                ],
+                "enabled": true,
+                "frame": [
+                 [
+                  446,
+                  999
+                 ],
+                 [
+                  215,
+                  0
+                 ]
+                ],
+                "role": "AXRow",
+                "subrole": "AXOutlineRow",
+                "children": [
+                 {
+                  "enabled": true,
+                  "focused": true,
+                  "frame": [
+                   [
+                    456,
+                    999
+                   ],
+                   [
+                    195,
+                    0
+                   ]
+                  ],
+                  "role": "AXCell",
+                  "children": [
+                   {
+                    "enabled": true,
+                    "frame": [
+                     [
+                      460,
+                      999
+                     ],
+                     [
+                      199,
+                      0
+                     ]
+                    ],
+                    "role": "AXGroup",
+                    "subrole": "AXHostingView"
+                   }
+                  ]
+                 }
+                ]
+               },
+               {
+                "actions": [
+                 "AXShowDefaultUI",
+                 "AXShowAlternateUI"
+                ],
+                "enabled": true,
+                "frame": [
+                 [
+                  446,
+                  999
+                 ],
+                 [
+                  215,
+                  32
+                 ]
+                ],
+                "role": "AXRow",
+                "subrole": "AXOutlineRow",
+                "children": [
+                 {
+                  "enabled": true,
+                  "focused": true,
+                  "frame": [
+                   [
+                    456,
+                    999
+                   ],
+                   [
+                    195,
+                    32
+                   ]
+                  ],
+                  "role": "AXCell",
+                  "children": [
+                   {
+                    "actions": [
+                     "AXShowMenu"
+                    ],
+                    "enabled": true,
+                    "frame": [
+                     [
+                      0,
+                      1200
+                     ],
+                     [
+                      0,
+                      0
+                     ]
+                    ],
+                    "identifier": "com.apple.Lock-Screen-Settings.extension",
+                    "role": "AXStaticText",
+                    "value": "Lock Screen"
+                   }
+                  ]
+                 }
+                ]
+               },
+               {
+                "actions": [
+                 "AXShowDefaultUI",
+                 "AXShowAlternateUI"
+                ],
+                "enabled": true,
+                "frame": [
+                 [
+                  446,
+                  1050
+                 ],
+                 [
+                  215,
+                  32
+                 ]
+                ],
+                "role": "AXRow",
+                "subrole": "AXOutlineRow",
+                "children": [
+                 {
+                  "enabled": true,
+                  "focused": true,
+                  "frame": [
+                   [
+                    456,
+                    1050
+                   ],
+                   [
+                    195,
+                    32
+                   ]
+                  ],
+                  "role": "AXCell",
+                  "children": [
+                   {
+                    "actions": [
+                     "AXShowMenu"
+                    ],
+                    "enabled": true,
+                    "frame": [
+                     [
+                      0,
+                      1200
+                     ],
+                     [
+                      0,
+                      0
+                     ]
+                    ],
+                    "identifier": "com.apple.settings.PrivacySecurity.extension",
+                    "role": "AXStaticText",
+                    "value": "Privacy & Security"
+                   }
+                  ]
+                 }
+                ]
+               },
+               {
+                "actions": [
+                 "AXShowDefaultUI",
+                 "AXShowAlternateUI"
+                ],
+                "enabled": true,
+                "frame": [
+                 [
+                  446,
+                  1082
+                 ],
+                 [
+                  215,
+                  32
+                 ]
+                ],
+                "role": "AXRow",
+                "subrole": "AXOutlineRow",
+                "children": [
+                 {
+                  "enabled": true,
+                  "focused": true,
+                  "frame": [
+                   [
+                    456,
+                    1082
+                   ],
+                   [
+                    195,
+                    32
+                   ]
+                  ],
+                  "role": "AXCell",
+                  "children": [
+                   {
+                    "actions": [
+                     "AXShowMenu"
+                    ],
+                    "enabled": true,
+                    "frame": [
+                     [
+                      0,
+                      1200
+                     ],
+                     [
+                      0,
+                      0
+                     ]
+                    ],
+                    "identifier": "com.apple.Touch-ID-Settings.extension*TouchIDPasswordPrefs",
+                    "role": "AXStaticText",
+                    "value": "Login Password"
+                   }
+                  ]
+                 }
+                ]
+               },
+               {
+                "actions": [
+                 "AXShowDefaultUI",
+                 "AXShowAlternateUI"
+                ],
+                "enabled": true,
+                "frame": [
+                 [
+                  446,
+                  1114
+                 ],
+                 [
+                  215,
+                  32
+                 ]
+                ],
+                "role": "AXRow",
+                "subrole": "AXOutlineRow",
+                "children": [
+                 {
+                  "enabled": true,
+                  "focused": true,
+                  "frame": [
+                   [
+                    456,
+                    1114
+                   ],
+                   [
+                    195,
+                    32
+                   ]
+                  ],
+                  "role": "AXCell",
+                  "children": [
+                   {
+                    "actions": [
+                     "AXShowMenu"
+                    ],
+                    "enabled": true,
+                    "frame": [
+                     [
+                      0,
+                      1200
+                     ],
+                     [
+                      0,
+                      0
+                     ]
+                    ],
+                    "identifier": "com.apple.Users-Groups-Settings.extension",
+                    "role": "AXStaticText",
+                    "value": "Users & Groups"
+                   }
+                  ]
+                 }
+                ]
+               },
+               {
+                "actions": [
+                 "AXShowDefaultUI",
+                 "AXShowAlternateUI"
+                ],
+                "enabled": true,
+                "frame": [
+                 [
+                  446,
+                  1159
+                 ],
+                 [
+                  215,
+                  19
+                 ]
+                ],
+                "role": "AXRow",
+                "subrole": "AXOutlineRow",
+                "children": [
+                 {
+                  "enabled": true,
+                  "focused": true,
+                  "frame": [
+                   [
+                    456,
+                    1159
+                   ],
+                   [
+                    195,
+                    19
+                   ]
+                  ],
+                  "role": "AXCell",
+                  "children": [
+                   {
+                    "enabled": true,
+                    "frame": [
+                     [
+                      460,
+                      1159
+                     ],
+                     [
+                      199,
+                      19
+                     ]
+                    ],
+                    "role": "AXGroup",
+                    "subrole": "AXHostingView"
+                   }
+                  ]
+                 }
+                ]
+               },
+               {
+                "actions": [
+                 "AXShowDefaultUI",
+                 "AXShowAlternateUI"
+                ],
+                "enabled": true,
+                "frame": [
+                 [
+                  446,
+                  1178
+                 ],
+                 [
+                  215,
+                  32
+                 ]
+                ],
+                "role": "AXRow",
+                "subrole": "AXOutlineRow",
+                "children": [
+                 {
+                  "enabled": true,
+                  "focused": true,
+                  "frame": [
+                   [
+                    456,
+                    1178
+                   ],
+                   [
+                    195,
+                    32
+                   ]
+                  ],
+                  "role": "AXCell",
+                  "children": [
+                   {
+                    "actions": [
+                     "AXShowMenu"
+                    ],
+                    "enabled": true,
+                    "frame": [
+                     [
+                      0,
+                      1200
+                     ],
+                     [
+                      0,
+                      0
+                     ]
+                    ],
+                    "identifier": "com.apple.Internet-Accounts-Settings.extension",
+                    "role": "AXStaticText",
+                    "value": "Internet Accounts"
+                   }
+                  ]
+                 }
+                ]
+               },
+               {
+                "actions": [
+                 "AXShowDefaultUI",
+                 "AXShowAlternateUI"
+                ],
+                "enabled": true,
+                "frame": [
+                 [
+                  446,
+                  1210
+                 ],
+                 [
+                  215,
+                  32
+                 ]
+                ],
+                "role": "AXRow",
+                "subrole": "AXOutlineRow",
+                "children": [
+                 {
+                  "enabled": true,
+                  "focused": true,
+                  "frame": [
+                   [
+                    456,
+                    1210
+                   ],
+                   [
+                    195,
+                    32
+                   ]
+                  ],
+                  "role": "AXCell",
+                  "children": [
+                   {
+                    "actions": [
+                     "AXShowMenu"
+                    ],
+                    "enabled": true,
+                    "frame": [
+                     [
+                      0,
+                      1200
+                     ],
+                     [
+                      0,
+                      0
+                     ]
+                    ],
+                    "identifier": "com.apple.Game-Center-Settings.extension",
+                    "role": "AXStaticText",
+                    "value": "Game Center"
+                   }
+                  ]
+                 }
+                ]
+               },
+               {
+                "actions": [
+                 "AXShowDefaultUI",
+                 "AXShowAlternateUI"
+                ],
+                "enabled": true,
+                "frame": [
+                 [
+                  446,
+                  1242
+                 ],
+                 [
+                  215,
+                  32
+                 ]
+                ],
+                "role": "AXRow",
+                "subrole": "AXOutlineRow",
+                "children": [
+                 {
+                  "enabled": true,
+                  "focused": true,
+                  "frame": [
+                   [
+                    456,
+                    1242
+                   ],
+                   [
+                    195,
+                    32
+                   ]
+                  ],
+                  "role": "AXCell",
+                  "children": [
+                   {
+                    "actions": [
+                     "AXShowMenu"
+                    ],
+                    "enabled": true,
+                    "frame": [
+                     [
+                      0,
+                      1200
+                     ],
+                     [
+                      0,
+                      0
+                     ]
+                    ],
+                    "identifier": "com.apple.systempreferences.AppleIDSettings:icloud",
+                    "role": "AXStaticText",
+                    "value": "iCloud"
+                   }
+                  ]
+                 }
+                ]
+               },
+               {
+                "actions": [
+                 "AXShowDefaultUI",
+                 "AXShowAlternateUI"
+                ],
+                "enabled": true,
+                "frame": [
+                 [
+                  446,
+                  1274
+                 ],
+                 [
+                  215,
+                  32
+                 ]
+                ],
+                "role": "AXRow",
+                "subrole": "AXOutlineRow",
+                "children": [
+                 {
+                  "enabled": true,
+                  "focused": true,
+                  "frame": [
+                   [
+                    456,
+                    1274
+                   ],
+                   [
+                    195,
+                    32
+                   ]
+                  ],
+                  "role": "AXCell",
+                  "children": [
+                   {
+                    "actions": [
+                     "AXShowMenu"
+                    ],
+                    "enabled": true,
+                    "frame": [
+                     [
+                      0,
+                      1200
+                     ],
+                     [
+                      0,
+                      0
+                     ]
+                    ],
+                    "identifier": "com.apple.WalletSettingsExtension",
+                    "role": "AXStaticText",
+                    "value": "Wallet & Apple\u00a0Pay"
+                   }
+                  ]
+                 }
+                ]
+               },
+               {
+                "actions": [
+                 "AXShowDefaultUI",
+                 "AXShowAlternateUI"
+                ],
+                "enabled": true,
+                "frame": [
+                 [
+                  446,
+                  1319
+                 ],
+                 [
+                  215,
+                  19
+                 ]
+                ],
+                "role": "AXRow",
+                "subrole": "AXOutlineRow",
+                "children": [
+                 {
+                  "enabled": true,
+                  "focused": true,
+                  "frame": [
+                   [
+                    456,
+                    1319
+                   ],
+                   [
+                    195,
+                    19
+                   ]
+                  ],
+                  "role": "AXCell",
+                  "children": [
+                   {
+                    "enabled": true,
+                    "frame": [
+                     [
+                      460,
+                      1319
+                     ],
+                     [
+                      199,
+                      19
+                     ]
+                    ],
+                    "role": "AXGroup",
+                    "subrole": "AXHostingView"
+                   }
+                  ]
+                 }
+                ]
+               },
+               {
+                "actions": [
+                 "AXShowDefaultUI",
+                 "AXShowAlternateUI"
+                ],
+                "enabled": true,
+                "frame": [
+                 [
+                  446,
+                  1338
+                 ],
+                 [
+                  215,
+                  32
+                 ]
+                ],
+                "role": "AXRow",
+                "subrole": "AXOutlineRow",
+                "children": [
+                 {
+                  "enabled": true,
+                  "focused": true,
+                  "frame": [
+                   [
+                    456,
+                    1338
+                   ],
+                   [
+                    195,
+                    32
+                   ]
+                  ],
+                  "role": "AXCell",
+                  "children": [
+                   {
+                    "actions": [
+                     "AXShowMenu"
+                    ],
+                    "enabled": true,
+                    "frame": [
+                     [
+                      0,
+                      1200
+                     ],
+                     [
+                      0,
+                      0
+                     ]
+                    ],
+                    "identifier": "com.apple.Keyboard-Settings.extension",
+                    "role": "AXStaticText",
+                    "value": "Keyboard"
+                   }
+                  ]
+                 }
+                ]
+               },
+               {
+                "actions": [
+                 "AXShowDefaultUI",
+                 "AXShowAlternateUI"
+                ],
+                "enabled": true,
+                "frame": [
+                 [
+                  446,
+                  1370
+                 ],
+                 [
+                  215,
+                  32
+                 ]
+                ],
+                "role": "AXRow",
+                "subrole": "AXOutlineRow",
+                "children": [
+                 {
+                  "enabled": true,
+                  "focused": true,
+                  "frame": [
+                   [
+                    456,
+                    1370
+                   ],
+                   [
+                    195,
+                    32
+                   ]
+                  ],
+                  "role": "AXCell",
+                  "children": [
+                   {
+                    "actions": [
+                     "AXShowMenu"
+                    ],
+                    "enabled": true,
+                    "frame": [
+                     [
+                      0,
+                      1200
+                     ],
+                     [
+                      0,
+                      0
+                     ]
+                    ],
+                    "identifier": "com.apple.Print-Scan-Settings.extension",
+                    "role": "AXStaticText",
+                    "value": "Printers & Scanners"
+                   }
+                  ]
+                 }
+                ]
+               },
+               {
+                "enabled": true,
+                "frame": [
+                 [
+                  456,
+                  357
+                 ],
+                 [
+                  195,
+                  1055
+                 ]
+                ],
+                "identifier": "ListColumn",
+                "role": "AXColumn"
+               }
+              ]
+             },
+             {
+              "enabled": true,
+              "frame": [
+               [
+                643,
+                356
+               ],
+               [
+                19,
+                511.5
+               ]
+              ],
+              "role": "AXScrollBar",
+              "value": "0",
+              "children": [
+               {
+                "enabled": true,
+                "frame": [
+                 [
+                  652,
+                  360
+                 ],
+                 [
+                  6,
+                  267
+                 ]
+                ],
+                "role": "AXValueIndicator",
+                "value": "0"
+               },
+               {
+                "actions": [
+                 "AXPress"
+                ],
+                "enabled": true,
+                "frame": [
+                 [
+                  644,
+                  357
+                 ],
+                 [
+                  0,
+                  0
+                 ]
+                ],
+                "role": "AXButton",
+                "subrole": "AXIncrementArrow"
+               },
+               {
+                "actions": [
+                 "AXPress"
+                ],
+                "enabled": true,
+                "frame": [
+                 [
+                  644,
+                  357
+                 ],
+                 [
+                  0,
+                  0
+                 ]
+                ],
+                "role": "AXButton",
+                "subrole": "AXDecrementArrow"
+               },
+               {
+                "actions": [
+                 "AXPress"
+                ],
+                "enabled": true,
+                "frame": [
+                 [
+                  652,
+                  628
+                 ],
+                 [
+                  6,
+                  235
+                 ]
+                ],
+                "role": "AXButton",
+                "subrole": "AXIncrementPage"
+               },
+               {
+                "actions": [
+                 "AXPress"
+                ],
+                "enabled": true,
+                "frame": [
+                 [
+                  652,
+                  360
+                 ],
+                 [
+                  6,
+                  0
+                 ]
+                ],
+                "role": "AXButton",
+                "subrole": "AXDecrementPage"
+               }
+              ]
+             }
+            ]
+           }
+          ]
+         },
+         {
+          "enabled": true,
+          "frame": [
+           [
+            456,
+            320
+           ],
+           [
+            195,
+            28
+           ]
+          ],
+          "role": "AXGroup",
+          "subrole": "AXHostingView",
+          "children": [
+           {
+            "actions": [
+             "AXShowMenu",
+             "AXConfirm"
+            ],
+            "enabled": true,
+            "frame": [
+             [
+              456,
+              320
+             ],
+             [
+              195,
+              28
+             ]
+            ],
+            "role": "AXTextField",
+            "subrole": "AXSearchField",
+            "children": [
+             {
+              "actions": [
+               "AXPress"
+              ],
+              "description": "Search",
+              "enabled": true,
+              "frame": [
+               [
+                464,
+                330
+               ],
+               [
+                15,
+                9
+               ]
+              ],
+              "role": "AXButton"
+             }
+            ]
+           }
+          ]
+         },
+         {
+          "frame": [
+           [
+            661,
+            311
+           ],
+           [
+            0,
+            573
+           ]
+          ],
+          "role": "AXSplitter",
+          "value": "223",
+          "enabled": false
+         },
+         {
+          "enabled": true,
+          "frame": [
+           [
+            438,
+            259
+           ],
+           [
+            723,
+            625
+           ]
+          ],
+          "role": "AXGroup",
+          "subrole": "AXHostingView",
+          "children": [
+           {
+            "enabled": true,
+            "frame": [
+             [
+              438,
+              259
+             ],
+             [
+              723,
+              625
+             ]
+            ],
+            "role": "AXGroup",
+            "subrole": "AXHostingView",
+            "children": [
+             {
+              "actions": [
+               "AXScrollLeftByPage",
+               "AXScrollRightByPage",
+               "AXScrollUpByPage",
+               "AXScrollDownByPage"
+              ],
+              "enabled": true,
+              "frame": [
+               [
+                661,
+                311
+               ],
+               [
+                500,
+                573
+               ]
+              ],
+              "role": "AXScrollArea",
+              "children": [
+               {
+                "enabled": true,
+                "frame": [
+                 [
+                  681,
+                  311
+                 ],
+                 [
+                  460,
+                  164
+                 ]
+                ],
+                "role": "AXGroup",
+                "children": [
+                 {
+                  "description": "General",
+                  "enabled": true,
+                  "frame": [
+                   [
+                    905,
+                    355
+                   ],
+                   [
+                    12,
+                    12
+                   ]
+                  ],
+                  "identifier": "questionmark.square.dashed",
+                  "role": "AXImage"
+                 },
+                 {
+                  "enabled": true,
+                  "frame": [
+                   [
+                    871,
+                    397
+                   ],
+                   [
+                    80,
+                    26
+                   ]
+                  ],
+                  "role": "AXStaticText",
+                  "value": "General"
+                 },
+                 {
+                  "enabled": true,
+                  "frame": [
+                   [
+                    712.5,
+                    423
+                   ],
+                   [
+                    397,
+                    32
+                   ]
+                  ],
+                  "role": "AXStaticText",
+                  "value": "Manage your overall setup and preferences for Mac, such as software updates, device language, AirDrop, and more."
+                 }
+                ]
+               },
+               {
+                "enabled": true,
+                "frame": [
+                 [
+                  681,
+                  485
+                 ],
+                 [
+                  460,
+                  134
+                 ]
+                ],
+                "role": "AXGroup",
+                "children": [
+                 {
+                  "actions": [
+                   "AXPress"
+                  ],
+                  "description": "About",
+                  "enabled": true,
+                  "frame": [
+                   [
+                    681,
+                    485
+                   ],
+                   [
+                    460,
+                    44
+                   ]
+                  ],
+                  "role": "AXButton"
+                 },
+                 {
+                  "actions": [
+                   "AXPress"
+                  ],
+                  "description": "Software Update",
+                  "enabled": true,
+                  "frame": [
+                   [
+                    681,
+                    530
+                   ],
+                   [
+                    460,
+                    44
+                   ]
+                  ],
+                  "role": "AXButton"
+                 },
+                 {
+                  "actions": [
+                   "AXPress"
+                  ],
+                  "description": "Storage",
+                  "enabled": true,
+                  "frame": [
+                   [
+                    681,
+                    575
+                   ],
+                   [
+                    460,
+                    44
+                   ]
+                  ],
+                  "role": "AXButton"
+                 }
+                ]
+               },
+               {
+                "enabled": true,
+                "frame": [
+                 [
+                  681,
+                  629
+                 ],
+                 [
+                  460,
+                  44
+                 ]
+                ],
+                "role": "AXGroup",
+                "children": [
+                 {
+                  "actions": [
+                   "AXPress"
+                  ],
+                  "description": "AppleCare & Warranty",
+                  "enabled": true,
+                  "frame": [
+                   [
+                    681,
+                    629
+                   ],
+                   [
+                    460,
+                    44
+                   ]
+                  ],
+                  "role": "AXButton"
+                 }
+                ]
+               },
+               {
+                "enabled": true,
+                "frame": [
+                 [
+                  681,
+                  683
+                 ],
+                 [
+                  460,
+                  44
+                 ]
+                ],
+                "role": "AXGroup",
+                "children": [
+                 {
+                  "actions": [
+                   "AXPress"
+                  ],
+                  "description": "AirDrop & Continuity",
+                  "enabled": true,
+                  "frame": [
+                   [
+                    681,
+                    683
+                   ],
+                   [
+                    460,
+                    44
+                   ]
+                  ],
+                  "role": "AXButton"
+                 }
+                ]
+               },
+               {
+                "enabled": true,
+                "frame": [
+                 [
+                  681,
+                  737
+                 ],
+                 [
+                  460,
+                  314
+                 ]
+                ],
+                "role": "AXGroup",
+                "children": [
+                 {
+                  "actions": [
+                   "AXPress"
+                  ],
+                  "description": "AutoFill & Passwords",
+                  "enabled": true,
+                  "frame": [
+                   [
+                    681,
+                    737
+                   ],
+                   [
+                    460,
+                    44
+                   ]
+                  ],
+                  "role": "AXButton"
+                 },
+                 {
+                  "actions": [
+                   "AXPress"
+                  ],
+                  "description": "Date & Time",
+                  "enabled": true,
+                  "frame": [
+                   [
+                    681,
+                    782
+                   ],
+                   [
+                    460,
+                    44
+                   ]
+                  ],
+                  "role": "AXButton"
+                 },
+                 {
+                  "actions": [
+                   "AXPress"
+                  ],
+                  "description": "Language & Region",
+                  "enabled": true,
+                  "frame": [
+                   [
+                    681,
+                    827
+                   ],
+                   [
+                    460,
+                    44
+                   ]
+                  ],
+                  "role": "AXButton"
+                 },
+                 {
+                  "actions": [
+                   "AXPress"
+                  ],
+                  "description": "Login Items & Extensions",
+                  "enabled": true,
+                  "frame": [
+                   [
+                    681,
+                    872
+                   ],
+                   [
+                    460,
+                    44
+                   ]
+                  ],
+                  "role": "AXButton"
+                 },
+                 {
+                  "actions": [
+                   "AXPress"
+                  ],
+                  "description": "Sharing",
+                  "enabled": true,
+                  "frame": [
+                   [
+                    681,
+                    917
+                   ],
+                   [
+                    460,
+                    44
+                   ]
+                  ],
+                  "role": "AXButton"
+                 },
+                 {
+                  "actions": [
+                   "AXPress"
+                  ],
+                  "description": "Startup Disk",
+                  "enabled": true,
+                  "frame": [
+                   [
+                    681,
+                    962
+                   ],
+                   [
+                    460,
+                    44
+                   ]
+                  ],
+                  "role": "AXButton"
+                 },
+                 {
+                  "actions": [
+                   "AXPress"
+                  ],
+                  "description": "Time Machine",
+                  "enabled": true,
+                  "frame": [
+                   [
+                    681,
+                    1007
+                   ],
+                   [
+                    460,
+                    44
+                   ]
+                  ],
+                  "role": "AXButton"
+                 }
+                ]
+               },
+               {
+                "enabled": true,
+                "frame": [
+                 [
+                  681,
+                  1061
+                 ],
+                 [
+                  460,
+                  44
+                 ]
+                ],
+                "role": "AXGroup",
+                "children": [
+                 {
+                  "actions": [
+                   "AXPress"
+                  ],
+                  "description": "Device Management",
+                  "enabled": true,
+                  "frame": [
+                   [
+                    681,
+                    1061
+                   ],
+                   [
+                    460,
+                    44
+                   ]
+                  ],
+                  "role": "AXButton"
+                 }
+                ]
+               },
+               {
+                "enabled": true,
+                "frame": [
+                 [
+                  681,
+                  1115
+                 ],
+                 [
+                  460,
+                  44
+                 ]
+                ],
+                "role": "AXGroup",
+                "children": [
+                 {
+                  "actions": [
+                   "AXPress"
+                  ],
+                  "description": "Transfer or Reset",
+                  "enabled": true,
+                  "frame": [
+                   [
+                    681,
+                    1115
+                   ],
+                   [
+                    460,
+                    44
+                   ]
+                  ],
+                  "role": "AXButton"
+                 }
+                ]
+               },
+               {
+                "enabled": true,
+                "frame": [
+                 [
+                  1143,
+                  310
+                 ],
+                 [
+                  19,
+                  575
+                 ]
+                ],
+                "role": "AXScrollBar",
+                "value": "0",
+                "children": [
+                 {
+                  "enabled": true,
+                  "frame": [
+                   [
+                    1152,
+                    314
+                   ],
+                   [
+                    6,
+                    385
+                   ]
+                  ],
+                  "role": "AXValueIndicator",
+                  "value": "0"
+                 },
+                 {
+                  "actions": [
+                   "AXPress"
+                  ],
+                  "enabled": true,
+                  "frame": [
+                   [
+                    1144,
+                    311
+                   ],
+                   [
+                    0,
+                    0
+                   ]
+                  ],
+                  "role": "AXButton",
+                  "subrole": "AXIncrementArrow"
+                 },
+                 {
+                  "actions": [
+                   "AXPress"
+                  ],
+                  "enabled": true,
+                  "frame": [
+                   [
+                    1144,
+                    311
+                   ],
+                   [
+                    0,
+                    0
+                   ]
+                  ],
+                  "role": "AXButton",
+                  "subrole": "AXDecrementArrow"
+                 },
+                 {
+                  "actions": [
+                   "AXPress"
+                  ],
+                  "enabled": true,
+                  "frame": [
+                   [
+                    1152,
+                    700
+                   ],
+                   [
+                    6,
+                    181
+                   ]
+                  ],
+                  "role": "AXButton",
+                  "subrole": "AXIncrementPage"
+                 },
+                 {
+                  "actions": [
+                   "AXPress"
+                  ],
+                  "enabled": true,
+                  "frame": [
+                   [
+                    1152,
+                    314
+                   ],
+                   [
+                    6,
+                    0
+                   ]
+                  ],
+                  "role": "AXButton",
+                  "subrole": "AXDecrementPage"
+                 }
+                ]
+               }
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "actions": [
+       "AXShowMenu"
+      ],
+      "enabled": true,
+      "frame": [
+       [
+        438,
+        259
+       ],
+       [
+        723,
+        52
+       ]
+      ],
+      "role": "AXToolbar",
+      "children": [
+       {
+        "actions": [
+         "Name:Move previous\nTarget:0x0\nSelector:(null)",
+         "Name:Remove from toolbar\nTarget:0x0\nSelector:(null)"
+        ],
+        "enabled": true,
+        "frame": [
+         [
+          665,
+          259
+         ],
+         [
+          81,
+          52
+         ]
+        ],
+        "role": "AXGroup",
+        "children": [
+         {
+          "enabled": true,
+          "frame": [
+           [
+            669,
+            267
+           ],
+           [
+            73,
+            36
+           ]
+          ],
+          "role": "AXGroup",
+          "children": [
+           {
+            "actions": [
+             "AXPress",
+             "AXShowMenu"
+            ],
+            "description": "Back",
+            "frame": [
+             [
+              669,
+              267
+             ],
+             [
+              36,
+              36
+             ]
+            ],
+            "identifier": "go back",
+            "role": "AXMenuButton",
+            "subrole": "AXSegment",
+            "enabled": false
+           },
+           {
+            "actions": [
+             "AXPress",
+             "AXShowMenu"
+            ],
+            "description": "Forward",
+            "frame": [
+             [
+              706,
+              267
+             ],
+             [
+              36,
+              36
+             ]
+            ],
+            "identifier": "go forward",
+            "role": "AXMenuButton",
+            "subrole": "AXSegment",
+            "enabled": false
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "actions": [
+       "AXPress"
+      ],
+      "enabled": true,
+      "frame": [
+       [
+        456,
+        277
+       ],
+       [
+        16,
+        16
+       ]
+      ],
+      "role": "AXButton",
+      "subrole": "AXCloseButton"
+     },
+     {
+      "actions": [
+       "AXPress",
+       "AXShowMenu"
+      ],
+      "enabled": true,
+      "frame": [
+       [
+        502,
+        277
+       ],
+       [
+        16,
+        16
+       ]
+      ],
+      "role": "AXButton",
+      "subrole": "AXZoomButton",
+      "children": [
+       {
+        "enabled": true,
+        "frame": [
+         [
+          503,
+          278
+         ],
+         [
+          14,
+          14
+         ]
+        ],
+        "role": "AXGroup"
+       }
+      ]
+     },
+     {
+      "actions": [
+       "AXPress"
+      ],
+      "enabled": true,
+      "frame": [
+       [
+        479,
+        277
+       ],
+       [
+        16,
+        16
+       ]
+      ],
+      "role": "AXButton",
+      "subrole": "AXMinimizeButton"
+     },
+     {
+      "actions": [
+       "AXPress"
+      ],
+      "enabled": true,
+      "frame": [
+       [
+        746,
+        259
+       ],
+       [
+        403,
+        52
+       ]
+      ],
+      "role": "AXStaticText"
+     }
+    ]
+   },
+   {
+    "actions": [
+     "AXCancel"
+    ],
+    "enabled": true,
+    "frame": [
+     [
+      0,
+      0
+     ],
+     [
+      1600,
+      30
+     ]
+    ],
+    "role": "AXMenuBar",
+    "children": [
+     {
+      "actions": [
+       "AXCancel",
+       "AXPress",
+       "AXPick"
+      ],
+      "enabled": true,
+      "frame": [
+       [
+        10,
+        0
+       ],
+       [
+        34,
+        30
+       ]
+      ],
+      "role": "AXMenuBarItem",
+      "title": "Apple"
+     },
+     {
+      "actions": [
+       "AXCancel",
+       "AXPress",
+       "AXPick"
+      ],
+      "enabled": true,
+      "frame": [
+       [
+        44,
+        0
+       ],
+       [
+        127,
+        30
+       ]
+      ],
+      "role": "AXMenuBarItem",
+      "title": "System Settings",
+      "children": [
+       {
+        "actions": [
+         "AXCancel"
+        ],
+        "enabled": true,
+        "frame": [
+         [
+          0,
+          1200
+         ],
+         [
+          0,
+          0
+         ]
+        ],
+        "role": "AXMenu",
+        "children": [
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "About System Settings"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "role": "AXMenuItem",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "role": "AXMenuItem",
+          "title": "Services",
+          "children": [
+           {
+            "actions": [
+             "AXCancel"
+            ],
+            "enabled": true,
+            "frame": [
+             [
+              0,
+              1200
+             ],
+             [
+              0,
+              0
+             ]
+            ],
+            "role": "AXMenu"
+           }
+          ]
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "role": "AXMenuItem",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "hide:",
+          "role": "AXMenuItem",
+          "title": "Hide System Settings"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "hideOtherApplications:",
+          "role": "AXMenuItem",
+          "title": "Hide Others"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "unhideAllApplications:",
+          "role": "AXMenuItem",
+          "title": "Show All",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "role": "AXMenuItem",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "terminate:",
+          "role": "AXMenuItem",
+          "title": "Quit System Settings"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "NSAlternateQuitMenuItem",
+          "role": "AXMenuItem",
+          "title": "Quit and Keep Windows"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "actions": [
+       "AXCancel",
+       "AXPress",
+       "AXPick"
+      ],
+      "enabled": true,
+      "frame": [
+       [
+        171,
+        0
+       ],
+       [
+        44,
+        30
+       ]
+      ],
+      "role": "AXMenuBarItem",
+      "title": "Edit",
+      "children": [
+       {
+        "actions": [
+         "AXCancel"
+        ],
+        "enabled": true,
+        "frame": [
+         [
+          0,
+          1200
+         ],
+         [
+          0,
+          0
+         ]
+        ],
+        "role": "AXMenu",
+        "children": [
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "undo:",
+          "role": "AXMenuItem",
+          "title": "Undo",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "redo:",
+          "role": "AXMenuItem",
+          "title": "Redo",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "role": "AXMenuItem",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "cut:",
+          "role": "AXMenuItem",
+          "title": "Cut",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "copy:",
+          "role": "AXMenuItem",
+          "title": "Copy",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "paste:",
+          "role": "AXMenuItem",
+          "title": "Paste",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "delete:",
+          "role": "AXMenuItem",
+          "title": "Delete",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "selectAll:",
+          "role": "AXMenuItem",
+          "title": "Select All",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "role": "AXMenuItem",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "_NSMenuItemAutoFillIdentifier",
+          "role": "AXMenuItem",
+          "title": "AutoFill",
+          "children": [
+           {
+            "actions": [
+             "AXCancel"
+            ],
+            "enabled": true,
+            "frame": [
+             [
+              0,
+              1200
+             ],
+             [
+              0,
+              0
+             ]
+            ],
+            "role": "AXMenu"
+           }
+          ]
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "startDictation:",
+          "role": "AXMenuItem",
+          "title": "Start Dictation\u2026"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "orderFrontCharacterPalette:",
+          "role": "AXMenuItem",
+          "title": "Emoji & Symbols"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "actions": [
+       "AXCancel",
+       "AXPress",
+       "AXPick"
+      ],
+      "enabled": true,
+      "frame": [
+       [
+        215,
+        0
+       ],
+       [
+        50,
+        30
+       ]
+      ],
+      "role": "AXMenuBarItem",
+      "title": "View",
+      "children": [
+       {
+        "actions": [
+         "AXCancel"
+        ],
+        "enabled": true,
+        "frame": [
+         [
+          0,
+          1200
+         ],
+         [
+          0,
+          0
+         ]
+        ],
+        "role": "AXMenu",
+        "children": [
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "role": "AXMenuItem",
+          "title": "Back",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "role": "AXMenuItem",
+          "title": "Forward",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "role": "AXMenuItem",
+          "title": "Search",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "role": "AXMenuItem",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "About"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "Accessibility"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "AirDrop & Continuity"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "Appearance"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "Apple Account"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "AppleCare & Warranty"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "Bluetooth"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "Date & Time"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "Desktop & Dock"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "Device Management"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "Displays"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "Energy"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "Focus"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "Game Center"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "iCloud"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "Internet Accounts"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "Keyboard"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "Language & Region"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "Lock Screen"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "Login Items & Extensions"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "Login Password"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "Menu Bar"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "Network"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "Notifications"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "Printers & Scanners"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "Privacy & Security"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "Screen Time"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "Sharing"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "Siri"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "Software Update"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "Sound"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "Spotlight"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "Startup Disk"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "Storage"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "Time Machine"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "Transfer or Reset"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "Users & Groups"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "Wallet & Apple\u00a0Pay"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "Wallpaper"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "Wi\u2011Fi"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "role": "AXMenuItem",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "toggleFullScreen:",
+          "role": "AXMenuItem",
+          "title": "Enter Full Screen",
+          "enabled": false
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "actions": [
+       "AXCancel",
+       "AXPress",
+       "AXPick"
+      ],
+      "enabled": true,
+      "frame": [
+       [
+        265,
+        0
+       ],
+       [
+        69,
+        30
+       ]
+      ],
+      "role": "AXMenuBarItem",
+      "title": "Window",
+      "children": [
+       {
+        "actions": [
+         "AXCancel"
+        ],
+        "enabled": true,
+        "frame": [
+         [
+          0,
+          1200
+         ],
+         [
+          0,
+          0
+         ]
+        ],
+        "role": "AXMenu",
+        "children": [
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "performClose:",
+          "role": "AXMenuItem",
+          "title": "Close",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "closeAll:",
+          "role": "AXMenuItem",
+          "title": "Close All"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "performMiniaturize:",
+          "role": "AXMenuItem",
+          "title": "Minimize",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "miniaturizeAll:",
+          "role": "AXMenuItem",
+          "title": "Minimize All"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "performZoom:",
+          "role": "AXMenuItem",
+          "title": "Zoom",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "zoomAll:",
+          "role": "AXMenuItem",
+          "title": "Zoom All"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "_zoomFill:",
+          "role": "AXMenuItem",
+          "title": "Fill",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "_zoomCenter:",
+          "role": "AXMenuItem",
+          "title": "Center",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "role": "AXMenuItem",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "role": "AXMenuItem",
+          "title": "Move & Resize",
+          "children": [
+           {
+            "actions": [
+             "AXCancel"
+            ],
+            "enabled": true,
+            "frame": [
+             [
+              0,
+              1200
+             ],
+             [
+              0,
+              0
+             ]
+            ],
+            "role": "AXMenu"
+           }
+          ]
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "role": "AXMenuItem",
+          "title": "Full Screen Tile",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "role": "AXMenuItem",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "_removeWindowFromStageManagerSet:",
+          "role": "AXMenuItem",
+          "title": "Remove Window from Set",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "role": "AXMenuItem",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "role": "AXMenuItem",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "arrangeInFront:",
+          "role": "AXMenuItem",
+          "title": "Bring All to Front"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "alternateArrangeInFront:",
+          "role": "AXMenuItem",
+          "title": "Arrange in Front"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "actions": [
+       "AXCancel",
+       "AXPress",
+       "AXPick"
+      ],
+      "enabled": true,
+      "frame": [
+       [
+        334,
+        0
+       ],
+       [
+        48,
+        30
+       ]
+      ],
+      "role": "AXMenuBarItem",
+      "title": "Help",
+      "children": [
+       {
+        "actions": [
+         "AXCancel"
+        ],
+        "enabled": true,
+        "frame": [
+         [
+          0,
+          1200
+         ],
+         [
+          0,
+          0
+         ]
+        ],
+        "role": "AXMenu",
+        "children": [
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "showHelp:",
+          "role": "AXMenuItem",
+          "title": "System Settings Help"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "macOS Help"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "User Manual"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "macOS Support"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "role": "AXMenuItem",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "Apple Virtual Machine 1 Specifications"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "Hardware Support"
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "windowTitle": ""
+}

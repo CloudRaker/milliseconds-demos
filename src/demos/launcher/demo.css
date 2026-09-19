@@ -1,0 +1,299 @@
+/* Spotlight-style palette, restyled with the milliseconds.ai tokens. All rules under .d-launcher. */
+.d-launcher {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  --l-accent: var(--purple-on-dark);
+  --l-ready: #6fdc8c;
+}
+.d-launcher.light {
+  --surface: #f2f0ee;
+  --ink: #ffffff;
+  --white: #17171b;
+  --muted: #5d5b66;
+  --line: #17171b22;
+}
+
+.d-launcher .l-controls {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.d-launcher .btn.on {
+  border-color: var(--l-ready);
+  color: var(--l-ready);
+}
+.d-launcher .l-hint {
+  font-family: var(--mono);
+  font-size: 12px;
+}
+
+/* Panel */
+.d-launcher .l-panel {
+  max-width: 680px;
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 30px 80px #00000066;
+}
+.d-launcher .l-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 20px;
+  height: 72px;
+  border-bottom: 1px solid var(--line);
+}
+.d-launcher .l-bolt {
+  font-size: 18px;
+  filter: grayscale(1) opacity(0.5);
+  transition: filter 150ms ease-out;
+}
+.d-launcher .l-bolt.ready {
+  filter: none;
+  text-shadow: 0 0 14px var(--l-ready);
+}
+.d-launcher .l-field {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: 0;
+  color: var(--white);
+  font: 400 22px var(--sans);
+  letter-spacing: -0.02em;
+}
+.d-launcher .l-field:focus {
+  outline: none;
+}
+.d-launcher .l-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--l-accent);
+  opacity: 0;
+  transition: opacity 120ms ease-out;
+}
+.d-launcher .l-dot.on {
+  opacity: 1;
+}
+
+/* Rows */
+.d-launcher .l-rows {
+  padding: 6px;
+  max-height: 392px;
+  overflow-y: auto;
+}
+.d-launcher .l-empty {
+  padding: 24px 14px;
+  margin: 0;
+  font-size: 14px;
+}
+.d-launcher .l-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 56px;
+  padding: 0 12px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.d-launcher .l-row.sel {
+  background: #ffffff12;
+}
+.d-launcher.light .l-row.sel {
+  background: #00000010;
+}
+.d-launcher .l-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: #ffffff14;
+  border: 1px solid var(--line);
+  font: 600 9px/1 var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.d-launcher .l-icon.k-calculate {
+  color: #f0b35a;
+  border-color: #f0b35a55;
+}
+.d-launcher .l-icon.k-open_url {
+  color: #6bb8ff;
+  border-color: #6bb8ff55;
+}
+.d-launcher .l-icon.k-group {
+  color: var(--white);
+  background: var(--purple);
+  border-color: transparent;
+  font-size: 14px;
+}
+.d-launcher .l-icon.k-system_toggle {
+  color: var(--white);
+  border-color: #6d4aff66;
+}
+.d-launcher .l-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.d-launcher .l-text b {
+  font-weight: 500;
+  font-size: 15px;
+  color: var(--white);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.d-launcher .l-text i {
+  font-style: normal;
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.d-launcher .l-check {
+  color: #6bb8ff;
+  font-size: 14px;
+}
+.d-launcher .l-prob {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.d-launcher .l-prob.stale {
+  opacity: 0.45;
+}
+.d-launcher .l-prob em {
+  font: 500 12px var(--mono);
+  font-style: normal;
+  color: var(--white);
+  width: 40px;
+  text-align: right;
+}
+/* The group row: P(all), not P(target), so it gets a label instead of the target bar. */
+.d-launcher .l-all {
+  font: 500 11px var(--mono);
+  color: var(--muted);
+  white-space: nowrap;
+}
+.d-launcher .l-all.stale {
+  opacity: 0.45;
+}
+.d-launcher .l-all em {
+  font-style: normal;
+  color: var(--white);
+}
+.d-launcher .l-enter {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 22px;
+  border-radius: 6px;
+  background: #6fdc8c2e;
+  color: var(--l-ready);
+  font-size: 13px;
+}
+
+/* Footer chips */
+.d-launcher .l-foot {
+  border-top: 1px solid var(--line);
+  padding: 12px;
+}
+.d-launcher .l-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.d-launcher .l-chip {
+  background: #ffffff10;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  cursor: pointer;
+  font: 500 12px var(--mono);
+  padding: 5px 11px;
+}
+.d-launcher .l-chip:hover {
+  color: var(--white);
+  border-color: var(--purple-on-dark);
+}
+.d-launcher .l-error {
+  margin: 0;
+}
+
+/* Simulated execution */
+.d-launcher .l-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%);
+  z-index: 20;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 10px 18px;
+  font-size: 14px;
+  color: var(--white);
+  box-shadow: 0 16px 40px #00000066;
+}
+.d-launcher .l-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  background: #000000aa;
+  padding: 24px;
+}
+.d-launcher .l-modal .panel {
+  max-width: 520px;
+  width: 100%;
+}
+.d-launcher .l-modal ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 14px;
+}
+.d-launcher .l-modal li b {
+  font-weight: 500;
+}
+
+@media (max-width: 560px) {
+  .d-launcher .l-field {
+    font-size: 18px;
+  }
+  .d-launcher .l-text i {
+    display: none;
+  }
+}
+
+.d-launcher, .d-launcher .l-panel { min-width: 0; }
+.d-launcher .l-panel { max-width: none; }
+.d-launcher .l-controls .btn { min-height: 42px; }
+.d-launcher .l-chip { max-width: 100%; white-space: normal; text-align: left; line-height: 1.5; }
+.d-launcher .l-row:focus-visible { outline: 2px solid var(--purple-on-dark); outline-offset: -2px; }
+.d-launcher .l-header:focus-within { box-shadow: inset 0 0 0 2px var(--purple-on-dark); }
+.d-launcher .l-toast { width: max-content; max-width: calc(100vw - 32px); border-radius: 12px; text-align: center; }
+.d-launcher .l-modal .panel { max-height: calc(100dvh - 48px); overflow: auto; overflow-wrap: anywhere; }
+@media (max-width: 560px) {
+  .d-launcher .l-header { height: auto; min-height: 64px; padding: 14px; gap: 10px; }
+  .d-launcher .l-row { height: auto; min-height: 68px; padding: 10px; gap: 8px; }
+  .d-launcher .l-text b, .d-launcher .l-text i { white-space: normal; overflow-wrap: anywhere; }
+  .d-launcher .l-text i { display: block; font-size: 11px; }
+  .d-launcher .l-prob { flex-direction: column; align-items: flex-end; gap: 4px; }
+  .d-launcher .l-enter { display: none; }
+}

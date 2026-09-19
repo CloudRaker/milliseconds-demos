@@ -1,0 +1,2097 @@
+{
+ "appName": "Calculator",
+ "bundleIdentifier": "com.apple.calculator",
+ "root": {
+  "enabled": true,
+  "frame": [
+   [
+    0,
+    0
+   ],
+   [
+    0,
+    0
+   ]
+  ],
+  "role": "AXApplication",
+  "title": "Calculator",
+  "children": [
+   {
+    "actions": [
+     "AXRaise"
+    ],
+    "enabled": true,
+    "frame": [
+     [
+      350,
+      556
+     ],
+     [
+      230,
+      408
+     ]
+    ],
+    "identifier": "main",
+    "role": "AXWindow",
+    "subrole": "AXStandardWindow",
+    "title": "Calculator",
+    "children": [
+     {
+      "enabled": true,
+      "frame": [
+       [
+        350,
+        556
+       ],
+       [
+        230,
+        408
+       ]
+      ],
+      "role": "AXGroup",
+      "subrole": "AXHostingView",
+      "children": [
+       {
+        "enabled": true,
+        "frame": [
+         [
+          350,
+          556
+         ],
+         [
+          230,
+          408
+         ]
+        ],
+        "identifier": "main, SidebarNavigationSplitView",
+        "role": "AXSplitGroup",
+        "children": [
+         {
+          "enabled": true,
+          "focused": true,
+          "frame": [
+           [
+            350,
+            556
+           ],
+           [
+            230,
+            408
+           ]
+          ],
+          "role": "AXGroup",
+          "subrole": "AXHostingView",
+          "children": [
+           {
+            "enabled": true,
+            "focused": true,
+            "frame": [
+             [
+              350,
+              609
+             ],
+             [
+              230,
+              354
+             ]
+            ],
+            "identifier": "CalculatorKeypadView",
+            "role": "AXGroup",
+            "children": [
+             {
+              "actions": [
+               "AXScrollLeftByPage",
+               "AXScrollRightByPage",
+               "AXScrollUpByPage",
+               "AXScrollDownByPage",
+               "Name:Copy\nTarget:0x0\nSelector:(null)"
+              ],
+              "description": "Edit field",
+              "enabled": true,
+              "frame": [
+               [
+                360,
+                642
+               ],
+               [
+                210,
+                42
+               ]
+              ],
+              "identifier": "StandardInputView",
+              "role": "AXScrollArea",
+              "children": [
+               {
+                "enabled": true,
+                "frame": [
+                 [
+                  551,
+                  645
+                 ],
+                 [
+                  19,
+                  36
+                 ]
+                ],
+                "role": "AXStaticText",
+                "value": "\u200e0"
+               }
+              ]
+             },
+             {
+              "actions": [
+               "AXPress"
+              ],
+              "description": "Delete",
+              "enabled": true,
+              "frame": [
+               [
+                360,
+                689
+               ],
+               [
+                48,
+                48
+               ]
+              ],
+              "help": "Delete the last digit or operation entered (long press to delete all)",
+              "identifier": "Delete",
+              "role": "AXButton"
+             },
+             {
+              "actions": [
+               "AXPress"
+              ],
+              "description": "All Clear",
+              "enabled": true,
+              "frame": [
+               [
+                414,
+                689
+               ],
+               [
+                48,
+                48
+               ]
+              ],
+              "identifier": "AllClear",
+              "role": "AXButton"
+             },
+             {
+              "actions": [
+               "AXPress"
+              ],
+              "description": "Percent",
+              "enabled": true,
+              "frame": [
+               [
+                468,
+                689
+               ],
+               [
+                48,
+                48
+               ]
+              ],
+              "identifier": "Percent",
+              "role": "AXButton"
+             },
+             {
+              "actions": [
+               "AXPress"
+              ],
+              "description": "Divide",
+              "enabled": true,
+              "frame": [
+               [
+                522,
+                689
+               ],
+               [
+                48,
+                48
+               ]
+              ],
+              "identifier": "Divide",
+              "role": "AXButton"
+             },
+             {
+              "actions": [
+               "AXPress"
+              ],
+              "description": "7",
+              "enabled": true,
+              "frame": [
+               [
+                360,
+                743
+               ],
+               [
+                48,
+                48
+               ]
+              ],
+              "identifier": "Seven",
+              "role": "AXButton"
+             },
+             {
+              "actions": [
+               "AXPress"
+              ],
+              "description": "8",
+              "enabled": true,
+              "frame": [
+               [
+                414,
+                743
+               ],
+               [
+                48,
+                48
+               ]
+              ],
+              "identifier": "Eight",
+              "role": "AXButton"
+             },
+             {
+              "actions": [
+               "AXPress"
+              ],
+              "description": "9",
+              "enabled": true,
+              "frame": [
+               [
+                468,
+                743
+               ],
+               [
+                48,
+                48
+               ]
+              ],
+              "identifier": "Nine",
+              "role": "AXButton"
+             },
+             {
+              "actions": [
+               "AXPress"
+              ],
+              "description": "Multiply",
+              "enabled": true,
+              "frame": [
+               [
+                522,
+                743
+               ],
+               [
+                48,
+                48
+               ]
+              ],
+              "identifier": "Multiply",
+              "role": "AXButton"
+             },
+             {
+              "actions": [
+               "AXPress"
+              ],
+              "description": "4",
+              "enabled": true,
+              "frame": [
+               [
+                360,
+                797
+               ],
+               [
+                48,
+                48
+               ]
+              ],
+              "identifier": "Four",
+              "role": "AXButton"
+             },
+             {
+              "actions": [
+               "AXPress"
+              ],
+              "description": "5",
+              "enabled": true,
+              "frame": [
+               [
+                414,
+                797
+               ],
+               [
+                48,
+                48
+               ]
+              ],
+              "identifier": "Five",
+              "role": "AXButton"
+             },
+             {
+              "actions": [
+               "AXPress"
+              ],
+              "description": "6",
+              "enabled": true,
+              "frame": [
+               [
+                468,
+                797
+               ],
+               [
+                48,
+                48
+               ]
+              ],
+              "identifier": "Six",
+              "role": "AXButton"
+             },
+             {
+              "actions": [
+               "AXPress"
+              ],
+              "description": "Subtract",
+              "enabled": true,
+              "frame": [
+               [
+                522,
+                797
+               ],
+               [
+                48,
+                48
+               ]
+              ],
+              "identifier": "Subtract",
+              "role": "AXButton"
+             },
+             {
+              "actions": [
+               "AXPress"
+              ],
+              "description": "1",
+              "enabled": true,
+              "frame": [
+               [
+                360,
+                851
+               ],
+               [
+                48,
+                48
+               ]
+              ],
+              "identifier": "One",
+              "role": "AXButton"
+             },
+             {
+              "actions": [
+               "AXPress"
+              ],
+              "description": "2",
+              "enabled": true,
+              "frame": [
+               [
+                414,
+                851
+               ],
+               [
+                48,
+                48
+               ]
+              ],
+              "identifier": "Two",
+              "role": "AXButton"
+             },
+             {
+              "actions": [
+               "AXPress"
+              ],
+              "description": "3",
+              "enabled": true,
+              "frame": [
+               [
+                468,
+                851
+               ],
+               [
+                48,
+                48
+               ]
+              ],
+              "identifier": "Three",
+              "role": "AXButton"
+             },
+             {
+              "actions": [
+               "AXPress"
+              ],
+              "description": "Add",
+              "enabled": true,
+              "frame": [
+               [
+                522,
+                851
+               ],
+               [
+                48,
+                48
+               ]
+              ],
+              "identifier": "Add",
+              "role": "AXButton"
+             },
+             {
+              "actions": [
+               "AXPress"
+              ],
+              "description": "Change Sign",
+              "enabled": true,
+              "frame": [
+               [
+                360,
+                905
+               ],
+               [
+                48,
+                48
+               ]
+              ],
+              "help": "Change sign of a value",
+              "identifier": "Negate",
+              "role": "AXButton"
+             },
+             {
+              "actions": [
+               "AXPress"
+              ],
+              "description": "0",
+              "enabled": true,
+              "frame": [
+               [
+                414,
+                905
+               ],
+               [
+                48,
+                48
+               ]
+              ],
+              "identifier": "Zero",
+              "role": "AXButton"
+             },
+             {
+              "actions": [
+               "AXPress"
+              ],
+              "description": "Point",
+              "enabled": true,
+              "frame": [
+               [
+                468,
+                905
+               ],
+               [
+                48,
+                48
+               ]
+              ],
+              "identifier": "Decimal",
+              "role": "AXButton"
+             },
+             {
+              "actions": [
+               "AXPress"
+              ],
+              "description": "Equals",
+              "enabled": true,
+              "frame": [
+               [
+                522,
+                905
+               ],
+               [
+                48,
+                48
+               ]
+              ],
+              "identifier": "Equals",
+              "role": "AXButton"
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "actions": [
+       "AXShowMenu"
+      ],
+      "enabled": true,
+      "frame": [
+       [
+        350,
+        556
+       ],
+       [
+        230,
+        52
+       ]
+      ],
+      "role": "AXToolbar",
+      "children": [
+       {
+        "actions": [
+         "AXIncrement",
+         "AXDecrement",
+         "AXDelete",
+         "AXShowMenu",
+         "AXCancel",
+         "AXPress"
+        ],
+        "description": "Show Sidebar",
+        "enabled": true,
+        "frame": [
+         [
+          450,
+          556
+         ],
+         [
+          48,
+          52
+         ]
+        ],
+        "identifier": "",
+        "role": "AXButton"
+       },
+       {
+        "actions": [
+         "AXIncrement",
+         "AXDecrement",
+         "AXDelete",
+         "AXShowMenu",
+         "AXCancel",
+         "AXPress",
+         "Name:Move previous\nTarget:0x0\nSelector:(null)",
+         "Name:Remove from toolbar\nTarget:0x0\nSelector:(null)"
+        ],
+        "description": "Mode",
+        "enabled": true,
+        "frame": [
+         [
+          532,
+          556
+         ],
+         [
+          44,
+          52
+         ]
+        ],
+        "identifier": "Mode: basic; unitConversion: false",
+        "role": "AXButton"
+       }
+      ]
+     },
+     {
+      "actions": [
+       "AXPress"
+      ],
+      "enabled": true,
+      "frame": [
+       [
+        368,
+        574
+       ],
+       [
+        16,
+        16
+       ]
+      ],
+      "role": "AXButton",
+      "subrole": "AXCloseButton"
+     },
+     {
+      "actions": [
+       "AXPress",
+       "AXShowMenu"
+      ],
+      "frame": [
+       [
+        414,
+        574
+       ],
+       [
+        16,
+        16
+       ]
+      ],
+      "role": "AXButton",
+      "subrole": "AXZoomButton",
+      "enabled": false,
+      "children": [
+       {
+        "enabled": true,
+        "frame": [
+         [
+          415,
+          575
+         ],
+         [
+          14,
+          14
+         ]
+        ],
+        "role": "AXGroup"
+       }
+      ]
+     },
+     {
+      "actions": [
+       "AXPress"
+      ],
+      "enabled": true,
+      "frame": [
+       [
+        391,
+        574
+       ],
+       [
+        16,
+        16
+       ]
+      ],
+      "role": "AXButton",
+      "subrole": "AXMinimizeButton"
+     }
+    ]
+   },
+   {
+    "actions": [
+     "AXCancel"
+    ],
+    "enabled": true,
+    "frame": [
+     [
+      0,
+      0
+     ],
+     [
+      1600,
+      30
+     ]
+    ],
+    "role": "AXMenuBar",
+    "children": [
+     {
+      "actions": [
+       "AXCancel",
+       "AXPress",
+       "AXPick"
+      ],
+      "enabled": true,
+      "frame": [
+       [
+        10,
+        0
+       ],
+       [
+        34,
+        30
+       ]
+      ],
+      "role": "AXMenuBarItem",
+      "title": "Apple"
+     },
+     {
+      "actions": [
+       "AXCancel",
+       "AXPress",
+       "AXPick"
+      ],
+      "enabled": true,
+      "frame": [
+       [
+        44,
+        0
+       ],
+       [
+        87,
+        30
+       ]
+      ],
+      "role": "AXMenuBarItem",
+      "title": "Calculator",
+      "children": [
+       {
+        "actions": [
+         "AXCancel"
+        ],
+        "enabled": true,
+        "frame": [
+         [
+          0,
+          1200
+         ],
+         [
+          0,
+          0
+         ]
+        ],
+        "role": "AXMenu",
+        "children": [
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "About Calculator"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "role": "AXMenuItem",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "role": "AXMenuItem",
+          "title": "Services",
+          "children": [
+           {
+            "actions": [
+             "AXCancel"
+            ],
+            "enabled": true,
+            "frame": [
+             [
+              0,
+              1200
+             ],
+             [
+              0,
+              0
+             ]
+            ],
+            "role": "AXMenu"
+           }
+          ]
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "role": "AXMenuItem",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "hide:",
+          "role": "AXMenuItem",
+          "title": "Hide Calculator"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "hideOtherApplications:",
+          "role": "AXMenuItem",
+          "title": "Hide Others"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "unhideAllApplications:",
+          "role": "AXMenuItem",
+          "title": "Show All",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "role": "AXMenuItem",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "terminate:",
+          "role": "AXMenuItem",
+          "title": "Quit Calculator"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "actions": [
+       "AXCancel",
+       "AXPress",
+       "AXPick"
+      ],
+      "enabled": true,
+      "frame": [
+       [
+        131,
+        0
+       ],
+       [
+        44,
+        30
+       ]
+      ],
+      "role": "AXMenuBarItem",
+      "title": "Edit",
+      "children": [
+       {
+        "actions": [
+         "AXCancel"
+        ],
+        "enabled": true,
+        "frame": [
+         [
+          0,
+          1200
+         ],
+         [
+          0,
+          0
+         ]
+        ],
+        "role": "AXMenu",
+        "children": [
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "undo:",
+          "role": "AXMenuItem",
+          "title": "Undo",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "redo:",
+          "role": "AXMenuItem",
+          "title": "Redo",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "role": "AXMenuItem",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "cut:",
+          "role": "AXMenuItem",
+          "title": "Cut",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "copy:",
+          "role": "AXMenuItem",
+          "title": "Copy",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "paste:",
+          "role": "AXMenuItem",
+          "title": "Paste",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "delete:",
+          "role": "AXMenuItem",
+          "title": "Delete",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "selectAll:",
+          "role": "AXMenuItem",
+          "title": "Select All",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "role": "AXMenuItem",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "_NSMenuItemAutoFillIdentifier",
+          "role": "AXMenuItem",
+          "title": "AutoFill",
+          "children": [
+           {
+            "actions": [
+             "AXCancel"
+            ],
+            "enabled": true,
+            "frame": [
+             [
+              0,
+              1200
+             ],
+             [
+              0,
+              0
+             ]
+            ],
+            "role": "AXMenu"
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "actions": [
+       "AXCancel",
+       "AXPress",
+       "AXPick"
+      ],
+      "enabled": true,
+      "frame": [
+       [
+        175,
+        0
+       ],
+       [
+        50,
+        30
+       ]
+      ],
+      "role": "AXMenuBarItem",
+      "title": "View",
+      "children": [
+       {
+        "actions": [
+         "AXCancel"
+        ],
+        "enabled": true,
+        "frame": [
+         [
+          0,
+          1200
+         ],
+         [
+          0,
+          0
+         ]
+        ],
+        "role": "AXMenu",
+        "children": [
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "role": "AXMenuItem",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "Basic"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "Scientific"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "Programmer"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "role": "AXMenuItem",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "role": "AXMenuItem",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "Convert"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "RPN Mode"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "role": "AXMenuItem",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "Math Notes\u2026"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "role": "AXMenuItem",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "Hide Thousands Separator"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "ID(id: 10531)",
+          "role": "AXMenuItem",
+          "title": "Decimal Places",
+          "children": [
+           {
+            "actions": [
+             "AXCancel"
+            ],
+            "enabled": true,
+            "frame": [
+             [
+              0,
+              1200
+             ],
+             [
+              0,
+              0
+             ]
+            ],
+            "role": "AXMenu"
+           }
+          ]
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "role": "AXMenuItem",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "Show History"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "toggleFullScreen:",
+          "role": "AXMenuItem",
+          "title": "Enter Full Screen",
+          "enabled": false
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "actions": [
+       "AXCancel",
+       "AXPress",
+       "AXPick"
+      ],
+      "enabled": true,
+      "frame": [
+       [
+        225,
+        0
+       ],
+       [
+        69,
+        30
+       ]
+      ],
+      "role": "AXMenuBarItem",
+      "title": "Window",
+      "children": [
+       {
+        "actions": [
+         "AXCancel"
+        ],
+        "enabled": true,
+        "frame": [
+         [
+          0,
+          1200
+         ],
+         [
+          0,
+          0
+         ]
+        ],
+        "role": "AXMenu",
+        "children": [
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "performClose:",
+          "role": "AXMenuItem",
+          "title": "Close",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "closeAll:",
+          "role": "AXMenuItem",
+          "title": "Close All"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "performMiniaturize:",
+          "role": "AXMenuItem",
+          "title": "Minimize",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "miniaturizeAll:",
+          "role": "AXMenuItem",
+          "title": "Minimize All"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "performZoom:",
+          "role": "AXMenuItem",
+          "title": "Zoom",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "zoomAll:",
+          "role": "AXMenuItem",
+          "title": "Zoom All"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "_zoomFill:",
+          "role": "AXMenuItem",
+          "title": "Fill",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "_zoomCenter:",
+          "role": "AXMenuItem",
+          "title": "Center",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "role": "AXMenuItem",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "role": "AXMenuItem",
+          "title": "Move & Resize",
+          "children": [
+           {
+            "actions": [
+             "AXCancel"
+            ],
+            "enabled": true,
+            "frame": [
+             [
+              0,
+              1200
+             ],
+             [
+              0,
+              0
+             ]
+            ],
+            "role": "AXMenu"
+           }
+          ]
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "role": "AXMenuItem",
+          "title": "Full Screen Tile",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "role": "AXMenuItem",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "_removeWindowFromStageManagerSet:",
+          "role": "AXMenuItem",
+          "title": "Remove Window from Set",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "role": "AXMenuItem",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "menuAction:",
+          "role": "AXMenuItem",
+          "title": "Always on Top"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "role": "AXMenuItem",
+          "enabled": false
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "arrangeInFront:",
+          "role": "AXMenuItem",
+          "title": "Bring All to Front"
+         },
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "alternateArrangeInFront:",
+          "role": "AXMenuItem",
+          "title": "Arrange in Front"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "actions": [
+       "AXCancel",
+       "AXPress",
+       "AXPick"
+      ],
+      "enabled": true,
+      "frame": [
+       [
+        294,
+        0
+       ],
+       [
+        48,
+        30
+       ]
+      ],
+      "role": "AXMenuBarItem",
+      "title": "Help",
+      "children": [
+       {
+        "actions": [
+         "AXCancel"
+        ],
+        "enabled": true,
+        "frame": [
+         [
+          0,
+          1200
+         ],
+         [
+          0,
+          0
+         ]
+        ],
+        "role": "AXMenu",
+        "children": [
+         {
+          "actions": [
+           "AXCancel",
+           "AXPress",
+           "AXPick"
+          ],
+          "enabled": true,
+          "frame": [
+           [
+            0,
+            1200
+           ],
+           [
+            0,
+            0
+           ]
+          ],
+          "identifier": "showHelp:",
+          "role": "AXMenuItem",
+          "title": "Calculator Help"
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "windowTitle": "Calculator"
+}

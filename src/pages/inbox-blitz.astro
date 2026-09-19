@@ -1,0 +1,14 @@
+---
+import Demo from '../layouts/Demo.astro';
+import meta from '../demos/inbox-blitz/meta';
+import Island from '../demos/inbox-blitz/Demo.tsx';
+---
+<Demo meta={meta}>
+  <Island client:only="react" />
+  <div slot="notes">
+    <h2>How it works</h2>
+    <p>The model assigns each email a category, urgency, sentiment and support signals. These judgments place emails into inbox lanes. A custom intent label runs a separate check across the selected messages.</p>
+    <h3>Demo scope</h3>
+    <p>The inbox contains synthetic emails. Low-confidence categories go to review, and phishing signals are advisory. Labels and lanes can be wrong, so inspect a message before acting on it.</p>
+  </div>
+</Demo>

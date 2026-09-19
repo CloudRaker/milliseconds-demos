@@ -1,0 +1,105 @@
+{
+ "slug": "tower",
+ "title": "Tower: radar controller decisions in milliseconds",
+ "one_liner": "A browser radar scope where the milliseconds.ai API picks one ATC instruction per aircraft in conflict, with latency, stale answers and losses of separation shown live against a rule-based autopilot and a simulated 2.5 s chat-LLM loop.",
+ "platform": "web (vite/react)",
+ "what_it_does": "The page shows a canvas radar scope of a 50 NM terminal sector: range rings, runway 27, six entry/exit fixes, two IAFs, and 15-40 seeded aircraft (arrivals, departures, overflights). Code steps the simulation every 0.5 s of sim time, predicts every pairwise conflict 120 s ahead with linear extrapolation, and puts the conflict in words (position, relative altitude with trend, geometry, closest approach, seconds to loss). For every aircraft with a predicted conflict or a pending clearance, the controller asks the model three narrow questions: which single instruction to issue out of ten, how urgent the situation is on a four-level scale, and whether the aircraft is clear and ready for handoff. Code validates the pick (cooldown, floors, ceilings, speed envelope, no turning into new traffic, must push an imminent loss out), falls back to the next-highest-probability valid option or to the deterministic rule policy, and flies the instruction. The scope draws a halo coloured by urgency on each aircraft just decided for, an H on the data block when handoff is likely, amber rings on conflicts, red when separation is lost. The right column shows the scoreboard (losses, near misses, delay vs direct, decisions/s), the latency panel (last/p50/p95 ms, requests, in flight, stale, errors, tokens, cost) and an instruction ticker with the reason for every fallback. Three policies share the same sim: Rules (no network), the API (batched, ~100 ms), and Slow (same judgment, one aircraft per call, +2.5 s), so the visitor sees lateness turn into losses of separation at 4x with Rush hour. Seed, 1x/4x, Rush hour, Pause and Reset controls are top left.",
+ "jev_questions": [
+  {
+   "key": "a{i}_instruction",
+   "type": "choice",
+   "instructions": "You are the radar controller. Choose the single ATC instruction to issue now to `aircraft[i]` (callsign `aircraft[i]`.callsign). Consider `aircraft[i]`.intruders, `aircraft[i]`.situation and `aircraft[i]`.unavailable_instructions (never choose an unavailable instruction). Resolve the most urgent conflict with the smallest manoeuvre that works; prefer vertical separation when the intruder is co-altitude and there is time; prefer speed reduction for in-trail traffic; turn away from the intruder, and turn right for head-on traffic. If the intruder has priority and is already manoeuvring, or there is no conflict and the aircraft is on route, choose maintain.",
+   "options": [
+    "maintain: No change. Correct when no intruder needs action, or the intruder has priority and is already manoeuvring.",
+    "turn_left_20: Small left turn (20 degrees). Gentle lateral fix when there is time.",
+    "turn_right_20: Small right turn (20 degrees). Gentle lateral fix when there is time.",
+    "turn_left_45: Large left turn (45 degrees). For urgent lateral avoidance.",
+    "turn_right_45: Large right turn (45 degrees). For urgent lateral avoidance; standard for head-on traffic is to turn right.",
+    "climb_1000: Climb 1000 ft. Good when the intruder is level or below and this aircraft has room above.",
+    "descend_1000: Descend 1000 ft. Good when the intruder is level or above and the floor allows it.",
+    "speed_minus_30: Reduce speed 30 kt. Best for in-trail spacing behind slower traffic on the same track.",
+    "speed_plus_30: Increase speed 30 kt. Rarely useful; only to open spacing from traffic behind.",
+    "direct_to_next_fix: Resume own navigation toward the destination fix. Correct once a vectored aircraft is clear of all traffic."
+   ],
+   "state_shape": "{ aircraft: [ { callsign, phase, altitude_ft, vertical ('descending to 7000' | 'climbing to N' | 'level'), heading_deg, speed_kt, destination ('NORIF, 18 NM away'), current_instruction ('none yet' | 'climb_1000 (issued 12 s ago)'), altitude_floor_ft, intruders: [ { callsign, phase, position ('ahead-left, 9.4 NM'), relative_altitude ('co-altitude and level' | '1000 ft above and descending'), geometry ('head-on, converging' | 'crossing from the left' | 'same direction, intruder ahead (in-trail)'), closest_approach ('1.1 NM in 62 s'), separation_lost_in_s, their_current_instruction, they_have_priority } ], unavailable_instructions: ['climb_1000 (would turn or climb into other traffic)'], situation } ] } \u2014 one entry per candidate aircraft, three questions per entry keyed a0_*, a1_*, ... in one request (src/jev.ts candidateState + buildRequest)."
+  },
+  {
+   "key": "a{i}_urgency",
+   "type": "score",
+   "instructions": "How urgently does `aircraft[i]` need a controller action, based on `aircraft[i]`.intruders[*].separation_lost_in_s and `aircraft[i]`.intruders[*].closest_approach?",
+   "options": [
+    "No controller action needed for at least the next 60 seconds",
+    "Monitor: a controller action will probably be needed within 60 seconds",
+    "Action needed now to keep 3 NM or 1000 ft from the intruder",
+    "Loss of separation is imminent: the closest approach is under 30 seconds away and already inside the standard"
+   ],
+   "state_shape": "same shared aircraft[] state; answer.score 0..3 colours the halo (cyan/amber/red)."
+  },
+  {
+   "key": "a{i}_handoff",
+   "type": "noul",
+   "instructions": "Is `aircraft[i]` clear of traffic and ready to be released: no intruders listed, so it can resume its own route and be handed off to the next controller?",
+   "options": [
+    "true: No intruners listed; nothing else needs to happen before it can resume navigation and be handed off",
+    "false: Has at least one intruder listed, or still needs a clearance to stay separated"
+   ],
+   "state_shape": "same shared aircraft[] state; noul > 0.5 shows an H on the data block."
+  }
+ ],
+ "request_cadence": "Sim tick every 0.5 s sim time (4x speed = 8 ticks/s wall). In API mode, each tick sends one batched request for every candidate aircraft not asked in the last 1000 ms wall and within 2 s of cooldown expiry; up to 4 requests in flight. Measured: 123-246 requests per 300 s sim (0.4-0.8 req/s), 1-6 aircraft per request, 3 questions each, ~1100-1250 input tokens per decision. Slow mode: one aircraft per request, one in flight, +2.5 s delay (~0.1 req/s). Rules mode: no network.",
+ "data_files": [
+  "/Users/blaget/projects/jev-experiments/jev-tower/measure/results/*.json (9 files, 4 KB each: scorecard, latency percentiles, tokens, cost, full ticker per mode/speed/rush; good for a 'measured runs' table on the demo page)",
+  "/Users/blaget/projects/jev-experiments/jev-tower/docs/scope-jev.png, scope-rules.png, scope-slow.png (220-256 KB each, 1280x720 screenshots)",
+  "/Users/blaget/projects/jev-experiments/jev-tower/docs/jev-tower.gif (2.1 MB) and docs/demo.mp4 (5.3 MB): reference only, re-capture for the port",
+  "No seed data: traffic is generated from the seeded PRNG in src/world.ts (seed 7 default)"
+ ],
+ "ui_components": [
+  "Scope (canvas radar: rings, runway, fixes, sweep, aircraft symbols, trails, vectors, data blocks with 10-offset placement, conflict lines, halos): /Users/blaget/projects/jev-experiments/jev-tower/src/Scope.tsx",
+  "App (header with Rules/Jev/Slow mode buttons, Rush hour, 1x/4x, Pause, seed input, Reset; rAF loop stepping Sim + Controller; scoreboard Stat tiles; latency panel; instruction ticker): /Users/blaget/projects/jev-experiments/jev-tower/src/App.tsx",
+  "Styles (dark radar theme, green phosphor palette): /Users/blaget/projects/jev-experiments/jev-tower/src/styles.css (replace with milliseconds.ai site tokens)"
+ ],
+ "reusable_source": [
+  "/Users/blaget/projects/jev-experiments/jev-tower/src/types.ts",
+  "/Users/blaget/projects/jev-experiments/jev-tower/src/rng.ts",
+  "/Users/blaget/projects/jev-experiments/jev-tower/src/kinematics.ts",
+  "/Users/blaget/projects/jev-experiments/jev-tower/src/world.ts",
+  "/Users/blaget/projects/jev-experiments/jev-tower/src/conflict.ts",
+  "/Users/blaget/projects/jev-experiments/jev-tower/src/validate.ts",
+  "/Users/blaget/projects/jev-experiments/jev-tower/src/rules.ts",
+  "/Users/blaget/projects/jev-experiments/jev-tower/src/engine.ts",
+  "/Users/blaget/projects/jev-experiments/jev-tower/src/Scope.tsx",
+  "/Users/blaget/projects/jev-experiments/jev-tower/src/jev.ts (keep candidateState, reasonText, LatencyStats, isStale; replace buildRequest/parseAnswers/callJev/USD_PER_INPUT_TOKEN)",
+  "/Users/blaget/projects/jev-experiments/jev-tower/src/controller.ts (keep as-is except the send() body, which calls the new transport and parser)",
+  "/Users/blaget/projects/jev-experiments/jev-tower/src/*.test.ts (kinematics, conflict, validate tests port unchanged; jev.test.ts and controller tests need the new request shape)"
+ ],
+ "dm1_mapping": [
+  {
+   "jev_key": "a{i}_instruction",
+   "dm1_route": "classify",
+   "dm1_body": "POST /classify {\"texts\": [<one string per candidate aircraft, up to 32>], \"labels\": {\"maintain\": \"No change. No intruder needs action, or the intruder has priority and is already manoeuvring, or the aircraft is on route with no conflict.\", \"turn_left_20\": \"Small left turn of 20 degrees. Gentle lateral fix away from an intruder on the right when there is time.\", \"turn_right_20\": \"Small right turn of 20 degrees. Gentle lateral fix away from an intruder on the left when there is time.\", \"turn_left_45\": \"Large left turn of 45 degrees. Urgent lateral avoidance from an intruder on the right.\", \"turn_right_45\": \"Large right turn of 45 degrees. Urgent lateral avoidance from an intruder on the left, and the standard answer to head-on traffic.\", \"climb_1000\": \"Climb 1000 ft. The intruder is co-altitude or below and there is time and room above.\", \"descend_1000\": \"Descend 1000 ft. The intruder is co-altitude or above and the altitude floor allows it.\", \"speed_minus_30\": \"Reduce speed 30 kt. In-trail spacing behind slower traffic on the same track.\", \"speed_plus_30\": \"Increase speed 30 kt. Only to open spacing from traffic behind on the same track.\", \"direct_to_next_fix\": \"Resume own navigation to the destination fix. The aircraft was vectored off route and is now clear of all traffic.\"}} where each text is the flattened candidate state: \"DAL459, arrival, 9000 ft descending to 7000, heading 241, 280 kt, to NORIF 18 NM away, floor 3000 ft, current instruction none yet. Conflict 1: FDX69 overflight ahead-left 9.4 NM, co-altitude and level, crossing from the left, closest approach 1.1 NM in 62 s, separation lost in 41 s, their instruction maintain, they do not have priority. Unavailable: climb_1000 (would turn or climb into other traffic). Situation: 1 predicted conflict in the next 120 s; the most urgent loses separation in 41 s. Doctrine: smallest manoeuvre that works; vertical first when co-altitude and there is time; speed for in-trail; turn away from the intruder; turn right for head-on; maintain when the intruder has priority and is already manoeuvring.\" Response results[i].scores maps to ParsedAnswer.probabilities, results[i].label to choice, results[i].confidence to confidence.",
+   "notes": "Unavailable instructions: also drop them from labels per text is impossible in a batch (labels are shared), so keep them in the text and let validate.ts reject them as today; the probability-ranked fallback already handles a bad pick. Keep the doctrine sentence short; the label descriptions carry most of the instruction. Confidence floor MIN_CONFIDENCE=0.15 maps to results[i].confidence."
+  },
+  {
+   "jev_key": "a{i}_urgency",
+   "dm1_route": "rate",
+   "dm1_body": "POST /rate {\"texts\": [<same flattened strings, up to 32>], \"scale\": [\"No controller action needed for at least the next 60 seconds\", \"Monitor: a controller action will probably be needed within 60 seconds\", \"Action needed now to keep 3 NM or 1000 ft from the intruder\", \"Loss of separation is imminent: the closest approach is under 30 seconds away and already inside the standard\"]} results[i].level (0..3) replaces Score.score for the halo colour.",
+   "notes": "Optional: this is derivable from separation_lost_in_s by code (rules.ts urgencyFor). Keep it as a second call only when we want to show /rate on the page; otherwise skip it and use urgencyFor to halve request volume."
+  },
+  {
+   "jev_key": "a{i}_handoff",
+   "dm1_route": "yes-no",
+   "dm1_body": "POST /yes-no {\"texts\": [<same flattened strings, up to 32>], \"statement\": \"The aircraft is clear of traffic and ready to resume its route and be handed off.\", \"when_true\": \"No conflict is listed and the aircraft was vectored off route or has no pending clearance.\", \"when_false\": \"At least one conflict is listed, or the aircraft still needs a clearance to stay separated.\"} results[i].probability replaces noul; H shown above 0.5.",
+   "notes": "Batch with texts (one per aircraft), single statement shared."
+  }
+ ],
+ "browser_plan": "Port the Vite/React app as-is into the demo repo under /tower with the milliseconds.ai site tokens (fonts, colour scale, Stat tiles) from ~/projects/cloudraker-spring-2026 replacing styles.css; keep the canvas Scope. Replace jev-proxy.mjs with one proxy route (Cloudflare Worker or the demo repo's shared /api/dm1/* handler) that forwards POST /api/dm1/{classify|rate|yes-no} to https://api.milliseconds.ai/v1/decision-machine-1/{route} with the server-side bearer key, and echoes x-inference-ms and x-input-tokens headers back. In controller.send(): build one flattened string per candidate aircraft (candidateState -> text), then fire the /classify batch (required) and the /yes-no batch (required for H) in parallel; drop /rate and use rules.ts urgencyFor for the halo unless the page wants to show three routes. That is 2 requests per tick at most for up to 32 aircraft, so the cap fits: set ASK_INTERVAL_MS to 1000 and MAX_IN_FLIGHT to 2, and add a token bucket in the transport at 2 requests/s wall (4x speed still sends the same wall-clock rate because ASK_INTERVAL is wall-clock). Read x-inference-ms for the 'inference' column and total round-trip for 'latency'; read x-input-tokens for the tokens/cost tile (price from the milliseconds pricing page, not the hard-coded Jev price). On HTTP 429: mark telemetry.errors, show a 'rate limited, rules fallback' badge in the latency panel, back off for 5 s, and fallbackToRules for the pending ids so the sector stays attended. Slow mode stays: one aircraft per request, +2500 ms. Keep the three mode buttons, seed, 1x/4x, Rush hour, Pause, Reset. Add a 'measured runs' table below the scope from measure/results after re-running measure/run.live.ts against dm1. Ship a fixed 1280x720 layout with a phone fallback that stacks the scope above the panels.",
+ "difficulty": "M",
+ "risks": [
+  "The Jev choice prompt carried the doctrine as instructions text; /classify has no instruction field, so accuracy depends on label descriptions plus a short doctrine sentence in the text. Wrong picks are caught by validate.ts, but expect more fallbacks than the 0-loss Jev runs until wording is tuned.",
+  "Unavailable instructions cannot be removed per aircraft in a batched /classify call (labels are shared). The validator handles it, but the ticker will show more 'chose X: rejected' entries.",
+  "Three Jev questions in one request become two or three HTTP requests; at 4x with Rush hour and ~2 req/s, some ticks skip asking, so decisions/s drops versus the README numbers. The org-wide 200 req/min cap is shared by all visitors: two concurrent visitors halve each one's budget, so the 429 fallback path must be solid.",
+  "Flattened text per aircraft is ~150-250 tokens; 32 aircraft x 2 routes is fine for the 1M tokens/min cap, but confirm the x-input-tokens numbers before publishing a cost tile.",
+  "Slow mode losses depend on seed; seed 7 at 4x lost once. Re-measure with dm1 latency before claiming numbers on the page.",
+  "Scope.tsx is 303 lines of canvas code with a green phosphor palette; restyling to the site theme without breaking readability needs a visual pass."
+ ]
+}

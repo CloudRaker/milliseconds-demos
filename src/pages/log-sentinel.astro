@@ -1,0 +1,14 @@
+---
+import Demo from '../layouts/Demo.astro';
+import meta from '../demos/log-sentinel/meta';
+import Island from '../demos/log-sentinel/Demo.tsx';
+---
+<Demo meta={meta}>
+  <Island client:only="react" />
+  <div slot="notes">
+    <h2>How it works</h2>
+    <p>The model judges whether each log entry needs attention, its severity and likely cause. Local rules group related events from the same service into incidents and retain the highest severity.</p>
+    <h3>Demo scope</h3>
+    <p>The logs and incident storm are synthetic. Model judgments can miss incidents or flag harmless events. Fixture-based results describe this sample stream, not a production monitoring guarantee.</p>
+  </div>
+</Demo>

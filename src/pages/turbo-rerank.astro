@@ -1,0 +1,14 @@
+---
+import Demo from '../layouts/Demo.astro';
+import meta from '../demos/turbo-rerank/meta';
+import Island from '../demos/turbo-rerank/Demo.tsx';
+---
+<Demo meta={meta}>
+  <Island client:only="react" />
+  <div slot="notes">
+    <h2>How it works</h2>
+    <p>A local search index retrieves candidate passages from a fictional company handbook. The model scores whether each passage answers the question and orders the candidates by that score.</p>
+    <h3>Demo scope</h3>
+    <p>The handbook is synthetic, and the demo returns passages rather than generating an answer. It can only rank retrieved candidates. Low answer probability means you should inspect the source before relying on it.</p>
+  </div>
+</Demo>

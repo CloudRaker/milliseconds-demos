@@ -1,0 +1,396 @@
+/* ModStream. Everything is scoped under .d-modstream; tokens come from site.css. */
+.d-modstream {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.d-modstream .ms-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+}
+.d-modstream .ms-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+.d-modstream .ms-slider {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--muted);
+  min-width: 170px;
+}
+.d-modstream .ms-slider b {
+  color: var(--white);
+  font-weight: 500;
+}
+.d-modstream input[type="range"] {
+  accent-color: var(--purple-on-dark);
+  width: 100%;
+}
+.d-modstream .ms-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--purple-on-dark);
+  display: inline-block;
+}
+.d-modstream .ms-inline-error {
+  margin: 0;
+}
+
+.d-modstream .ms-hud {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+.d-modstream .ms-metric p {
+  margin: 0;
+  font-size: 13px;
+}
+.d-modstream .ms-value {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 34px;
+  color: var(--white);
+  margin: 4px 0 8px;
+}
+.d-modstream .ms-value small {
+  font-size: 13px;
+  color: var(--muted);
+}
+.d-modstream .ms-trace {
+  width: 120px;
+  height: 30px;
+  color: var(--white);
+  opacity: 0.75;
+  margin-left: auto;
+}
+.d-modstream .ms-trace-empty {
+  width: 120px;
+  height: 30px;
+  margin-left: auto;
+  border-bottom: 1px solid var(--line);
+}
+
+.d-modstream .ms-panes {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+}
+@media (max-width: 900px) {
+  .d-modstream .ms-panes {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.d-modstream .ms-chat,
+.d-modstream .ms-queues {
+  display: flex;
+  flex-direction: column;
+  min-height: 460px;
+  max-height: 560px;
+  padding: 16px;
+}
+.d-modstream .ms-chat-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+}
+.d-modstream .ms-chat-tools {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.d-modstream .ms-search {
+  width: 160px;
+  padding: 6px 10px;
+  font-size: 13px;
+}
+.d-modstream .ms-seg {
+  display: inline-flex;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.d-modstream .ms-seg button {
+  background: transparent;
+  border: 0;
+  color: var(--muted);
+  font: 500 12px var(--sans);
+  padding: 7px 14px;
+  cursor: pointer;
+}
+.d-modstream .ms-seg button[aria-pressed="true"] {
+  background: var(--purple);
+  color: var(--white);
+}
+.d-modstream .ms-count {
+  font-family: var(--mono);
+  opacity: 0.8;
+}
+
+.d-modstream .ms-scroll {
+  flex: 1;
+  overflow-y: auto;
+  margin-top: 12px;
+  border-top: 1px solid var(--line);
+}
+.d-modstream .ms-empty {
+  padding: 24px 4px;
+  font-size: 14px;
+}
+
+.d-modstream .ms-row {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: baseline;
+  padding: 7px 4px;
+  border-bottom: 1px solid #ffffff10;
+  font-size: 14px;
+}
+.d-modstream .ms-user {
+  font-family: var(--mono);
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.d-modstream .ms-text {
+  word-break: break-word;
+}
+.d-modstream .ms-kw {
+  display: block;
+  font-size: 11px;
+  font-style: normal;
+  color: #f0b35a;
+}
+/* The same marker on an already-removed message: present, but not shouting. */
+.d-modstream .ms-kw-muted {
+  color: color-mix(in srgb, #f0b35a 55%, transparent);
+}
+.d-modstream .ms-meta {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 11px;
+  white-space: nowrap;
+}
+.d-modstream .ms-time {
+  font-size: 11px;
+}
+.d-modstream .ms-hide .ms-text,
+.d-modstream .ms-timeout_user .ms-text,
+.d-modstream .ms-care .ms-text {
+  color: var(--muted);
+  text-decoration: line-through;
+  text-decoration-color: #ffffff40;
+}
+.d-modstream .ms-review {
+  background: #6d4aff12;
+}
+.d-modstream .ms-raid {
+  box-shadow: inset 2px 0 0 #ff8a8a80;
+}
+.d-modstream .ms-badge-hide {
+  color: #f0b35a;
+  border-color: #f0b35a55;
+}
+.d-modstream .ms-badge-timeout_user {
+  color: #ff8a8a;
+  border-color: #ff8a8a55;
+}
+.d-modstream .ms-badge-care {
+  color: #7dd3fc;
+  border-color: #7dd3fc55;
+}
+.d-modstream .ms-badge-review {
+  color: var(--white);
+  border-color: #6d4aff66;
+}
+.d-modstream .ms-badge-allow {
+  color: #6fdc8c;
+  border-color: #6fdc8c55;
+}
+.d-modstream .ms-chat-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding-top: 10px;
+  font-size: 12px;
+}
+.d-modstream .ms-mini {
+  padding: 5px 12px;
+  font-size: 12px;
+}
+
+.d-modstream .ms-queue-scroll {
+  border-top: 0;
+}
+.d-modstream .ms-qitem {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px;
+  margin: 10px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.d-modstream .ms-qitem header {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: center;
+}
+.d-modstream .ms-qtext {
+  margin: 0;
+  font-size: 14px;
+}
+.d-modstream .ms-reason,
+.d-modstream .ms-care-reply {
+  margin: 0;
+  font-size: 12px;
+}
+.d-modstream .ms-care-reply {
+  border-left: 2px solid #7dd3fc;
+  padding-left: 10px;
+  color: var(--muted);
+  font-family: var(--sans);
+  line-height: 1.5;
+}
+.d-modstream .ms-care-reply b {
+  color: #7dd3fc;
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.d-modstream .ms-qactions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.d-modstream .ms-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.d-modstream .ms-bar-row {
+  display: grid;
+  grid-template-columns: 78px 1fr 38px;
+  gap: 8px;
+  align-items: center;
+  font-size: 11px;
+}
+.d-modstream .ms-bar-row .mono {
+  text-align: right;
+}
+
+.d-modstream .ms-comparison table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.d-modstream .ms-comparison th,
+.d-modstream .ms-comparison td {
+  text-align: left;
+  padding: 10px 8px;
+  border-bottom: 1px solid var(--line);
+}
+.d-modstream .ms-comparison thead th {
+  font: 600 11px var(--sans);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.d-modstream .ms-comparison tbody th {
+  font-weight: 400;
+}
+.d-modstream .ms-dm-row b {
+  color: var(--white);
+  font-size: 18px;
+}
+.d-modstream .ms-counts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin: 12px 0 0;
+  font-size: 12px;
+}
+.d-modstream .ms-counts b {
+  color: var(--white);
+  font-family: var(--mono);
+}
+
+.d-modstream .ms-dialog {
+  background: var(--surface);
+  color: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 24px;
+  max-width: 520px;
+  width: calc(100vw - 48px);
+}
+.d-modstream .ms-dialog::backdrop {
+  background: #000000aa;
+}
+.d-modstream .ms-dialog h3 {
+  margin: 0 0 6px;
+}
+.d-modstream .ms-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 16px 0;
+  font-size: 14px;
+}
+.d-modstream .ms-field em {
+  font-style: normal;
+  font-size: 12px;
+}
+
+/* A message that is held and has not been sent yet: neutral, not a verdict. */
+.d-modstream .ms-held .ms-text {
+  color: var(--muted);
+}
+.d-modstream .ms-badge-held {
+  color: var(--muted);
+}
+
+/* The text tests (pronouns, "…me", "himself") say so in the row that used them: a
+   visitor can reach a timeout with a message that is not abuse, and the gate that did
+   it is not inference. Same weight as the keyword marker, different colour. */
+.d-modstream .ms-note {
+  display: block;
+  font-size: 11px;
+  font-style: normal;
+  color: var(--muted);
+}
+
+/* Keep the conversation readable at narrow widths. */
+.d-modstream .ms-hud { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.d-modstream .ms-hud > *, .d-modstream .ms-panes > *, .d-modstream .ms-text { min-width: 0; overflow-wrap: anywhere; }
+.d-modstream .ms-comparison { overflow-x: auto; }
+.d-modstream .ms-value { flex-wrap: wrap; }
+@media (max-width: 680px) {
+  .d-modstream .ms-hud { grid-template-columns: minmax(0, 1fr); }
+  .d-modstream .ms-row { grid-template-columns: minmax(0, 1fr); gap: 6px; padding-block: 14px; }
+  .d-modstream .ms-user { max-width: 100%; }
+  .d-modstream .ms-meta { flex-direction: row; flex-wrap: wrap; justify-content: flex-start; }
+  .d-modstream .ms-scroll { min-height: 260px; max-height: 460px; }
+  .d-modstream .ms-chat-head { flex-wrap: wrap; }
+  .d-modstream .ms-dialog { width: calc(100% - 24px); padding: 20px; }
+}

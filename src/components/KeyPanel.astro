@@ -1,0 +1,117 @@
+---
+// Personal keys are used only for custom requests; published examples are sponsored.
+---
+<details class="key-panel">
+  <summary aria-label="Manage your API key"><span class="key-dot"></span><span data-key-label>Add your API key</span></summary>
+  <div class="key-body">
+    <p class="muted">Supplied examples run for free. When you’re signed in, custom inputs automatically use your console test key and your workspace’s free quota.</p>
+    <button class="btn primary" type="button" data-key-source>Use my test key</button>
+    <p class="muted key-source-note">Uses your signed-in console workspace. This key stays on this page only. After signing out or switching workspaces, clear it and connect again. <a href="https://console.milliseconds.ai/" target="_blank" rel="noopener noreferrer">Check your workspace.</a></p>
+    <p data-key-status role="status" hidden></p>
+    <p class="error" data-key-error role="alert" hidden></p>
+    <p data-key-help hidden><a href="https://console.milliseconds.ai/auth/sign-in" target="_blank" rel="noopener noreferrer">Sign in to the console</a>, then return here and retry.</p>
+    <form data-key-form>
+      <label for="manual-api-key">Or paste your own key</label>
+      <input id="manual-api-key" class="input" type="password" name="key" placeholder="test_sk-… or prod_sk-…" autocomplete="off" spellcheck="false" aria-label="Your milliseconds.ai API key" />
+      <p class="muted">Pasted keys are saved in this browser. Keys are sent only to this site’s proxy for custom requests.</p>
+      <div class="key-actions">
+        <button class="btn" type="submit">Use this key</button>
+        <button class="btn" type="button" data-key-forget>Clear key</button>
+        <a class="muted" href="https://console.milliseconds.ai/signup" target="_blank" rel="noopener noreferrer">Get a free key</a>
+      </div>
+    </form>
+  </div>
+</details>
+<script>
+  import { getKey, setKey, setConsoleKey, fetchConsoleTestKey, initializeConsoleKey, Dm1Error, KEY_EVENT, KEY_SHAPE } from "../lib/dm1";
+  const panel = document.querySelector<HTMLDetailsElement>(".key-panel")!;
+  const label = panel.querySelector<HTMLElement>("[data-key-label]")!;
+  const form = panel.querySelector<HTMLFormElement>("[data-key-form]")!;
+  const input = form.querySelector<HTMLInputElement>("input[name=key]")!;
+  const error = panel.querySelector<HTMLElement>("[data-key-error]")!;
+  const status = panel.querySelector<HTMLElement>("[data-key-status]")!;
+  const help = panel.querySelector<HTMLElement>("[data-key-help]")!;
+  const source = panel.querySelector<HTMLButtonElement>("[data-key-source]")!;
+  let pending: AbortController | undefined;
+  let sourcedWorkspace = "";
+  const resetMessages = () => { error.hidden = true; help.hidden = true; status.hidden = true; };
+  const cancelSource = () => { pending?.abort(); pending = undefined; source.disabled = false; source.textContent = "Use my test key"; };
+  const render = () => {
+    const k = getKey();
+    label.textContent = k ? (sourcedWorkspace ? "Console test key" : `Your key ····${k.slice(-4)}`) : "Add your API key";
+    panel.classList.toggle("own", Boolean(k));
+    document.documentElement.classList.toggle("has-key", Boolean(k));
+    if (!k) { sourcedWorkspace = ""; status.hidden = true; }
+  };
+  const showWorkspace = (result: { organizationName?: string }) => {
+    sourcedWorkspace = result.organizationName || "your selected console workspace";
+    render();
+    input.value = "";
+    status.textContent = `Using a test key from ${sourcedWorkspace}. Custom inputs use this workspace’s free quota.`;
+    status.hidden = false;
+  };
+  const showError = (cause: unknown) => {
+    error.textContent = cause instanceof Dm1Error ? cause.message : "Could not connect to the console. Retry or paste a key below.";
+    error.hidden = false;
+    help.hidden = false;
+    const link = help.querySelector<HTMLAnchorElement>("a")!;
+    const needsSignIn = cause instanceof Dm1Error && cause.status === 401;
+    link.href = needsSignIn ? "https://console.milliseconds.ai/auth/sign-in" : "https://console.milliseconds.ai/";
+    link.textContent = needsSignIn ? "Sign in to the console" : "Open your console workspace";
+  };
+  source.addEventListener("click", async () => {
+    resetMessages();
+    const controller = new AbortController();
+    pending = controller;
+    source.disabled = true;
+    source.textContent = "Connecting…";
+    try {
+      const result = await fetchConsoleTestKey(controller.signal);
+      if (controller.signal.aborted) return;
+      setConsoleKey(result.key);
+      showWorkspace(result);
+    } catch (cause) {
+      if (controller.signal.aborted) return;
+      showError(cause);
+    } finally {
+      if (pending === controller) cancelSource();
+    }
+  });
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const k = input.value.trim();
+    if (!KEY_SHAPE.test(k)) {
+      error.textContent = "That does not look like a milliseconds.ai key (test_sk-… or prod_sk-…).";
+      error.hidden = false;
+      return;
+    }
+    cancelSource();
+    resetMessages();
+    sourcedWorkspace = "";
+    setKey(k);
+    input.value = "";
+    panel.open = false;
+  });
+  panel.querySelector("[data-key-forget]")?.addEventListener("click", () => {
+    cancelSource();
+    resetMessages();
+    sourcedWorkspace = "";
+    input.value = "";
+    setKey("");
+    status.textContent = "Key cleared. Supplied examples still run for free.";
+    status.hidden = false;
+  });
+  panel.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") { panel.open = false; panel.querySelector("summary")?.focus(); }
+  });
+  window.addEventListener(KEY_EVENT, render);
+  render();
+  label.textContent = "Connecting to console…";
+  source.disabled = true;
+  initializeConsoleKey().then(result => {
+    if (result) showWorkspace(result);
+  }).catch(showError).finally(() => {
+    source.disabled = false;
+    render();
+  });
+</script>

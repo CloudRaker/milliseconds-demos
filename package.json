@@ -1,0 +1,40 @@
+{
+  "name": "milliseconds-demos",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev --port 4324",
+    "build": "node scripts/generate-examples.mjs && astro build && node scripts/check-seo.mjs",
+    "preview": "pnpm build && wrangler dev",
+    "check": "astro check",
+    "check:seo": "node scripts/check-seo.mjs",
+    "deploy": "pnpm build && wrangler deploy --env production",
+    "generate:examples": "node scripts/generate-examples.mjs"
+  },
+  "dependencies": {
+    "@astrojs/react": "^5.0.3",
+    "@phosphor-icons/react": "2.1.10",
+    "@plausible-analytics/tracker": "^0.4.6",
+    "astro": "^6.1.7",
+    "minisearch": "7.2.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5",
+    "@fontsource/space-grotesk": "^5.3.0",
+    "@pierre/theme": "2.0.0",
+    "@resvg/resvg-js": "2.6.2",
+    "@types/node": "^22",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "satori": "0.26.0",
+    "typescript": "^5.9.0",
+    "wrangler": "4.134.0"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "packageManager": "pnpm@9.15.0"
+}

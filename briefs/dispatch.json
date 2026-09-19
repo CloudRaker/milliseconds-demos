@@ -1,0 +1,162 @@
+{
+ "slug": "dispatch",
+ "title": "Dispatch Console",
+ "one_liner": "A 911 dispatch console for a fictional city that triages a seeded 3-minute stream of 275 emergency reports with the milliseconds.ai API, merges duplicates, and sends units across a live canvas map.",
+ "platform": "web (vite/react)",
+ "what_it_does": "The page shows a dispatch center: incoming reports on the left, a procedural city map in the center, open incidents on the right, an event log and a comparison table at the bottom. A seeded generator (seed 20260917) emits 275 free-text reports over 180 simulated seconds: 911 call transcripts, SMS, and sensor alerts, in bursts of 1 to 5 per second. For each report the app asks seven typed judgments: category, severity, multiple victims, hazmat or fire spread, caller in danger, unit package, and duplicate-of-open-incident. Code owns every rule: merge into the nearest open incident within 350 m when duplicate probability is at least 0.6, gate low category confidence to a keyword heuristic, pick the nearest available units per package, animate units to the scene and back, close incidents after on-scene time. Three modes run the same seed: Manual queue (one report per 12 s), Slow LLM (3 s per report, sequential), and the live API. Run all 3 fills a comparison table: reports triaged, queue depth at 180 s, median time to dispatch, critical incidents waiting more than 60 s, duplicates merged, idle units. A KPI strip shows latency p50/p95, decisions per second, request count, errors, input tokens, and cost per 1,000 reports. Hovering a report shows the full probability breakdown for each judgment. A Mass-casualty surge button injects 40 reports in 10 s. Without a key the proxy returns 503 and the app runs on the deterministic fallback, labelled.",
+ "jev_questions": [
+  {
+   "key": "category",
+   "type": "choice",
+   "instructions": "Which single service does `report.text` primarily need? If it is clearly about one of the events already listed in `nearby_open_incidents` (same place, same kind of event), choose duplicate_update.",
+   "options": [
+    "fire: Fire, smoke, explosion, or a gas leak that could ignite",
+    "medical: A sick or injured person who needs paramedics and no other service",
+    "police: Crime, violence, threats, weapons, burglary, or suspicious activity",
+    "traffic: A vehicle collision, a person struck by a vehicle, or a road hazard caused by vehicles",
+    "utility: Downed power lines, transformer fault, water main, sewage, street light or manhole problems",
+    "rescue: A person trapped or in the water: elevator entrapment, trench collapse, drowning, sinking vehicle",
+    "non_emergency: Not an emergency: a question, complaint, noise, animal, minor nuisance, test call, or administrative request",
+    "duplicate_update: New information or a repeat call about an event that is already in `nearby_open_incidents`"
+   ],
+   "state_shape": "{ report: { channel: '911 call transcript' | 'text message' | 'automated sensor alert', text, geocoded_address }, nearby_open_incidents: [{ id, category, address, first_report (<=140 chars), age_seconds, distance_m, units_dispatched }] (up to 5, sorted by distance) }"
+  },
+  {
+   "key": "severity",
+   "type": "score",
+   "instructions": "How severe is the situation described in `report.text` for the people involved right now?",
+   "options": [
+    "Information only: nothing is happening that needs a response",
+    "Minor: no injuries, no immediate risk, routine response can wait",
+    "Moderate: possible minor injuries or property at risk, prompt response",
+    "Serious: injuries likely or active danger to people, urgent response",
+    "Immediate threat to life: someone may die in the next minutes without help"
+   ],
+   "state_shape": "same state object as category"
+  },
+  {
+   "key": "multiple_victims",
+   "type": "noul",
+   "instructions": "Does `report.text` indicate that more than one person is injured, trapped, or in danger?",
+   "options": [
+    "true: Two or more people hurt or at risk",
+    "false: One person or nobody at risk"
+   ],
+   "state_shape": "same state object"
+  },
+  {
+   "key": "hazmat_or_fire_spread",
+   "type": "noul",
+   "instructions": "Does `report.text` describe fire that is spreading, an explosion risk, fuel or gas leak, live electrical wire, or other hazardous material?",
+   "options": [],
+   "state_shape": "same state object; no criteria"
+  },
+  {
+   "key": "caller_in_danger_now",
+   "type": "noul",
+   "instructions": "Is the person sending `report.text` themselves in immediate physical danger right now?",
+   "options": [
+    "true: The caller is trapped, threatened, injured, or inside the hazard",
+    "false: The caller is a safe bystander or reporting after the fact"
+   ],
+   "state_shape": "same state object"
+  },
+  {
+   "key": "units_needed",
+   "type": "choice",
+   "instructions": "Which response package should be sent for `report.text` if it is a new incident? Pick the smallest package that covers every need.",
+   "options": [
+    "ambulance: One ambulance: a single sick or injured person, no fire or entrapment",
+    "ambulance+fire: One ambulance and one fire engine: injured people plus fire, fuel leak, entrapment, or water rescue",
+    "police_1: One police unit: a report to take, a minor dispute, a non-violent situation",
+    "police_2+: Two or more police units: violence in progress, weapons, a crime in progress, a crowd",
+    "fire_engine: One fire engine: a small contained fire, gas smell, or a technical rescue without injuries",
+    "fire_full: Full fire response, engines plus ladder plus ambulance: a structure fire with people possibly inside",
+    "utility_crew: A utility repair crew: power line, transformer, water main, sewer, street light, manhole",
+    "none: No units: not an emergency or nothing to respond to"
+   ],
+   "state_shape": "same state object"
+  },
+  {
+   "key": "is_duplicate_of_open_incident",
+   "type": "noul",
+   "instructions": "Does `report.text` describe the same event as one of the entries in `nearby_open_incidents`? Judge by matching place and kind of event, not by wording.",
+   "options": [
+    "true: Same location and same kind of event as a listed open incident",
+    "false: A different event, or nothing similar is listed nearby"
+   ],
+   "state_shape": "same state object; nearby_open_incidents drives the answer"
+  }
+ ],
+ "request_cadence": "One fan-out request per report (7 questions, ~1,750 input tokens), fired as reports arrive: 1 to 5 reports per second in bursts, up to 12 requests in flight, 275 requests per 180 s run, 40 extra in 10 s on surge. 429/529 retried with 200/400/800 ms backoff. Timeout 2.5 sim-seconds then heuristic fallback. Sim speed 2x/4x multiplies the rate.",
+ "data_files": [
+  "/Users/blaget/projects/jev-experiments/jev-dispatch/src/generator.ts (387 lines, ~20 weighted scenarios with texts, follow-ups and sensor strings; this is the seeded report stream, no external data file)",
+  "/Users/blaget/projects/jev-experiments/jev-dispatch/TESTING.md (40-row recorded accuracy table with ground truth per report, useful as a fixed accuracy sample)",
+  "/Users/blaget/projects/jev-experiments/jev-dispatch/public/dispatch.svg (242 bytes favicon)",
+  "/Users/blaget/projects/jev-experiments/jev-dispatch/screenshots/*.png (4 files, 0.6 to 0.85 MB each; reference only, do not ship)",
+  "/Users/blaget/projects/jev-experiments/jev-dispatch/screenshots/demo.mp4 (7.1 MB; reference only)"
+ ],
+ "ui_components": [
+  "App (top bar, mode switch, Run all 3, speed, pause, restart, surge, KPI strip, layout): /Users/blaget/projects/jev-experiments/jev-dispatch/src/App.tsx",
+  "MapView (canvas city: districts, streets, river, depots, incidents, moving units): /Users/blaget/projects/jev-experiments/jev-dispatch/src/MapView.tsx",
+  "Feed, Incidents, EventLog panels with probability hover card: /Users/blaget/projects/jev-experiments/jev-dispatch/src/panels.tsx",
+  "Styles (dark console theme, must be restyled to the milliseconds site tokens): /Users/blaget/projects/jev-experiments/jev-dispatch/src/style.css"
+ ],
+ "reusable_source": [
+  "/Users/blaget/projects/jev-experiments/jev-dispatch/src/generator.ts",
+  "/Users/blaget/projects/jev-experiments/jev-dispatch/src/city.ts",
+  "/Users/blaget/projects/jev-experiments/jev-dispatch/src/rng.ts",
+  "/Users/blaget/projects/jev-experiments/jev-dispatch/src/kpi.ts",
+  "/Users/blaget/projects/jev-experiments/jev-dispatch/src/types.ts",
+  "/Users/blaget/projects/jev-experiments/jev-dispatch/src/MapView.tsx",
+  "/Users/blaget/projects/jev-experiments/jev-dispatch/src/panels.tsx",
+  "/Users/blaget/projects/jev-experiments/jev-dispatch/src/sim.ts (copy; replace the per-report Decider with a batch decider, keep dispatch, merge, KPI and mode logic)",
+  "/Users/blaget/projects/jev-experiments/jev-dispatch/src/jev.ts (keep heuristicDecision, heuristicPackage, pickMergeTarget, nearestOpen, simulatedDecision, clampSeverity; replace buildRequest and parseResponse)",
+  "/Users/blaget/projects/jev-experiments/jev-dispatch/src/sim.test.ts (22 tests, adapt the request and parse tests)"
+ ],
+ "dm1_mapping": [
+  {
+   "jev_key": "(shared text)",
+   "dm1_route": "classify",
+   "dm1_body": "Every route gets the same composed text per report. text = `Channel: text message. Address: 382 Heather Way, Northgate.\\nReport: \"i see the smoke from kiln st is anyone coming?? big black smoke\"\\nOpen incidents nearby: INC-029 fire at 475 Kiln St, Ironworks, 120 m away, 41 s old, 2 units sent: \"apartment fire 475 Kiln St smoke everywhere...\"; INC-031 medical at ...` (up to 5, or `Open incidents nearby: none`).",
+   "notes": "DM1 has no state object. Serialize the report and nearby incidents into the text once and reuse it for all four calls of the batch."
+  },
+  {
+   "jev_key": "category",
+   "dm1_route": "classify",
+   "dm1_body": "POST /classify {\"texts\": [<up to 32 composed report texts>], \"labels\": {\"fire\": \"Fire, smoke, explosion, or a gas leak that could ignite\", \"medical\": \"A sick or injured person who needs paramedics and no other service\", \"police\": \"Crime, violence, threats, weapons, burglary, or suspicious activity\", \"traffic\": \"A vehicle collision, a person struck by a vehicle, or a road hazard caused by vehicles\", \"utility\": \"Downed power lines, transformer fault, water main, sewage, street light or manhole problems\", \"rescue\": \"A person trapped or in the water: elevator entrapment, trench collapse, drowning, sinking vehicle\", \"non_emergency\": \"Not an emergency: a question, complaint, noise, animal, minor nuisance, test call, or administrative request\", \"duplicate_update\": \"A repeat call or new information about one of the open incidents listed in the text, same place and same kind of event\"}} -> results[i].label, .confidence, .scores",
+   "notes": "Keep the 0.3 confidence gate on results[i].confidence and the unknown-label guard. scores feeds the hover card."
+  },
+  {
+   "jev_key": "severity",
+   "dm1_route": "rate",
+   "dm1_body": "POST /rate {\"texts\": [<same batch>], \"scale\": [\"Information only: nothing is happening that needs a response\", \"Minor: no injuries, no immediate risk, routine response can wait\", \"Moderate: possible minor injuries or property at risk, prompt response\", \"Serious: injuries likely or active danger to people, urgent response\", \"Immediate threat to life: someone may die in the next minutes without help\"]} -> results[i].level (0..4) as Severity, results[i].score (0..1) as severityScore, results[i].scores for the hover card",
+   "notes": "Use level directly, no rounding. severityScore in Sim only feeds display."
+  },
+  {
+   "jev_key": "units_needed",
+   "dm1_route": "classify",
+   "dm1_body": "POST /classify {\"texts\": [<same batch>], \"labels\": {\"ambulance\": \"One ambulance: a single sick or injured person, no fire or entrapment\", \"ambulance+fire\": \"One ambulance and one fire engine: injured people plus fire, fuel leak, entrapment, or water rescue\", \"police_1\": \"One police unit: a report to take, a minor dispute, a non-violent situation\", \"police_2+\": \"Two or more police units: violence in progress, weapons, a crime in progress, a crowd\", \"fire_engine\": \"One fire engine: a small contained fire, gas smell, or a technical rescue without injuries\", \"fire_full\": \"Full fire response with engines, ladder and ambulance: a structure fire with people possibly inside\", \"utility_crew\": \"A utility repair crew: power line, transformer, water main, sewer, street light, manhole\", \"none\": \"No units needed: not an emergency or nothing to respond to\"}} -> results[i].label, .scores",
+   "notes": "Optional cut to 3 requests per batch: drop this call and derive the package with heuristicPackage(category, severity, multipleVictims>=0.6). Keep the live call for the demo; the hover card shows its scores."
+  },
+  {
+   "jev_key": "multiple_victims + hazmat_or_fire_spread + caller_in_danger_now + is_duplicate_of_open_incident",
+   "dm1_route": "yes-no",
+   "dm1_body": "POST /yes-no {\"texts\": [<same batch>], \"statements\": [\"More than one person is injured, trapped, or in danger.\", \"There is a spreading fire, explosion risk, fuel or gas leak, live wire, or hazardous material.\", \"The person reporting is inside the hazard or in immediate physical danger right now.\", \"The report describes the same event as one of the open incidents listed nearby.\"], \"when_true\": \"The report text itself states the condition, or the report matches a listed open incident by place and kind of event.\", \"when_false\": \"The report describes one person, a safe bystander, no hazard, or a different event than any listed incident.\"} -> results[i][0..3].probability as multipleVictims, hazmat, callerInDanger, duplicateP",
+   "notes": "The four Jev nouls collapse into one batched request with shared statements. Hints are shared by the batch, so keep them generic across the four statements. duplicateP >= 0.6 or category duplicate_update triggers pickMergeTarget (nearest open incident within 350 m), unchanged from the Jev code. Verify the exact per-text result shape for multi-statement batches against the live API on the first request."
+  }
+ ],
+ "browser_plan": "Rebuild as a Vite/React island at demo.milliseconds.ai/dispatch inside the new demos repo, styled with the milliseconds site tokens from ~/projects/cloudraker-spring-2026 (light and dark tokens, site type scale, the site header). Copy generator, city, rng, kpi, types, MapView, panels and sim as-is; replace the Decider. Proxy: one Cloudflare Worker route POST /api/dm1/:route with an allowlist of the eight route names, forwards the JSON body to https://api.milliseconds.ai/v1/decision-machine-1/:route with the bearer key from a Worker secret, passes back status, body, x-inference-ms and x-input-tokens. Never ship the key. Batch decider: every 500 ms wall-clock the Sim drains up to 32 queued reports into one batch and fires four parallel requests (classify category, rate severity, classify units, yes-no with four statements), then waits until all four land before the next batch. That is at most 4 requests per batch and the batch tick is throttled so the rolling rate stays under 2 requests/s (a 2 s minimum gap between batches, or one request per 500 ms serialized). A normal run is 275 reports in 180 s, about 90 batches, about 360 requests over 3 minutes; a surge of 40 reports fits in two batches. Raise the triage timeout from 2.5 to 8 sim-seconds because batching adds up to 2 s of wait; MAX_INFLIGHT becomes one batch. Run the batch tick on wall-clock, not sim time, so 2x/4x sim speed does not raise the request rate (cap speed at 2x in live mode). On HTTP 429: retry once after 1 s, then apply the heuristic fallback for that batch, count it under fallbacks, and show a 'rate limited, heuristic triage' pill; keep the sim running. On 503 from the proxy (no key) show the fallback pill as today. KPI strip: latency from the batch round trip, decisions per second, requests, errors, input tokens from x-input-tokens summed, cost per 1,000 reports only if milliseconds pricing is known, else show tokens per report. Keep Manual and Slow LLM modes and Run all 3 unchanged; keep the 40-row accuracy table from TESTING.md as an optional static accuracy panel or rerun it with a script against the proxy.",
+ "difficulty": "L",
+ "risks": [
+  "Nearby open incidents move from a structured state object into prose in the text; duplicate detection quality can drop (Jev sample was 39/40). Rerun the 40-report accuracy sample against DM1 before publishing numbers.",
+  "Batching adds up to 2 s of triage latency; the '0.2 s median dispatch' headline from the README will not reproduce. Report the measured numbers, expect 1 to 3 s.",
+  "yes-no when_true/when_false hints are shared across the four statements; one generic hint pair may weaken each statement. Fallback: split into two yes-no calls only if accuracy demands it (raises request count).",
+  "Multi-statement plus multi-text result shape for /yes-no must be confirmed against the live API; the brief assumes results[i] holds one entry per statement.",
+  "Rate limit is shared by all visitors of demo.milliseconds.ai; two concurrent viewers running the live mode double the rate. Add a per-IP token bucket in the Worker and show a clear 429 state in the UI.",
+  "Sim speed 2x/4x must not scale request rate; run the batch tick on wall-clock time.",
+  "DM1 pricing is not given; do not reuse the Jev $0.042/Mtok figure. Show tokens per report until a price is confirmed.",
+  "Composed texts with five nearby incidents grow to roughly 400 to 600 tokens each; a 32-text batch is ~15k tokens per request, well under the 1M tokens/minute cap but worth tracking in the KPI strip.",
+  "Manual and Slow LLM modes use generator ground truth (simulatedDecision), so the comparison is fair only for speed, not for accuracy; keep the README caveat."
+ ]
+}

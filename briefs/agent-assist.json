@@ -1,0 +1,210 @@
+{
+ "slug": "agent-assist",
+ "title": "Agent Assist",
+ "one_liner": "Contact-center copilot that refreshes intent, churn, frustration, five flags and a macro suggestion about 100 ms after every customer message across eight concurrent chats.",
+ "platform": "web (vite/react)",
+ "what_it_does": "The page is a three-column support console: a queue of eight chats on the left, the active conversation in the middle, and a copilot panel on the right. The user presses \"Run all 8 chats\". Eight scripted customers then send five messages each on staggered timers. About 40 messages land over roughly 50 seconds. Each new customer message triggers one judgment over the last six messages plus a customer profile (plan, tenure, prior tickets) and a catalog of 12 macros. The copilot shows the intent, two 0-3 gauges (churn risk, frustration), fired signal chips (needs supervisor, regulatory, refund requested, apologize first, resolvable now), a code-computed \"refund eligible\" chip, and the suggested macro. If macro confidence is at least 0.6 the macro body is auto-filled into the reply box and auto-sent 1.5 s later; below that the panel lists the top three macros with probabilities for the agent to pick; \"none\" means reply freehand. Queue rows show badges (escalate, churn, frustrated, regulatory, refund) and re-sort by a priority score so a supervisor sees the hot chats first. A metrics bar shows count judged, browser-measured p50/p95 panel latency, and a speedup versus a 4 s simulated LLM baseline toggle that greys the panel with a countdown.",
+ "jev_questions": [
+  {
+   "key": "best_macro",
+   "type": "choice",
+   "instructions": "Which macro from `catalog_of_macros` is the best canned reply for the agent to send in response to the LAST customer message in `conversation`, given the whole conversation so far? Pick `none` if no macro fits the latest message.",
+   "options": [
+    "duplicate_charge_refund",
+    "account_unlock_reset",
+    "two_factor_recovery",
+    "escalate_to_supervisor",
+    "sla_credit",
+    "feature_availability_by_plan",
+    "feature_request_logged",
+    "privacy_data_request",
+    "shipping_tracking_update",
+    "shipping_replacement",
+    "bug_acknowledged_engineering",
+    "guided_walkthrough",
+    "none"
+   ],
+   "state_shape": "{conversation:[{role:'customer'|'agent',text}] (last 6), customer:{plan,tenure_months,prior_tickets}, catalog_of_macros:[{id,title,summary}] x12}; each option criterion is `${title}: ${summary}`; none = 'No macro in the catalog is a good reply to the customer's latest message; the agent should write a custom reply'"
+  },
+  {
+   "key": "intent",
+   "type": "choice",
+   "instructions": "What is the primary intent of the customer in the LAST customer message of `conversation`, in the context of the earlier messages?",
+   "options": [
+    "billing_dispute: A charge, invoice, duplicate payment or refund problem",
+    "account_access: Cannot log in, locked out, password or 2FA problems",
+    "cancellation_threat: Customer says or implies they will leave, cancel or switch to a competitor",
+    "feature_question: Asking whether something is possible, supported, or on the roadmap",
+    "data_privacy_request: Requests about personal data: erasure, export, GDPR, CCPA or legal demands",
+    "shipping_delay: A physical order is late, lost or stuck in transit",
+    "bug_report: Something is broken and the customer describes errors or provides logs",
+    "general_help: Needs guidance using the product, confused about the interface",
+    "gratitude_or_closing: Thanking the agent, confirming the problem is solved, or ending the chat",
+    "other: None of the above"
+   ],
+   "state_shape": "same JudgeState as above"
+  },
+  {
+   "key": "churn_risk",
+   "type": "score",
+   "instructions": "How likely is this customer to cancel or leave, judging from the whole `conversation` and `customer` profile?",
+   "options": [
+    "0: No churn signal: the customer is neutral or positive about staying",
+    "1: Mild: some dissatisfaction but no mention of leaving",
+    "2: Elevated: repeated problems or comparisons with alternatives, leaving is plausible",
+    "3: Severe: explicitly threatens to cancel, switch provider, or demands an exit"
+   ],
+   "state_shape": "same JudgeState; score is 0..3 float"
+  },
+  {
+   "key": "frustration",
+   "type": "score",
+   "instructions": "How frustrated is the customer in the LAST customer message of `conversation`?",
+   "options": [
+    "0: Calm and polite",
+    "1: Slightly annoyed or impatient",
+    "2: Clearly frustrated, repeats complaints or uses emphatic language",
+    "3: Angry or hostile, ultimatums, insults or shouting"
+   ],
+   "state_shape": "same JudgeState; score 0..3"
+  },
+  {
+   "key": "needs_escalation_to_human_supervisor",
+   "type": "noul",
+   "instructions": "Should this chat be escalated to a human supervisor or manager right now, based on the `conversation`?",
+   "options": [
+    "true: The customer explicitly asks for a manager, threatens to leave, raises a legal or regulatory demand, or the issue is beyond what a front-line agent can resolve",
+    "false: A front-line agent can handle this conversation on their own"
+   ],
+   "state_shape": "same JudgeState; noul >= 0.5 is yes"
+  },
+  {
+   "key": "customer_requests_refund",
+   "type": "noul",
+   "instructions": "Does the customer ask for, or clearly expect, money back (a refund, chargeback, reimbursement or credit) anywhere in the `conversation`?",
+   "options": [
+    "true: The customer asks for a refund, reimbursement, or account credit",
+    "false: No request or expectation of money back"
+   ],
+   "state_shape": "same JudgeState"
+  },
+  {
+   "key": "contains_regulatory_request",
+   "type": "noul",
+   "instructions": "Does the `conversation` contain a data-protection or legal request, such as GDPR, CCPA, right to erasure, right of access, data export, subpoena or a demand made under a law or regulation?",
+   "options": [
+    "true: The customer cites a law or regulation, or makes a data erasure, data access or legal demand",
+    "false: An ordinary support conversation with no legal or data-protection request"
+   ],
+   "state_shape": "same JudgeState"
+  },
+  {
+   "key": "agent_should_apologize_first",
+   "type": "noul",
+   "instructions": "Should the agent begin the next reply with an apology, because the customer in the `conversation` was harmed or inconvenienced by something on the company's side (a bug, outage, wrong charge, delay or poor prior support)?",
+   "options": [
+    "true: The company caused a problem or inconvenience; the reply should open with an apology",
+    "false: Nothing to apologize for: a neutral question, a user-side issue, or the customer is thanking us"
+   ],
+   "state_shape": "same JudgeState"
+  },
+  {
+   "key": "resolution_likely_this_session",
+   "type": "noul",
+   "instructions": "Can the agent most likely fully resolve the customer's issue within this chat session, without waiting on engineering, a carrier, a legal team or a manager?",
+   "options": [
+    "true: The issue can be closed in this chat: answering a question, sending a link, guiding through the UI, or issuing a refund the agent can do",
+    "false: Resolution depends on another team, an external party, a multi-day process, or the customer is too upset to close today"
+   ],
+   "state_shape": "same JudgeState"
+  }
+ ],
+ "request_cadence": "One systemOne request per customer message, all nine questions fanned out in that single call. 40 messages per full run over about 50 s, so about 0.8 requests/s, with bursts of 2-3 in the same second across the eight chats. Server semaphore caps in-flight at 8. Single-chat mode fires one request per \"Next message\" click.",
+ "data_files": [
+  "/Users/blaget/projects/jev-experiments/agent-assist/src/data/scripts.ts (124 lines; 8 customers x 5 timed messages with profiles; reuse verbatim)",
+  "/Users/blaget/projects/jev-experiments/agent-assist/src/data/macros.ts (103 lines; 12 macros with id, title, summary, body template; reuse verbatim)",
+  "/Users/blaget/projects/jev-experiments/agent-assist/screenshots/agent-assist.jpg (225 KB reference screenshot)",
+  "/Users/blaget/projects/jev-experiments/agent-assist/screenshots/agent-assist-demo.webp (447 KB animated reference)"
+ ],
+ "ui_components": [
+  "App shell with topbar, controls, run loop and timers: /Users/blaget/projects/jev-experiments/agent-assist/src/App.tsx",
+  "Queue (risk-sorted rows with badges): /Users/blaget/projects/jev-experiments/agent-assist/src/components/Queue.tsx",
+  "Conversation (message list, reply box, Next/Play/Pause): /Users/blaget/projects/jev-experiments/agent-assist/src/components/Conversation.tsx",
+  "Copilot (intent, gauges, signal chips, macro gate, baseline overlay): /Users/blaget/projects/jev-experiments/agent-assist/src/components/Copilot.tsx",
+  "MetricsBar (count, p50, p95, speedup): /Users/blaget/projects/jev-experiments/agent-assist/src/components/MetricsBar.tsx",
+  "Styles (836 lines, replace with milliseconds site tokens): /Users/blaget/projects/jev-experiments/agent-assist/src/styles.css"
+ ],
+ "reusable_source": [
+  "/Users/blaget/projects/jev-experiments/agent-assist/src/data/scripts.ts",
+  "/Users/blaget/projects/jev-experiments/agent-assist/src/data/macros.ts",
+  "/Users/blaget/projects/jev-experiments/agent-assist/src/lib/store.ts (reducer; only rename jevMs and drop mock field)",
+  "/Users/blaget/projects/jev-experiments/agent-assist/src/lib/engine.ts (refund policy, percentile, latencyStats, queuePriority, fmtMs, pct; gateMacro/scoreLabel/queueBadges need the answer-shape swap described in dm1_mapping)",
+  "/Users/blaget/projects/jev-experiments/agent-assist/src/components/Queue.tsx",
+  "/Users/blaget/projects/jev-experiments/agent-assist/src/components/Conversation.tsx",
+  "/Users/blaget/projects/jev-experiments/agent-assist/src/components/MetricsBar.tsx",
+  "/Users/blaget/projects/jev-experiments/agent-assist/src/App.tsx (run loop and timers; swap judgeMessage for the batched client)"
+ ],
+ "dm1_mapping": [
+  {
+   "jev_key": "best_macro",
+   "dm1_route": "classify",
+   "dm1_body": "POST /classify {\"text\": \"<transcript>\", \"labels\": {\"duplicate_charge_refund\": \"Duplicate charge \u2014 refund: Apologize for a duplicate or incorrect charge and confirm the extra amount will be refunded to the original payment method within 5\u201310 business days.\", \"account_unlock_reset\": \"Account locked \u2014 reset link: Unlock a locked account and send a fresh password-reset link; explain the link expires in 30 minutes.\", \"two_factor_recovery\": \"2FA recovery \u2014 verify identity: Customer lost their 2FA device; explain the identity-verification steps needed before 2FA can be reset.\", \"escalate_to_supervisor\": \"Escalate to supervisor: Customer demands a manager or is at serious risk of leaving; acknowledge the severity, escalate to a supervisor and commit to a callback within one hour.\", \"sla_credit\": \"SLA credit for outage: Customer asks about compensation for downtime; explain how SLA credits are calculated and that finance applies them to the next invoice.\", \"feature_availability_by_plan\": \"Feature availability by plan: Answer whether a feature exists and which plan includes it, and link to the plan comparison page.\", \"feature_request_logged\": \"Not available \u2014 request logged: The requested capability does not exist yet; log a feature request and explain that the roadmap is public.\", \"privacy_data_request\": \"GDPR/CCPA data request: Acknowledge a data access or erasure request, explain identity verification, commit to the 30-day statutory timeline and written confirmation.\", \"shipping_tracking_update\": \"Shipping \u2014 tracking check: Physical order is late; apologize, open a trace with the carrier and promise an update within 24 hours.\", \"shipping_replacement\": \"Shipping \u2014 send replacement: Customer needs the item urgently or it is lost; ship a replacement with expedited delivery and provide return instructions for the original.\", \"bug_acknowledged_engineering\": \"Bug \u2014 forwarded to engineering: Customer reports a bug with technical details; thank them for the logs, confirm it has been reproduced or filed with engineering and share how they will be updated.\", \"guided_walkthrough\": \"Patient step-by-step walkthrough: Customer is confused by the interface; give a reassuring, plain-language, one-step-at-a-time walkthrough.\", \"none\": \"No canned reply fits the latest customer message; the agent should write a custom reply, for example the customer is only saying thanks or closing.\"}}",
+   "notes": "Transcript text = last 6 messages rendered as 'Customer: ...\\nAgent: ...' lines, with the last customer line prefixed 'LATEST Customer:' so the label descriptions can refer to the latest message. Prepend one line 'Profile: pro plan, 14 months, 2 prior tickets.' Response: label -> answer.choice, probability -> answer.confidence, scores -> answer.probabilities. gateMacro keeps threshold 0.6 unchanged. Build labels once from MACROS at module load."
+  },
+  {
+   "jev_key": "intent",
+   "dm1_route": "classify",
+   "dm1_body": "POST /classify {\"text\": \"<transcript>\", \"labels\": {\"billing_dispute\": \"A charge, invoice, duplicate payment or refund problem\", \"account_access\": \"Cannot log in, locked out, password or 2FA problems\", \"cancellation_threat\": \"Customer says or implies they will leave, cancel or switch to a competitor\", \"feature_question\": \"Asking whether something is possible, supported, or on the roadmap\", \"data_privacy_request\": \"Requests about personal data: erasure, export, GDPR, CCPA or legal demands\", \"shipping_delay\": \"A physical order is late, lost or stuck in transit\", \"bug_report\": \"Something is broken and the customer describes errors or provides logs\", \"general_help\": \"Needs guidance using the product, confused about the interface\", \"gratitude_or_closing\": \"Thanking the agent, confirming the problem is solved, or ending the chat\", \"other\": \"None of the above\"}}",
+   "notes": "Use INTENTS map from questions.ts as-is. Intent is about the LATEST message; pass only the last customer message as text for this route (better than the whole window) and keep the transcript for the others."
+  },
+  {
+   "jev_key": "churn_risk",
+   "dm1_route": "rate",
+   "dm1_body": "POST /rate {\"text\": \"<transcript>\", \"scale\": [\"No churn signal: the customer is neutral or positive about staying\", \"Mild: some dissatisfaction but no mention of leaving\", \"Elevated: repeated problems or comparisons with alternatives, leaving is plausible\", \"Severe: explicitly threatens to cancel, switch provider, or demands an exit\"]}",
+   "notes": "Map score (0..1) to the 0..3 gauge as score*3; level index gives the legend label. CHURN_ALERT stays 1.5 on the 0..3 scale."
+  },
+  {
+   "jev_key": "frustration",
+   "dm1_route": "rate",
+   "dm1_body": "POST /rate {\"text\": \"<last customer message>\", \"scale\": [\"Calm and polite\", \"Slightly annoyed or impatient\", \"Clearly frustrated, repeats complaints or uses emphatic language\", \"Angry or hostile, ultimatums, insults or shouting\"]}",
+   "notes": "Frustration is about the latest message only, so send just that message as text. Same score*3 mapping."
+  },
+  {
+   "jev_key": "needs_escalation_to_human_supervisor",
+   "dm1_route": "yes-no",
+   "dm1_body": "POST /yes-no {\"text\": \"<transcript>\", \"statements\": [\"The chat should be escalated to a human supervisor now.\", \"The customer asks for or expects money back.\", \"The conversation contains a data-protection or legal request.\", \"The company caused the customer's problem.\", \"A front-line agent can fully resolve this in this chat.\"]}",
+   "notes": "One batched call covers all five flags. Response results[0] -> needs_escalation. Per-statement hints are not possible in one batch because when_true/when_false are shared, so the statements carry the criteria instead. If accuracy on the seeded scripts is poor, split into five single-statement calls with the hints listed below and accept 5 extra requests per message (still within budget when batched across chats). Hints for a split call: when_true 'The customer asks for a manager, threatens to leave, cites a law, or the issue is beyond a front-line agent'; when_false 'A front-line agent can handle this alone'. answer -> noul >= 0.5; probability -> noul."
+  },
+  {
+   "jev_key": "customer_requests_refund",
+   "dm1_route": "yes-no",
+   "dm1_body": "results[1] of the batch above. Split form: {\"text\": \"<transcript>\", \"statement\": \"The customer asks for or expects money back.\", \"when_true\": \"The customer asks for a refund, chargeback, reimbursement or account credit.\", \"when_false\": \"No request or expectation of money back.\"}",
+   "notes": "Keep 0.5 threshold for the badge."
+  },
+  {
+   "jev_key": "contains_regulatory_request",
+   "dm1_route": "yes-no",
+   "dm1_body": "results[2] of the batch above. Split form: {\"text\": \"<transcript>\", \"statement\": \"The conversation contains a data-protection or legal request.\", \"when_true\": \"The customer cites GDPR, CCPA, a law or regulation, or demands data erasure, data access or export.\", \"when_false\": \"An ordinary support conversation with no legal or data-protection request.\"}"
+  },
+  {
+   "jev_key": "agent_should_apologize_first",
+   "dm1_route": "yes-no",
+   "dm1_body": "results[3] of the batch above. Split form: {\"text\": \"<transcript>\", \"statement\": \"The company caused the customer's problem.\", \"when_true\": \"A bug, outage, wrong charge, delay or poor prior support on the company's side inconvenienced the customer.\", \"when_false\": \"A neutral question, a user-side issue, or the customer is thanking us.\"}"
+  },
+  {
+   "jev_key": "resolution_likely_this_session",
+   "dm1_route": "yes-no",
+   "dm1_body": "results[4] of the batch above. Split form: {\"text\": \"<transcript>\", \"statement\": \"A front-line agent can fully resolve this in this chat.\", \"when_true\": \"The issue closes in this chat: answer a question, send a link, guide through the UI, or issue a refund the agent can do.\", \"when_false\": \"Resolution depends on engineering, a carrier, legal, a manager, or a multi-day process.\"}"
+  }
+ ],
+ "browser_plan": "Rebuild as a Vite/React page at demo.milliseconds.ai/agent-assist with the three-column layout from the original, restyled with the milliseconds site tokens from ~/projects/cloudraker-spring-2026. Copy scripts.ts, macros.ts, store.ts, Queue, Conversation, MetricsBar as-is. Replace server/jev.ts with a thin proxy worker route (POST /api/dm1/:route) that adds the bearer key and forwards to https://api.milliseconds.ai/v1/decision-machine-1/:route; the key never reaches the bundle. In the browser, replace judgeMessage with a judge(chat) that fires the five calls per message in parallel (classify best_macro, classify intent, rate churn, rate frustration, yes-no with 5 statements) and merges them into the same JudgeAnswers shape so Copilot and engine.ts stay unchanged. Measure panelMs in the browser around the Promise.all and read x-inference-ms from each response for the server-side badge. Request budget: 40 messages x 5 calls = 200 requests per full run, which over 50 s is 4 req/s, above the 2 req/s target. Fix with a client-side batcher: a 250 ms window collects pending judgments from all chats, then sends one request per route with texts:[...] (up to 32, one per pending chat) so bursts from concurrent chats collapse into 5 requests per tick, and a token-bucket caps outgoing requests at 2/s. Worst case is then 5 requests per 250 ms window only when chats collide, and a full run stays near 100-150 requests. Show the x-inference-ms and per-message panel latency exactly as the original. On HTTP 429 or 5xx: retry once after the Retry-After or 1 s, mark the chat row with a \"rate limited, retrying\" pill, and if it fails again keep the previous judgment visible and show an error chip; never block the script timers. Keep the 4 s simulated-LLM baseline toggle and the copy that says it is artificial. Drop MOCK mode.",
+ "difficulty": "M",
+ "risks": [
+  "Jev returned all nine answers in one call; dm1 needs five calls per message. Latency shown will be the max of the five, likely 150-400 ms, so the '~100 ms' README claim will not hold; measure and print real numbers.",
+  "The five yes/no statements share when_true/when_false in a batch, so the batch form loses per-flag hints. Eval on the seeded scripts first; fall back to five separate calls if flags misfire.",
+  "Jev questions reference the JSON state (`catalog_of_macros`, `customer` profile) directly; dm1 only sees text. The transcript rendering plus a one-line profile prefix must carry that context, and best_macro depends on label descriptions alone.",
+  "The 'none' macro and gratitude/closing turns are the weakest case for classify; the original's 0.6 auto-fill gate may need tuning against dm1 confidence values.",
+  "Rate limit is org-wide across all visitors; two people running the demo at once double the request rate, so the throttle must stay conservative and 429 handling must be visible.",
+  "rate returns a 0..1 score; mapping to the 0..3 gauge is score*3, which can differ from Jev's expected-value score and shift the CHURN_ALERT badge threshold."
+ ]
+}

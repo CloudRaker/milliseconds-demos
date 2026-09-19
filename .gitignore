@@ -1,0 +1,11 @@
+node_modules
+dist
+.astro
+.wrangler
+.dev.vars
+.DS_Store
+# CocoIndex Code (ccc)
+/.cocoindex_code/
+
+# Built from shared fixtures before preview/deploy; never hand-edit.
+/src/generated/examples.json

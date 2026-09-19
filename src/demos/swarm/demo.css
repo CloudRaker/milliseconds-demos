@@ -1,0 +1,56 @@
+/* Swarm demo. Every rule stays under .d-swarm; tokens come from site.css. */
+.d-swarm { display: flex; flex-direction: column; gap: 16px; }
+
+.d-swarm .swarm-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.d-swarm .btn.small { padding: 7px 14px; font-size: 13px; }
+.d-swarm .btn.on { border-color: var(--purple-on-dark); color: var(--white); }
+.d-swarm .ctl { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
+.d-swarm .ctl .select { width: auto; padding: 7px 10px; font-size: 13px; }
+.d-swarm .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
+.d-swarm .seg button { padding: 7px 14px; background: transparent; border: 0; color: var(--muted); font: 500 13px var(--sans); cursor: pointer; }
+.d-swarm .seg button.on { background: var(--purple); color: var(--white); }
+.d-swarm .seg button + button { border-left: 1px solid var(--line); }
+
+.d-swarm .swarm-body { display: grid; gap: 16px; grid-template-columns: minmax(0, 1.6fr) minmax(300px, 0.9fr); align-items: start; }
+.d-swarm .arena { position: relative; padding: 12px; }
+.d-swarm .arena canvas { display: block; width: 100%; aspect-ratio: 16 / 10; border-radius: 10px; touch-action: none; cursor: crosshair; }
+.d-swarm .arena-note {
+  position: absolute; left: 50%; top: 24px; transform: translateX(-50%);
+  margin: 0; padding: 7px 14px; border: 1px solid var(--line); border-radius: 999px;
+  background: color-mix(in srgb, var(--ink) 80%, transparent); color: var(--muted); font-size: 13px; white-space: nowrap;
+}
+.d-swarm .legend { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 10px; font-size: 12px; color: var(--muted); }
+.d-swarm .legend i { display: inline-block; width: 9px; height: 9px; margin-right: 5px; }
+
+.d-swarm .swarm-side { display: flex; flex-direction: column; gap: 16px; }
+.d-swarm table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.d-swarm th { text-align: left; font: 600 11px var(--sans); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); padding-bottom: 6px; }
+.d-swarm td { padding: 5px 0; border-top: 1px solid var(--line); font-family: var(--mono); }
+.d-swarm td i { display: inline-block; width: 8px; height: 8px; border-radius: 99px; margin-right: 6px; }
+.d-swarm .jud td:first-child { white-space: nowrap; }
+.d-swarm .jud .p { display: flex; align-items: center; gap: 6px; }
+.d-swarm .jud .p .bar { display: block; width: 42px; height: 5px; border-radius: 3px; background: var(--line); overflow: hidden; margin: 0; }
+.d-swarm .jud .p .bar > i { display: block; width: 0; height: 100%; margin: 0; border-radius: 0; background: var(--purple-on-dark); }
+.d-swarm .jud .p b { font-weight: 500; font-size: 12px; }
+.d-swarm .board td:first-child { font-family: var(--sans); }
+
+.d-swarm .wire-head { margin: 0 0 8px; font-size: 12px; color: var(--muted); }
+.d-swarm .wire-head b { color: var(--white); font-weight: 500; }
+.d-swarm .wire {
+  margin: 0; padding: 12px; max-height: 190px; overflow: auto;
+  background: color-mix(in srgb, var(--surface) 60%, transparent); border: 1px solid var(--line); border-radius: 10px;
+  font-family: var(--mono); font-size: 12px; line-height: 1.7; color: var(--white); white-space: pre-wrap;
+}
+.d-swarm .error { margin: 0; }
+
+@media (max-width: 980px) {
+  .d-swarm .swarm-body { grid-template-columns: 1fr; }
+}
+
+.d-swarm .swarm-side, .d-swarm .panel { min-width: 0; }
+.d-swarm .arena-note { width: calc(100% - 40px); max-width: 48ch; white-space: normal; text-align: center; border-radius: 10px; line-height: 1.5; }
+.d-swarm .swarm-side .panel { overflow-x: auto; }
+.d-swarm .swarm-side .panel > p.muted { font-size: 13px; line-height: 1.5; }
+.d-swarm .jud .p .bar { width: 24px; }
+.d-swarm .wire { overflow-wrap: anywhere; }
+@media (max-width: 480px) { .d-swarm .arena canvas { aspect-ratio: 1; } .d-swarm .jud .p .bar { display: none; } .d-swarm th { letter-spacing: 0; font-size: 10px; } .d-swarm .legend { gap: 10px; } }

@@ -1,0 +1,96 @@
+/* Shell Guard. Terminal on the left, `jevsh explain` on the right, `jevsh bench` below.
+   All rules scoped under .d-shell-guard; tokens come from site.css, panels from demos.css. */
+.d-shell-guard { display: flex; flex-direction: column; gap: 16px; }
+.d-shell-guard .sg-metrics { padding: 4px 2px; }
+.d-shell-guard .sg-error { margin: 0; }
+
+.d-shell-guard .sg-grid { display: grid; gap: 16px; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); }
+@media (max-width: 1000px) { .d-shell-guard .sg-grid { grid-template-columns: minmax(0, 1fr); } }
+
+/* Terminal */
+.d-shell-guard .sg-term { display: flex; flex-direction: column; cursor: text; }
+.d-shell-guard .sg-scroll {
+  flex: 1; min-height: 320px; max-height: 460px; overflow-y: auto;
+  background: #0d0d10; border: 1px solid var(--line); border-radius: 10px; padding: 14px;
+  font-family: var(--mono); font-size: 13px; line-height: 1.6;
+}
+.d-shell-guard .sg-line { margin: 0 0 2px; white-space: pre-wrap; word-break: break-word; font-size: 13px; }
+.d-shell-guard .sg-cmd { color: var(--white); }
+.d-shell-guard .sg-out { color: var(--muted); }
+.d-shell-guard .sg-note { color: #7e7a88; }
+.d-shell-guard .sg-confirm { color: #f0b35a; margin: 6px 0; }
+.d-shell-guard .sg-block { color: #ff8a8a; margin: 6px 0; }
+.d-shell-guard .sg-err { color: #ff8a8a; }
+.d-shell-guard .sg-input-row { display: flex; gap: 8px; align-items: baseline; margin-top: 4px; }
+.d-shell-guard .sg-prompt { color: var(--white); white-space: nowrap; }
+.d-shell-guard .sg-input {
+  flex: 1; min-width: 0; background: transparent; border: 0; outline: none; padding: 0;
+  color: var(--white); font: 400 13px var(--mono); caret-color: var(--purple-on-dark);
+}
+.d-shell-guard .sg-input::placeholder { color: #55525c; }
+
+/* Scenario chips */
+.d-shell-guard .sg-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.d-shell-guard .sg-chip { padding: 6px 10px; gap: 8px; border-radius: 8px; font-family: var(--mono); font-size: 12px; }
+.d-shell-guard .sg-chip code { font-size: 12px; }
+.d-shell-guard .sg-chip .tag { font-size: 9px; padding: 1px 5px; }
+
+/* Explain panel */
+.d-shell-guard .sg-sub {
+  margin: 14px 0 6px; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+}
+.d-shell-guard .sg-sub:first-of-type { margin-top: 0; }
+.d-shell-guard .sg-state {
+  margin: 0; max-height: 150px; overflow: auto; background: #0d0d10; border: 1px solid var(--line);
+  border-radius: 8px; padding: 10px; font-size: 11px; line-height: 1.5; color: var(--muted); white-space: pre-wrap;
+}
+.d-shell-guard .sg-prob { display: grid; grid-template-columns: 96px 1fr 34px 64px; gap: 8px; align-items: center; margin-bottom: 6px; }
+.d-shell-guard .sg-prob-id { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.d-shell-guard .sg-prob-v { font-family: var(--mono); font-size: 12px; text-align: right; }
+.d-shell-guard .sg-bar { position: relative; overflow: visible; }
+.d-shell-guard .sg-bar > i { border-radius: 3px; }
+.d-shell-guard .sg-bar > u {
+  position: absolute; top: -3px; width: 1px; height: 12px; background: var(--white); opacity: 0.55;
+}
+.d-shell-guard .sg-slider, .d-shell-guard .sg-deadline input { width: 100%; accent-color: var(--purple-on-dark); }
+.d-shell-guard .sg-verdict { display: flex; gap: 6px; flex-wrap: wrap; }
+.d-shell-guard .sg-decision { font-family: var(--mono); font-size: 14px; margin: 14px 0 4px; }
+.d-shell-guard .sg-run { color: #6fdc8c; }
+.d-shell-guard .sg-confirm.sg-decision, .d-shell-guard .sg-decision.sg-confirm { color: #f0b35a; }
+.d-shell-guard .sg-decision.sg-block { color: #ff8a8a; }
+.d-shell-guard .sg-foot { font-size: 12px; margin: 4px 0 0; }
+.d-shell-guard .sg-deadline {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px; font-family: var(--mono);
+  font-size: 11px; color: var(--muted);
+}
+
+/* Bench */
+.d-shell-guard .sg-bench-head { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; }
+.d-shell-guard .sg-bench-head .muted { font-size: 12px; }
+.d-shell-guard .sg-bench-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 2px 18px;
+  max-height: 340px; overflow-y: auto;
+}
+.d-shell-guard .sg-bench-row {
+  display: grid; grid-template-columns: 58px 58px minmax(0, 1fr); gap: 8px; align-items: baseline;
+  font-family: var(--mono); font-size: 12px; padding: 2px 0; border-bottom: 1px solid #ffffff10;
+}
+.d-shell-guard .sg-bench-row code { font-size: 12px; color: var(--white); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.d-shell-guard .sg-bench-row .muted { grid-column: 3; font-size: 11px; }
+.d-shell-guard .sg-verdict-cell { font-size: 11px; letter-spacing: 0.04em; }
+.d-shell-guard .sg-verdict-cell.sg-idle { color: #55525c; }
+.d-shell-guard .sg-regex { opacity: 0.55; }
+
+.d-shell-guard .panel { min-width: 0; }
+.d-shell-guard .sg-chip { max-width: 100%; white-space: normal; }
+.d-shell-guard .sg-chip code, .d-shell-guard .sg-state { overflow-wrap: anywhere; }
+.d-shell-guard .sg-bench-grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); }
+.d-shell-guard .sg-bench-row { grid-template-columns: 58px minmax(0, 1fr); padding: 8px 0; }
+.d-shell-guard .sg-bench-row .muted { grid-column: 2; }
+.d-shell-guard .sg-prob-id { text-transform: capitalize; }
+@media (max-width: 480px) { .d-shell-guard .sg-input-row { flex-wrap: wrap; } .d-shell-guard .sg-input { flex-basis: 100%; padding: 8px 0; } .d-shell-guard .sg-prob { grid-template-columns: 88px minmax(0, 1fr) 30px; } .d-shell-guard .sg-slider { grid-column: 2 / 4; } .d-shell-guard .sg-deadline { flex-wrap: wrap; } }
+
+.d-shell-guard .sg-chip .tag { flex-shrink: 0; white-space: nowrap; }
+.d-shell-guard .sg-request { margin: 18px 0; padding: 12px; border: 1px solid var(--line); border-radius: 10px; }
+.d-shell-guard .sg-request summary { cursor: pointer; font-size: 13px; line-height: 1.5; color: var(--muted); }
+.d-shell-guard .sg-decision:first-of-type { margin-top: 0; }

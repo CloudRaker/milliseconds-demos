@@ -1,0 +1,273 @@
+/* Tower demo. Everything is scoped under .d-tower; tokens come from site.css, controls from demos.css. */
+.d-tower {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.d-tower .t-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+}
+.d-tower .t-modes,
+.d-tower .t-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+.d-tower .btn {
+  padding: 8px 14px;
+  font-size: 13px;
+}
+.d-tower .t-mode {
+  min-width: 92px;
+  justify-content: center;
+}
+.d-tower .t-seed {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+.d-tower .t-seed .input {
+  width: auto;
+  min-width: 210px;
+  padding: 7px 10px;
+  font-size: 13px;
+}
+
+.d-tower .t-blurb {
+  margin: 0;
+  font-size: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.d-tower .t-keys {
+  font-family: var(--mono);
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.d-tower .t-body {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: minmax(0, 1.25fr) minmax(320px, 0.75fr);
+  align-items: start;
+}
+.d-tower .t-left {
+  padding: 12px;
+}
+.d-tower .t-stage {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--ink);
+}
+.d-tower .scope {
+  display: block;
+  width: 100%;
+}
+.d-tower .t-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--ink) 72%, transparent);
+  backdrop-filter: blur(2px);
+}
+.d-tower .t-overlay p {
+  margin: 0;
+  color: var(--white);
+  font-size: 15px;
+}
+
+.d-tower .t-clock {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  align-items: center;
+  padding: 10px 6px 2px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.d-tower .t-warn {
+  color: #f0b35a;
+}
+.d-tower .t-budget {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+.d-tower .t-budget .bar {
+  display: block;
+  width: 90px;
+}
+
+.d-tower .t-right {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+.d-tower .t-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.d-tower .t-stat {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px;
+  background: #ffffff05;
+}
+.d-tower .t-stat-label {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.d-tower .t-stat-value {
+  font-size: 22px;
+  color: var(--white);
+  margin-top: 6px;
+}
+.d-tower .t-big .t-stat-value {
+  font-size: 30px;
+}
+.d-tower .t-stat.good .t-stat-value {
+  color: #6fdc8c;
+}
+.d-tower .t-stat.bad .t-stat-value {
+  color: #ff8a8a;
+}
+.d-tower .t-stat-sub {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.d-tower .t-metrics2 {
+  margin-top: 10px;
+  font-size: 12px;
+  gap: 14px;
+}
+.d-tower .t-badge {
+  display: inline-block;
+  margin: 10px 0 0;
+}
+.d-tower .error {
+  margin: 10px 0 0;
+  word-break: break-word;
+}
+
+.d-tower .t-ticker ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 260px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.d-tower .t-ticker li {
+  display: grid;
+  grid-template-columns: 44px 62px minmax(0, 1fr);
+  gap: 8px;
+  font-size: 12px;
+  color: var(--muted);
+  padding: 3px 0;
+  border-bottom: 1px solid #ffffff10;
+}
+.d-tower .t-ticker li.t-empty {
+  display: block;
+  border-bottom: 0;
+}
+.d-tower .t-tt {
+  opacity: 0.6;
+}
+.d-tower .t-tc {
+  color: var(--white);
+}
+.d-tower .t-tx {
+  word-break: break-word;
+}
+.d-tower .t-instruction .t-tx {
+  color: var(--white);
+}
+.d-tower .t-fallback .t-tx {
+  color: #f0b35a;
+}
+.d-tower .t-los .t-tx,
+.d-tower .t-near .t-tx {
+  color: #ff8a8a;
+  font-weight: 600;
+}
+
+.d-tower .t-measured {
+  overflow-x: auto;
+}
+.d-tower .t-measured-note {
+  margin: -6px 0 14px;
+  font-size: 13px;
+}
+.d-tower .t-measured table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  min-width: 620px;
+}
+.d-tower .t-measured th {
+  text-align: left;
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 0 12px 8px 0;
+  border-bottom: 1px solid var(--line);
+}
+.d-tower .t-measured td {
+  padding: 7px 12px 7px 0;
+  border-bottom: 1px solid #ffffff10;
+  color: var(--muted);
+}
+.d-tower .t-measured tbody tr:hover td {
+  color: var(--white);
+}
+
+@media (max-width: 1080px) {
+  .d-tower .t-body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .d-tower .t-seed .input {
+    min-width: 160px;
+  }
+}
+@media (max-width: 640px) {
+  .d-tower .t-stats {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .d-tower .t-bar {
+    gap: 10px;
+  }
+  .d-tower .t-keys {
+    display: none;
+  }
+}
+
+.d-tower .t-controls, .d-tower .t-seed { min-width: 0; max-width: 100%; }
+.d-tower .t-seed .input { max-width: 100%; min-width: 0; }
+.d-tower .t-overlay { padding: 20px; text-align: center; }
+.d-tower .t-right .panel > p.muted { line-height: 1.6; }
+@media (max-width: 480px) { .d-tower .t-seed { width: 100%; } .d-tower .t-seed .input { flex: 1; width: 0; } }

@@ -1,0 +1,142 @@
+{
+ "slug": "voice-turn",
+ "title": "Voice Turn: instant endpointing and barge-in",
+ "one_liner": "A voice assistant that answers the moment a request is complete, instead of waiting for a fixed silence timeout, and stops talking when the speaker interrupts.",
+ "platform": "macos-swift",
+ "what_it_does": "The user presses Start. A simulated microphone plays a scripted transcript of ten utterances with realistic per-word timing, or a live microphone streams partial transcripts. On every new word the app sends the transcript so far to the judge and asks \"has the speaker finished a complete request?\", \"what do they want?\", and, while the assistant speaks, \"is the speaker interrupting?\". Slot questions (timer duration, room, contact) only appear when a regex finds candidates in the transcript; the judge picks one candidate or \"none\". Code owns all thresholds: fire when turn_complete >= 0.85 and the pause is >= 250 ms; if turn_complete < 0.35 the silence fallback stretches to 2500 ms; otherwise a 1000 ms silence timeout applies; with no answer at all the plain timeout applies. When it fires, a canned reply from intent plus slot is spoken by TTS. If is_barge_in >= 0.8 while speaking, speech stops. A timeline strip shows the waveform, words, the turn_complete step line, a green \"fired\" marker, an orange \"silence baseline would fire\" marker, a shaded \"saved\" band and a red barge-in marker. Panels show judge latency p50/p95, requests, tokens, cost, and a comparison of mean delay after end of speech: 1000 ms baseline vs about 350 ms with the judge, plus cut-off count, fires/fallbacks, saved per turn and cumulative. A Turns table lists intent, slot, probability at fire, delay and saving, tagged BARGED or BASELINE CUT OFF.",
+ "jev_questions": [
+  {
+   "key": "turn_complete",
+   "type": "noul",
+   "instructions": "Has the speaker finished saying a complete request, so that the assistant should respond right now instead of waiting for more words? Judge from `transcript_so_far` and the pause length `ms_since_last_word`. criteria.true: The words form a complete, self-contained request or statement. Nothing essential is missing; an assistant could act on it as-is. criteria.false: The speaker is mid-sentence: the transcript ends on a dangling word (for, to, in, the, and, a, of), names an action without its object, or is clearly about to add more.",
+   "state_shape": "{context, transcript_so_far, ms_since_last_word, word_count, assistant_state: listening|speaking, assistant_is_saying?}"
+  },
+  {
+   "key": "intent",
+   "type": "choice",
+   "instructions": "What does the speaker want the assistant to do, based on `transcript_so_far`?",
+   "options": [
+    "set_timer: Start a timer, alarm or countdown for a duration",
+    "weather: Ask about weather, temperature or forecast",
+    "play_music: Play a song, artist, genre or playlist",
+    "lights: Turn lights on/off, dim, or change their color",
+    "send_message: Send a text or message to a person",
+    "question: A general knowledge or factual question",
+    "chit_chat: Greeting, small talk or thanks with no task",
+    "incomplete: Too little said so far to tell what the speaker wants"
+   ],
+   "state_shape": "same state"
+  },
+  {
+   "key": "is_barge_in",
+   "type": "noul",
+   "instructions": "The assistant is currently speaking the text in `assistant_is_saying`. Is the speaker interrupting to make the assistant stop, be quiet, cancel, or change what it is doing? criteria.true: Words like stop, wait, no, cancel, never mind, shut up, hold on, or a brand new request that overrides the current response. criteria.false: Silence, filler (uh, hmm), backchannel agreement (ok, yeah, thanks), or the speaker echoing the assistant.",
+   "state_shape": "same state, only sent while assistant_state == speaking"
+  },
+  {
+   "key": "timer_duration",
+   "type": "choice",
+   "instructions": "Which of these phrases from the transcript is the duration the speaker wants the timer set for?",
+   "options": [
+    "<regex duration candidates, e.g. 'ten minutes'>",
+    "none: None of them is the timer duration"
+   ],
+   "state_shape": "same state, only when duration regex matches"
+  },
+  {
+   "key": "room",
+   "type": "choice",
+   "instructions": "Which room does the speaker want the lights command applied to?",
+   "options": [
+    "<matched rooms from list kitchen, bedroom, living room, bathroom, office, garage, hallway, dining room, basement, nursery, porch>",
+    "none: No specific room"
+   ],
+   "state_shape": "same state, only when a room word is present"
+  },
+  {
+   "key": "contact",
+   "type": "choice",
+   "instructions": "Who does the speaker want to send the message to?",
+   "options": [
+    "<regex capture after text|message|tell|call, e.g. 'mom', 'sarah'>",
+    "none: No recipient named"
+   ],
+   "state_shape": "same state, only when contact regex matches"
+  }
+ ],
+ "request_cadence": "One fan-out request per partial transcript update (roughly per word, every 250-400 ms while speaking), coalesced to at most one in flight. Measured: 58 requests per 75 s session, about 1.4 decisions/s while speaking, ~697 input tokens per request. HTTP 429 triggers a 2 s backoff.",
+ "data_files": [
+  "/Users/blaget/projects/jev-experiments/jev-voice-turn/Sources/SimulatedMic.swift (DemoScript: 10 utterances with per-word gap/duration; ~60 lines, port to a JSON/TS array)",
+  "/Users/blaget/projects/jev-experiments/jev-voice-turn/screenshots/01-jev-fires-before-silence.png (212 KB, reference visual)",
+  "/Users/blaget/projects/jev-experiments/jev-voice-turn/screenshots/05-session-summary.png (226 KB, reference visual)",
+  "/Users/blaget/projects/jev-experiments/jev-voice-turn/screenshots/demo.mp4 (2.5 MB, reference only)"
+ ],
+ "ui_components": [
+  "Header with status note, in-flight count, rate-limit banner: Sources/ContentView.swift lines 40-130",
+  "Live transcript card with turn_complete, intent, pause: Sources/ContentView.swift",
+  "Assistant reply card (phase idle/listening/speaking): Sources/ContentView.swift line 139",
+  "Timeline strip (waveform, words, step line, markers, saved band): Sources/TimelineView.swift",
+  "Latency stats panel (last/p50/p95, decisions/s, tokens, cost): Sources/LatencyStats.swift + ContentView",
+  "Endpointing comparison panel (silence timeout vs judge): Sources/ContentView.swift lines 290-320, math in Sources/TimelineMath.swift",
+  "Policy sliders (fire threshold, barge-in threshold, min pause, silence baseline, judge on/off): Sources/ContentView.swift line 334",
+  "Turns table with BARGED / BASELINE CUT OFF tags: Sources/ContentView.swift lines 210-250",
+  "Panel/Theme primitives: Sources/Theme.swift"
+ ],
+ "reusable_source": [
+  "/Users/blaget/projects/jev-experiments/jev-voice-turn/Sources/TurnPolicy.swift (verdict, isBargeIn, baselineFireTime, ResponseComposer: pure, port 1:1 to TS)",
+  "/Users/blaget/projects/jev-experiments/jev-voice-turn/Sources/SimulatedMic.swift (DemoScript + play loop with gapBeforeMs/durationMs; port to async TS with setTimeout)",
+  "/Users/blaget/projects/jev-experiments/jev-voice-turn/Sources/TurnState.swift (CandidateExtractor regexes for durations, rooms, contacts; snapshot builder)",
+  "/Users/blaget/projects/jev-experiments/jev-voice-turn/Sources/TimelineMath.swift (x mapping, probabilityPath, comparison aggregates, formatters)",
+  "/Users/blaget/projects/jev-experiments/jev-voice-turn/Sources/LatencyStats.swift (p50/p95, trailing decisions/s, stale/failed counters)",
+  "/Users/blaget/projects/jev-experiments/jev-voice-turn/Sources/SessionEngine.swift (mergeWords partial merging, coalescing dispatch, tick policy loop; port logic, drop SwiftUI)",
+  "/Users/blaget/projects/jev-experiments/jev-voice-turn/Sources/Models.swift (Intent enum with labels and rubrics, TurnRecord)"
+ ],
+ "dm1_mapping": [
+  {
+   "jev_key": "turn_complete",
+   "dm1_route": "yes-no",
+   "dm1_body": "POST /yes-no {\"text\":\"set a timer for ten\",\"statement\":\"The speaker has finished a complete request the assistant can act on now.\",\"when_true\":\"The words form a complete, self-contained request. Nothing essential is missing.\",\"when_false\":\"The transcript ends mid-sentence on a dangling word like for, to, in, the, and, or names an action without its object.\"} -> {answer, probability}",
+   "notes": "text is the raw partial transcript only. Do not put ms_since_last_word in text; the 250 ms min-pause guard and the 1000/2500 ms timeouts live in code, as in TurnPolicy. Use probability against fireThreshold 0.85 and incompleteThreshold 0.35. Sent once per coalesced partial while listening."
+  },
+  {
+   "jev_key": "is_barge_in",
+   "dm1_route": "yes-no",
+   "dm1_body": "POST /yes-no {\"text\":\"Assistant is saying: \\\"Turning the living room lights on.\\\" Speaker says: \\\"stop stop\\\"\",\"statement\":\"The speaker interrupts to make the assistant stop, cancel, or change what it is doing.\",\"when_true\":\"Words like stop, wait, no, cancel, never mind, hold on, or a brand new request that overrides the response.\",\"when_false\":\"Filler (uh, hmm), backchannel agreement (ok, yeah, thanks), or the speaker echoing the assistant.\"} -> {answer, probability}",
+   "notes": "Only sent while phase == speaking; replaces the turn_complete call for that partial. Threshold 0.8. If barge-in fires, send one turn_complete yes-no on the interruption text to decide whether it is a new request (>= 0.85) or just a stop."
+  },
+  {
+   "jev_key": "intent",
+   "dm1_route": "classify",
+   "dm1_body": "POST /classify {\"text\":\"set a timer for ten minutes\",\"labels\":{\"set_timer\":\"Start a timer, alarm or countdown for a duration\",\"weather\":\"Ask about weather, temperature or forecast\",\"play_music\":\"Play a song, artist, genre or playlist\",\"lights\":\"Turn lights on/off, dim, or change their color\",\"send_message\":\"Send a text or message to a person\",\"question\":\"A general knowledge or factual question\",\"chit_chat\":\"Greeting, small talk or thanks with no task\",\"incomplete\":\"Too little said so far to tell what the speaker wants\"}} -> {label, probability, scores}",
+   "notes": "Sent once at fire time (not per partial) to save budget. Optionally also every 3rd partial for the live intent readout, if the budget allows. Map label to Intent enum; unknown -> incomplete."
+  },
+  {
+   "jev_key": "timer_duration",
+   "dm1_route": "classify",
+   "dm1_body": "POST /classify {\"text\":\"set a timer for ten minutes\",\"labels\":{\"ten minutes\":\"This phrase is the duration the speaker wants the timer set for\",\"none\":\"None of the phrases is the timer duration\"}} -> {label}",
+   "notes": "Labels are the regex duration candidates plus none (classify needs >= 2 labels, so none is always present). Sent at fire time only when intent == set_timer and candidates exist. Code copies the label verbatim; nothing generated."
+  },
+  {
+   "jev_key": "room",
+   "dm1_route": "classify",
+   "dm1_body": "POST /classify {\"text\":\"turn off the lights in the kitchen\",\"labels\":{\"kitchen\":\"The room the lights command applies to\",\"none\":\"No specific room is named\"}} -> {label}",
+   "notes": "Sent at fire time when intent == lights and a room word matched. Cheaper alternative: one POST /entities {text, types:{duration:\"a length of time for a timer\", room:\"a room in a house\", contact:\"a person to message\"}} at fire time replaces all three slot calls; prefer this if latency matters more than fidelity to the candidate-selection design."
+  },
+  {
+   "jev_key": "contact",
+   "dm1_route": "classify",
+   "dm1_body": "POST /classify {\"text\":\"text mom I'll be late\",\"labels\":{\"mom\":\"The person the message is for\",\"none\":\"No recipient is named\"}} -> {label}",
+   "notes": "Sent at fire time when intent == send_message and the contact regex matched."
+  }
+ ],
+ "browser_plan": "Build a Vite/React page at demo.milliseconds.ai/voice-turn in the milliseconds site style (dark panels, mono numerics, green = judge, orange = baseline, red = barge-in). Sources: (1) Simulated microphone, default, plays DemoScript with the same gapBeforeMs/durationMs via setTimeout and a synthetic level envelope; (2) Live microphone via Web Speech API (webkitSpeechRecognition, continuous, interimResults) when the browser supports it, with the same \"audio never leaves the machine, only transcript text is sent\" note; Chrome sends audio to Google, so word the note honestly. Assistant replies use speechSynthesis; cancel() on barge-in. Port TurnPolicy, CandidateExtractor, mergeWords, LatencyStats, TimelineMath 1:1 to TypeScript. Render the timeline strip on a canvas at 30 fps with requestAnimationFrame driving tick(). Proxy: a tiny serverless function (Cloudflare Worker or Vercel edge) at /api/dm1/:route that forwards JSON to https://api.milliseconds.ai/v1/decision-machine-1/:route with the server-side bearer key, allowlists routes, and passes back x-inference-ms and x-input-tokens headers plus the 429 status. Budget: the original sent up to 5 questions per partial as one fan-out; here send one /yes-no per coalesced partial (turn_complete while listening, is_barge_in while speaking), and defer intent classify and slot classify (or a single /entities) to fire time. Keep at most one request in flight, add a 500 ms minimum spacing (token bucket 2/s) so a burst of fast words coalesces, and discard stale answers by sequence number. That yields about 1 req/s during speech and 2-3 extra per turn at fire; the 10-utterance script stays near 60-70 requests per session, same as the original. On 429: 2 s backoff, banner \"rate limited, silence fallback active\", the policy falls back to the 1000 ms timeout so the demo never stalls. Show x-inference-ms as the latency source next to wall-clock RTT. Cost panel: use the milliseconds token price instead of the Jev figure.",
+ "difficulty": "L",
+ "risks": [
+  "Short imperatives like 'text mom I'll be late' scored 0.42-0.55 on Jev; the yes-no statement may also land in the unsure band, so keep the silence fallback and expect 1-2 fallbacks per session.",
+  "Per-partial cadence is the whole point of the demo; with a shared 200 req/min org budget, two simultaneous visitors at ~1 req/s each already use most of it. Add a per-page 2 req/s cap and consider a proxy-side global limiter that returns 429 early.",
+  "Web Speech API interim results are jumpy and revise earlier words; the mergeWords logic must handle shrinking transcripts. Safari support is partial; keep simulated mode as the default.",
+  "Chrome Web Speech sends audio to Google servers; the on-device privacy claim from the macOS app does not hold in the browser. Reword the privacy note.",
+  "Judging turn completeness from text alone, without ms_since_last_word in the request, may lower recall for utterances that end on a noun and could continue. Validate the fire delay and cut-off counts against the README numbers before publishing.",
+  "speechSynthesis on some browsers needs a user gesture first and may not fire onend reliably; guard the speaking phase with a timeout so barge-in tests still run."
+ ]
+}

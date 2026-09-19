@@ -1,0 +1,105 @@
+/* Dispatch console. Everything is scoped under .d-dispatch and uses the site tokens
+   (--ink, --surface, --white, --muted, --line, --purple-on-dark, --sans, --mono). */
+
+.d-dispatch { display: grid; gap: 14px; font-size: 14px; }
+
+/* Controls ---------------------------------------------------------------- */
+.d-dispatch .controls { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 14px 16px; }
+.d-dispatch .controls .spacer { flex: 1 1 24px; }
+.d-dispatch .clock { font-size: 13px; color: var(--muted); min-width: 92px; text-align: right; }
+
+/* Metrics + KPIs ---------------------------------------------------------- */
+.d-dispatch .metrics { padding: 0 4px; }
+.d-dispatch .kpis { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
+.d-dispatch .kpi { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
+.d-dispatch .kpi-label { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.d-dispatch .kpi-value { font-size: 24px; margin-top: 4px; color: var(--white); }
+.d-dispatch .kpi-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.d-dispatch .kpi.good .kpi-value { color: #6fdc8c; }
+.d-dispatch .kpi.warn .kpi-value { color: #f0b35a; }
+.d-dispatch .kpi.hot .kpi-value { color: #ff8a8a; }
+.d-dispatch .kpi.purple .kpi-value { color: var(--purple-on-dark); }
+
+/* Three-column stage ------------------------------------------------------ */
+.d-dispatch .stage { display: grid; gap: 14px; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr) minmax(0, 1fr); align-items: start; }
+.d-dispatch .bottom { display: grid; gap: 14px; grid-template-columns: minmax(0, 1fr); }
+@media (max-width: 1100px) {
+  .d-dispatch .stage, .d-dispatch .bottom { grid-template-columns: minmax(0, 1fr); }
+}
+.d-dispatch .panel { padding: 14px 16px; }
+.d-dispatch .scroll { max-height: 460px; overflow-y: auto; display: grid; gap: 8px; scrollbar-width: thin; }
+
+/* Feed -------------------------------------------------------------------- */
+.d-dispatch .feed-item { border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; background: #ffffff05; }
+.d-dispatch .feed-item.deciding { border-color: #6d4aff66; }
+.d-dispatch .feed-head { display: flex; gap: 8px; align-items: baseline; font-size: 11px; color: var(--muted); }
+.d-dispatch .feed-head .chan { font: 600 10px var(--mono); letter-spacing: 0.08em; color: var(--white); }
+.d-dispatch .feed-head .addr { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.d-dispatch .feed-text { font-size: 13px; line-height: 1.45; margin: 4px 0 6px; color: var(--white); }
+.d-dispatch .feed-foot { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+
+/* Category chips: one hue per service, same palette as the map. */
+.d-dispatch .tag.cat { border-color: currentColor; }
+.d-dispatch .cat-fire { color: #ff6a4a; }
+.d-dispatch .cat-medical { color: #ff5c93; }
+.d-dispatch .cat-police { color: #6d8cff; }
+.d-dispatch .cat-traffic { color: #f0b35a; }
+.d-dispatch .cat-utility { color: #c3e653; }
+.d-dispatch .cat-rescue { color: #36dcc8; }
+.d-dispatch .cat-non_emergency { color: var(--muted); }
+.d-dispatch .cat-duplicate_update { color: #a089ff; }
+
+.d-dispatch .sev { display: inline-flex; gap: 2px; }
+.d-dispatch .sev i { width: 5px; height: 12px; border-radius: 1px; background: var(--line); }
+.d-dispatch .sev i.on { background: var(--muted); }
+.d-dispatch .sev i.on.s3 { background: #f0b35a; }
+.d-dispatch .sev i.on.s4 { background: #ff8a8a; }
+
+/* Probability hover card -------------------------------------------------- */
+.d-dispatch .probs { position: fixed; right: max(24px, calc((100vw - 1600px) / 2 + 24px)); width: 320px; z-index: 30; max-height: 460px; overflow: auto; pointer-events: none; box-shadow: 0 20px 60px #00000080; }
+.d-dispatch .probs .panel-title { margin: 10px 0 6px; }
+.d-dispatch .probs .panel-title:first-child { margin-top: 0; }
+.d-dispatch .prow { display: grid; grid-template-columns: 1fr 70px 34px; gap: 8px; align-items: center; font-size: 11px; color: var(--muted); margin: 2px 0; }
+.d-dispatch .prow .bar { height: 5px; border-radius: 3px; background: var(--line); overflow: hidden; }
+.d-dispatch .prow .bar i { display: block; height: 100%; background: #ffffff40; }
+.d-dispatch .prow .bar i.pick { background: var(--purple-on-dark); }
+.d-dispatch .prow .v { text-align: right; color: var(--white); }
+.d-dispatch .probs-meta { font-size: 11px; margin: 10px 0 0; }
+@media (max-width: 1100px) { .d-dispatch .probs { display: none; } }
+
+/* Map --------------------------------------------------------------------- */
+.d-dispatch .map-wrap { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--ink); }
+.d-dispatch .map-wrap canvas { display: block; width: 100%; aspect-ratio: 4000 / 2800; }
+.d-dispatch .legend { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px; font-size: 11px; color: var(--muted); }
+.d-dispatch .legend span { display: inline-flex; align-items: center; gap: 5px; }
+.d-dispatch .legend i { width: 8px; height: 8px; display: inline-block; border-radius: 1px; }
+
+/* Incidents --------------------------------------------------------------- */
+.d-dispatch .inc { border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; background: #ffffff05; }
+.d-dispatch .inc.awaiting_units { border-color: #ff8a8a55; }
+.d-dispatch .inc-head { display: flex; gap: 8px; align-items: center; font-size: 11px; }
+.d-dispatch .inc-addr { font-size: 12px; margin: 4px 0 6px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.d-dispatch .inc-foot { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; font-size: 11px; color: var(--muted); }
+.d-dispatch .inc-foot .status { text-transform: uppercase; letter-spacing: 0.08em; font-size: 10px; }
+
+/* Event log + comparison -------------------------------------------------- */
+.d-dispatch .lines { max-height: 240px; overflow-y: auto; font-size: 11px; display: grid; gap: 2px; }
+.d-dispatch .line { display: grid; grid-template-columns: 52px 78px 1fr; gap: 8px; color: var(--muted); }
+.d-dispatch .line .t { text-align: right; }
+.d-dispatch .line .k { text-transform: uppercase; letter-spacing: 0.06em; font-size: 10px; align-self: center; }
+.d-dispatch .line .k.dispatch, .d-dispatch .line .k.on_scene { color: #6fdc8c; }
+.d-dispatch .line .k.merge { color: #a089ff; }
+.d-dispatch .line .k.error, .d-dispatch .line .k.surge { color: #ff8a8a; }
+.d-dispatch .line .k.fallback { color: #f0b35a; }
+
+.d-dispatch .panel { min-width: 0; }
+.d-dispatch .dispatch-summary { margin: 0; line-height: 1.6; }
+.d-dispatch .feed-head, .d-dispatch .inc-head { flex-wrap: wrap; }
+.d-dispatch .line > span { overflow-wrap: anywhere; min-width: 0; }
+@media (max-width: 600px) {
+  .d-dispatch .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .d-dispatch .kpi { padding: 12px; }
+  .d-dispatch .kpi-label { letter-spacing: .04em; }
+  .d-dispatch .line { grid-template-columns: 44px 64px minmax(0, 1fr); gap: 6px; }
+  .d-dispatch .clock { margin-left: auto; }
+}

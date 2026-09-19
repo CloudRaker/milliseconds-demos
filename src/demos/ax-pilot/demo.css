@@ -1,0 +1,349 @@
+/* AX Pilot. Everything scoped under .d-ax-pilot; tokens and .panel/.btn/.input/.tag/.bar come from
+   site.css and demos.css. The simulated window borrows macOS proportions, not macOS colours. */
+
+.d-ax-pilot {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.d-ax-pilot .small {
+  font-size: 13px;
+}
+.d-ax-pilot p {
+  margin: 0;
+}
+
+/* Tabs */
+.d-ax-pilot .tabs {
+  display: flex;
+  gap: 8px;
+}
+.d-ax-pilot .tab {
+  padding: 8px 16px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font: 500 14px var(--sans);
+  cursor: pointer;
+}
+.d-ax-pilot .tab.on {
+  color: var(--white);
+  border-color: var(--purple-on-dark);
+  background: #6d4aff1a;
+}
+
+/* Layout: controls and stage on top, HUD and log below. */
+.d-ax-pilot .stage {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: minmax(300px, 380px) minmax(0, 1fr);
+  align-items: start;
+}
+.d-ax-pilot .stage.recorded {
+  grid-template-columns: minmax(0, 1fr);
+}
+.d-ax-pilot .hud,
+.d-ax-pilot .logpanel {
+  grid-column: span 1;
+}
+@media (max-width: 980px) {
+  .d-ax-pilot .stage {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Controls */
+.d-ax-pilot .hint {
+  margin: 10px 0;
+  font-size: 13px;
+}
+.d-ax-pilot .row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.d-ax-pilot .error {
+  margin-top: 10px;
+}
+
+/* The simulated window */
+.d-ax-pilot .win {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+  background: #0d0d10;
+  min-height: 360px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.d-ax-pilot .win-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  background: #1c1c22;
+  border-bottom: 1px solid var(--line);
+}
+.d-ax-pilot .win-bar i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ffffff26;
+}
+.d-ax-pilot .win-bar b {
+  margin-left: 10px;
+  font: 500 13px var(--sans);
+}
+.d-ax-pilot .win-main {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+.d-ax-pilot .g-content {
+  flex: 1;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+.d-ax-pilot .g-sidebar {
+  width: 210px;
+  padding: 10px;
+  border-right: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow: auto;
+  max-height: 420px;
+}
+.d-ax-pilot .g-toolbar,
+.d-ax-pilot .g-tabs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--line);
+  flex-wrap: wrap;
+}
+.d-ax-pilot .g-keys {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.d-ax-pilot .win[data-app="Calculator"] {
+  max-width: 400px;
+}
+.d-ax-pilot .win[data-app="Calculator"] .g-content {
+  max-width: 352px;
+}
+.d-ax-pilot .win[data-app="Calculator"] .g-keys {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  max-width: 320px;
+}
+.d-ax-pilot .g-display .txt {
+  font: 400 44px var(--mono);
+  text-align: right;
+  padding: 8px 12px;
+  max-width: 320px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.d-ax-pilot .g-pane,
+.d-ax-pilot .g-page {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-content: flex-start;
+}
+.d-ax-pilot .win[data-app="System Settings"] .g-pane {
+  max-width: 420px;
+}
+.d-ax-pilot .txt {
+  flex-basis: 100%;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Controls inside the window */
+.d-ax-pilot .ctl {
+  padding: 8px 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font: 400 14px var(--sans);
+  color: var(--white);
+  background: #ffffff08;
+  user-select: none;
+}
+.d-ax-pilot .win[data-app="Calculator"] .ctl {
+  text-align: center;
+  padding: 14px 0;
+  font-size: 16px;
+}
+.d-ax-pilot .ctl.row {
+  border: 1px solid transparent;
+  background: transparent;
+  border-radius: 7px;
+  padding: 7px 10px;
+  font-size: 13px;
+}
+.d-ax-pilot .ctl.sel {
+  border-color: var(--purple-on-dark);
+  background: #6d4aff26;
+}
+.d-ax-pilot .ctl.foc {
+  outline: 2px solid #6d4aff66;
+  outline-offset: 1px;
+}
+.d-ax-pilot .ctl.field {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-family: var(--mono);
+  font-size: 13px;
+  background: #ffffff05;
+}
+.d-ax-pilot .ctl.field.area {
+  flex-basis: 100%;
+  min-height: 140px;
+  align-items: flex-start;
+  white-space: pre-wrap;
+}
+.d-ax-pilot .ctl .ph {
+  color: #ffffff3d;
+}
+/* The yellow highlight the Swift app drew over the chosen element's frame. */
+.d-ax-pilot .ctl.hl {
+  border-color: #f0c040;
+  box-shadow: 0 0 0 3px #f0c04040;
+}
+.d-ax-pilot .g-sheet {
+  position: absolute;
+  inset: 0;
+  background: #000000a8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.d-ax-pilot .sheet-card {
+  width: min(400px, 80%);
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #1c1c22;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  text-align: center;
+}
+
+/* HUD */
+.d-ax-pilot .status {
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+.d-ax-pilot .status.live {
+  color: var(--white);
+}
+.d-ax-pilot .metrics {
+  margin-bottom: 14px;
+}
+.d-ax-pilot .decision {
+  font-size: 14px;
+  margin: 12px 0;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.d-ax-pilot .nouls,
+.d-ax-pilot .bars {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+.d-ax-pilot .nouls > div,
+.d-ax-pilot .bars > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 110px 46px;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.d-ax-pilot .blabel {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--mono);
+  font-size: 12px;
+}
+.d-ax-pilot .bars .mono,
+.d-ax-pilot .nouls .mono {
+  text-align: right;
+  font-size: 12px;
+}
+
+/* Step log */
+.d-ax-pilot .log {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 260px;
+  overflow: auto;
+}
+.d-ax-pilot .log li {
+  display: grid;
+  grid-template-columns: 26px 78px minmax(0, 1fr) auto auto;
+  gap: 10px;
+  align-items: baseline;
+  font: 400 12px var(--mono);
+}
+.d-ax-pilot .log .target {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--muted);
+}
+
+/* Recorded tab */
+.d-ax-pilot .rec .goalline {
+  font-size: 15px;
+  margin-bottom: 6px;
+}
+.d-ax-pilot .rec .muted.mono {
+  margin-bottom: 12px;
+  line-height: 1.7;
+}
+
+.d-ax-pilot .panel { min-width: 0; }
+.d-ax-pilot .controls > label { display: block; }
+.d-ax-pilot .stagepanel > .small { margin: 0 0 16px; line-height: 1.6; }
+.d-ax-pilot .tabs { flex-wrap: wrap; }
+.d-ax-pilot .rec, .d-ax-pilot .ctl { overflow-wrap: anywhere; }
+.d-ax-pilot .g-sidebar { flex-shrink: 0; }
+@media (max-width: 600px) {
+  .d-ax-pilot .panel { padding: 16px; }
+  .d-ax-pilot .win-main { flex-direction: column; }
+  .d-ax-pilot .g-sidebar { width: 100%; max-height: 180px; border-right: 0; border-bottom: 1px solid var(--line); }
+  .d-ax-pilot .g-content { padding: 12px; }
+  .d-ax-pilot .sheet-card { width: calc(100% - 24px); padding: 16px; }
+  .d-ax-pilot .nouls > div, .d-ax-pilot .bars > div { grid-template-columns: minmax(0, 1fr) 60px 38px; gap: 6px; }
+  .d-ax-pilot .log li { grid-template-columns: 22px minmax(0, 1fr) auto; gap: 6px; padding: 8px 0; border-bottom: 1px solid var(--line); }
+  .d-ax-pilot .log li > :first-child { grid-column: 1; grid-row: 1; }
+  .d-ax-pilot .log li > b { grid-column: 2 / -1; grid-row: 1; }
+  .d-ax-pilot .log .target { grid-column: 2 / -1; grid-row: 2; white-space: normal; overflow-wrap: anywhere; }
+  .d-ax-pilot .log li > .tag { grid-column: 2; grid-row: 3; justify-self: start; }
+  .d-ax-pilot .log li > :last-child { grid-column: 3; grid-row: 3; white-space: nowrap; }
+}

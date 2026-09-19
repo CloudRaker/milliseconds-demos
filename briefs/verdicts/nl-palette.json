@@ -1,0 +1,59 @@
+{
+ "slug": "nl-palette",
+ "pass": false,
+ "build_ok": true,
+ "smoke_ok": true,
+ "contract_ok": true,
+ "faithful": true,
+ "defects": [
+  {
+   "severity": "major",
+   "file": "src/demos/nl-palette/data.ts",
+   "what": "The /rate font-size scale still inverts the shrink direction on the phrasing the builder claims to have fixed. Live now: \"the text is way too big\" -> level 3 = +4 at 59-60% (all=[34%, 3%, 3%, 59%]), so the demo grows the font the user just complained was too large. \"text is far too large\" only squeaks through at -4 57% vs +4 38%. The cause is the word \"way\": it sits in the +4 description (\"a lot, way or much bigger\") and outweighs the \"far too big or too large\" cue on -4. Both the code comment above ARG_SCALES and the user-facing notes in src/pages/nl-palette.astro assert this exact case is now correct, so the page tells the visitor something false.",
+   "fix": "Move the \"way\" cue off +4 and onto -4 in ARG_SCALES.font_size_delta: -4 -> \"Much smaller text: shrink the editor font by 4 points (a lot, way or much smaller or tinier; the text is way too big, far too big or far too large)\"; +4 -> \"Much bigger text: grow the editor font by 4 points (a lot or much bigger; the text is way too small, far too small or tiny)\". I measured this exact pair live: 9/9 on [\"the text is way too big\" -4, \"text is far too large\" -4, \"this is huge, tone it down\" -4, \"make the font much smaller\" -4, \"make it a bit smaller\" -2, \"make this louder\" +2, \"a touch bigger\" +2, \"text is way too small\" +4, \"i can't read this, everything is tiny\" +4], with -4 on the first case rising from 3% to 80%."
+  },
+  {
+   "severity": "minor",
+   "file": "src/demos/nl-palette/data.ts",
+   "what": "BENCHMARK_CASES has no shrink-direction font case at all: both change_font_size cases expect +2 and +4. That is exactly why the inversion above survived the 32-case run at 10/10 argument accuracy.",
+   "fix": "Add { query: \"the text is way too big\", expected: \"change_font_size\", expectedArg: \"-4\" } (and optionally \"make it a bit more compact\" -> -2) to BENCHMARK_CASES, and update the 26/6 split in the Benchmark lede."
+  },
+  {
+   "severity": "minor",
+   "file": "src/demos/nl-palette/data.ts",
+   "what": "Two of the 66 commands (Toggle Full Screen, Toggle Font Ligatures) are dropped, and the stated reason is wrong for the implementation that shipped. The header comment and the astro notes both say \"/classify takes at most 64 labels, and the catalogue has 66, so Toggle Full Screen and Toggle Font Ligatures are gone\" \u2014 but the demo does not use flat /classify for commands, it uses /classify-tree, where the 64 cap applies per level and the largest level (Format) holds about 15 labels. Both commands fit.",
+   "fix": "Restore the two commands to COMMANDS (Toggle Font Ligatures under Appearance, Toggle Full Screen under Window, with an execute.ts no-op or a toast for full screen), and drop the 64-label paragraph from src/pages/nl-palette.astro. If they stay out, change the reason in both places to the real one (full screen cannot work inside an embedded page)."
+  },
+  {
+   "severity": "minor",
+   "file": "src/demos/nl-palette/data.ts",
+   "what": "The /yes-no destructive gate has false positives on safe commands. Measured live with the shipped statement and hints: \"undo that\" 50% and \"clear the formatting on this\" 54%, both at or above the 0.5 gate, so the confirm dialog opens for an undo and for a formatting change. The plainly safe set is fine (bold 7%, zoom in 22%, sort lines 23%, join lines 32%, trim whitespace 32%), so it is the wording, not the gate.",
+   "fix": "Put the two escape hatches into DESTRUCTIVE_HINTS.when_false explicitly: \"The request only shows, changes, formats or navigates, or it can be undone; undoing, redoing and changing formatting are never destructive.\" Re-run smoke and confirm \"undo that\" and \"clear the formatting on this\" fall below 0.5 while \"trash this note\" and \"get rid of every other tab\" stay above 0.9."
+  },
+  {
+   "severity": "minor",
+   "file": "src/demos/nl-palette/smoke.mjs",
+   "what": "The /yes-no section does not send the page's real request body. Demo.tsx calls yesNo(text, [DESTRUCTIVE_STATEMENT], hints), which posts { statements: [...] } and reads results[0].probability; smoke.mjs posts { statement: ... } and reads r.answer / r.probability. Both shapes work on the API (I verified the statements[] form returns {\"results\":[{...\"probability\":0.926}]}), but the script therefore cannot catch a regression in the shape the page actually uses.",
+   "fix": "In smoke.mjs section 3, post { text, statements: [DESTRUCTIVE_STATEMENT], ...DESTRUCTIVE_HINTS } and read r.results[0].answer / r.results[0].probability. One call for all three queries would also drop the run from 8 calls to 6."
+  },
+  {
+   "severity": "minor",
+   "file": "src/demos/nl-palette/Benchmark.tsx",
+   "what": "Stale counts: three header comments still say 30 where the benchmark holds 32 cases \u2014 data.ts (\"its 30 benchmark phrasings\"), Benchmark.tsx (\"The 30-case benchmark ... one /classify-tree with all 30 texts\") and smoke.mjs (\"one /classify-tree over the 30 phrasings\").",
+   "fix": "Change the three comments to 32, or write them as BENCHMARK_CASES.length so they cannot drift again."
+  },
+  {
+   "severity": "minor",
+   "file": "src/demos/nl-palette/Palette.tsx",
+   "what": "The brief asks for a visible \"Rate limited, retrying\" pill on HTTP 429 with the last ranking kept. dm1.ts retries 429 internally (3 attempts, backoff) and exposes nothing, so a rate-limited visitor sees only the spinner for several seconds, and the error path is reached only after the retries are exhausted. The last ranking is kept and the fuzzy fallback works, so this is presentation only.",
+   "fix": "Either accept it and drop the claim, or have dm1() take an onRetry callback and render a <span className=\"tag warn\">rate limited, retrying</span> in .pal-status while it is set."
+  },
+  {
+   "severity": "minor",
+   "file": "src/demos/nl-palette/data.ts",
+   "what": "Fidelity note, not a bug: the original sent {query, app_state} and told Jev to read the state (hide vs show, text size vs zoom). paletteText() sends the query alone. The builder measured a state preamble at 17/30 vs 24/30 and says so in meta.summary and the notes, and every state-dependent command here is a toggle, so the loss is small. The one state-dependent rule that remains, the unnamed \"different look\", is handled in pickTheme and I confirmed it live: \"give me a different look\" -> model dark 62%, pickTheme(current=dark) -> light.",
+   "fix": "No change needed. Keep the measurement in the notes; it is the most interesting thing on the page."
+  }
+ ],
+ "notes": "Build: pnpm build passes with zero errors (3 pages, 1.39 s). dist/nl-palette/index.html exists and dist/index.html lists \"NL Palette\".\n\nSmoke, re-run live on the shipped code: 8 calls, 5463 input tokens, group accuracy 30/32, command accuracy@1 30/32 (94%), argument accuracy 10/10. Reproduces the builder's report exactly. The two misses are \"make it shout\" (routed appearance > toggle_typewriter_mode 34% instead of text > uppercase_selection) and \"wrd wrap\" (format > toggle_inline_code 57%) - the second is a fuzzy-shaped query the fuzzy column catches, which is the point of the side-by-side. Both are shown as misses in the table.\n\nMy own adversarial inputs (three rounds, live): the singular per-keystroke body { text, tree } returns the shape Palette.tsx reads (2 levels, leaf scores) - smoke only covered the batched form, so this was worth checking; \"nuke everything\" -> file > delete_note at 20% correctly lands under the 0.55 gate and forces an explicit pick; \"close all the other tabs and delete this note\" -> tabs > close_other_tabs 79% and 96% destructive; \"undo that\" -> edit > undo 87%; \"make it bigger\" -> change_font_size 71% (font vs zoom disambiguation holds without app_state). The font-size scale probe is where it broke - see the major defect.\n\nContract: every point holds. meta.ts default-exports a valid DemoMeta; demo.css is fully scoped under .d-nl-palette (the only unprefixed rules are @keyframes pal-spin and one @media whose inner selectors are all scoped); the page uses <Demo meta={meta}> with the island and an accurate notes slot; no fetch outside src/lib/dm1.ts (the only fetch in the folder is smoke.mjs, a node script); no new dependencies (package.json and pnpm-lock.yaml untouched); no files touched outside src/demos/nl-palette/ and src/pages/nl-palette.astro; no localStorage; the .metrics strip shows calls, model p50 from inferenceMs, round trip p50 from wallMs and input tokens; Dm1Error renders inline in .error in all three components and the palette falls back to the fuzzy list; the benchmark is the only loop and it is bounded three ways (32 fixed cases, at most 5 calls, a 60 s AbortController guard) with a working Stop; nothing fires on load - the editor renders the three seed notes, the outline, the tabs and the full 32-row fuzzy benchmark table before any request, and both the palette and the benchmark need a click.\n\nFidelity to the brief: all six Jev questions are ported (command, four argument slots, destructive), the interaction loop is the original's (Cmd+K, 250 ms debounce, stale aborts, probability bars, 0.55 gate with dashed top-3 and forced explicit pick, argument preview on the top row, Tab cycling Model / Side-by-side / Fuzzy-only, session p50/p95 footer, confirm dialog on destructive-or-0.5), and the data is the original's (seed notes, benchmark cases plus two heading cases, fuzzy scorer, executor). Two reductions: the 2 dropped commands (64 of 66) and the dropped app_state preamble, both documented, the second backed by a measurement.\n\npass=false on the one major: the /rate font scale grows the font when the user says the text is too big, and the page's notes tell the visitor that case was fixed. It is a two-string change in ARG_SCALES plus one benchmark case, and I verified the replacement strings at 9/9 live.\n\nI made no commits and pushed nothing; the worktree is back at 7d188f7 with a clean tree."
+}

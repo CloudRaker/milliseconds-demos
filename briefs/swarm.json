@@ -1,0 +1,100 @@
+{
+ "slug": "swarm",
+ "title": "Swarm: 32 agents, one API",
+ "one_liner": "An .io-style arena where up to 32 agents each get their move, boost and target judged by decision-machine-1 every half second, with live latency, decisions/s and cost metrics next to a heuristic baseline.",
+ "platform": "web (vite/react)",
+ "what_it_does": "The page shows a 1600x1000 canvas arena with 140 pellets and 4 to 64 colored agents. Each agent has one of four personalities: aggressive, cautious, greedy, trickster. Bigger agents eat smaller ones on contact, pellets add size, boost gives a 1.5 s speed burst with an 8 s cooldown. The human plays a green agent with mouse and space. Every ~400 ms the app builds a compact text perception per agent (own state, nearest 6 agents with relation and direction, nearest 5 pellets, wall distances) and asks three typed questions per agent: move direction (choice over 9 options), spend boost (noul), and which entity to pursue (choice over nearby ids). Physics, collisions, respawns and the 60 Hz heading refinement stay in code. Answers are gated: move applies only above 0.12 confidence, boost only above 0.6 and only when the boost is ready, target only when it is in the listed ids. Stale answers (older seq) are discarded, and an agent falls back to a deterministic heuristic after 4 s without a fresh answer. A metrics panel shows decisions/s, in-flight requests, latency p50/p95, tokens per decision, tokens/min, $/hour, stale, fallbacks, errors and 429s. A leaderboard shows kills, deaths, pellets and win% per personality. Toggles compare Jev agents, mixed and heuristic bots, and a slow LLM (2.5 s) mode shows agents dying from stale decisions.",
+ "jev_questions": [
+  {
+   "key": "<agentId>.move",
+   "type": "choice",
+   "instructions": "Best next direction for agent `agents.<id>`, given what lies each way and its `personalities.<personality>`? Toward BIGGER is fatal; prey and pellets grow you.",
+   "options": [
+    "N",
+    "NE",
+    "E",
+    "SE",
+    "S",
+    "SW",
+    "W",
+    "NW",
+    "hold"
+   ],
+   "state_shape": "state = { rules: string, personalities: {aggressive, cautious, greedy, trickster}, agents: { a00: '<compact text perception>', ... } }. Criteria per direction built by describeMoves(): 'toward a07 (BIGGER, 30px)', 'away from a07 (BIGGER)', 'pellet p019 62px', 'WALL 40px', or 'open'; hold = 'stay still'."
+  },
+  {
+   "key": "<agentId>.boost",
+   "type": "noul",
+   "instructions": "Should agent `agents.<id>` spend its boost now (see `rules`, `personalities.<personality>`)?",
+   "options": [
+    "true: boost is ready and a BIGGER agent is within ~150px approaching, or prey/pellet is within a burst's reach and the personality spends boost on it",
+    "false: no urgent threat or opportunity, boost not ready, or energy low"
+   ],
+   "state_shape": "same batched state; fires when noul >= 0.6 and code confirms boost is ready"
+  },
+  {
+   "key": "<agentId>.target",
+   "type": "choice",
+   "instructions": "Which listed entity should agent `agents.<id>` pursue now, per `personalities.<personality>`? none if fleeing matters more.",
+   "options": [
+    "none",
+    "<smaller or similar agent ids, e.g. a12: 'smaller, 140px SW'>",
+    "<pellet ids, e.g. p019: 'pellet, 62px N'>"
+   ],
+   "state_shape": "same batched state; options vary per agent, bigger agents never listed; 8 agents share one request with keys namespaced <id>.move/.boost/.target"
+  }
+ ],
+ "request_cadence": "Per agent every 400 ms, 8 agents per request, max 12 in flight and 2 per agent. Measured: 32 agents gave ~9.3 requests/s (1,699 requests in 182 s), 65 decisions/s, ~1,048 input tokens per decision, ~4M tokens/min.",
+ "data_files": [
+  "/Users/blaget/projects/jev-experiments/jev-swarm/screenshots/live-run.png (436 KB, README hero, reference only)",
+  "/Users/blaget/projects/jev-experiments/jev-swarm/screenshots/slow-llm.png (422 KB)",
+  "/Users/blaget/projects/jev-experiments/jev-swarm/screenshots/heuristic.png (311 KB)",
+  "/Users/blaget/projects/jev-experiments/jev-swarm/screenshots/demo.mp4 (9 MB, do not ship)",
+  "No fixture data: the world is generated from seed 7 in src/swarm.ts DEFAULT_SETTINGS"
+ ],
+ "ui_components": [
+  "App shell with controls, metrics panel and leaderboard: /Users/blaget/projects/jev-experiments/jev-swarm/src/App.tsx (350 lines)",
+  "Canvas renderer (arena grid, agents, targets, in-flight rings, flash on fresh answer): /Users/blaget/projects/jev-experiments/jev-swarm/src/render.ts",
+  "Controls: agents slider 4-64, policy buttons (Jev/Mixed/Heuristic), batch select, tick select, slow LLM toggle, targets toggle, pause, reset",
+  "Styles: /Users/blaget/projects/jev-experiments/jev-swarm/src/style.css (dark palette, replace with milliseconds.ai tokens)"
+ ],
+ "reusable_source": [
+  "/Users/blaget/projects/jev-experiments/jev-swarm/src/world.ts (pure simulation, seeded RNG, physics, eating, respawn; copy as-is)",
+  "/Users/blaget/projects/jev-experiments/jev-swarm/src/render.ts (pure canvas draw; copy as-is, swap colors)",
+  "/Users/blaget/projects/jev-experiments/jev-swarm/src/metrics.ts (copy as-is, change USD_PER_INPUT_TOKEN to milliseconds pricing, source x-input-tokens header)",
+  "/Users/blaget/projects/jev-experiments/jev-swarm/src/decide.ts (keep heuristicDecision, avoidWalls, refineHeading, applyAnswer, applyDecision; rewrite parseAgentAnswers for dm1 response shape)",
+  "/Users/blaget/projects/jev-experiments/jev-swarm/src/perception.ts (keep buildPerception, renderPerception, describeMoves, describeTargets; replace buildQuestions/buildBatchRequest with a dm1 batch builder)",
+  "/Users/blaget/projects/jev-experiments/jev-swarm/src/world.test.ts and decide.test.ts (heuristic and world tests run unchanged)",
+  "/Users/blaget/projects/jev-experiments/jev-swarm/server.mjs and jev-proxy.mjs (pattern for the proxy; rewrite as a Worker route that forwards to api.milliseconds.ai)"
+ ],
+ "dm1_mapping": [
+  {
+   "jev_key": "<agentId>.move",
+   "dm1_route": "classify",
+   "dm1_body": "POST /classify {\"texts\": [<one perception text per alive agent, up to 32>], \"labels\": {\"N\": \"Move north. Good when the N line lists a pellet or prey and no BIGGER agent or WALL.\", \"NE\": \"Move north-east. Same rule for the NE line.\", \"E\": \"...\", \"SE\": \"...\", \"S\": \"...\", \"SW\": \"...\", \"W\": \"...\", \"NW\": \"...\", \"hold\": \"Stay still. Only when every direction is worse than waiting.\"}}. Each text = renderPerception(p) + '\\nrules: bigger agents eat smaller on contact...' + '\\npersonality: aggressive hunts smaller agents relentlessly...' + '\\ndirections:\\n  N: pellet p019 62px\\n  NE: WALL 40px\\n  E: toward a07 (BIGGER, 30px)\\n  ...' (the describeMoves() output moves into the text because labels are shared across the batch). Response results[i] -> {label, probability, scores}. Apply when probability >= 0.12 (MOVE_CONFIDENCE_FLOOR); chase rule uses scores[towardPrey] >= 0.3.",
+   "notes": "Labels must be identical for all 32 texts, so the per-agent direction descriptions go into the text. Keep the direction block short: one line per direction, 'open' for empty ones."
+  },
+  {
+   "jev_key": "<agentId>.boost",
+   "dm1_route": "yes-no",
+   "dm1_body": "POST /yes-no {\"texts\": [<same perception texts, up to 32>], \"statement\": \"This agent should spend its boost now.\", \"when_true\": \"Boost is ready and a BIGGER agent is within about 150px moving toward you, or prey or a pellet is within a burst's reach and the personality spends boost on it.\", \"when_false\": \"No urgent threat or opportunity, boost is cooling down or active, or energy is low.\"}. results[i] -> {answer, probability}. Fire when probability >= 0.6 and code confirms boostCooldown == 0.",
+   "notes": "Skip agents whose boost is not ready to save tokens; code already enforces the cooldown."
+  },
+  {
+   "jev_key": "<agentId>.target",
+   "dm1_route": "classify",
+   "dm1_body": "POST /classify {\"texts\": [<perception texts with a fixed 'targets:' block: 'prey_1=a12 (smaller, 140px SW); prey_2=none; pellet_1=p019 (62px N); pellet_2=p044 (118px NE); pellet_3=none'>], \"labels\": {\"prey_1\": \"Chase the agent listed as prey_1 (nearest smaller agent).\", \"prey_2\": \"Chase the agent listed as prey_2.\", \"pellet_1\": \"Go to pellet_1, the nearest pellet.\", \"pellet_2\": \"Go to pellet_2.\", \"pellet_3\": \"Go to pellet_3.\", \"none\": \"No target: flee a BIGGER agent or wander.\"}}. Code maps the slot label back to the entity id; a slot that reads 'none' resolves to null.",
+   "notes": "Jev used per-agent option ids; dm1 batch labels are shared, so use fixed slot labels and put the id-to-slot table in the text. Bigger agents never fill a slot."
+  }
+ ],
+ "browser_plan": "Same React + canvas app, restyled with the milliseconds.ai tokens, served from demo.milliseconds.ai/swarm. Copy world.ts, render.ts, metrics.ts, and the heuristic parts of decide.ts unchanged. Replace the per-agent fan-out with one swarm-wide batch per tick: every 500 ms build the perception text for all alive non-human agents (cap 32 = one texts array), send ONE /classify move request, and alternate the second request each tick between /yes-no boost and /classify target. That is exactly 2 requests/s and 32 to 64 decisions/s, close to the original 65/s. For 33-64 agents, split into two texts arrays and raise the tick to 1000 ms so the rate stays at 2 req/s. Scheduler: a single in-flight slot per route, seq per agent, discard stale answers, heuristic fallback after 4 s, and on HTTP 429 back off for Retry-After (min 2 s), show a 'shared rate limit reached, heuristic takes over' banner, and count it. Proxy: a Worker route /api/dm1/:route that forwards JSON to https://api.milliseconds.ai/v1/decision-machine-1/:route with the server-side bearer key, allowlists the route names, rejects bodies with more than 32 texts, passes through status, retry-after, x-inference-ms and x-input-tokens. Metrics panel reads x-input-tokens and x-inference-ms from the proxied response headers (latency = browser round trip, inference = header). Keep the slow LLM (2.5 s) toggle, Jev/Mixed/Heuristic buttons renamed to 'dm1 agents / Mixed / Heuristic bots', targets toggle, pause, reset, and the leaderboard. Drop the batch-size select (fixed at whole swarm) and offer tick 500/1000/2000 only. Default to 24 agents so token usage stays near 400k tokens/min with several visitors on the shared org key.",
+ "difficulty": "L",
+ "risks": [
+  "Shared batch labels remove the per-agent option descriptions Jev used; the model must read the direction block inside the text. Agent behaviour may be weaker than the Jev run; measure kills/deaths vs the heuristic bots before publishing numbers.",
+  "Token budget: ~200-250 tokens per perception x 32 texts x 2 req/s is about 600k-900k tokens/min for one visitor. Two visitors can hit the 1M/min org cap. Default 24 agents and a 600 ms tick if measurements confirm this.",
+  "Scores from /classify may not be normalized probabilities; verify before reusing the 0.3 chase threshold and the 0.12 confidence floor.",
+  "The original showed 8 agents/request and 12 in flight; the port has 1-2 requests in flight, so the 'requests in flight' metric loses its drama. Show decisions/s and inference-ms instead.",
+  "The proxy must allowlist routes and cap texts at 32, or a visitor can burn the org quota through it.",
+  "Canvas game with 60 Hz physics: the cloudraker-spring-2026 site style must be applied without touching the render loop; keep the arena a plain canvas island."
+ ]
+}

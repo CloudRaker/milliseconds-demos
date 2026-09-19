@@ -1,0 +1,14 @@
+---
+import Demo from '../layouts/Demo.astro';
+import meta from '../demos/sales-intake/meta';
+import Island from '../demos/sales-intake/Demo';
+---
+<Demo meta={meta}>
+  <Island client:only="react" />
+  <div slot="notes">
+    <h2>From an inbox to the next conversation</h2>
+    <p>The model checks four intent signals, extracts stated facts, and evaluates three criteria. Code routes each message to a team and computes a weighted fit score from the known criteria. Weights reorder the queue locally; new criteria need a fresh model run.</p>
+    <h3>Drafts, ready for a person</h3>
+    <p>These fictional messages demonstrate intake, not enrichment. Exact wording can be highlighted in the source, but a match does not prove the model assigned the right meaning or person. Unknown information stays unknown. Routes and fit judgments can be wrong; nothing is sent to a CRM and no email is sent.</p>
+  </div>
+</Demo>

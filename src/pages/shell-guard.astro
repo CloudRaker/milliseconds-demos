@@ -1,0 +1,14 @@
+---
+import Demo from '../layouts/Demo.astro';
+import meta from '../demos/shell-guard/meta';
+import Island from '../demos/shell-guard/Demo.tsx';
+---
+<Demo meta={meta}>
+  <Island client:only="react" />
+  <div slot="notes">
+    <h2>How it works</h2>
+    <p>The model checks the command for destructive actions, the wrong target and exposed credentials. Local rules apply the risk thresholds and ask for confirmation when needed.</p>
+    <h3>Demo scope</h3>
+    <p>Commands run in a simulated filesystem inside this page, not on your computer. Typo detection uses a limited command list and can flag valid tools. This demo does not replace a secure execution sandbox.</p>
+  </div>
+</Demo>

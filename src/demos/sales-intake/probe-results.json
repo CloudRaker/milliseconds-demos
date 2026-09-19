@@ -1,0 +1,1191 @@
+[
+  {
+    "name": "intent-30",
+    "route": "yes-no",
+    "data": {
+      "results": [
+        {
+          "results": [
+            {
+              "statement": "The sender wants to purchase or evaluate software for their organization.",
+              "answer": true,
+              "probability": 0.993
+            },
+            {
+              "statement": "The sender asks for help with a product they already use.",
+              "answer": false,
+              "probability": 0.187
+            },
+            {
+              "statement": "The sender is applying for a job or asking about employment.",
+              "answer": true,
+              "probability": 0.5
+            },
+            {
+              "statement": "The sender is offering to sell their services to the recipient.",
+              "answer": true,
+              "probability": 0.989
+            }
+          ]
+        },
+        {
+          "results": [
+            {
+              "statement": "The sender wants to purchase or evaluate software for their organization.",
+              "answer": true,
+              "probability": 0.977
+            },
+            {
+              "statement": "The sender asks for help with a product they already use.",
+              "answer": false,
+              "probability": 0.139
+            },
+            {
+              "statement": "The sender is applying for a job or asking about employment.",
+              "answer": false,
+              "probability": 0.014
+            },
+            {
+              "statement": "The sender is offering to sell their services to the recipient.",
+              "answer": true,
+              "probability": 0.91
+            }
+          ]
+        },
+        {
+          "results": [
+            {
+              "statement": "The sender wants to purchase or evaluate software for their organization.",
+              "answer": false,
+              "probability": 0.184
+            },
+            {
+              "statement": "The sender asks for help with a product they already use.",
+              "answer": true,
+              "probability": 0.993
+            },
+            {
+              "statement": "The sender is applying for a job or asking about employment.",
+              "answer": false,
+              "probability": 0.019
+            },
+            {
+              "statement": "The sender is offering to sell their services to the recipient.",
+              "answer": false,
+              "probability": 0.175
+            }
+          ]
+        },
+        {
+          "results": [
+            {
+              "statement": "The sender wants to purchase or evaluate software for their organization.",
+              "answer": false,
+              "probability": 0.002
+            },
+            {
+              "statement": "The sender asks for help with a product they already use.",
+              "answer": false,
+              "probability": 0.05
+            },
+            {
+              "statement": "The sender is applying for a job or asking about employment.",
+              "answer": true,
+              "probability": 0.997
+            },
+            {
+              "statement": "The sender is offering to sell their services to the recipient.",
+              "answer": false,
+              "probability": 0.102
+            }
+          ]
+        },
+        {
+          "results": [
+            {
+              "statement": "The sender wants to purchase or evaluate software for their organization.",
+              "answer": false,
+              "probability": 0.006
+            },
+            {
+              "statement": "The sender asks for help with a product they already use.",
+              "answer": false,
+              "probability": 0.309
+            },
+            {
+              "statement": "The sender is applying for a job or asking about employment.",
+              "answer": true,
+              "probability": 0.963
+            },
+            {
+              "statement": "The sender is offering to sell their services to the recipient.",
+              "answer": true,
+              "probability": 0.996
+            }
+          ]
+        },
+        {
+          "results": [
+            {
+              "statement": "The sender wants to purchase or evaluate software for their organization.",
+              "answer": true,
+              "probability": 0.992
+            },
+            {
+              "statement": "The sender asks for help with a product they already use.",
+              "answer": false,
+              "probability": 0.434
+            },
+            {
+              "statement": "The sender is applying for a job or asking about employment.",
+              "answer": true,
+              "probability": 0.866
+            },
+            {
+              "statement": "The sender is offering to sell their services to the recipient.",
+              "answer": true,
+              "probability": 0.981
+            }
+          ]
+        },
+        {
+          "results": [
+            {
+              "statement": "The sender wants to purchase or evaluate software for their organization.",
+              "answer": true,
+              "probability": 0.986
+            },
+            {
+              "statement": "The sender asks for help with a product they already use.",
+              "answer": false,
+              "probability": 0.129
+            },
+            {
+              "statement": "The sender is applying for a job or asking about employment.",
+              "answer": false,
+              "probability": 0.039
+            },
+            {
+              "statement": "The sender is offering to sell their services to the recipient.",
+              "answer": true,
+              "probability": 0.898
+            }
+          ]
+        },
+        {
+          "results": [
+            {
+              "statement": "The sender wants to purchase or evaluate software for their organization.",
+              "answer": false,
+              "probability": 0.017
+            },
+            {
+              "statement": "The sender asks for help with a product they already use.",
+              "answer": true,
+              "probability": 0.857
+            },
+            {
+              "statement": "The sender is applying for a job or asking about employment.",
+              "answer": false,
+              "probability": 0.002
+            },
+            {
+              "statement": "The sender is offering to sell their services to the recipient.",
+              "answer": false,
+              "probability": 0.108
+            }
+          ]
+        },
+        {
+          "results": [
+            {
+              "statement": "The sender wants to purchase or evaluate software for their organization.",
+              "answer": false,
+              "probability": 0.001
+            },
+            {
+              "statement": "The sender asks for help with a product they already use.",
+              "answer": false,
+              "probability": 0.01
+            },
+            {
+              "statement": "The sender is applying for a job or asking about employment.",
+              "answer": true,
+              "probability": 0.941
+            },
+            {
+              "statement": "The sender is offering to sell their services to the recipient.",
+              "answer": false,
+              "probability": 0.013
+            }
+          ]
+        },
+        {
+          "results": [
+            {
+              "statement": "The sender wants to purchase or evaluate software for their organization.",
+              "answer": false,
+              "probability": 0.009
+            },
+            {
+              "statement": "The sender asks for help with a product they already use.",
+              "answer": false,
+              "probability": 0.215
+            },
+            {
+              "statement": "The sender is applying for a job or asking about employment.",
+              "answer": false,
+              "probability": 0.203
+            },
+            {
+              "statement": "The sender is offering to sell their services to the recipient.",
+              "answer": true,
+              "probability": 0.988
+            }
+          ]
+        },
+        {
+          "results": [
+            {
+              "statement": "The sender wants to purchase or evaluate software for their organization.",
+              "answer": false,
+              "probability": 0.059
+            },
+            {
+              "statement": "The sender asks for help with a product they already use.",
+              "answer": false,
+              "probability": 0.086
+            },
+            {
+              "statement": "The sender is applying for a job or asking about employment.",
+              "answer": false,
+              "probability": 0.061
+            },
+            {
+              "statement": "The sender is offering to sell their services to the recipient.",
+              "answer": false,
+              "probability": 0.278
+            }
+          ]
+        },
+        {
+          "results": [
+            {
+              "statement": "The sender wants to purchase or evaluate software for their organization.",
+              "answer": false,
+              "probability": 0.053
+            },
+            {
+              "statement": "The sender asks for help with a product they already use.",
+              "answer": false,
+              "probability": 0.4
+            },
+            {
+              "statement": "The sender is applying for a job or asking about employment.",
+              "answer": false,
+              "probability": 0.019
+            },
+            {
+              "statement": "The sender is offering to sell their services to the recipient.",
+              "answer": false,
+              "probability": 0.106
+            }
+          ]
+        },
+        {
+          "results": [
+            {
+              "statement": "The sender wants to purchase or evaluate software for their organization.",
+              "answer": false,
+              "probability": 0.122
+            },
+            {
+              "statement": "The sender asks for help with a product they already use.",
+              "answer": false,
+              "probability": 0.019
+            },
+            {
+              "statement": "The sender is applying for a job or asking about employment.",
+              "answer": false,
+              "probability": 0.001
+            },
+            {
+              "statement": "The sender is offering to sell their services to the recipient.",
+              "answer": false,
+              "probability": 0.227
+            }
+          ]
+        },
+        {
+          "results": [
+            {
+              "statement": "The sender wants to purchase or evaluate software for their organization.",
+              "answer": false,
+              "probability": 0.021
+            },
+            {
+              "statement": "The sender asks for help with a product they already use.",
+              "answer": false,
+              "probability": 0.385
+            },
+            {
+              "statement": "The sender is applying for a job or asking about employment.",
+              "answer": false,
+              "probability": 0.004
+            },
+            {
+              "statement": "The sender is offering to sell their services to the recipient.",
+              "answer": false,
+              "probability": 0.083
+            }
+          ]
+        },
+        {
+          "results": [
+            {
+              "statement": "The sender wants to purchase or evaluate software for their organization.",
+              "answer": false,
+              "probability": 0.005
+            },
+            {
+              "statement": "The sender asks for help with a product they already use.",
+              "answer": false,
+              "probability": 0.018
+            },
+            {
+              "statement": "The sender is applying for a job or asking about employment.",
+              "answer": true,
+              "probability": 0.989
+            },
+            {
+              "statement": "The sender is offering to sell their services to the recipient.",
+              "answer": false,
+              "probability": 0.046
+            }
+          ]
+        },
+        {
+          "results": [
+            {
+              "statement": "The sender wants to purchase or evaluate software for their organization.",
+              "answer": false,
+              "probability": 0.043
+            },
+            {
+              "statement": "The sender asks for help with a product they already use.",
+              "answer": false,
+              "probability": 0.197
+            },
+            {
+              "statement": "The sender is applying for a job or asking about employment.",
+              "answer": false,
+              "probability": 0.037
+            },
+            {
+              "statement": "The sender is offering to sell their services to the recipient.",
+              "answer": true,
+              "probability": 0.941
+            }
+          ]
+        },
+        {
+          "results": [
+            {
+              "statement": "The sender wants to purchase or evaluate software for their organization.",
+              "answer": false,
+              "probability": 0.034
+            },
+            {
+              "statement": "The sender asks for help with a product they already use.",
+              "answer": false,
+              "probability": 0.077
+            },
+            {
+              "statement": "The sender is applying for a job or asking about employment.",
+              "answer": false,
+              "probability": 0.019
+            },
+            {
+              "statement": "The sender is offering to sell their services to the recipient.",
+              "answer": false,
+              "probability": 0.056
+            }
+          ]
+        },
+        {
+          "results": [
+            {
+              "statement": "The sender wants to purchase or evaluate software for their organization.",
+              "answer": true,
+              "probability": 0.986
+            },
+            {
+              "statement": "The sender asks for help with a product they already use.",
+              "answer": false,
+              "probability": 0.218
+            },
+            {
+              "statement": "The sender is applying for a job or asking about employment.",
+              "answer": false,
+              "probability": 0.01
+            },
+            {
+              "statement": "The sender is offering to sell their services to the recipient.",
+              "answer": true,
+              "probability": 0.792
+            }
+          ]
+        },
+        {
+          "results": [
+            {
+              "statement": "The sender wants to purchase or evaluate software for their organization.",
+              "answer": true,
+              "probability": 0.968
+            },
+            {
+              "statement": "The sender asks for help with a product they already use.",
+              "answer": false,
+              "probability": 0.089
+            },
+            {
+              "statement": "The sender is applying for a job or asking about employment.",
+              "answer": false,
+              "probability": 0.006
+            },
+            {
+              "statement": "The sender is offering to sell their services to the recipient.",
+              "answer": false,
+              "probability": 0.216
+            }
+          ]
+        },
+        {
+          "results": [
+            {
+              "statement": "The sender wants to purchase or evaluate software for their organization.",
+              "answer": true,
+              "probability": 0.801
+            },
+            {
+              "statement": "The sender asks for help with a product they already use.",
+              "answer": false,
+              "probability": 0.053
+            },
+            {
+              "statement": "The sender is applying for a job or asking about employment.",
+              "answer": false,
+              "probability": 0.004
+            },
+            {
+              "statement": "The sender is offering to sell their services to the recipient.",
+              "answer": false,
+              "probability": 0.25
+            }
+          ]
+        },
+        {
+          "results": [
+            {
+              "statement": "The sender wants to purchase or evaluate software for their organization.",
+              "answer": false,
+              "probability": 0.019
+            },
+            {
+              "statement": "The sender asks for help with a product they already use.",
+              "answer": false,
+              "probability": 0.112
+            },
+            {
+              "statement": "The sender is applying for a job or asking about employment.",
+              "answer": false,
+              "probability": 0.004
+            },
+            {
+              "statement": "The sender is offering to sell their services to the recipient.",
+              "answer": false,
+              "probability": 0.084
+            }
+          ]
+        },
+        {
+          "results": [
+            {
+              "statement": "The sender wants to purchase or evaluate software for their organization.",
+              "answer": false,
+              "probability": 0.002
+            },
+            {
+              "statement": "The sender asks for help with a product they already use.",
+              "answer": false,
+              "probability": 0.009
+            },
+            {
+              "statement": "The sender is applying for a job or asking about employment.",
+              "answer": true,
+              "probability": 0.985
+            },
+            {
+              "statement": "The sender is offering to sell their services to the recipient.",
+              "answer": false,
+              "probability": 0.016
+            }
+          ]
+        },
+        {
+          "results": [
+            {
+              "statement": "The sender wants to purchase or evaluate software for their organization.",
+              "answer": true,
+              "probability": 0.984
+            },
+            {
+              "statement": "The sender asks for help with a product they already use.",
+              "answer": false,
+              "probability": 0.103
+            },
+            {
+              "statement": "The sender is applying for a job or asking about employment.",
+              "answer": false,
+              "probability": 0.009
+            },
+            {
+              "statement": "The sender is offering to sell their services to the recipient.",
+              "answer": true,
+              "probability": 0.912
+            }
+          ]
+        },
+        {
+          "results": [
+            {
+              "statement": "The sender wants to purchase or evaluate software for their organization.",
+              "answer": false,
+              "probability": 0.017
+            },
+            {
+              "statement": "The sender asks for help with a product they already use.",
+              "answer": false,
+              "probability": 0.103
+            },
+            {
+              "statement": "The sender is applying for a job or asking about employment.",
+              "answer": false,
+              "probability": 0.038
+            },
+            {
+              "statement": "The sender is offering to sell their services to the recipient.",
+              "answer": false,
+              "probability": 0.252
+            }
+          ]
+        },
+        {
+          "results": [
+            {
+              "statement": "The sender wants to purchase or evaluate software for their organization.",
+              "answer": true,
+              "probability": 0.988
+            },
+            {
+              "statement": "The sender asks for help with a product they already use.",
+              "answer": false,
+              "probability": 0.497
+            },
+            {
+              "statement": "The sender is applying for a job or asking about employment.",
+              "answer": false,
+              "probability": 0.173
+            },
+            {
+              "statement": "The sender is offering to sell their services to the recipient.",
+              "answer": true,
+              "probability": 0.912
+            }
+          ]
+        },
+        {
+          "results": [
+            {
+              "statement": "The sender wants to purchase or evaluate software for their organization.",
+              "answer": false,
+              "probability": 0.037
+            },
+            {
+              "statement": "The sender asks for help with a product they already use.",
+              "answer": true,
+              "probability": 0.735
+            },
+            {
+              "statement": "The sender is applying for a job or asking about employment.",
+              "answer": false,
+              "probability": 0.002
+            },
+            {
+              "statement": "The sender is offering to sell their services to the recipient.",
+              "answer": false,
+              "probability": 0.038
+            }
+          ]
+        },
+        {
+          "results": [
+            {
+              "statement": "The sender wants to purchase or evaluate software for their organization.",
+              "answer": false,
+              "probability": 0.004
+            },
+            {
+              "statement": "The sender asks for help with a product they already use.",
+              "answer": false,
+              "probability": 0.049
+            },
+            {
+              "statement": "The sender is applying for a job or asking about employment.",
+              "answer": true,
+              "probability": 0.997
+            },
+            {
+              "statement": "The sender is offering to sell their services to the recipient.",
+              "answer": false,
+              "probability": 0.023
+            }
+          ]
+        },
+        {
+          "results": [
+            {
+              "statement": "The sender wants to purchase or evaluate software for their organization.",
+              "answer": true,
+              "probability": 0.556
+            },
+            {
+              "statement": "The sender asks for help with a product they already use.",
+              "answer": false,
+              "probability": 0.223
+            },
+            {
+              "statement": "The sender is applying for a job or asking about employment.",
+              "answer": false,
+              "probability": 0.058
+            },
+            {
+              "statement": "The sender is offering to sell their services to the recipient.",
+              "answer": true,
+              "probability": 0.99
+            }
+          ]
+        },
+        {
+          "results": [
+            {
+              "statement": "The sender wants to purchase or evaluate software for their organization.",
+              "answer": true,
+              "probability": 0.98
+            },
+            {
+              "statement": "The sender asks for help with a product they already use.",
+              "answer": false,
+              "probability": 0.203
+            },
+            {
+              "statement": "The sender is applying for a job or asking about employment.",
+              "answer": false,
+              "probability": 0.004
+            },
+            {
+              "statement": "The sender is offering to sell their services to the recipient.",
+              "answer": false,
+              "probability": 0.217
+            }
+          ]
+        },
+        {
+          "results": [
+            {
+              "statement": "The sender wants to purchase or evaluate software for their organization.",
+              "answer": false,
+              "probability": 0.018
+            },
+            {
+              "statement": "The sender asks for help with a product they already use.",
+              "answer": false,
+              "probability": 0.033
+            },
+            {
+              "statement": "The sender is applying for a job or asking about employment.",
+              "answer": false,
+              "probability": 0.025
+            },
+            {
+              "statement": "The sender is offering to sell their services to the recipient.",
+              "answer": false,
+              "probability": 0.066
+            }
+          ]
+        }
+      ]
+    },
+    "accuracy": "26/30",
+    "heldOut": "6/6",
+    "review": 16,
+    "rows": [
+      {
+        "id": "01",
+        "expected": "sales",
+        "label": "sales",
+        "uncertain": true
+      },
+      {
+        "id": "02",
+        "expected": "sales",
+        "label": "sales",
+        "uncertain": true
+      },
+      {
+        "id": "03",
+        "expected": "support",
+        "label": "support",
+        "uncertain": false
+      },
+      {
+        "id": "04",
+        "expected": "careers",
+        "label": "careers",
+        "uncertain": false
+      },
+      {
+        "id": "05",
+        "expected": "vendor",
+        "label": "vendor",
+        "uncertain": true
+      },
+      {
+        "id": "06",
+        "expected": "sales",
+        "label": "sales",
+        "uncertain": true
+      },
+      {
+        "id": "07",
+        "expected": "sales",
+        "label": "sales",
+        "uncertain": true
+      },
+      {
+        "id": "08",
+        "expected": "support",
+        "label": "support",
+        "uncertain": false
+      },
+      {
+        "id": "09",
+        "expected": "careers",
+        "label": "careers",
+        "uncertain": false
+      },
+      {
+        "id": "10",
+        "expected": "vendor",
+        "label": "vendor",
+        "uncertain": false
+      },
+      {
+        "id": "11",
+        "expected": "other",
+        "label": "other",
+        "uncertain": true
+      },
+      {
+        "id": "12",
+        "expected": "sales",
+        "label": "other",
+        "uncertain": true
+      },
+      {
+        "id": "13",
+        "expected": "sales",
+        "label": "other",
+        "uncertain": true
+      },
+      {
+        "id": "14",
+        "expected": "support",
+        "label": "other",
+        "uncertain": true
+      },
+      {
+        "id": "15",
+        "expected": "careers",
+        "label": "careers",
+        "uncertain": false
+      },
+      {
+        "id": "16",
+        "expected": "vendor",
+        "label": "vendor",
+        "uncertain": false
+      },
+      {
+        "id": "17",
+        "expected": "other",
+        "label": "other",
+        "uncertain": true
+      },
+      {
+        "id": "18",
+        "expected": "sales",
+        "label": "sales",
+        "uncertain": false
+      },
+      {
+        "id": "19",
+        "expected": "sales",
+        "label": "sales",
+        "uncertain": false
+      },
+      {
+        "id": "20",
+        "expected": "sales",
+        "label": "sales",
+        "uncertain": false
+      },
+      {
+        "id": "21",
+        "expected": "support",
+        "label": "other",
+        "uncertain": true
+      },
+      {
+        "id": "22",
+        "expected": "careers",
+        "label": "careers",
+        "uncertain": false
+      },
+      {
+        "id": "23",
+        "expected": "sales",
+        "label": "sales",
+        "uncertain": true
+      },
+      {
+        "id": "24",
+        "expected": "other",
+        "label": "other",
+        "uncertain": true
+      },
+      {
+        "id": "25",
+        "expected": "sales",
+        "label": "sales",
+        "uncertain": true
+      },
+      {
+        "id": "26",
+        "expected": "support",
+        "label": "support",
+        "uncertain": true
+      },
+      {
+        "id": "27",
+        "expected": "careers",
+        "label": "careers",
+        "uncertain": false
+      },
+      {
+        "id": "28",
+        "expected": "vendor",
+        "label": "vendor",
+        "uncertain": false
+      },
+      {
+        "id": "29",
+        "expected": "sales",
+        "label": "sales",
+        "uncertain": false
+      },
+      {
+        "id": "30",
+        "expected": "other",
+        "label": "other",
+        "uncertain": true
+      }
+    ]
+  },
+  {
+    "name": "facts-six",
+    "data": {
+      "results": [
+        {
+          "data": {
+            "company": "Northstar Foods",
+            "contact": "Maya Chen",
+            "email": "maya@northstar.example",
+            "need": "automate invoice processing",
+            "timing": "next month",
+            "budget": "$12,000 per year"
+          }
+        },
+        {
+          "data": {
+            "company": "Cedar Studio",
+            "contact": "Oliver",
+            "email": "oliver@cedar.example",
+            "need": null,
+            "timing": null,
+            "budget": null
+          }
+        },
+        {
+          "data": {
+            "company": "Fieldwork",
+            "contact": "Priya",
+            "email": "priya@fieldwork.example",
+            "need": "restore access",
+            "timing": null,
+            "budget": null
+          }
+        },
+        {
+          "data": {
+            "company": null,
+            "contact": null,
+            "email": "leo@candidate.example",
+            "need": "frontend engineers",
+            "timing": null,
+            "budget": null
+          }
+        },
+        {
+          "data": {
+            "company": "Pipeline Partners",
+            "contact": "sales director",
+            "email": null,
+            "need": "outsourced appointment setting",
+            "timing": null,
+            "budget": "$900"
+          }
+        },
+        {
+          "data": {
+            "company": "Brightside Books",
+            "contact": "Sam",
+            "email": "sam@brightside.example",
+            "need": "social media scheduling tool",
+            "timing": "next year",
+            "budget": "$2,000 annually"
+          }
+        }
+      ]
+    },
+    "wallMs": 587,
+    "tokens": "636"
+  },
+  {
+    "name": "Needs to automate document or invoice processing",
+    "data": {
+      "results": [
+        {
+          "label": "match",
+          "probability": 0.939,
+          "confidence": 0.756,
+          "scores": {
+            "match": 0.939,
+            "not_fit": 0.02,
+            "unknown": 0.041
+          }
+        },
+        {
+          "label": "match",
+          "probability": 0.354,
+          "confidence": 0.002,
+          "scores": {
+            "match": 0.354,
+            "not_fit": 0.338,
+            "unknown": 0.308
+          }
+        },
+        {
+          "label": "not_fit",
+          "probability": 0.995,
+          "confidence": 0.969,
+          "scores": {
+            "match": 0.001,
+            "not_fit": 0.995,
+            "unknown": 0.004
+          }
+        },
+        {
+          "label": "not_fit",
+          "probability": 0.941,
+          "confidence": 0.785,
+          "scores": {
+            "match": 0.003,
+            "not_fit": 0.941,
+            "unknown": 0.056
+          }
+        },
+        {
+          "label": "not_fit",
+          "probability": 0.983,
+          "confidence": 0.915,
+          "scores": {
+            "match": 0.002,
+            "not_fit": 0.983,
+            "unknown": 0.015
+          }
+        },
+        {
+          "label": "not_fit",
+          "probability": 0.957,
+          "confidence": 0.827,
+          "scores": {
+            "match": 0.004,
+            "not_fit": 0.957,
+            "unknown": 0.038
+          }
+        }
+      ]
+    },
+    "wallMs": 452,
+    "tokens": "583"
+  },
+  {
+    "name": "Explicitly wants to evaluate or buy software",
+    "data": {
+      "results": [
+        {
+          "label": "match",
+          "probability": 0.98,
+          "confidence": 0.9,
+          "scores": {
+            "match": 0.98,
+            "not_fit": 0.014,
+            "unknown": 0.006
+          }
+        },
+        {
+          "label": "match",
+          "probability": 0.873,
+          "confidence": 0.608,
+          "scores": {
+            "match": 0.873,
+            "not_fit": 0.109,
+            "unknown": 0.017
+          }
+        },
+        {
+          "label": "not_fit",
+          "probability": 0.619,
+          "confidence": 0.158,
+          "scores": {
+            "match": 0.167,
+            "not_fit": 0.619,
+            "unknown": 0.214
+          }
+        },
+        {
+          "label": "not_fit",
+          "probability": 0.525,
+          "confidence": 0.085,
+          "scores": {
+            "match": 0.176,
+            "not_fit": 0.525,
+            "unknown": 0.299
+          }
+        },
+        {
+          "label": "not_fit",
+          "probability": 0.854,
+          "confidence": 0.532,
+          "scores": {
+            "match": 0.06,
+            "not_fit": 0.854,
+            "unknown": 0.086
+          }
+        },
+        {
+          "label": "match",
+          "probability": 0.978,
+          "confidence": 0.892,
+          "scores": {
+            "match": 0.978,
+            "not_fit": 0.017,
+            "unknown": 0.005
+          }
+        }
+      ]
+    },
+    "wallMs": 553,
+    "tokens": "580"
+  },
+  {
+    "name": "Is planning a project or purchase soon, such as next month",
+    "data": {
+      "results": [
+        {
+          "label": "match",
+          "probability": 0.944,
+          "confidence": 0.77,
+          "scores": {
+            "match": 0.944,
+            "not_fit": 0.032,
+            "unknown": 0.023
+          }
+        },
+        {
+          "label": "not_fit",
+          "probability": 0.891,
+          "confidence": 0.654,
+          "scores": {
+            "match": 0.011,
+            "not_fit": 0.891,
+            "unknown": 0.098
+          }
+        },
+        {
+          "label": "not_fit",
+          "probability": 0.986,
+          "confidence": 0.927,
+          "scores": {
+            "match": 0.002,
+            "not_fit": 0.986,
+            "unknown": 0.012
+          }
+        },
+        {
+          "label": "not_fit",
+          "probability": 0.87,
+          "confidence": 0.625,
+          "scores": {
+            "match": 0.007,
+            "not_fit": 0.87,
+            "unknown": 0.123
+          }
+        },
+        {
+          "label": "not_fit",
+          "probability": 0.776,
+          "confidence": 0.397,
+          "scores": {
+            "match": 0.061,
+            "not_fit": 0.776,
+            "unknown": 0.163
+          }
+        },
+        {
+          "label": "not_fit",
+          "probability": 0.64,
+          "confidence": 0.192,
+          "scores": {
+            "match": 0.232,
+            "not_fit": 0.64,
+            "unknown": 0.128
+          }
+        }
+      ]
+    },
+    "wallMs": 710,
+    "tokens": "591"
+  }
+]

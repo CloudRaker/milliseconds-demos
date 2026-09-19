@@ -1,0 +1,82 @@
+{
+ "slug": "turbo-rerank",
+ "title": "Turbo Rerank",
+ "one_liner": "BM25 finds 50 candidate passages, one batched decision-machine call reranks them by meaning, top-1 accuracy goes from 50% to ~100% on a 40-query benchmark.",
+ "platform": "web (vite/react)",
+ "what_it_does": "The user types a question into a docs-search box for the fictional company Northwind (598 synthetic passages: engineering handbook, HR policies, 12 service runbooks/API docs). Search runs as-you-type with a 250 ms debounce. In-process BM25 returns the top 50 passages in under 1 ms and paints the left column immediately. The proxy then sends all 50 candidates plus the query to Jev in one systemOne request with one score question per candidate (4 relevance levels) and one noul asking whether any candidate answers the query. The client computes expected relevance (sum p*level in [0,3]) and sorts; ties fall back to BM25 order. The right column shows the reranked order with rank-delta arrows, a relevance bar, the argmax level label, and a confidence percent; the top item gets a winner highlight when its level is at least 2. When P(answer exists) < 0.5 a \"No good answer in the corpus\" banner appears. A latency panel shows rerank ms, BM25 ms, candidates/s throughput, session p50/p95, and a details drawer with request count and tokens. A Benchmark tab streams 40 hand-labelled queries (25 paraphrases) over SSE into a table with BM25 rank vs Jev rank, change arrows, per-query latency, answer-exists probability, plus accuracy bars for Top-1, Top-5, MRR and latency stats.",
+ "jev_questions": [
+  {
+   "key": "relevance_c01 \u2026 relevance_c50 (one per candidate; key = `relevance_${candidateKey}`, candidateKey = c01..c50)",
+   "type": "score",
+   "instructions": "How well does the documentation passage `candidates.cNN` answer the search query `query`? Judge only this passage on its own; ignore the other candidates.",
+   "options": [
+    "Irrelevant: the passage is about a different subject; it does not help answer the query at all.",
+    "Tangential: the passage is in the same general area or shares vocabulary with the query, but it does not address what the query is actually asking.",
+    "Partially answers: the passage addresses the thing the query asks about but is missing the specific detail the query wants, or covers only part of the question.",
+    "Directly answers: the passage contains the specific information the query asks for; a reader would be satisfied after reading it."
+   ],
+   "state_shape": "{ query: string, candidates: { c01: passageText, c02: ..., c50: ... } } \u2014 all 50 in ONE systemOne request (RERANK_BATCHES=1), model jev-latest"
+  },
+  {
+   "key": "answer_exists_in_candidates",
+   "type": "noul",
+   "instructions": "Does at least one of the passages in `candidates` directly answer the search query `query`?",
+   "options": [
+    "true: At least one candidate passage contains the specific information the query asks for.",
+    "false: No candidate passage answers the query; the closest ones are only on a related topic."
+   ],
+   "state_shape": "same state object as above; answer .noul (P(true)) drives the 'No good answer in the corpus' banner when < 0.5"
+  }
+ ],
+ "request_cadence": "One Jev request per search, fired on every keystroke after a 250 ms debounce (in-flight request aborted on new input). Each request carries 50 candidates (~14k input tokens, ~170 ms p50). Benchmark: 40 queries with concurrency 4, ~2 s wall clock, 466k input tokens total.",
+ "data_files": [
+  "/Users/blaget/projects/jev-experiments/turbo-rerank/shared/corpus/handbook.ts (28 KB, 66 hand-written handbook passages)",
+  "/Users/blaget/projects/jev-experiments/turbo-rerank/shared/corpus/hr.ts (17 KB, 41 HR passages)",
+  "/Users/blaget/projects/jev-experiments/turbo-rerank/shared/corpus/services.ts (66 KB, 12 service specs that generate 491 passages)",
+  "/Users/blaget/projects/jev-experiments/turbo-rerank/shared/corpus/index.ts (22 KB, seeded generator -> 598 passages, deterministic, no PII)",
+  "/Users/blaget/projects/jev-experiments/turbo-rerank/shared/bench-queries.ts (55 lines, 40 query -> target-id pairs, 25 flagged paraphrase)",
+  "/Users/blaget/projects/jev-experiments/turbo-rerank/screenshots/ (jpg/webp/mp4 reference of the original UI, not shipped)"
+ ],
+ "ui_components": [
+  "App shell, search composer, examples, tabs, banners: /Users/blaget/projects/jev-experiments/turbo-rerank/src/App.tsx",
+  "Two-column BM25 vs reranked list with rank deltas, relevance bars, winner highlight: /Users/blaget/projects/jev-experiments/turbo-rerank/src/ResultColumns.tsx",
+  "Latency panel (ms, throughput, session p50/p95, token details): /Users/blaget/projects/jev-experiments/turbo-rerank/src/LatencyPanel.tsx",
+  "Benchmark tab (table, accuracy bars, latency stats): /Users/blaget/projects/jev-experiments/turbo-rerank/src/Benchmark.tsx",
+  "Inline SVG icons: /Users/blaget/projects/jev-experiments/turbo-rerank/src/Icon.tsx",
+  "Dark theme CSS to be replaced by milliseconds.ai styles: /Users/blaget/projects/jev-experiments/turbo-rerank/src/styles.css"
+ ],
+ "reusable_source": [
+  "/Users/blaget/projects/jev-experiments/turbo-rerank/shared/bm25.ts (tokenizer, stemmer, BM25 index; pure TS, runs in browser)",
+  "/Users/blaget/projects/jev-experiments/turbo-rerank/shared/corpus/*.ts (corpus generator, pure TS)",
+  "/Users/blaget/projects/jev-experiments/turbo-rerank/shared/bench-queries.ts",
+  "/Users/blaget/projects/jev-experiments/turbo-rerank/shared/rerank.ts (mergeRanking, splitBatches, percentile, mean)",
+  "/Users/blaget/projects/jev-experiments/turbo-rerank/shared/bench.ts (runBenchQuery, summarize; swap RerankFn to the DM1 client)",
+  "/Users/blaget/projects/jev-experiments/turbo-rerank/shared/types.ts (rename jevRank/jevMs fields or keep as-is)",
+  "/Users/blaget/projects/jev-experiments/turbo-rerank/src/ResultColumns.tsx, LatencyPanel.tsx, Icon.tsx (presentation only)",
+  "/Users/blaget/projects/jev-experiments/turbo-rerank/shared/bm25.test.ts, corpus.test.ts (tests still valid)"
+ ],
+ "dm1_mapping": [
+  {
+   "jev_key": "relevance_c01..c50",
+   "dm1_route": "rate",
+   "dm1_body": "POST /rate  {\"texts\": [\"Query: having a baby soon, how many weeks can I take off\\n\\nPassage: <candidate 1 text>\", ... up to 32], \"scale\": [\"Irrelevant. The passage is about a different subject and does not help answer the query.\", \"Tangential. The passage shares the topic or vocabulary of the query but does not address what the query asks.\", \"Partially answers. The passage addresses the query's subject but misses the specific detail the query wants.\", \"Directly answers. The passage contains the specific information the query asks for.\"]}  -> {results:[{score, level, scores}]}. Sort by score desc (score is the 0..1 weighted position, same as Jev's expected relevance / 3), tiebreak by BM25 rank. level = argmax label index. confidence = max(scores).",
+   "notes": "50 candidates = 2 requests (32 + 18) fired in parallel. Each text embeds the query, because /rate has no per-call instruction field. Alternative if rate underperforms: /yes-no {texts:[passages], statement:\"The passage answers the question: <query>\", when_true:\"The passage states the specific fact the question asks for.\", when_false:\"The passage is on another topic or only shares words with the question.\"} and sort by probability."
+  },
+  {
+   "jev_key": "answer_exists_in_candidates",
+   "dm1_route": "rate",
+   "dm1_body": "No extra request. answerExists = max over candidates of scores[3] (P(Directly answers)) from the /rate results above. Banner shows when answerExists < 0.5.",
+   "notes": "Derived in code, zero extra latency. If a real yes/no probability is wanted: POST /yes-no {texts:[top 5 reranked passages], statement:\"The passage directly answers the query: <query>\", when_true:\"The passage gives the specific information the query asks for.\", when_false:\"The passage only covers a related topic.\"} and take max probability. Costs one more request per search."
+  }
+ ],
+ "browser_plan": "Vite + React page at demo.milliseconds.ai/turbo-rerank, styled with the milliseconds.ai tokens. Corpus build and BM25 run in the browser (598 passages, sub-ms), so the only server piece is the proxy. Proxy: a Cloudflare Worker route /api/dm1/:route that allows only rate and yes-no, injects the bearer key, forwards the JSON body, and passes back x-inference-ms and x-input-tokens headers. Client flow per search: BM25 top-50 -> split into texts batches of 32 and 18 -> two parallel POST /rate calls -> mergeRanking by score -> answerExists = max P(level 3). Cadence: search fires on Enter or after 600 ms idle, not per keystroke; a new query aborts in-flight requests. A tiny client token bucket (2 tokens/s, burst 2) queues all proxy calls so one tab never exceeds 2 req/s. Latency panel reads x-inference-ms as the rerank time and shows both requests' input tokens. Benchmark: run the 40 queries client-side in sequence through the same bucket (80 requests, about 40 s), update the table row by row, no SSE. Optional toggle Top-32 mode: one request per search, 40 requests per benchmark, 20 s; document that one benchmark target (BM25 #42) falls outside. On HTTP 429: show a soft banner Rate limited, retrying, keep BM25 column visible, exponential backoff 1 s, 2 s, 4 s, then give up with a Try again button. Benchmark pauses on 429 and resumes.",
+ "difficulty": "M",
+ "risks": [
+  "/rate has no per-call instruction. The query must be embedded in each text. Prompt shape 'Query: ...\\n\\nPassage: ...' needs a quick eval against the 40 benchmark queries before shipping. Fallback is /yes-no with probability sort.",
+  "Two requests per search with 200 req/min org-wide means about 100 searches per minute across all visitors. A public demo with several concurrent users can hit 429. Keep search-on-pause, not per keystroke.",
+  "Benchmark takes about 40 s instead of 2 s. The original headline '1,008 candidates/s' will not reproduce. Report per-request x-inference-ms and candidates per request instead.",
+  "Score semantics differ: Jev gave a 4-way probability distribution and confidence. /rate gives score, level, scores. Confidence must be derived as max(scores).",
+  "Token budget: about 14k input tokens per search, 1M/min org-wide, so about 70 searches/min. Same order as the request limit, acceptable.",
+  "The original 100% top-1 claim is Jev-specific. Do not hard-code the numbers in copy. Show live measured results only."
+ ]
+}
