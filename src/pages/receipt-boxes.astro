@@ -1,0 +1,15 @@
+---
+import Demo from '../layouts/Demo.astro';
+import meta from '../demos/receipt-boxes/meta';
+import Island from '../demos/receipt-boxes/Demo';
+---
+<Demo meta={meta}>
+ <Island client:only="react" />
+ <div slot="notes">
+  <h2>From a photo to a checked record</h2>
+  <p>One extract call sends the image and a JSON Schema. The response returns the record and a box for each value it could locate, in the uploaded image’s own pixels. Nothing is parsed to text first: the model reads the pixels, so layout stays available.</p>
+  <h3>Keep a person in the loop</h3>
+  <p>A box locates where a value was read, not that the reading is right. Amounts, dates and card digits still need review before they reach a ledger. Runs use real model responses, with cached or live provenance shown in Performance &amp; cost.</p>
+  <p>This demo sends one image of at most 5 MB as JPEG, PNG or WebP. It does not accept image URLs, PDFs, multi-page documents or batches of images. Images are processed in memory, never written to disk and never logged.</p>
+ </div>
+</Demo>

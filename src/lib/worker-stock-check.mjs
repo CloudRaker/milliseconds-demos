@@ -84,6 +84,20 @@ for(const [route,key] of [['yes-no','statements'],['answer','questions']]) {
 }
 for(const body of [null,[],{}, {text:'a',texts:['b']},{text:'x'.repeat(6001)},{text:''},{texts:['valid',false]},{texts:['x'.repeat(6001)]},{texts:[]},{texts:Array(33).fill('x')}]) assert.equal(sanitize('classify',body),null);
 const personalBody={text:'full original text',labels:['a','b']};assert.deepEqual(sanitize('classify',personalBody),personalBody);assert.equal(sanitize('classify',personalBody).text,personalBody.text);
+// Image inputs: one image, optional text, never a batch, never a URL, never over 5 MB.
+const image=`data:image/png;base64,${'A'.repeat(64)}`;
+const imageBody={image,detail:'medium',schema:{type:'object'}};
+assert.deepEqual(sanitize('extract',imageBody),imageBody);
+assert.deepEqual(sanitize('extract',{...imageBody,text:'context'}),{...imageBody,text:'context'});
+for(const body of [{image,texts:['a']},{image:'https://example.com/a.png'},{image:'data:image/png;base64,not base64'},{image,detail:'ultra'},{image,text:''},{image:`data:image/png;base64,${'A'.repeat(4*Math.ceil((5*1024*1024+4096)/3))}`}]) assert.equal(sanitize('extract',body),null,JSON.stringify(body).slice(0,60));
+// A large image passes while the rest of the body stays under the text budget.
+assert.ok(sanitize('extract',{image:`data:image/png;base64,${'A'.repeat(400_000)}`,schema:{type:'object'}}));
+assert.equal(sanitize('extract',{image,schema:{note:'x'.repeat(100_000)}}),null,'the body around the image is still bounded');
+s=setup();
+for(const [body,code] of [[{image:'https://example.com/a.png'},'invalid_image'],[{image:`data:image/png;base64,${'A'.repeat(4*Math.ceil((5*1024*1024+4096)/3))}`},'image_too_large'],[{image,texts:['a']},'image_with_texts']]) {
+  const response=await s.run(new Request('https://demo.milliseconds.ai/api/run',{method:'POST',headers:{'x-ms-key':`sk-ms-${'x'.repeat(25)}`},body:JSON.stringify({route:'extract',body})}));
+  assert.equal(response.status,400);assert.equal((await response.json()).error.code,code);assert.equal(s.calls(),0,'bad images never reach inference');
+}
 s=setup();
 for(const body of [{text:'x'.repeat(6001)},{texts:['valid',false]}]) {
   const response=await s.run(new Request('https://demo.milliseconds.ai/api/run',{method:'POST',headers:{'x-ms-key':`sk-ms-${'x'.repeat(25)}`},body:JSON.stringify({route:'classify',body})}));

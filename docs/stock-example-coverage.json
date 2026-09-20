@@ -64,6 +64,11 @@
         "returns-desk/stock-v1/6741f560b9b6f205852442435b6252caac270fd58220faa92e0b0af1f0839c12"
       ]
     },
+    "receipt-boxes": {
+      "bakery-receipt": [
+        "receipt-boxes/stock-v1/83a9bd7388dd685c94067a58ac67063dc5f7ed5c7d762700f649861fba5ebf2d"
+      ]
+    },
     "instant-search": {
       "search-1": [
         "instant-search/stock-v1/a3c690a4861ec384848c7b6ae928887a010b695236516182a712a12a2ccb7a44",

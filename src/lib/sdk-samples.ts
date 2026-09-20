@@ -27,20 +27,35 @@ function python(value: unknown, level = 0): string {
   return (array ? '[' : '{') + (entries.length ? '\n' + entries.map(v => '  '.repeat(level + 1) + v).join(',\n') + '\n' + '  '.repeat(level) : '') + (array ? ']' : '}');
 }
 
+/**
+ * Image samples read the file instead of pasting 40 kB of base64: the SDKs take bytes or a path,
+ * and `detail` selects the resolution tier. Signatures follow @cloudraker/milliseconds 0.2.0.
+ */
+const IMAGE_FILE = 'receipt.png';
+
 /** Build-only samples: exact stock inputs, public SDK methods, no browser demo imports or credentials. */
 export function sdkCode(example: Pick<StockExample, 'route' | 'body'>) {
   const { route, body } = example;
   const [tsMethod, pyMethod, fields] = methods[route];
-  const input = body.text ?? body.texts;
+  const image = typeof body.image === 'string' ? body.image : undefined;
+  const detail = typeof body.detail === 'string' ? body.detail : undefined;
+  const input = image ? (body.text ?? '') : (body.text ?? body.texts);
   const args = [input, ...fields.map(field => body[field] ?? body[field.slice(0, -1)])];
   if (args.some(arg => arg === undefined)) throw new Error(`Incomplete SDK example: ${route}`);
   const hints = Object.fromEntries(['when_true', 'when_false'].filter(k => body[k] !== undefined).map(k => [k, body[k]]));
-  const tsArgs = [...args.map(json), ...(Object.keys(hints).length ? [json(hints)] : [])];
-  const pyArgs = [...args.map(arg => python(arg)), ...Object.entries(hints).map(([k, v]) => `${k}=${python(v)}`)];
+  const tsOptions = image ? [`{ image: await readFile("${IMAGE_FILE}")${detail ? `, detail: ${json(detail)}` : ''} }`] : Object.keys(hints).length ? [json(hints)] : [];
+  const tsArgs = [...args.map(json), ...tsOptions];
+  const pyArgs = [
+    ...args.map(arg => python(arg)),
+    ...(image ? [`image="${IMAGE_FILE}"`, ...(detail ? [`detail=${python(detail)}`] : [])] : Object.entries(hints).map(([k, v]) => `${k}=${python(v)}`)),
+  ];
+  // The CLI reads the image from disk too, so the piped JSON stays readable.
+  const { image: _image, detail: _detail, ...cliBody } = body;
+  const cliFlags = image ? ` --image ${IMAGE_FILE}${detail ? ` --detail ${detail}` : ''}` : '';
   return {
-    typescript: `import { DecisionMachine } from "@cloudraker/milliseconds";\n\n// Run on your server; reads MS_API_KEY from the environment.\nconst dm = new DecisionMachine();\n\nconst { result, usage } = await dm.${tsMethod}(\n${tsArgs.map(arg => arg.split('\n').map(line => '  ' + line).join('\n')).join(',\n')}\n).withUsage();\n\nconsole.log(result);\nconsole.log({ inputTokens: usage.inputTokens, modelMs: usage.inferenceMs });`,
-    python: `from milliseconds import DecisionMachine\n\n# Reads MS_API_KEY from the environment.\ndm = DecisionMachine()\n\nresult = dm.${pyMethod}(\n${pyArgs.map(arg => arg.split('\n').map(line => '    ' + line).join('\n')).join(',\n')}\n)\n\nprint(result)`,
-    cli: `# Reads MS_API_KEY. JSON on stdin supplies the complete request.\ndm1 ${route} --json --usage <<'DM1_REQUEST'\n${json(body)}\nDM1_REQUEST`,
+    typescript: `${image ? 'import { readFile } from "node:fs/promises";\n' : ''}import { DecisionMachine } from "@cloudraker/milliseconds";\n\n// Run on your server; reads MS_API_KEY from the environment.${image ? '\n// The image carries the input; the leading text is optional context.' : ''}\nconst dm = new DecisionMachine();\n\nconst { result, usage } = await dm.${tsMethod}(\n${tsArgs.map(arg => arg.split('\n').map(line => '  ' + line).join('\n')).join(',\n')}\n).withUsage();\n\nconsole.log(result);\nconsole.log({ inputTokens: usage.inputTokens, modelMs: usage.inferenceMs });`,
+    python: `from milliseconds import DecisionMachine\n\n# Reads MS_API_KEY from the environment.${image ? '\n# The image carries the input; the leading text is optional context.' : ''}\ndm = DecisionMachine()\n\nresult = dm.${pyMethod}(\n${pyArgs.map(arg => arg.split('\n').map(line => '    ' + line).join('\n')).join(',\n')}\n)\n\nprint(result)`,
+    cli: `# Reads MS_API_KEY. JSON on stdin supplies the complete request.\ndm1 ${route}${cliFlags} --json --usage <<'DM1_REQUEST'\n${json(image ? cliBody : body)}\nDM1_REQUEST`,
   };
 }
 

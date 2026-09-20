@@ -15,7 +15,8 @@ await build({entryPoints:['src/lib/sdk-samples.ts'],bundle:true,platform:'node',
 const {sdkCode}=await import(pathToFileURL(join(temp,'samples.mjs')));
 const registry=JSON.parse(await readFile('src/generated/examples.json','utf8'));
 const unique=new Map();for(const entry of Object.values(registry))if(!unique.has(entry.demo+'/'+entry.route))unique.set(entry.demo+'/'+entry.route,entry);
-const cases=[...unique].map(([id,entry])=>({id,...entry,code:sdkCode(entry)}));
+// Image samples read a file from disk and need SDK 0.2.0; they are generated but not executed here.
+const cases=[...unique].filter(([,entry])=>!entry.body.image).map(([id,entry])=>({id,...entry,code:sdkCode(entry)}));
 const casesPath=join(temp,'cases.json');await writeFile(casesPath,JSON.stringify(cases));
 // Real SDK parsing needs the two array axes and the capability's result envelope.
 function reply(route,body){

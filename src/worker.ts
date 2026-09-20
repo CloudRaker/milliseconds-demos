@@ -1,10 +1,13 @@
 import { API, REVISION, boundedBody, examples, error, type ExampleEnv } from './lib/example-store';
+import { DETAIL_EDGE, IMAGE_MESSAGES, MAX_IMAGE_CHARS, imageProblem } from './lib/image';
 export { ExampleStore } from './lib/example-store';
 
 const ROUTES = new Set(["yes-no", "classify", "classify-tree", "rate", "answer", "entities", "extract", "verify"]);
 const MAX_BODY = 96_000; // bytes of JSON: 32 texts of 2,000 chars plus labels
 const MAX_TEXT = 6_000;
 const MAX_TEXTS = 32;
+/** One base64 image (5 MB decoded) on top of the JSON body. */
+const MAX_REQUEST = MAX_BODY * 2 + MAX_IMAGE_CHARS;
 const UPSTREAM_TIMEOUT_MS = 20_000;
 const KEY = /^(?:sk-ms|test_sk|prod_sk)-[A-Za-z0-9_-]{20,}$/;
 
@@ -24,16 +27,26 @@ const json = (body: unknown, status = 200, headers: HeadersInit = {}) =>
 const fail = (status: number, code: string, message: string, headers: HeadersInit = {}) =>
   json({ error: { code, message } }, status, headers);
 
-/** Bound the request: one text or up to 32 texts, each capped, and the whole body under MAX_BODY. */
+/**
+ * Bound the request: one image, or one text, or up to 32 texts, each capped, and the body under
+ * MAX_BODY. The image never counts towards that budget; it has its own 5 MB limit.
+ */
 export function sanitize(route: string, body: unknown) {
   if (!ROUTES.has(route) || typeof body !== "object" || body === null || Array.isArray(body)) return null;
   const input = body as Record<string, unknown>;
   const validText = (text: unknown) => typeof text === 'string' && text.length > 0 && text.length <= MAX_TEXT;
-  if (Object.hasOwn(input, 'text') === Object.hasOwn(input, 'texts')) return null;
-  if (Object.hasOwn(input, 'text')) {
+  const { image, ...rest } = input;
+  if (Object.hasOwn(input, 'image')) {
+    // An image replaces `texts` and may carry one optional text alongside it.
+    if (imageProblem(image) || Object.hasOwn(input, 'texts')) return null;
+    if (Object.hasOwn(input, 'text') && !validText(input.text)) return null;
+    if (input.detail !== undefined && !Object.hasOwn(DETAIL_EDGE, String(input.detail))) return null;
+  } else if (Object.hasOwn(input, 'text') === Object.hasOwn(input, 'texts')) {
+    return null;
+  } else if (Object.hasOwn(input, 'text')) {
     if (!validText(input.text)) return null;
   } else if (!Array.isArray(input.texts) || input.texts.length === 0 || input.texts.length > MAX_TEXTS || !input.texts.every(validText)) return null;
-  if (new TextEncoder().encode(JSON.stringify(input)).byteLength > MAX_BODY) return null;
+  if (new TextEncoder().encode(JSON.stringify(rest)).byteLength > MAX_BODY) return null;
   return input;
 }
 
@@ -70,17 +83,23 @@ export default {
     const key = request.headers.get("x-ms-key")?.trim() ?? "";
     if (!key) return fail(401, "no_key", "Add your milliseconds.ai API key in the key panel to run the demos.");
     if (!KEY.test(key)) return fail(401, "invalid_key", "That does not look like a milliseconds.ai key (test_sk-… or prod_sk-…).");
-    if (Number(request.headers.get("content-length") ?? 0) > MAX_BODY * 2)
+    if (Number(request.headers.get("content-length") ?? 0) > MAX_REQUEST)
       return fail(413, "too_large", "Request too large for the demo.");
 
     let payload: { route?: unknown; body?: unknown };
     try {
-      payload = JSON.parse(await boundedBody(request, MAX_BODY * 2));
+      payload = JSON.parse(await boundedBody(request, MAX_REQUEST));
       if (!payload || typeof payload !== "object" || Array.isArray(payload)) throw new Error("invalid_json");
     } catch {
       return fail(400, "invalid_json", "Body must be JSON.");
     }
     const route = String(payload.route ?? "");
+    // Name the image problem instead of hiding it behind the generic text message.
+    if (payload.body && typeof payload.body === "object" && Object.hasOwn(payload.body, "image")) {
+      const problem = imageProblem((payload.body as Record<string, unknown>).image);
+      if (problem) return fail(400, problem, IMAGE_MESSAGES[problem]);
+      if (Object.hasOwn(payload.body, "texts")) return fail(400, "image_with_texts", IMAGE_MESSAGES.image_with_texts);
+    }
     const forward = sanitize(route, payload.body);
     if (!forward) return fail(400, "invalid_request", `Send { route, body } with one text or up to ${MAX_TEXTS} texts, each 1–${MAX_TEXT} characters. Your input was not changed.`);
 
