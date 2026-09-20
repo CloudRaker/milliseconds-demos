@@ -64,6 +64,50 @@
         "returns-desk/stock-v1/6741f560b9b6f205852442435b6252caac270fd58220faa92e0b0af1f0839c12"
       ]
     },
+    "hot-dog": {
+      "hotdog-classic": [
+        "hot-dog/stock-v1/caa7fdcb4198de96e18f10b848644585d09fa22cbcbf04fc65c1739c3a90b1d3"
+      ],
+      "hotdog-macau": [
+        "hot-dog/stock-v1/70ac8062a6de7cb1fe4b81a491d6782f2296e9238d9bae012044d49f24ff9e9d"
+      ],
+      "hotdog-gourmet": [
+        "hot-dog/stock-v1/365b17abf07eba50166d9832bee81a53455a7775df677944ac9c321afaa273ee"
+      ],
+      "hotdog-pancho": [
+        "hot-dog/stock-v1/f0caa67d3b9227e5a4d1a801c80aabb5a2ad02b2d80ebb89a90f868f1d2abfa4"
+      ],
+      "hotdog-chili": [
+        "hot-dog/stock-v1/2d165901f284d3250736d397614ca2a26c24a78a0eb822f58f442115bb1284d4"
+      ],
+      "hotdog-akasaka": [
+        "hot-dog/stock-v1/9d69644309f001b698e6803bedbb621791170fe98ae83eabd75b452fe4f30525"
+      ],
+      "burger": [
+        "hot-dog/stock-v1/f3e0a2f6ee595668c1b5ee9ca44b6d9eed61aa0072a4782ac2955ec71e4dfd0a"
+      ],
+      "corn-dog": [
+        "hot-dog/stock-v1/b2c38cb281f15ecc6b4ba0d6f26ef0901f445ccdd2de85aa7f34c2d5f03f7dac"
+      ],
+      "bratwurst": [
+        "hot-dog/stock-v1/24368f356f04fbccfa3310c5c31ee5fcbb138933928abff22bbd44dce6f171d6"
+      ],
+      "empty-buns": [
+        "hot-dog/stock-v1/2ca5e2ad235731c9dd6e31f2a2a1fc0e8eec9c77f1bc38d0472ccd9c533f71fa"
+      ],
+      "sausages": [
+        "hot-dog/stock-v1/8efe21c1fb15f5c3e74dee20923de1f51df962ba172624f50669725e1f11be34"
+      ],
+      "banana": [
+        "hot-dog/stock-v1/d4f0c6ba8b07d900d1e5f3ad01944a5367e056d0a466d3d76df307d55965c236"
+      ],
+      "dachshund": [
+        "hot-dog/stock-v1/5765f558756e91cc7418f2f166fa174c240ac65a027a65b77528c78920bbdd65"
+      ],
+      "taco": [
+        "hot-dog/stock-v1/8dd80df4aa591fa5e1741219a854a130845ba87665efe7491f5e6a829c7b7f22"
+      ]
+    },
     "receipt-reader": {
       "bakery-receipt": [
         "receipt-reader/stock-v1/a6d893907ed1208f1dc31684dd918cd2cfe8f21b1ceba5be1d74c7722238ff51"

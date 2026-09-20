@@ -32,14 +32,16 @@ function python(value: unknown, level = 0): string {
  * bytes (or as a data URL / bare base64), never as a path: TypeScript's `image` is
  * `Uint8Array | ArrayBuffer | Blob | string`, Python's is `bytes | str | PathLike`. The CLI is the
  * one surface that takes a path, through `--image`. `detail` selects the resolution tier.
+ * The file is named after the image's own media type, so the sample is copy-pasteable as written.
  */
-const IMAGE_FILE = 'receipt.png';
+const imageFile = (image: string) => `image.${image.startsWith('data:image/png') ? 'png' : image.startsWith('data:image/webp') ? 'webp' : 'jpg'}`;
 
 /** Build-only samples: exact stock inputs, public SDK methods, no browser demo imports or credentials. */
 export function sdkCode(example: Pick<StockExample, 'route' | 'body'>) {
   const { route, body } = example;
   const [tsMethod, pyMethod, fields] = methods[route];
   const image = typeof body.image === 'string' ? body.image : undefined;
+  const IMAGE_FILE = image ? imageFile(image) : '';
   const detail = typeof body.detail === 'string' ? body.detail : undefined;
   const input = image ? (body.text ?? '') : (body.text ?? body.texts);
   const args = [input, ...fields.map(field => body[field] ?? body[field.slice(0, -1)])];
@@ -66,7 +68,7 @@ export function sdkCode(example: Pick<StockExample, 'route' | 'body'>) {
     typescript: `${image ? 'import { readFile } from "node:fs/promises";\n' : ''}import { DecisionMachine } from "@cloudraker/milliseconds";\n\n// Run on your server; reads MS_API_KEY from the environment.${image ? '\n// The image carries the input; the leading text is optional context.' : ''}\nconst dm = new DecisionMachine();\n\nconst { result, usage } = await dm.${tsMethod}(\n${tsArgs.map(arg => arg.split('\n').map(line => '  ' + line).join('\n')).join(',\n')}\n).withUsage();\n\nconsole.log(result);\nconsole.log({ inputTokens: usage.inputTokens, modelMs: usage.inferenceMs });`,
     python: `${image ? 'from pathlib import Path\n' : ''}from milliseconds import DecisionMachine\n\n# Reads MS_API_KEY from the environment.${image ? '\n# The image carries the input; the leading text is optional context.' : ''}\ndm = DecisionMachine()\n\nresult = dm.${pyMethod}(\n${pyArgs.map(arg => arg.split('\n').map(line => '    ' + line).join('\n')).join(',\n')}\n)\n\nprint(result)`,
     cli: image
-      ? `# Reads MS_API_KEY. The image and the schema are read from disk.\n${cliFiles.map(f => f.write).join('')}dm1 ${route}${cliFlags} --json --usage`
+      ? `# Reads MS_API_KEY. The image and the other fields are read from disk.\n${cliFiles.map(f => f.write).join('')}dm1 ${route}${cliFlags} --json --usage`
       : `# Reads MS_API_KEY. JSON on stdin supplies the complete request.\ndm1 ${route} --json --usage <<'DM1_REQUEST'\n${json(body)}\nDM1_REQUEST`,
   };
 }

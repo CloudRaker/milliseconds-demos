@@ -7,6 +7,8 @@ const base = process.env.QA_BASE || 'http://127.0.0.1:4324';
 const output = process.env.QA_OUTPUT || '/tmp/ms-business-qa';
 await fs.mkdir(output, { recursive: true });
 const slugs = ['invoice-desk', 'receipt-reader', 'sales-intake', 'catalog-studio', 'evidence-check', 'private-share', 'returns-desk'];
+// Not a business workflow, but the second image demo: it must survive the same responsive and telemetry rules.
+const extra = ['hot-dog'];
 const browser = await chromium.launch();
 try {
   const page = await browser.newPage();
@@ -14,7 +16,7 @@ try {
   page.on('pageerror', error => errors.push(error.message));
   await page.goto(base);
   const cards = page.locator('.demo-card');
-  assert.equal(await cards.count(), 27);
+  assert.equal(await cards.count(), 28);
   assert.deepEqual(await cards.evaluateAll((nodes, n) => nodes.slice(0, n).map(node => node.getAttribute("href")), slugs.length), slugs.map(slug => `/${slug}/`));
   for (const button of await page.locator('[data-demo-filter]').all()) {
     const category = await button.getAttribute('data-demo-filter');
@@ -23,7 +25,7 @@ try {
     const visible = await cards.evaluateAll(nodes => nodes.filter(node => !node.hidden).map(node => node.dataset.category));
     assert.ok(visible.length > 0);
     if (category !== 'all') assert.ok(visible.every(value => value === category));
-    else assert.equal(visible.length, 27);
+    else assert.equal(visible.length, 28);
     assert.match(await page.locator('.demo-filter-count').innerText(), new RegExp(`Showing ${visible.length} demos`));
   }
   await page.locator('[data-demo-filter="all"]').click();
@@ -33,7 +35,7 @@ try {
     await page.screenshot({ path: `${output}/directory-${width}.png`, fullPage: true });
   }
   await page.close();
-  for (const slug of slugs) {
+  for (const slug of [...slugs, ...extra]) {
     const page = await browser.newPage();
     page.on('pageerror', error => errors.push(`${slug}: ${error.message}`));
     let apiCalls = 0;
@@ -64,7 +66,7 @@ try {
     await page.close();
   }
   assert.deepEqual(errors, []);
-  console.log('PASS: all seven workflows, 27-demo discovery, category filters, original attribution, sample telemetry, icons and responsive widths.');
+  console.log('PASS: all seven workflows plus hot-dog, 28-demo discovery, category filters, original attribution, sample telemetry, icons and responsive widths.');
 } finally {
   await browser.close();
 }

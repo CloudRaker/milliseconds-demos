@@ -1,0 +1,25 @@
+/* Scoped to the hot dog island. Colours come from the shared tokens in src/styles/demos.css. */
+.hotdog-demo { display: grid; gap: 16px; }
+.hd-toolbar { display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; align-items: flex-end; }
+.hd-toolbar p { margin: 8px 0 0; color: var(--muted); font-size: 14px; max-width: 52ch; }
+.hd-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.hd-status { margin: 0; font-size: 14px; color: var(--muted); }
+.hd-rule { margin: 0; font-size: 13px; color: var(--muted); }
+.hd-grid { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); }
+.hd-card { display: grid; gap: 8px; padding: 10px; border-radius: 10px; background: color-mix(in srgb, var(--purple) 7%, transparent); }
+.hd-card.is-running { outline: 2px solid var(--purple); outline-offset: -2px; }
+.hd-photo { line-height: 0; border-radius: 8px; overflow: hidden; background: #fbfaf7; aspect-ratio: 4 / 3; }
+.hd-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.hd-verdict { display: flex; flex-wrap: wrap; gap: 6px; align-items: baseline; }
+.hd-badge { font-size: 12px; font-weight: 600; padding: 3px 8px; border-radius: 999px; background: #f4e3e3; color: #8a1f1f; }
+.hd-badge.is-hot { background: #dff0e0; color: #1d6b2a; }
+.hd-badge.is-idle { background: color-mix(in srgb, var(--purple) 12%, transparent); color: var(--muted); font-weight: 500; }
+.hd-probability { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.hd-caption { margin: 0; font-size: 12px; color: var(--muted); }
+.hd-edge { margin-left: 6px; font-size: 11px; padding: 1px 6px; border-radius: 999px; border: 1px solid currentColor; }
+.hd-credits ul { margin: 0; padding-left: 18px; font-size: 12px; display: grid; gap: 4px; }
+.hd-credits p { font-size: 12px; margin: 10px 0 0; }
+/* Grid children default to min-width:auto, so a long caption widens the page on narrow phones. */
+.hotdog-demo, .hd-grid > *, .hd-card > * { min-width: 0; }
+.hd-caption, .hd-credits li { overflow-wrap: anywhere; }
+@media (max-width: 420px) { .hd-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); } }

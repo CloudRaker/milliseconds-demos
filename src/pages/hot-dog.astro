@@ -1,0 +1,17 @@
+---
+import Demo from '../layouts/Demo.astro';
+import meta from '../demos/hot-dog/meta';
+import Island from '../demos/hot-dog/Demo';
+---
+<Demo meta={meta}>
+ <Island client:only="react" />
+ <div slot="notes">
+  <h2>The smallest useful image job</h2>
+  <p>Silicon Valley's SeeFood app answered one question about a photo. That question is a real API call: one <code>classify</code> over one image, two described labels, a probability for each. Nothing is parsed, described or summarised first.</p>
+  <h3>Pick the tier the job needs</h3>
+  <p>Detail selects the longest edge the model reads: 512 px at <code>low</code>, 768 px at <code>medium</code>, 1024 px at <code>high</code>. Telling a hot dog from a banana needs none of the extra pixels, so this demo stays at <code>low</code> and bills 1,000 image tokens per photo. Reading small print off a receipt is the job that needs a higher tier.</p>
+  <h3>A verdict is still a reading</h3>
+  <p>A probability near 0.5 means the model is undecided, not that the answer is half true. Two of the stock subjects, a corn dog and a bratwurst in a roll, divide people as well. Route the undecided cases to a person instead of forcing a label.</p>
+  <p>This demo sends one photo of at most 5 MB as JPEG, PNG or WebP. It does not accept image URLs or batches of images. Photos are processed in memory, never written to disk and never logged.</p>
+ </div>
+</Demo>

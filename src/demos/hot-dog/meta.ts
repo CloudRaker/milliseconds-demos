@@ -1,0 +1,2 @@
+import type { DemoMeta } from '../meta';
+export default { slug:'hot-dog', title:'Hot Dog / Not Hot Dog', summary:'The SeeFood joke, played straight: fourteen photos, one binary verdict each, at the cheapest image tier.', instruction:'Classify the whole grid free, then drop in a photo of your own with your key.', routes:['classify'], category:'Developer & interactive' } satisfies DemoMeta;
