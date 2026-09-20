@@ -105,7 +105,7 @@ export default function Demo() {
     <details className="panel"><summary>Workflow notes</summary>
       <p>One <code>extract</code> call sends the image and a JSON Schema. The response holds <code>data</code>, shaped by that schema. Line items come back as an array, so a receipt with three lines returns three objects. A field the model did not find comes back empty.</p>
       <p>Detail selects the longest edge the model reads: {Object.entries(DETAIL_EDGE).map(([level, edge]) => `${level} ${edge} px`).join(', ')}. Billed input tokens per image on extract are {(Object.keys(DETAIL_EDGE) as Detail[]).map(level => `${level} ${imageTokens('extract', level).toLocaleString()}`).join(', ')}, plus the text of the request. The base64 is never counted as characters.</p>
-      <p>Extract on an image is a generative pass for a handful of values, not a page. The schema may ask for at most 5 fields per call, and one call takes 2.5 to 3.5 s. For a long document, parse it to text first and use the text capabilities, which have no field cap.</p>
+      <p>Extract on an image is a generative pass for a handful of values, not a page. The schema may ask for at most 5 fields per call, and one call takes 2.5 to 3.5 s. For whole pages and long documents, use the <a href="https://cloudraker.com">CloudRaker paperwork API</a>, which parses and extracts full documents with no field cap.</p>
       <p>Images are processed in memory, never written to disk and never logged. Send one image of at most 5 MB, as JPEG, PNG or WebP. Image URLs are not accepted.</p>
       <p><a href="#sdk-examples">See SDK and CLI examples</a></p>
     </details>
