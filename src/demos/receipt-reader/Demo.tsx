@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { ImageSquareIcon, ScanIcon } from '@phosphor-icons/react';
 import { trackDemoEvent } from '../../lib/demo-events';
 import { dm1 } from '../../lib/dm1';
-import { DETAIL_EDGE, IMAGE_TOKENS, decodeImage, type Detail } from '../../lib/image';
+import { DETAIL_EDGE, decodeImage, imageTokens, type Detail } from '../../lib/image';
 import { RECEIPT } from './receipt';
 import { extractionRequest, parseReceipt, type Row } from './logic';
 import './demo.css';
@@ -73,7 +73,7 @@ export default function Demo() {
       <div className="rb-actions">
         <label htmlFor="rb-detail">Detail
           <select id="rb-detail" className="input" value={detail} onChange={event => { setDetail(event.target.value as Detail); clear('Detail changed. Extract again to see the new result.'); }}>
-            {(Object.keys(DETAIL_EDGE) as Detail[]).map(level => <option key={level} value={level}>{level} · {DETAIL_EDGE[level]} px · {IMAGE_TOKENS[level].toLocaleString()} tokens</option>)}
+            {(Object.keys(DETAIL_EDGE) as Detail[]).map(level => <option key={level} value={level}>{level} · {DETAIL_EDGE[level]} px · {imageTokens('extract', level).toLocaleString()} tokens</option>)}
           </select>
         </label>
         <button className="btn" onClick={() => file.current?.click()}><ImageSquareIcon size={18} aria-hidden="true" />Use my image</button>
@@ -104,7 +104,7 @@ export default function Demo() {
     </div>
     <details className="panel"><summary>Workflow notes</summary>
       <p>One <code>extract</code> call sends the image and a JSON Schema. The response holds <code>data</code>, shaped by that schema. Line items come back as an array, so a receipt with three lines returns three objects. A field the model did not find comes back empty.</p>
-      <p>Detail selects the longest edge the model reads: {Object.entries(DETAIL_EDGE).map(([level, edge]) => `${level} ${edge} px`).join(', ')}. Billed input tokens per image are {(Object.keys(DETAIL_EDGE) as Detail[]).map(level => `${level} ${IMAGE_TOKENS[level].toLocaleString()}`).join(', ')}, plus the text of the request. The base64 is never counted as characters.</p>
+      <p>Detail selects the longest edge the model reads: {Object.entries(DETAIL_EDGE).map(([level, edge]) => `${level} ${edge} px`).join(', ')}. Billed input tokens per image on extract are {(Object.keys(DETAIL_EDGE) as Detail[]).map(level => `${level} ${imageTokens('extract', level).toLocaleString()}`).join(', ')} (provisional), plus the text of the request. The base64 is never counted as characters.</p>
       <p>Images are processed in memory, never written to disk and never logged. Send one image of at most 5 MB, as JPEG, PNG or WebP. Image URLs are not accepted.</p>
       <p><a href="#sdk-examples">See SDK and CLI examples</a></p>
     </details>

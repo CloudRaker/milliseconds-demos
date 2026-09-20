@@ -2,7 +2,7 @@
 import assert from 'node:assert/strict';
 import { extractionRequest, parseReceipt, FIELDS } from './logic.ts';
 import { RECEIPT } from './receipt.ts';
-import { decodedBytes, imageProblem, IMAGE_TOKENS, MAX_IMAGE_BYTES } from '../../lib/image.ts';
+import { decodedBytes, imageProblem, imageTokens, MAX_IMAGE_BYTES } from '../../lib/image.ts';
 
 const base64 = RECEIPT.dataUrl.slice(RECEIPT.dataUrl.indexOf(',') + 1);
 
@@ -19,8 +19,9 @@ for (const [value, code] of [
   [`data:image/jpeg;base64,${'A'.repeat(4 * Math.ceil((MAX_IMAGE_BYTES + 1024) / 3))}`, 'image_too_large'],
 ]) assert.equal(imageProblem(value), code, String(value).slice(0, 40));
 
-// Fixed image tokens per detail tier, billed once per request, whatever the capability.
-assert.deepEqual(['low', 'medium', 'high'].map(detail => IMAGE_TOKENS[detail]), [1000, 2000, 4000]);
+// Provisional generative multiplier: extract bills five times the tier.
+assert.deepEqual(['low', 'medium', 'high'].map(detail => imageTokens('extract', detail)), [5000, 10000, 20000]);
+assert.equal(imageTokens('classify', 'medium'), 2000);
 
 // The request carries the image and the tier, never a URL.
 const request = extractionRequest(RECEIPT.dataUrl, 'medium');
