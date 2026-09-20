@@ -29,6 +29,9 @@ const request = extractionRequest(RECEIPT.dataUrl, 'medium');
 assert.equal(request.image, RECEIPT.dataUrl);
 assert.equal(request.detail, 'medium');
 assert.equal(request.schema.properties.items.type, 'array');
+// The public extract request has no free-text instructions field; the schema carries the guidance.
+assert.deepEqual(Object.keys(request).sort(), ['detail', 'image', 'schema']);
+assert.match(request.schema.description, /exactly as printed/);
 
 // Boxes: only four integers inside the image, in order, are usable.
 assert.deepEqual(parseBox([10, 20, 30, 40], size), [10, 20, 30, 40]);

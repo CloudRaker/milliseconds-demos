@@ -14,7 +14,8 @@ export const IMAGE_TOKENS: Record<Detail, number> = { low: 1000, medium: 2000, h
  */
 export const GENERATIVE_MULTIPLIER: Record<string, number> = { answer: 2, extract: 5, entities: 5, verify: 5 };
 /** Billed input tokens for the image part of one request. */
-export const imageTokens = (capability: string, detail: Detail) => IMAGE_TOKENS[detail] * (GENERATIVE_MULTIPLIER[capability] ?? 1);
+export const imageTokens = (capability: string, detail: Detail) =>
+  IMAGE_TOKENS[detail] * (Object.hasOwn(GENERATIVE_MULTIPLIER, capability) ? GENERATIVE_MULTIPLIER[capability] : 1);
 export const IMAGE_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
 const DATA_URL = /^data:image\/(?:jpeg|png|webp);base64,/;
@@ -42,15 +43,30 @@ export const IMAGE_MESSAGES: Record<'invalid_image' | 'image_too_large' | 'image
   image_with_texts: 'Send one image with optional text, not a batch of texts.',
 };
 
-/** Read a picked file as a data URL, rejecting the wrong type or an oversized file before the read. */
-export async function fileToDataUrl(file: File): Promise<string> {
+/**
+ * Decode a picked file and re-encode it, so the raster the API decodes is the one measured here.
+ * `createImageBitmap` applies EXIF orientation and the canvas drops the metadata: a portrait phone
+ * photo would otherwise be sent unrotated and every returned box would fall outside the image.
+ * The longest edge is capped at the largest detail tier, which is all the model reads anyway.
+ */
+export async function decodeImage(file: File): Promise<{ dataUrl: string; width: number; height: number }> {
   if (!IMAGE_MIME_TYPES.includes(file.type)) throw new Error(IMAGE_MESSAGES.invalid_image);
   if (file.size > MAX_IMAGE_BYTES) throw new Error(IMAGE_MESSAGES.image_too_large);
-  const bytes = new Uint8Array(await file.arrayBuffer());
-  let binary = '';
-  for (let i = 0; i < bytes.length; i += 0x8000) binary += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
-  const dataUrl = `data:${file.type};base64,${btoa(binary)}`;
+  const bitmap = await createImageBitmap(file, { imageOrientation: 'from-image' }).catch(() => {
+    throw new Error(IMAGE_MESSAGES.invalid_image);
+  });
+  const scale = Math.min(1, DETAIL_EDGE.high / Math.max(bitmap.width, bitmap.height));
+  const width = Math.max(1, Math.round(bitmap.width * scale));
+  const height = Math.max(1, Math.round(bitmap.height * scale));
+  const canvas = document.createElement('canvas');
+  canvas.width = width;
+  canvas.height = height;
+  const context = canvas.getContext('2d');
+  if (!context) throw new Error(IMAGE_MESSAGES.invalid_image);
+  context.drawImage(bitmap, 0, 0, width, height);
+  bitmap.close();
+  const dataUrl = canvas.toDataURL('image/jpeg', 0.92);
   const problem = imageProblem(dataUrl);
   if (problem) throw new Error(IMAGE_MESSAGES[problem]);
-  return dataUrl;
+  return { dataUrl, width, height };
 }

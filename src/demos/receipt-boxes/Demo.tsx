@@ -2,22 +2,12 @@ import { useEffect, useRef, useState } from 'react';
 import { ImageSquareIcon, ScanIcon } from '@phosphor-icons/react';
 import { trackDemoEvent } from '../../lib/demo-events';
 import { dm1 } from '../../lib/dm1';
-import { DETAIL_EDGE, fileToDataUrl, imageTokens, type Detail } from '../../lib/image';
+import { DETAIL_EDGE, decodeImage, imageTokens, type Detail } from '../../lib/image';
 import { RECEIPT } from './receipt';
 import { extractionRequest, parseReceipt, rect, type Row, type Size } from './logic';
 import './demo.css';
 
 const STOCK: Size = { width: RECEIPT.width, height: RECEIPT.height };
-
-/** Boxes arrive in the image's own pixels, so an uploaded image needs its natural size. */
-function measure(dataUrl: string): Promise<Size> {
-  return new Promise((resolve, reject) => {
-    const image = new Image();
-    image.onload = () => resolve({ width: image.naturalWidth, height: image.naturalHeight });
-    image.onerror = () => reject(new Error('That image could not be read. Try a JPEG, PNG or WebP file.'));
-    image.src = dataUrl;
-  });
-}
 
 export default function Demo() {
   const [image, setImage] = useState(RECEIPT.dataUrl);
@@ -41,10 +31,10 @@ export default function Demo() {
   async function pick(file: File | undefined) {
     if (!file) return;
     try {
-      const dataUrl = await fileToDataUrl(file);
-      const measured = await measure(dataUrl);
+      const decoded = await decodeImage(file);
       clear('Image ready. Extracting your own image uses your API key.');
-      setImage(dataUrl); setSize(measured); setAlt(`Uploaded image, ${measured.width} by ${measured.height} pixels`);
+      setImage(decoded.dataUrl); setSize({ width: decoded.width, height: decoded.height });
+      setAlt(`Uploaded image, ${decoded.width} by ${decoded.height} pixels`);
       trackDemoEvent('receipt-boxes', 'own_input_run');
     } catch (error) {
       setStatus(error instanceof Error ? error.message : 'That image could not be read.');

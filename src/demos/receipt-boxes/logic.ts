@@ -18,6 +18,7 @@ export const FIELDS = [
 export const schema = {
   type: 'object',
   title: 'receipt',
+  description: 'A printed receipt. Copy every amount exactly as printed and leave a field empty when it is not on the receipt.',
   properties: {
     ...Object.fromEntries(FIELDS.map(field => [field.key, { type: field.type, description: field.description }])),
     items: {
@@ -27,10 +28,12 @@ export const schema = {
     },
   },
 };
-export const instructions = 'Read the printed receipt. Copy amounts exactly as printed and leave a field empty when it is not on the receipt.';
-
-/** One extract call over one image. `boxes` come back in the uploaded image's own pixels. */
-export const extractionRequest = (image: string, detail: Detail) => ({ image, detail, schema, instructions });
+/**
+ * One extract call over one image. `boxes` come back in the uploaded image's own pixels.
+ * The public request carries no free-text instructions, so the wording that guides the model
+ * lives in the schema's own `title` and field `description`s.
+ */
+export const extractionRequest = (image: string, detail: Detail) => ({ image, detail, schema });
 
 const number = (value: unknown) => typeof value === 'number' && Number.isFinite(value);
 const text = (value: unknown) => value === null || value === undefined || typeof value === 'string' || number(value);

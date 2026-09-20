@@ -47,15 +47,25 @@ export function sdkCode(example: Pick<StockExample, 'route' | 'body'>) {
   const tsArgs = [...args.map(json), ...tsOptions];
   const pyArgs = [
     ...args.map(arg => python(arg)),
-    ...(image ? [`image="${IMAGE_FILE}"`, ...(detail ? [`detail=${python(detail)}`] : [])] : Object.entries(hints).map(([k, v]) => `${k}=${python(v)}`)),
+    // A str is read as base64 by the Python SDK; a path must be a Path.
+    ...(image ? [`image=Path("${IMAGE_FILE}")`, ...(detail ? [`detail=${python(detail)}`] : [])] : Object.entries(hints).map(([k, v]) => `${k}=${python(v)}`)),
   ];
-  // The CLI reads the image from disk too, so the piped JSON stays readable.
-  const { image: _image, detail: _detail, ...cliBody } = body;
-  const cliFlags = image ? ` --image ${IMAGE_FILE}${detail ? ` --detail ${detail}` : ''}` : '';
+  // The CLI reads the image from disk. Piping JSON is not an option beside an image: any stdin
+  // that starts with { becomes the whole request, and a request with no text is a usage error.
+  // The remaining fields go in as flags, each from its own file.
+  const { image: _image, detail: _detail, text: _text, ...cliBody } = body;
+  const cliFiles = Object.entries(image ? cliBody : {}).map(([field, value]) => {
+    if (!methods[route][2].includes(field)) throw new Error(`No dm1 flag for ${route}.${field} beside an image`);
+    const file = `${route}-${field}.json`;
+    return { flag: ` --${field} @${file}`, write: `cat > ${file} <<'DM1_${field.toUpperCase()}'\n${json(value)}\nDM1_${field.toUpperCase()}\n\n` };
+  });
+  const cliFlags = image ? ` --image ${IMAGE_FILE}${detail ? ` --detail ${detail}` : ''}${cliFiles.map(f => f.flag).join('')}` : '';
   return {
     typescript: `${image ? 'import { readFile } from "node:fs/promises";\n' : ''}import { DecisionMachine } from "@cloudraker/milliseconds";\n\n// Run on your server; reads MS_API_KEY from the environment.${image ? '\n// The image carries the input; the leading text is optional context.' : ''}\nconst dm = new DecisionMachine();\n\nconst { result, usage } = await dm.${tsMethod}(\n${tsArgs.map(arg => arg.split('\n').map(line => '  ' + line).join('\n')).join(',\n')}\n).withUsage();\n\nconsole.log(result);\nconsole.log({ inputTokens: usage.inputTokens, modelMs: usage.inferenceMs });`,
-    python: `from milliseconds import DecisionMachine\n\n# Reads MS_API_KEY from the environment.${image ? '\n# The image carries the input; the leading text is optional context.' : ''}\ndm = DecisionMachine()\n\nresult = dm.${pyMethod}(\n${pyArgs.map(arg => arg.split('\n').map(line => '    ' + line).join('\n')).join(',\n')}\n)\n\nprint(result)`,
-    cli: `# Reads MS_API_KEY. JSON on stdin supplies the complete request.\ndm1 ${route}${cliFlags} --json --usage <<'DM1_REQUEST'\n${json(image ? cliBody : body)}\nDM1_REQUEST`,
+    python: `${image ? 'from pathlib import Path\n' : ''}from milliseconds import DecisionMachine\n\n# Reads MS_API_KEY from the environment.${image ? '\n# The image carries the input; the leading text is optional context.' : ''}\ndm = DecisionMachine()\n\nresult = dm.${pyMethod}(\n${pyArgs.map(arg => arg.split('\n').map(line => '    ' + line).join('\n')).join(',\n')}\n)\n\nprint(result)`,
+    cli: image
+      ? `# Reads MS_API_KEY. The image and the schema are read from disk.\n${cliFiles.map(f => f.write).join('')}dm1 ${route}${cliFlags} --json --usage`
+      : `# Reads MS_API_KEY. JSON on stdin supplies the complete request.\ndm1 ${route} --json --usage <<'DM1_REQUEST'\n${json(body)}\nDM1_REQUEST`,
   };
 }
 

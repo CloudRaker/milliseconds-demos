@@ -15,9 +15,10 @@ await build({entryPoints:['src/lib/sdk-samples.ts'],bundle:true,platform:'node',
 const {sdkCode}=await import(pathToFileURL(join(temp,'samples.mjs')));
 const registry=JSON.parse(await readFile('src/generated/examples.json','utf8'));
 const unique=new Map();for(const entry of Object.values(registry))if(!unique.has(entry.demo+'/'+entry.route))unique.set(entry.demo+'/'+entry.route,entry);
-// Image samples read a file from disk and need SDK 0.2.0; they are generated but not executed here.
-const cases=[...unique].filter(([,entry])=>!entry.body.image).map(([id,entry])=>({id,...entry,code:sdkCode(entry)}));
-const casesPath=join(temp,'cases.json');await writeFile(casesPath,JSON.stringify(cases));
+// Image samples read a file from disk, so they are compiled but never executed.
+const cases=[...unique].map(([id,entry])=>({id,...entry,code:sdkCode(entry)}));
+const runnable=cases.filter(c=>!c.body.image);
+const casesPath=join(temp,'cases.json');await writeFile(casesPath,JSON.stringify(runnable));
 // Real SDK parsing needs the two array axes and the capability's result envelope.
 function reply(route,body){
  const leaf={answer:route==='answer'?null:true,statement:'example',question:'example',probability:.9,confidence:.8,label:'example',scores:route==='rate'?[.1,.9]:{example:.9},score:1,level:1,start:null,end:null,matches:true,found:[],path:['example'],levels:[],data:{},entities:[]};
@@ -29,12 +30,13 @@ const headers={'content-type':'application/json','x-input-tokens':'100','x-infer
 const {DecisionMachine}=await import(pathToFileURL(join(sdk,'dist/index.js')));
 const original=globalThis.fetch;process.env.MS_API_KEY='sk-ms-sample-test-not-a-real-key';
 for(const c of cases){
+ await writeFile(join(temp,c.id.replace('/','-')+'.ts'),c.code.typescript);
+ if(c.body.image)continue;
  let calls=0;
  globalThis.fetch=async(url,init)=>{calls++;assert.equal(new URL(url).pathname,'/v1/decision-machine-1/'+c.route);assert.deepEqual(JSON.parse(init.body),c.body,c.id);return new Response(JSON.stringify(reply(c.route,c.body)),{headers});};
  const code=c.code.typescript.replace(/^import[^\n]+\n/,'');
  await new Function('DecisionMachine','console',`return (async()=>{${code}})()`)(DecisionMachine,{log(){}});
  assert.equal(calls,1,c.id);
- await writeFile(join(temp,c.id.replace('/','-')+'.ts'),c.code.typescript);
 }
 globalThis.fetch=original;
 await writeFile(join(temp,'tsconfig.json'),JSON.stringify({compilerOptions:{target:'ES2022',module:'NodeNext',moduleResolution:'NodeNext',strict:true,noEmit:true,skipLibCheck:true,paths:{'@cloudraker/milliseconds':[join(sdk,'dist/index.d.ts')]}},include:['*.ts']}));
@@ -45,9 +47,9 @@ const pyFile=join(temp,'check.py');await writeFile(pyFile,pyScript);console.log(
 const mock=join(temp,'mock.mjs');await writeFile(mock,`import fs from 'node:fs';import assert from 'node:assert/strict';const c=JSON.parse(fs.readFileSync(process.env.SDK_CASE));const reply=${reply.toString()};globalThis.fetch=async(url,init)=>{assert.equal(new URL(url).pathname,'/v1/decision-machine-1/'+c.route);assert.deepEqual(JSON.parse(init.body),c.body);fs.appendFileSync(process.env.SDK_CALLS,'1');return new Response(JSON.stringify(reply(c.route,c.body)),{headers:${JSON.stringify(headers)}})};`);
 const bin=join(temp,'bin');await mkdir(bin);
 await writeFile(join(bin,'dm1'),`#!/bin/sh\nexec ${JSON.stringify(process.execPath)} ${JSON.stringify(join(sdk,'dist/cli.js'))} "$@"\n`,{mode:0o755});
-for(const c of cases){
+for(const c of runnable){
  const path=join(temp,'current.json'),calls=join(temp,'calls.txt');await writeFile(path,JSON.stringify(c));await writeFile(calls,'');
  execFileSync('/bin/bash',['-c',c.code.cli],{env:{...process.env,PATH:bin+':'+process.env.PATH,NODE_OPTIONS:`--import=${mock}`,SDK_CASE:path,SDK_CALLS:calls},stdio:'pipe'});
  assert.equal(await readFile(calls,'utf8'),'1',c.id);
 }
-console.log(`PASS: ${cases.length} request examples across ${new Set(cases.map(c=>c.demo)).size} demos × TypeScript, Python and dm1; exact SDK payloads, TypeScript compile, no network.`);
+console.log(`PASS: ${runnable.length} executed and ${cases.length-runnable.length} compiled-only request examples across ${new Set(cases.map(c=>c.demo)).size} demos × TypeScript, Python and dm1; exact SDK payloads, TypeScript compile, no network.`);

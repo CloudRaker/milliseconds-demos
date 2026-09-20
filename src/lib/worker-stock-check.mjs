@@ -56,6 +56,10 @@ const personal=new Request('https://demo.milliseconds.ai/api/run',{method:'POST'
 s.env.API={fetch:async()=>{return new Response('{}',{status:401});}};
 assert.equal((await s.run(personal)).status,401);assert.equal(s.calls(),0,'invalid personal credentials never fall back to sponsor');
 assert.equal((await s.run(new Request('https://demo.milliseconds.ai/api/run',{method:'POST',body:'{}'}))).status,401);
+// A shaped key is not a gate: the per-IP limiter runs before the body is buffered.
+s=setup();s.env.RATE_LIMITER={limit:async()=>({success:false})};
+const flooded=await s.run(new Request('https://demo.milliseconds.ai/api/run',{method:'POST',headers:{'x-ms-key':`sk-ms-${'x'.repeat(25)}`},body:JSON.stringify({route:'classify',body:examples[id].body})}));
+assert.equal(flooded.status,429);assert.equal(s.calls(),0,'a rate-limited run never reaches the API');
 examples[id].recorded={data:result,tokens:42,modelMs:75,generatedAt:'2020-01-01T00:00:00.000Z'};examples[id].pinned=true;
 s=setup({secret:''});const pinned=await s.run(req());assert.equal(pinned.headers.get('x-demo-source'),'cache');assert.equal(pinned.status,200);assert.equal(s.calls(),0,'pinned traces never refresh, even when old');delete examples[id].recorded;delete examples[id].pinned;
 assert.ok(validResult('classify',{...result,scores:{error:.9,warning:.1}}),'error is a valid classification label');

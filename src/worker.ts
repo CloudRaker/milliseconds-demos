@@ -83,6 +83,11 @@ export default {
     const key = request.headers.get("x-ms-key")?.trim() ?? "";
     if (!key) return fail(401, "no_key", "Add your milliseconds.ai API key in the key panel to run the demos.");
     if (!KEY.test(key)) return fail(401, "invalid_key", "That does not look like a milliseconds.ai key (test_sk-… or prod_sk-…).");
+    // A key that only looks right is not a gate: the body can be megabytes, so throttle per IP
+    // before buffering it. A chunked request declares no length, so it is refused outright.
+    if (env.RATE_LIMITER && !(await env.RATE_LIMITER.limit({ key: request.headers.get("cf-connecting-ip") ?? "unknown" })).success)
+      return fail(429, "rate_limited", "Too many requests from this address. Try again shortly.");
+    // A declared length is advisory: a chunked body declares none, and boundedBody caps the read.
     if (Number(request.headers.get("content-length") ?? 0) > MAX_REQUEST)
       return fail(413, "too_large", "Request too large for the demo.");
 
