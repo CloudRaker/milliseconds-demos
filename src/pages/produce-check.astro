@@ -1,0 +1,18 @@
+---
+import Demo from '../layouts/Demo.astro';
+import ImageClassifier from '../components/ImageClassifier';
+import meta from '../demos/produce-check/meta';
+import { config } from '../demos/produce-check/config';
+---
+<Demo meta={meta}>
+  <ImageClassifier config={config} client:only="react" />
+  <div slot="notes">
+    <h2>A visual first pass</h2>
+    <p>{config.useCase}</p>
+    <p>{config.limitation}</p>
+    <h3>Real photographs, traceable labels</h3>
+    <p>{config.dataset.note}</p>
+    <p>Photographs: {config.dataset.author}. <a href={config.dataset.url}>{config.dataset.name}</a>, under <a href={config.dataset.licenseUrl}>{config.dataset.license}</a>.</p>
+    <p>These examples demonstrate the API; they are not an accuracy benchmark. Compare the model reading with the source label and review uncertain results.</p>
+  </div>
+</Demo>

@@ -143,6 +143,18 @@ html.has-key .key-banner { display: none; }
 .demo-filters .btn > span { color: var(--muted); font-size: 11px; }
 .demo-filter-count { margin: 0 0 20px; font-size: 13px; }
 .demo-card[hidden] { display: none; }
+.demo-filter-section { display: flex; align-items: baseline; gap: 20px; }
+.demo-filter-label { width: 64px; flex-shrink: 0; font-size: 12px; color: var(--muted); }
+.demo-input-filters .btn { min-width: 100px; justify-content: center; }
+.demo-card-input { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; }
+.demo-card-thumbnail { width: 28px; height: 28px; flex-shrink: 0; border-radius: 6px; object-fit: cover; background: var(--surface); }
+.demo-filter-empty { padding: 24px 0 40px; }
+@media (max-width: 600px) {
+  .demo-filter-section { display: block; }
+  .demo-filter-label { display: block; margin-bottom: 8px; }
+  .demo-input-filters { flex-wrap: nowrap; }
+  .demo-input-filters .btn { min-width: 0; flex: 1; padding-inline: 12px; }
+}
 .demo-title { display: flex; align-items: center; gap: 16px; margin: 16px 0 12px; }
 .demo-head .demo-title h1 { margin: 0; }
 .demo-title .demo-icon { width: 36px; height: 36px; }
@@ -244,4 +256,16 @@ html.has-key .key-banner { display: none; }
  .run-metrics-head { margin-bottom: 8px; }
  .run-metrics-grid dd { font-size: 23px; }
  .run-metrics-details { margin-top: 10px; padding-top: 7px; }
+}
+
+.run-live-mode { border-bottom: 1px solid var(--line); padding-bottom: 14px; margin-bottom: 16px; }
+.run-live-mode label { display: flex; align-items: center; gap: 10px; min-height: 36px; font-size: 14px; cursor: pointer; }
+.run-live-mode input { width: 18px; height: 18px; accent-color: var(--purple-on-dark); flex-shrink: 0; }
+.run-live-mode input:focus-visible { outline: 2px solid var(--purple-on-dark); outline-offset: 3px; }
+.run-live-mode p { color: var(--muted); font-size: 12px; line-height: 1.6; margin: 4px 0 0; max-width: 90ch; }
+.run-metrics-grid.is-live-mode { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 600px) {
+  .run-metrics-grid.is-live-mode { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 0; }
+  .run-metrics-grid.is-live-mode > div:nth-child(odd) { padding-left: 0; border-left: 0; }
+  .run-metrics-grid.is-live-mode > div:nth-child(even) { padding-left: 10px; border-left: 1px solid var(--line); }
 }

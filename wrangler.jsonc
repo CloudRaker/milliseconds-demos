@@ -19,7 +19,7 @@
       "workers_dev": false,
       "durable_objects": { "bindings": [{ "name": "EXAMPLES", "class_name": "ExampleStore" }] },
       "ratelimits": [{ "name": "RATE_LIMITER", "namespace_id": "1006", "simple": { "limit": 600, "period": 60 } }],
-      "vars": { "EXAMPLE_DAILY_BUDGET": "2000" },
+      "vars": { "EXAMPLE_DAILY_BUDGET": "3000" },
       "routes": [{ "pattern": "demo.milliseconds.ai", "custom_domain": true }],
       // Production only: service binding to the decision-machine Worker in the same account, so the proxy hop never leaves Cloudflare.
       "services": [{ "binding": "API", "service": "decision-machine-production" }]

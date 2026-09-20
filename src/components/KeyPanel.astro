@@ -1,10 +1,10 @@
 ---
-// Personal keys are used only for custom requests; published examples are sponsored.
+// Personal keys cover custom input and all requests when the visitor enables live mode.
 ---
 <details class="key-panel">
   <summary aria-label="Manage your API key"><span class="key-dot"></span><span data-key-label>Add your API key</span></summary>
   <div class="key-body">
-    <p class="muted">Supplied examples run for free. When you’re signed in, custom inputs automatically use your console test key and your workspace’s free quota.</p>
+    <p class="muted">Supplied examples run for free by default. Live mode also runs samples with your key. When you’re signed in, personal requests automatically use your console test key and your workspace’s quota.</p>
     <button class="btn primary" type="button" data-key-source>Use my test key</button>
     <p class="muted key-source-note">Uses your signed-in console workspace. This key stays on this page only. After signing out or switching workspaces, clear it and connect again. <a href="https://console.milliseconds.ai/" target="_blank" rel="noopener noreferrer">Check your workspace.</a></p>
     <p data-key-status role="status" hidden></p>
@@ -13,7 +13,7 @@
     <form data-key-form>
       <label for="manual-api-key">Or paste your own key</label>
       <input id="manual-api-key" class="input" type="password" name="key" placeholder="test_sk-… or prod_sk-…" autocomplete="off" spellcheck="false" aria-label="Your milliseconds.ai API key" />
-      <p class="muted">Pasted keys are saved in this browser. Keys are sent only to this site’s proxy for custom requests.</p>
+      <p class="muted">Pasted keys are saved in this browser. Keys are sent only to this site’s proxy for personal requests.</p>
       <div class="key-actions">
         <button class="btn" type="submit">Use this key</button>
         <button class="btn" type="button" data-key-forget>Clear key</button>
@@ -98,7 +98,7 @@
     sourcedWorkspace = "";
     input.value = "";
     setKey("");
-    status.textContent = "Key cleared. Supplied examples still run for free.";
+    status.textContent = "Key cleared. Turn off live mode to run supplied examples for free.";
     status.hidden = false;
   });
   panel.addEventListener("keydown", (event) => {

@@ -1,0 +1,79 @@
+{
+  "archiveUrl": "https://huggingface.co/datasets/AI-Lab-Makerere/beans/resolve/main/data/test.zip",
+  "archiveSha256": "ca67b15d960d1e2fd9d23fd8498ce86818ead90755c630a43baf19ec4af09312",
+  "transformation": "Aspect-preserving downsample to at most 448 px; JPEG quality 70. No crops or retouching.",
+  "files": [
+    {
+      "id": "healthy-test-0",
+      "archivePath": "test/healthy/healthy_test.0.jpg",
+      "originalWidth": 500,
+      "originalHeight": 500,
+      "originalSha256": "520786de35cd8246bf35a05feca05bc520d3b138e4380a5b575d044585eefc77",
+      "embeddedSha256": "acb6da132d7c1b9ca50a87784e26a9077daefc0fb095de30a2c6bfcf6c63385b"
+    },
+    {
+      "id": "healthy-test-1",
+      "archivePath": "test/healthy/healthy_test.1.jpg",
+      "originalWidth": 500,
+      "originalHeight": 500,
+      "originalSha256": "8650ef0b6849210c87a629402ba7148fbb771b81c67e0362abb13ac21465a0c1",
+      "embeddedSha256": "103c4d8b2c66842084d5b5e85685e2310694257fb3548c3b739970867310cf4f"
+    },
+    {
+      "id": "healthy-test-2",
+      "archivePath": "test/healthy/healthy_test.2.jpg",
+      "originalWidth": 500,
+      "originalHeight": 500,
+      "originalSha256": "e2c63864fc2f02bd7c206c1d497c95a97c8070343c1fd996d624965d00c05d51",
+      "embeddedSha256": "f006e121f6bbb3c5241d10b065f276c61eb4ee2f0b45efb82648f5a1ff59da58"
+    },
+    {
+      "id": "angular-leaf-spot-test-0",
+      "archivePath": "test/angular_leaf_spot/angular_leaf_spot_test.0.jpg",
+      "originalWidth": 500,
+      "originalHeight": 500,
+      "originalSha256": "e7ac409cda99b323fa9d70f07902f2d88ceee90f3e2a920de0cccb931598cae1",
+      "embeddedSha256": "9e547a7af924d011bc869a63ae4d14b2564bc4e34b3cf721824b62b64771a5fa"
+    },
+    {
+      "id": "angular-leaf-spot-test-1",
+      "archivePath": "test/angular_leaf_spot/angular_leaf_spot_test.1.jpg",
+      "originalWidth": 500,
+      "originalHeight": 500,
+      "originalSha256": "9e95062c50af38a8256598f26d079b1b01d5850e4265267c3157db2f14d4026d",
+      "embeddedSha256": "9569abbff4f5f4afecd7d6c241e609b781b49c7cec0ef0a47568605f6bee4f8d"
+    },
+    {
+      "id": "angular-leaf-spot-test-2",
+      "archivePath": "test/angular_leaf_spot/angular_leaf_spot_test.2.jpg",
+      "originalWidth": 500,
+      "originalHeight": 500,
+      "originalSha256": "3ca1bfe8e29bacea0cea633b746f8a2d6f8557e6c458825e90de035a45bc8eaa",
+      "embeddedSha256": "dbac238474fdec3ea464ce5f9aefb137efed654c05f57936529ef59aefac91a5"
+    },
+    {
+      "id": "bean-rust-test-0",
+      "archivePath": "test/bean_rust/bean_rust_test.0.jpg",
+      "originalWidth": 500,
+      "originalHeight": 500,
+      "originalSha256": "794e13ecedb37190014ef48a69c601d66dc7b5bea7198d70c9122a78aaa1ed08",
+      "embeddedSha256": "8b09d892e5deb5470a43e6a76c14a4bdf6c67930d41fc749501fb20f97804a3b"
+    },
+    {
+      "id": "bean-rust-test-1",
+      "archivePath": "test/bean_rust/bean_rust_test.1.jpg",
+      "originalWidth": 500,
+      "originalHeight": 500,
+      "originalSha256": "85c1007058ae07ce2815604b8bee6dab899254c8b3ce4ac47b3ec66bf95437f7",
+      "embeddedSha256": "029e37147a3dee4fc449196fac60fb5b0d49fdd9c5402538f1d790d6e0e11905"
+    },
+    {
+      "id": "bean-rust-test-2",
+      "archivePath": "test/bean_rust/bean_rust_test.2.jpg",
+      "originalWidth": 500,
+      "originalHeight": 500,
+      "originalSha256": "7a23bf1a453feae47c819f6d404ef7dc84bc071bd48a69a65a39adcadfd66e27",
+      "embeddedSha256": "1d9effde94be28d9387c29e0ddf2c99a859a99127c0179fcc480822492b43933"
+    }
+  ]
+}

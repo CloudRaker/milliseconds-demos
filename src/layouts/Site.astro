@@ -59,7 +59,7 @@ const canonical = new URL(Astro.url.pathname, 'https://demo.milliseconds.ai').hr
     </footer>
     <script>
       import { init } from "@plausible-analytics/tracker";
-      init({ domain: "demo.milliseconds.ai" });
+      if (import.meta.env.PROD) init({ domain: "milliseconds.ai" });
       let sessionRequest = 0;
       const refreshSession = () => {
         const request = ++sessionRequest;

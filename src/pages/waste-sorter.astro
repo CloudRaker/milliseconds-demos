@@ -1,0 +1,19 @@
+---
+import Demo from '../layouts/Demo.astro';
+import ImageClassifier from '../components/ImageClassifier';
+import meta from '../demos/waste-sorter/meta';
+import { config } from '../demos/waste-sorter/config';
+import license from '../demos/waste-sorter/LICENSE.txt?raw';
+---
+<Demo meta={meta}>
+  <ImageClassifier config={config} client:only="react" />
+  <div slot="notes">
+    <h2>Sort by what the camera sees</h2>
+    <p>Use material classification to triage collection photos or flag uncertain items for a sorting operator. One image goes to <code>/classify</code> with six described labels.</p>
+    <h3>A material label is not a recycling instruction</h3>
+    <p>TrashNet photographed single objects against a light background. A cluttered conveyor belt, dirty container or mixed-material package is a different task. Local collection rules still decide what belongs in each bin.</p>
+    <h3>Real photos, original labels</h3>
+    <p>These twelve unmodified photos come from <a href={config.dataset.url}>TrashNet by Gary Thung and Mindy Yang</a>, shared under the <a href={config.dataset.licenseUrl}>MIT license</a>. Each photo links to its source archive and identifies its original filename. The dataset labels are comparison points, not predictions.</p>
+    <details><summary>Image dataset license</summary><pre style="white-space: pre-wrap; font-size: 0.8rem;">{license}</pre></details>
+  </div>
+</Demo>

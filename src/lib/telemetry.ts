@@ -28,11 +28,12 @@ export interface Telemetry {
   modelMs: number;
   modelSamples: number;
   elapsed: number[];
+  liveElapsed: number[];
 }
 
 export const EMPTY_TELEMETRY: Telemetry = {
   pending: 0, attempts: 0, retries: 0, succeeded: 0, failed: 0, cancelled: 0,
-  tokens: 0, unknownUsage: 0, modelMs: 0, modelSamples: 0, elapsed: [],
+  tokens: 0, unknownUsage: 0, modelMs: 0, modelSamples: 0, elapsed: [], liveElapsed: [],
   personalTokens: 0, personalUnknownUsage: 0, sponsoredTokens: 0, sponsoredUnknownUsage: 0, personalAttempts: 0,
   sponsoredAttempts: 0, exampleUnknownAttempts: 0, cachedResponses: 0, cachedTokens: 0,
   cachedUnknownUsage: 0, cachedModelMs: 0, cachedModelSamples: 0, cachedGeneratedAt: null,
@@ -94,6 +95,7 @@ export function requestFinished(outcome: "succeeded" | "failed" | "cancelled", e
     [outcome]: snapshot[outcome] + 1,
     ...(outcome === "succeeded" ? {
       elapsed: [...snapshot.elapsed, elapsedMs],
+      ...((source === 'personal-live' || source === 'sponsored-live') ? { liveElapsed: [...snapshot.liveElapsed, elapsedMs] } : {}),
       ...(source === "cache" ? {
         cachedModelMs: snapshot.cachedModelMs + (modelMs ?? 0),
         cachedModelSamples: snapshot.cachedModelSamples + Number(modelMs !== null),

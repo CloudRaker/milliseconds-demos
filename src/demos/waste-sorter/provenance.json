@@ -1,0 +1,74 @@
+[
+  {
+    "id": "glass-1",
+    "originalPath": "dataset-resized/glass/glass1.jpg",
+    "sha256": "084511aff76ddb2668538ed7a25fe803d53e625cd3734f5a5656e00a76fb7a92",
+    "bytes": 8296
+  },
+  {
+    "id": "glass-2",
+    "originalPath": "dataset-resized/glass/glass2.jpg",
+    "sha256": "bab5084ba99a52b6518107211e4f3a291c0600a5e78bcdd65a133fa79493dbc6",
+    "bytes": 10989
+  },
+  {
+    "id": "paper-1",
+    "originalPath": "dataset-resized/paper/paper1.jpg",
+    "sha256": "25063c2320fd0fff4dc04317a7627418695c9970618a48073bb79cb3e542859c",
+    "bytes": 17487
+  },
+  {
+    "id": "paper-2",
+    "originalPath": "dataset-resized/paper/paper2.jpg",
+    "sha256": "5c246fd3fec667ee5c9ca8c7f50b86a78264674752d066d525642afb22bbeb5e",
+    "bytes": 27354
+  },
+  {
+    "id": "cardboard-1",
+    "originalPath": "dataset-resized/cardboard/cardboard1.jpg",
+    "sha256": "9573fd98a5aca2ab9a4c5b9ebcdfa4dcf9719b216c2025ee4305c4df611c885f",
+    "bytes": 17333
+  },
+  {
+    "id": "cardboard-2",
+    "originalPath": "dataset-resized/cardboard/cardboard2.jpg",
+    "sha256": "c368bda01fcf3d9cb13cb16062bbbf5c96843ceb905e730fa9d69f533b318d7e",
+    "bytes": 18110
+  },
+  {
+    "id": "plastic-1",
+    "originalPath": "dataset-resized/plastic/plastic1.jpg",
+    "sha256": "5a81a13c442580a6839e0d350f98d6a6712f6dff47afbc5b436945327ca9ad37",
+    "bytes": 9713
+  },
+  {
+    "id": "plastic-2",
+    "originalPath": "dataset-resized/plastic/plastic2.jpg",
+    "sha256": "86c49ad6ad1213ca8e78308201430378e8fb87b3ffe624993773e6828bf7e30a",
+    "bytes": 6218
+  },
+  {
+    "id": "metal-1",
+    "originalPath": "dataset-resized/metal/metal1.jpg",
+    "sha256": "c9e3856e65f887bd3b04edf686e6e1d265a67306a0b3a3c7a05edb83af2447b3",
+    "bytes": 17249
+  },
+  {
+    "id": "metal-2",
+    "originalPath": "dataset-resized/metal/metal2.jpg",
+    "sha256": "da59c3fa97ea7e9ef2e374a7ccc4cc84d350f3a3e4bcefc6e601d0cc4ecae7ed",
+    "bytes": 12348
+  },
+  {
+    "id": "trash-1",
+    "originalPath": "dataset-resized/trash/trash1.jpg",
+    "sha256": "befe03db44ad0923b3f88239c071084950190e54381dc51679007917cfd315fa",
+    "bytes": 16718
+  },
+  {
+    "id": "trash-2",
+    "originalPath": "dataset-resized/trash/trash2.jpg",
+    "sha256": "00d96cc08c730da1d1bd47cc303191dfe354f6fbc2d026e78634e3a7705ead70",
+    "bytes": 10587
+  }
+]

@@ -16,6 +16,8 @@ Locally the Worker calls `https://api.milliseconds.ai` directly. In production i
 
 ## Deploy
 
+Plausible reports production pageviews and demo events to the main `milliseconds.ai` dashboard. Event URLs retain the `demo.milliseconds.ai` hostname. Development builds do not initialize analytics.
+
 ```sh
 CLOUDFLARE_ACCOUNT_ID=<account> pnpm run deploy
 ```
@@ -39,6 +41,8 @@ After a deploy, `node scripts/warm-examples.mjs https://demo.milliseconds.ai` pr
 **Every page shows the same metrics panel:** median delivery time, input tokens, and estimated inference cost at $0.04 per million tokens. Unknown usage is shown as `Unavailable` or `≥`, never as zero.
 
 **SDK tabs.** Each demo shows TypeScript, Python, and `dm1` CLI samples generated from the same request catalog as the demo. They run against the public API with the reader's `MS_API_KEY`, not the demo proxy.
+
+**Live mode.** Enable “Use my key for every request” in the performance panel to bypass the demo cache, including for supplied text and image samples. Every request uses your key and quota. The choice lasts for the current browser tab. Live timing and usage exclude cached deliveries; turn the option off to restore free samples.
 
 ## Add a demo
 

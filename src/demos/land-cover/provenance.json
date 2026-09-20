@@ -1,0 +1,87 @@
+{
+  "archiveUrl": "https://zenodo.org/records/7711810/files/EuroSAT_RGB.zip",
+  "archiveSha256": "b4f5b234ecb7d7ff9c6cddb046543b4717c53fd6e9815be6c0e80cc614f51b90",
+  "transformation": "Original 64 by 64 RGB JPEG bytes, unchanged.",
+  "files": [
+    {
+      "id": "AnnualCrop-1",
+      "archivePath": "EuroSAT_RGB/AnnualCrop/AnnualCrop_1.jpg",
+      "originalWidth": 64,
+      "originalHeight": 64,
+      "originalSha256": "f733d6f5d13be0bfe05161cc4df3416e31880c4371cbde9ca85e5409ff4fa78d",
+      "embeddedSha256": "f733d6f5d13be0bfe05161cc4df3416e31880c4371cbde9ca85e5409ff4fa78d"
+    },
+    {
+      "id": "Forest-1",
+      "archivePath": "EuroSAT_RGB/Forest/Forest_1.jpg",
+      "originalWidth": 64,
+      "originalHeight": 64,
+      "originalSha256": "0f695a651c815c3fb84e46c8c9b08ac62f6cb24ef1c174f7cb0382fa93a40039",
+      "embeddedSha256": "0f695a651c815c3fb84e46c8c9b08ac62f6cb24ef1c174f7cb0382fa93a40039"
+    },
+    {
+      "id": "HerbaceousVegetation-1",
+      "archivePath": "EuroSAT_RGB/HerbaceousVegetation/HerbaceousVegetation_1.jpg",
+      "originalWidth": 64,
+      "originalHeight": 64,
+      "originalSha256": "63cfd7b2e495cab62bf49c0df2e192f885c57128d96f748e20dfdb6d55f03c0f",
+      "embeddedSha256": "63cfd7b2e495cab62bf49c0df2e192f885c57128d96f748e20dfdb6d55f03c0f"
+    },
+    {
+      "id": "Highway-1",
+      "archivePath": "EuroSAT_RGB/Highway/Highway_1.jpg",
+      "originalWidth": 64,
+      "originalHeight": 64,
+      "originalSha256": "80e6a21cb1ca9b3fc16c330db58911a4deb92321f9d04909b3490b800f027aec",
+      "embeddedSha256": "80e6a21cb1ca9b3fc16c330db58911a4deb92321f9d04909b3490b800f027aec"
+    },
+    {
+      "id": "Industrial-1",
+      "archivePath": "EuroSAT_RGB/Industrial/Industrial_1.jpg",
+      "originalWidth": 64,
+      "originalHeight": 64,
+      "originalSha256": "5fc481b33a8a5b7482571ec542311d0113c07e337bbe00fc138d545a9fcde2e3",
+      "embeddedSha256": "5fc481b33a8a5b7482571ec542311d0113c07e337bbe00fc138d545a9fcde2e3"
+    },
+    {
+      "id": "Pasture-1",
+      "archivePath": "EuroSAT_RGB/Pasture/Pasture_1.jpg",
+      "originalWidth": 64,
+      "originalHeight": 64,
+      "originalSha256": "cecc4e41d8eaa205e7d710b5d06252bb2cf95514b2d812389eb6d30b16cc4efb",
+      "embeddedSha256": "cecc4e41d8eaa205e7d710b5d06252bb2cf95514b2d812389eb6d30b16cc4efb"
+    },
+    {
+      "id": "PermanentCrop-1",
+      "archivePath": "EuroSAT_RGB/PermanentCrop/PermanentCrop_1.jpg",
+      "originalWidth": 64,
+      "originalHeight": 64,
+      "originalSha256": "50a4aa7b9ec5d7415f620f2d472140e2613fcf1abf4c1bb9bebb11e8db208ddd",
+      "embeddedSha256": "50a4aa7b9ec5d7415f620f2d472140e2613fcf1abf4c1bb9bebb11e8db208ddd"
+    },
+    {
+      "id": "Residential-1",
+      "archivePath": "EuroSAT_RGB/Residential/Residential_1.jpg",
+      "originalWidth": 64,
+      "originalHeight": 64,
+      "originalSha256": "9133c4b97bcc5b65d8c80ef1ca4c968514850c65dee3c22a2148f53193c331cf",
+      "embeddedSha256": "9133c4b97bcc5b65d8c80ef1ca4c968514850c65dee3c22a2148f53193c331cf"
+    },
+    {
+      "id": "River-1",
+      "archivePath": "EuroSAT_RGB/River/River_1.jpg",
+      "originalWidth": 64,
+      "originalHeight": 64,
+      "originalSha256": "c7b130aa0aad3cc5120db0874e1b21395c9adebfbc9cf7adc6753577b150b06f",
+      "embeddedSha256": "c7b130aa0aad3cc5120db0874e1b21395c9adebfbc9cf7adc6753577b150b06f"
+    },
+    {
+      "id": "SeaLake-1",
+      "archivePath": "EuroSAT_RGB/SeaLake/SeaLake_1.jpg",
+      "originalWidth": 64,
+      "originalHeight": 64,
+      "originalSha256": "51e6ad247d5032b82c8bf7024fd9400e89e9c7ed6c867c3c5abc45e46230e160",
+      "embeddedSha256": "51e6ad247d5032b82c8bf7024fd9400e89e9c7ed6c867c3c5abc45e46230e160"
+    }
+  ]
+}

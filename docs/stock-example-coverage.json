@@ -64,6 +64,32 @@
         "returns-desk/stock-v1/6741f560b9b6f205852442435b6252caac270fd58220faa92e0b0af1f0839c12"
       ]
     },
+    "crack-check": {
+      "positive-00001": [
+        "crack-check/stock-v1/d66447005c7568ca8c5cb0526adb8a4ddbb65b8e8b81234772d1ce4e756e8c32"
+      ],
+      "positive-00010": [
+        "crack-check/stock-v1/54d178b836e5a58bb4c4d852ac46b4261b45aa604613f60b798fab46c630aaff"
+      ],
+      "positive-00100": [
+        "crack-check/stock-v1/4c0c2bbab50061a58efab8cc08277121dfed76834138d095ffe135966a868e37"
+      ],
+      "positive-01000": [
+        "crack-check/stock-v1/18356f9ac9b008ba046dc88e2bb3523e72153480919ab5828b7d92e3510bebf6"
+      ],
+      "negative-00001": [
+        "crack-check/stock-v1/067e20fefad7b60abd60e629d85a53e4855a321a19f6323acae973782ce87fa3"
+      ],
+      "negative-00010": [
+        "crack-check/stock-v1/2c731d798f471c6ae5f299a327a5b5e9f48cbc897d1e4d0d85f7b9a9e7141afe"
+      ],
+      "negative-00100": [
+        "crack-check/stock-v1/f258d4332e3f0724c728620c0a34d8cb8b9e00f9c887ef454247f96f976f2e16"
+      ],
+      "negative-01000": [
+        "crack-check/stock-v1/83415887f7383fb0e064935c6f5b032b7d4771cca0637024b36f421bddc0de6c"
+      ]
+    },
     "hot-dog": {
       "hotdog-classic": [
         "hot-dog/stock-v1/caa7fdcb4198de96e18f10b848644585d09fa22cbcbf04fc65c1739c3a90b1d3"
@@ -110,7 +136,7 @@
     },
     "receipt-reader": {
       "bakery-receipt": [
-        "receipt-reader/stock-v1/a6d893907ed1208f1dc31684dd918cd2cfe8f21b1ceba5be1d74c7722238ff51"
+        "receipt-reader/stock-v1/af865718fabd7523c6c321c0e33c0b96854dd70fc083ee85e747968a6ca0011b"
       ]
     },
     "instant-search": {
@@ -494,6 +520,67 @@
         "turbo-rerank/stock-v1/d92413b7b07852f5f905066f440d2ba46e41718bdbb98c292c59122a456baf08"
       ]
     },
+    "land-cover": {
+      "AnnualCrop-1": [
+        "land-cover/stock-v1/891a2a142a7952a631f1f3b5dbcb72e315a5582dd090bbbdfe254b35d779ce34"
+      ],
+      "Forest-1": [
+        "land-cover/stock-v1/d56085c026c5cc84992816b1ef8f6f13a8a52fe368df65c9f8cf03eeb3dcae7d"
+      ],
+      "HerbaceousVegetation-1": [
+        "land-cover/stock-v1/b31b204c81705d7b37297cee73fcd77e98de856fc5bb4a7c3d5b160b41daf773"
+      ],
+      "Highway-1": [
+        "land-cover/stock-v1/8f9ad77dee75fc4810d42072a46d2291f57c82ad64226cd388f514dab41841ae"
+      ],
+      "Industrial-1": [
+        "land-cover/stock-v1/702186ba7131470032a24ae8fc727ff05d4f8a1d48c393aeb4f925db847ca5ea"
+      ],
+      "Pasture-1": [
+        "land-cover/stock-v1/f9614b6d4d2da547c82e2431f5532ce8cfaa235400d87899af8c5c4db6821a89"
+      ],
+      "PermanentCrop-1": [
+        "land-cover/stock-v1/83c2aa3ff07ae76426495ad81dcfd199a04a485858dc03729643293c82356e03"
+      ],
+      "Residential-1": [
+        "land-cover/stock-v1/03500421fa8743cc6f039e6a8c1bd6307bfc916009043b489745b24e8bf501c7"
+      ],
+      "River-1": [
+        "land-cover/stock-v1/ebfcd8d185bd21cfa09203b57bee0477b1037309b21963d93ac3c6705be81e16"
+      ],
+      "SeaLake-1": [
+        "land-cover/stock-v1/cf452ba1efc48b84d15e0ddd3f9474a90b23a12acf96e3c28be3cb6a37aacab5"
+      ]
+    },
+    "leaf-check": {
+      "healthy-test-0": [
+        "leaf-check/stock-v1/fc400617cdbdde761f6649e764a913c42d3bc824cc15591f3adc3ec2718368be"
+      ],
+      "healthy-test-1": [
+        "leaf-check/stock-v1/7104c280c316c89c73ff2a1c8c8cb6f14126d7e6570000324fd851322ae4098c"
+      ],
+      "healthy-test-2": [
+        "leaf-check/stock-v1/0d0edb17fbce2cf424c6b3183bc675a28aa00392c3c2164258658d063214f146"
+      ],
+      "angular-leaf-spot-test-0": [
+        "leaf-check/stock-v1/4a7643ea1afaf596208829ab24a39c6283e53af2ab42994a6f7f89ca9620f2b5"
+      ],
+      "angular-leaf-spot-test-1": [
+        "leaf-check/stock-v1/aa4b5381734fffc9e9edcc1cfa8a1f2b1ddaf038e939e97cc64568b3574919f5"
+      ],
+      "angular-leaf-spot-test-2": [
+        "leaf-check/stock-v1/288319cc0d5cb8b81999418af70ba2aa64e833b45e1b5ff79ec1a44909031857"
+      ],
+      "bean-rust-test-0": [
+        "leaf-check/stock-v1/8049705c9cf4ae430f4bd2df9b667e9712b973f9db6839b0eea327ff7245afad"
+      ],
+      "bean-rust-test-1": [
+        "leaf-check/stock-v1/e4d63b591d6ed2f6b31ae533e229b87ec47375d83c02d000f458d58d2de5f6b6"
+      ],
+      "bean-rust-test-2": [
+        "leaf-check/stock-v1/4ef2a91d59a522a75ca8ecfedc3cea2beec0f5a9b60a806e5e9cdfdcb38467c4"
+      ]
+    },
     "ax-pilot": {
       "sim-calculator": [
         "ax-pilot/stock-v1/7b9197c3a994d06d055a2c9f6b985494b864a1fd6902a31dab63630570961055",
@@ -546,6 +633,52 @@
       "recorded-notes": [
         "ax-pilot/stock-v1/992d14ef0ce5281fe175c9b4de9056a86f5837991bae152220cdc80a55db7233",
         "ax-pilot/stock-v1/d27f80c36fee0b5749b32c85295488c023c70d33068447153b9cf010d3977d02"
+      ]
+    },
+    "produce-check": {
+      "fresh-bitter-gourd": [
+        "produce-check/stock-v1/bc378fe9176165835c5e60d2fa20816b1d894505c87cce254d3fee41ea0c4046"
+      ],
+      "stale-bitter-gourd": [
+        "produce-check/stock-v1/f3f1f42794d4b8d8c75324c24d1b0a7a6d1a81c7b8b0d0a70005c822d924255c"
+      ],
+      "fresh-capsicum": [
+        "produce-check/stock-v1/d47a1e81479c5027ae47e52ffe12cb779b9422b4858374582e90be094f12aeb1"
+      ],
+      "stale-capsicum": [
+        "produce-check/stock-v1/f47a1847fdc8b79efc9c626ca14a89f51712c29b7bf2600a47fe52754ec01fcf"
+      ],
+      "fresh-tomato": [
+        "produce-check/stock-v1/a8cfb7e25336ba32374852a39abbd80e9f74379ade702df61ebc5428a6382eac"
+      ],
+      "stale-tomato": [
+        "produce-check/stock-v1/be08b405a66eb077cc4ba5eea51904c83b15c9903fb234c870b47a56092e8ddb"
+      ]
+    },
+    "roast-check": {
+      "green-1": [
+        "roast-check/stock-v1/e1a5dacb17adee58e1cae66dc24a7f44809935f26df6bcf345f63d3035229ec6"
+      ],
+      "green-50": [
+        "roast-check/stock-v1/155f1bfd0a32414cdb7a5454f9a4017a239ae11a36de9f9a373797d36b1706c7"
+      ],
+      "light-1": [
+        "roast-check/stock-v1/dec171ea267e706bcaf0926241c62287072eabce0e65eaf1734316cd419f4dd3"
+      ],
+      "light-50": [
+        "roast-check/stock-v1/946981ceb2abe2d7d0d8edbcce6cef9e4976c18dc1cfa366101942618184e27c"
+      ],
+      "medium-1": [
+        "roast-check/stock-v1/ad9a378f41854e77711230e48c381d1559b735c0a0fe7332664cfc91811df3b3"
+      ],
+      "medium-50": [
+        "roast-check/stock-v1/7f6497371e53721ba52c28911b166d52ea4dc598588b42385fcd1623fac4be95"
+      ],
+      "dark-1": [
+        "roast-check/stock-v1/d8c72a55ab82e7a09ff9897c237cacc70fa8f45fdecd86597907169c6dfd4fc9"
+      ],
+      "dark-50": [
+        "roast-check/stock-v1/f378e53da22d14ffc6dec4e393419d693bd688f907b1283a039fda7776fb24fc"
       ]
     },
     "agent-assist": {
@@ -4389,6 +4522,44 @@
       ],
       "leads-spam-5": [
         "judge-sheets/stock-v1/b1376c08f1dfa98d437c3126e4fce57f81d398c268f4b2f914e2fed7d932ee2f"
+      ]
+    },
+    "waste-sorter": {
+      "glass-1": [
+        "waste-sorter/stock-v1/87033609b5f4c29ffc43bc23c5284ddd98957b20e5e77eb2e0bfed35fe3ebe85"
+      ],
+      "glass-2": [
+        "waste-sorter/stock-v1/6704a30efc5ca75cee71bff0de5c7b101ba0379f9711ba677df247355560d96d"
+      ],
+      "paper-1": [
+        "waste-sorter/stock-v1/9e58bb624422de3b9dcc3d55af5bdcafb18c2b3c661b50597adfa07fb0593e86"
+      ],
+      "paper-2": [
+        "waste-sorter/stock-v1/73e614a1c9b8f00ed5a1ccf8c029035ee37b1f3b240e852086f0f45011f887e0"
+      ],
+      "cardboard-1": [
+        "waste-sorter/stock-v1/e27f4eedd5bafea9a2b8d9a0120d7347f482d4d67b17de8535e14d22533bf748"
+      ],
+      "cardboard-2": [
+        "waste-sorter/stock-v1/84d457c953dadd904586ff78248198ca95725fbcbc802040aba86d28d84f6b23"
+      ],
+      "plastic-1": [
+        "waste-sorter/stock-v1/c82b93c7f032a194b029c3566bf1bcc796fa65cf91644299795f94768a19be24"
+      ],
+      "plastic-2": [
+        "waste-sorter/stock-v1/b4174cd694cc5eccced7b2f9603cf938a7dfe589c80bbaea24a2ab2e72ab3121"
+      ],
+      "metal-1": [
+        "waste-sorter/stock-v1/3e86c1a12c43b90054ac2c708075c5286e9057606c97b06bdb1343b5b2196302"
+      ],
+      "metal-2": [
+        "waste-sorter/stock-v1/57649aa0551de7f74546fe727c6f11ef03215e5602756f9c3e8f0b57c95a665a"
+      ],
+      "trash-1": [
+        "waste-sorter/stock-v1/9e8bacd273e0801291ab491c22f6541f781a645a0e7f318a85917c683929000b"
+      ],
+      "trash-2": [
+        "waste-sorter/stock-v1/9e5a0efad3ce9e82a5a5308aac69923a744cca049f858ca7e19628131cd6ca13"
       ]
     }
   }

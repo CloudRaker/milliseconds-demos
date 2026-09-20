@@ -5,12 +5,7 @@ export interface Row { path: string; label: string; value: string }
 export const FIELDS = [
   { key: 'merchant', label: 'Merchant', type: 'string', description: 'business name printed at the top of the receipt' },
   { key: 'date', label: 'Date', type: 'string', description: 'date of purchase as printed' },
-  { key: 'receipt_number', label: 'Receipt number', type: 'string', description: 'receipt or transaction number' },
-  { key: 'subtotal', label: 'Subtotal', type: 'number', description: 'subtotal before tax' },
-  { key: 'tax', label: 'Tax', type: 'number', description: 'tax amount charged' },
   { key: 'total', label: 'Total', type: 'number', description: 'final total amount paid' },
-  { key: 'currency', label: 'Currency', type: 'string', description: 'three letter currency code, empty when not printed' },
-  { key: 'card_last4', label: 'Card last 4', type: 'string', description: 'last four digits of the payment card' },
 ] as const;
 
 export const schema = {
@@ -57,4 +52,3 @@ export function parseReceipt(raw: unknown): { rows: Row[]; data: Record<string, 
   });
   return { rows, data };
 }
-

@@ -1,0 +1,82 @@
+[
+  {
+    "id": "green-1",
+    "originalFilename": "test/Green/green (1).png",
+    "datasetVersion": 1,
+    "downloadUrl": "https://www.kaggle.com/api/v1/datasets/download/gpiosenka/coffee-bean-dataset-resized-224-x-224/test%2FGreen%2Fgreen%20%281%29.png?datasetVersionNumber=1",
+    "originalSha256": "8e91a48acad6842a4485fd90fc9672e497b36e6cd5bec3fdda7f19fcf5a15ab0",
+    "sampleSha256": "2a2fe10c19633e5ccb946bc6139f765dc0c094d3c77e3b4a875c008c7b354bba",
+    "sourceLabel": "test/Green",
+    "transformation": "RGB conversion; longest edge at most 512 px; JPEG quality 80."
+  },
+  {
+    "id": "green-50",
+    "originalFilename": "test/Green/green (50).png",
+    "datasetVersion": 1,
+    "downloadUrl": "https://www.kaggle.com/api/v1/datasets/download/gpiosenka/coffee-bean-dataset-resized-224-x-224/test%2FGreen%2Fgreen%20%2850%29.png?datasetVersionNumber=1",
+    "originalSha256": "eedc6325fec445e53307bb95a1cc7937408272a820063bf2cd9feec0aeedb75b",
+    "sampleSha256": "130e192a73d88929398b76e6792047e613be1e9ccdae71dace3e3a8da024e6a3",
+    "sourceLabel": "test/Green",
+    "transformation": "RGB conversion; longest edge at most 512 px; JPEG quality 80."
+  },
+  {
+    "id": "light-1",
+    "originalFilename": "test/Light/light (1).png",
+    "datasetVersion": 1,
+    "downloadUrl": "https://www.kaggle.com/api/v1/datasets/download/gpiosenka/coffee-bean-dataset-resized-224-x-224/test%2FLight%2Flight%20%281%29.png?datasetVersionNumber=1",
+    "originalSha256": "d2ad3257d400d04e55f36a1bbf429ddf90b2acf245dc1f5f98b6c6f27394a787",
+    "sampleSha256": "4602490928b5909c8c3256f559f08ea511f68a9b59fc08e081fbd9e1d67d28bf",
+    "sourceLabel": "test/Light",
+    "transformation": "RGB conversion; longest edge at most 512 px; JPEG quality 80."
+  },
+  {
+    "id": "light-50",
+    "originalFilename": "test/Light/light (50).png",
+    "datasetVersion": 1,
+    "downloadUrl": "https://www.kaggle.com/api/v1/datasets/download/gpiosenka/coffee-bean-dataset-resized-224-x-224/test%2FLight%2Flight%20%2850%29.png?datasetVersionNumber=1",
+    "originalSha256": "f9fd0cd1225454d12379ba543fb154b59bd6e78fbd4847ed4f5c58b1f2daba6c",
+    "sampleSha256": "21ccb9986f2061da667b6aeb1396f5a34fc8393146369048b540107a210d9bf3",
+    "sourceLabel": "test/Light",
+    "transformation": "RGB conversion; longest edge at most 512 px; JPEG quality 80."
+  },
+  {
+    "id": "medium-1",
+    "originalFilename": "test/Medium/medium (1).png",
+    "datasetVersion": 1,
+    "downloadUrl": "https://www.kaggle.com/api/v1/datasets/download/gpiosenka/coffee-bean-dataset-resized-224-x-224/test%2FMedium%2Fmedium%20%281%29.png?datasetVersionNumber=1",
+    "originalSha256": "b074fbe3df40ce04026cc7bc6f68304eced0599db0aeeb5f967b8f7a1498b111",
+    "sampleSha256": "b5a3fc1154275a4493b733eea256fe6b398cf4ac3133cc69f6614cfb83054990",
+    "sourceLabel": "test/Medium",
+    "transformation": "RGB conversion; longest edge at most 512 px; JPEG quality 80."
+  },
+  {
+    "id": "medium-50",
+    "originalFilename": "test/Medium/medium (50).png",
+    "datasetVersion": 1,
+    "downloadUrl": "https://www.kaggle.com/api/v1/datasets/download/gpiosenka/coffee-bean-dataset-resized-224-x-224/test%2FMedium%2Fmedium%20%2850%29.png?datasetVersionNumber=1",
+    "originalSha256": "92b1d54743367a461c0525c985471b580f1a5fc34b612ca50ce43b426b931908",
+    "sampleSha256": "7d6e295df38501040f74b8ce89e71da197b14e583b228157edd8ecfc28ca65c7",
+    "sourceLabel": "test/Medium",
+    "transformation": "RGB conversion; longest edge at most 512 px; JPEG quality 80."
+  },
+  {
+    "id": "dark-1",
+    "originalFilename": "test/Dark/dark (1).png",
+    "datasetVersion": 1,
+    "downloadUrl": "https://www.kaggle.com/api/v1/datasets/download/gpiosenka/coffee-bean-dataset-resized-224-x-224/test%2FDark%2Fdark%20%281%29.png?datasetVersionNumber=1",
+    "originalSha256": "ce019807df78f9d26003b520678faf556b5f1c76f9c0ce84e8cc11518fe4ccd6",
+    "sampleSha256": "c2351dbe61fabcec4720a04debe0f27bb43ae8dc3787a7f7f361539ff7d96ea8",
+    "sourceLabel": "test/Dark",
+    "transformation": "RGB conversion; longest edge at most 512 px; JPEG quality 80."
+  },
+  {
+    "id": "dark-50",
+    "originalFilename": "test/Dark/dark (50).png",
+    "datasetVersion": 1,
+    "downloadUrl": "https://www.kaggle.com/api/v1/datasets/download/gpiosenka/coffee-bean-dataset-resized-224-x-224/test%2FDark%2Fdark%20%2850%29.png?datasetVersionNumber=1",
+    "originalSha256": "b8049ba4e0dc7a019eada5327f10c859f0615997e26a9f1ffbed47d2abc8f68b",
+    "sampleSha256": "db407dfc8c93c824159e8328694cd92c9da14095d51b65ef508c5b36a3af3c53",
+    "sourceLabel": "test/Dark",
+    "transformation": "RGB conversion; longest edge at most 512 px; JPEG quality 80."
+  }
+]

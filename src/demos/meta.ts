@@ -8,6 +8,8 @@ export interface DemoMeta {
   instruction: string;
   /** Which API routes the demo calls, e.g. ["yes-no", "classify"]. */
   routes: string[];
+  /** The input used by the demo; omitted for existing text workflows. */
+  modality?: 'text' | 'image';
   /** Source repository folder name, for the attribution link. */
   origin?: string;
   category?: "Documents & operations" | "Sales & commerce" | "Customer experience" | "Developer & interactive";

@@ -1,7 +1,7 @@
 import { attemptFinished, attemptStarted, metricHeader, requestFinished, requestStarted, type DemoSource } from "./telemetry.ts";
 import { stockRequestId } from './stock-client.ts';
 
-// Stock requests resolve to immutable public IDs. Custom requests use the visitor's own key.
+// Stock requests use public IDs unless the visitor opts into live requests with their own key.
 // The sponsor credential exists only on the Worker. One page-wide queue keeps a page under the free plan's
 // 200 requests/minute: at most CONCURRENCY calls in flight and RATE calls per second. Batch with
 // `texts` (up to 32) or `statements` (up to 32) instead of firing per item.
@@ -38,6 +38,23 @@ export const CONCURRENCY = 4;
 /** Manually pasted keys persist; console-sourced test keys stay in this page only. */
 export const KEY_STORAGE = "ms.apiKey";
 export const KEY_EVENT = "ms:apikey";
+export const LIVE_MODE_EVENT = "ms:live-mode";
+const LIVE_MODE_STORAGE = "ms.forceLive";
+let pageLiveMode: boolean | undefined;
+export function getForceLive(): boolean {
+  if (pageLiveMode !== undefined) return pageLiveMode;
+  try { return sessionStorage.getItem(LIVE_MODE_STORAGE) === 'true'; } catch { return false; }
+}
+export function setForceLive(enabled: boolean) {
+  pageLiveMode = enabled;
+  try { sessionStorage.setItem(LIVE_MODE_STORAGE, String(enabled)); } catch { /* Keep the choice on this page. */ }
+  window.dispatchEvent(new Event(LIVE_MODE_EVENT));
+}
+export function subscribeLiveMode(listener: () => void) {
+  window.addEventListener(LIVE_MODE_EVENT, listener);
+  return () => window.removeEventListener(LIVE_MODE_EVENT, listener);
+}
+export const getServerForceLive = () => false;
 export const KEY_SHAPE = /^(?:sk-ms|test_sk|prod_sk)-[A-Za-z0-9_-]{20,}$/;
 const TEST_KEY_SHAPE = /^test_sk-[A-Za-z0-9_-]{20,}$/;
 let pageKey: string | null = null;
@@ -167,7 +184,8 @@ function setBackingOff(delta: number) {
 /** POST one call through the proxy. Retries 429 with backoff (3 tries), throws Dm1Error otherwise. */
 export async function dm1<T = unknown>(route: Route, body: Record<string, unknown>, signal?: AbortSignal): Promise<Result<T>> {
   signal?.throwIfAborted();
-  const exampleId = await stockRequestId(route, body);
+  const forceLive = getForceLive();
+  const exampleId = forceLive ? null : await stockRequestId(route, body);
   signal?.throwIfAborted();
   if (!exampleId) await initializeConsoleKey().catch(() => null);
   signal?.throwIfAborted();
@@ -175,7 +193,9 @@ export async function dm1<T = unknown>(route: Route, body: Record<string, unknow
   const requestKeyRevision = keyRevision;
   if (!exampleId && !key) {
     if (typeof document !== 'undefined') openKeyPanel();
-    throw new Dm1Error(401, "no_key", "Use your API key for this input, or restore a supplied example to run for free. Your edits have been kept.");
+    throw new Dm1Error(401, "no_key", forceLive
+      ? "Live mode needs your API key, including for supplied samples. Add a key or turn off live mode to use the free examples."
+      : "Use your API key for this input, or restore a supplied example to run for free. Your edits have been kept.");
   }
   const defaultSource: DemoSource = exampleId ? 'example-unknown' : 'personal-live';
   let source: DemoSource = defaultSource;

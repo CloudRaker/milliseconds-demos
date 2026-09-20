@@ -1,0 +1,50 @@
+[
+  {
+    "id": "positive-00001",
+    "originalPath": "Positive/00001.jpg",
+    "sha256": "62681cdec3bfcee1210103e1fda8f543d4e92212e202405eb56d9d31507107ee",
+    "bytes": 5217
+  },
+  {
+    "id": "positive-00010",
+    "originalPath": "Positive/00010.jpg",
+    "sha256": "1643632595a0ef0fb66ae8e05858ba48050fbd9498147809464163840aaf85c0",
+    "bytes": 5647
+  },
+  {
+    "id": "positive-00100",
+    "originalPath": "Positive/00100.jpg",
+    "sha256": "86e58531d3fbac7486f853c381b55531663b4d7f013fb3546dbbc767cc7be4b2",
+    "bytes": 6533
+  },
+  {
+    "id": "positive-01000",
+    "originalPath": "Positive/01000.jpg",
+    "sha256": "9810e66463648fc317c9103b798d4a4b55364acf6bf0e7aabe47fa663b9a6534",
+    "bytes": 8295
+  },
+  {
+    "id": "negative-00001",
+    "originalPath": "Negative/00001.jpg",
+    "sha256": "3b011359bc0554a62c585fa50e5d9017316a1db3a6a85fbd72d7274e96c21a1d",
+    "bytes": 5725
+  },
+  {
+    "id": "negative-00010",
+    "originalPath": "Negative/00010.jpg",
+    "sha256": "0f6868d16a463544ce99753937ddcf060980c38e5b83653e491391abf8393e90",
+    "bytes": 5878
+  },
+  {
+    "id": "negative-00100",
+    "originalPath": "Negative/00100.jpg",
+    "sha256": "2271f78963db256126ce509cfa1608157c78e214b6f23054d2ece8af234936c9",
+    "bytes": 5385
+  },
+  {
+    "id": "negative-01000",
+    "originalPath": "Negative/01000.jpg",
+    "sha256": "afc0aa7b0f8e6206c0e2479245f3bee20e809533109995f6975427446ea80bed",
+    "bytes": 4668
+  }
+]

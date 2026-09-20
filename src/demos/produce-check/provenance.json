@@ -1,0 +1,62 @@
+[
+  {
+    "id": "fresh-bitter-gourd",
+    "originalFilename": "fresh_bitter_gourd/IMG_20200822_223831.jpg_0_1039.jpg",
+    "datasetVersion": 1,
+    "downloadUrl": "https://www.kaggle.com/api/v1/datasets/download/raghavrpotdar/fresh-and-stale-images-of-fruits-and-vegetables/fresh_bitter_gourd%2FIMG_20200822_223831.jpg_0_1039.jpg?datasetVersionNumber=1",
+    "originalSha256": "c67ff10a2607e765eb8c0b3ef0189c3d5a978d9da4d5f05bd68848d669a447e2",
+    "sampleSha256": "08e08f8ed78e0eb7227d33a420cf897551bdc63b45ff0ff883169c95459cad39",
+    "sourceLabel": "fresh_bitter_gourd",
+    "transformation": "RGB conversion; longest edge at most 512 px; JPEG quality 80."
+  },
+  {
+    "id": "stale-bitter-gourd",
+    "originalFilename": "stale_bitter_gourd/IMG_20200824_182208.jpg_0_2930.jpg",
+    "datasetVersion": 1,
+    "downloadUrl": "https://www.kaggle.com/api/v1/datasets/download/raghavrpotdar/fresh-and-stale-images-of-fruits-and-vegetables/stale_bitter_gourd%2FIMG_20200824_182208.jpg_0_2930.jpg?datasetVersionNumber=1",
+    "originalSha256": "0608013236171b05f1d9d7fa933f68e246ec9fc37546c00a880f191ddf9a35da",
+    "sampleSha256": "ba3da5c7b93ad80efbda281fc85f22288651a3a65146a9595a872b7c27c4f7d7",
+    "sourceLabel": "stale_bitter_gourd",
+    "transformation": "RGB conversion; longest edge at most 512 px; JPEG quality 80."
+  },
+  {
+    "id": "fresh-capsicum",
+    "originalFilename": "fresh_capsicum/Day1A.jpg_0_1118.jpg",
+    "datasetVersion": 1,
+    "downloadUrl": "https://www.kaggle.com/api/v1/datasets/download/raghavrpotdar/fresh-and-stale-images-of-fruits-and-vegetables/fresh_capsicum%2FDay1A.jpg_0_1118.jpg?datasetVersionNumber=1",
+    "originalSha256": "a54f4f5b5cb19be2d9df410dd3f6245d3290015bf0a399411f01487bb85e644c",
+    "sampleSha256": "d6a2ea863867568fcfbc93870b41b779c4a0eeb1d859c23c6250074ad9dffdb7",
+    "sourceLabel": "fresh_capsicum",
+    "transformation": "RGB conversion; longest edge at most 512 px; JPEG quality 80."
+  },
+  {
+    "id": "stale-capsicum",
+    "originalFilename": "stale_capsicum/IMG_20200901_181735.jpg_0_1126.jpg",
+    "datasetVersion": 1,
+    "downloadUrl": "https://www.kaggle.com/api/v1/datasets/download/raghavrpotdar/fresh-and-stale-images-of-fruits-and-vegetables/stale_capsicum%2FIMG_20200901_181735.jpg_0_1126.jpg?datasetVersionNumber=1",
+    "originalSha256": "33c0ce9b3a3cd5d8aabb6934749658b84529c57cdd80cf8d60265c0c2d64f227",
+    "sampleSha256": "1719c305ab6a7426a4def8356a111954061d4f1b32a54d45f3251f4e1679459b",
+    "sourceLabel": "stale_capsicum",
+    "transformation": "RGB conversion; longest edge at most 512 px; JPEG quality 80."
+  },
+  {
+    "id": "fresh-tomato",
+    "originalFilename": "fresh_tomato/DSCN4068.jpg_0_112.jpg",
+    "datasetVersion": 1,
+    "downloadUrl": "https://www.kaggle.com/api/v1/datasets/download/raghavrpotdar/fresh-and-stale-images-of-fruits-and-vegetables/fresh_tomato%2FDSCN4068.jpg_0_112.jpg?datasetVersionNumber=1",
+    "originalSha256": "323af77dbd68c2dd9b6eb49841d4e0161c22f0cd2d10ae4a78e4f6c4f4c4800d",
+    "sampleSha256": "161f2e3cf644c932fe5c53540d7697ee62d4e83a913d230611b54a7ddd4923d7",
+    "sourceLabel": "fresh_tomato",
+    "transformation": "RGB conversion; longest edge at most 512 px; JPEG quality 80."
+  },
+  {
+    "id": "stale-tomato",
+    "originalFilename": "stale_tomato/Copy of IMG_20200727_223202.jpg_0_1614.jpg",
+    "datasetVersion": 1,
+    "downloadUrl": "https://www.kaggle.com/api/v1/datasets/download/raghavrpotdar/fresh-and-stale-images-of-fruits-and-vegetables/stale_tomato%2FCopy%20of%20IMG_20200727_223202.jpg_0_1614.jpg?datasetVersionNumber=1",
+    "originalSha256": "d6771eaf7728f2a89757f42e8f77a0e4b6284bf0e76d96e7910191b29f0576b6",
+    "sampleSha256": "8b6a54b7b584cfc03fa28e7e7c8f81acd7ccdabbcff99f71efeea479262c489b",
+    "sourceLabel": "stale_tomato",
+    "transformation": "RGB conversion; longest edge at most 512 px; JPEG quality 80."
+  }
+]

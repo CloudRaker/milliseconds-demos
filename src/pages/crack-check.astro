@@ -1,0 +1,18 @@
+---
+import Demo from '../layouts/Demo.astro';
+import ImageClassifier from '../components/ImageClassifier';
+import meta from '../demos/crack-check/meta';
+import { config } from '../demos/crack-check/config';
+---
+<Demo meta={meta}>
+  <ImageClassifier config={config} client:only="react" />
+  <div slot="notes">
+    <h2>A first pass through inspection photos</h2>
+    <p>A maintenance team can use a visual classifier to prioritize photos for inspection. The request sends one concrete crop to <code>/classify</code> with two described labels: visible crack or no visible crack.</p>
+    <h3>Surface screening has a boundary</h3>
+    <p>The dataset contains small surface crops. It cannot establish structural condition, crack depth, cause or severity. A negative result does not establish safety, and an inspector must make maintenance decisions. Pits, stains and shadows can also confuse a visual classifier.</p>
+    <h3>Published inspection data</h3>
+    <p>The eight unchanged sample JPEGs are from <a href={config.dataset.url}>Concrete Crack Images for Classification, version 2</a> by Çağlar Fırat Özgenel, licensed <a href={config.dataset.licenseUrl}>CC BY 4.0</a>. Positive source folders map to “crack”; Negative folders map to “no_crack”.</p>
+    <p>Dataset citation: Özgenel, Ç. F. (2019), <em>Concrete Crack Images for Classification</em>, Mendeley Data, V2, DOI: <a href="https://doi.org/10.17632/5y9wdsg2zt.2">10.17632/5y9wdsg2zt.2</a>. Related study: Özgenel and Gönenç Sorguç (2018), <em>Performance Comparison of Pretrained Convolutional Neural Networks on Crack Detection in Buildings</em>, ISARC 2018.</p>
+  </div>
+</Demo>

@@ -19,7 +19,7 @@ for (const [value, code] of [
   [`data:image/jpeg;base64,${'A'.repeat(4 * Math.ceil((MAX_IMAGE_BYTES + 1024) / 3))}`, 'image_too_large'],
 ]) assert.equal(imageProblem(value), code, String(value).slice(0, 40));
 
-// Provisional generative multiplier: extract bills five times the tier.
+// Generative image extraction bills twice the tier.
 assert.deepEqual(['low', 'medium', 'high'].map(detail => imageTokens('extract', detail)), [2000, 4000, 8000]);
 assert.equal(imageTokens('classify', 'medium'), 2000);
 
@@ -31,10 +31,16 @@ assert.equal(request.schema.properties.items.type, 'array');
 // The public extract request has no free-text instructions field; the schema carries the guidance.
 assert.deepEqual(Object.keys(request).sort(), ['detail', 'image', 'schema']);
 assert.match(request.schema.description, /exactly as printed/);
+// The API counts nested leaves, including each property of an array item once.
+const fieldCount = schema => schema.type === 'object'
+  ? Object.values(schema.properties).reduce((n, child) => n + fieldCount(child), 0)
+  : schema.type === 'array' && schema.items.type === 'object' ? fieldCount(schema.items) : 1;
+assert.equal(fieldCount(request.schema), 5, 'image extraction allows at most five fields');
+assert.deepEqual(FIELDS.map(field => field.key), ['merchant', 'date', 'total']);
 
 // Every schema field becomes a row, and line items expand into a name and a price each.
 const parsed = parseReceipt({
-  data: { merchant: 'Harbor Lane Bakery', date: '2026-09-18', receipt_number: 'HLB-40218', subtotal: 23.85, tax: 1.91, total: 25.76, currency: 'USD', card_last4: '4417', items: [{ name: 'Flat white', price: 9 }, { name: 'Oat milk 1L', price: 3.1 }] },
+  data: { merchant: 'Harbor Lane Bakery', date: '2026-09-18', total: 25.76, items: [{ name: 'Flat white', price: 9 }, { name: 'Oat milk 1L', price: 3.1 }] },
 });
 assert.equal(parsed.rows.length, FIELDS.length + 4, 'every field plus a name and a price per line item');
 assert.deepEqual(parsed.rows.map(row => row.path).slice(-4), ['items[0].name', 'items[0].price', 'items[1].name', 'items[1].price']);
@@ -46,7 +52,7 @@ assert.deepEqual(Object.keys(parsed.rows[0]).sort(), ['label', 'path', 'value'],
 
 // Missing values render empty.
 const sparse = parseReceipt({ data: { merchant: 'Harbor Lane Bakery', total: null } });
-assert.equal(sparse.rows.find(row => row.path === 'tax').value, '');
+assert.equal(sparse.rows.find(row => row.path === 'date').value, '');
 assert.equal(sparse.rows.find(row => row.path === 'total').value, '');
 
 for (const bad of [null, 'text', [], {}, { data: [] }, { data: { merchant: { nested: true } } }, { data: { items: [{ name: ['a'] }] } }])
