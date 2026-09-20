@@ -6,7 +6,7 @@ const { chromium } = await import(process.env.PLAYWRIGHT_MODULE || 'playwright')
 const base = process.env.QA_BASE || 'http://127.0.0.1:4324';
 const output = process.env.QA_OUTPUT || '/tmp/ms-business-qa';
 await fs.mkdir(output, { recursive: true });
-const slugs = ['invoice-desk', 'receipt-boxes', 'sales-intake', 'catalog-studio', 'evidence-check', 'private-share', 'returns-desk'];
+const slugs = ['invoice-desk', 'receipt-reader', 'sales-intake', 'catalog-studio', 'evidence-check', 'private-share', 'returns-desk'];
 const browser = await chromium.launch();
 try {
   const page = await browser.newPage();

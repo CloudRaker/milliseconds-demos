@@ -10,17 +10,15 @@
 .rb-section-head h2 { font-size: 16px; margin: 0; }
 .rb-section-head > span { font-size: 12px; }
 .rb-workbench { display: grid; gap: 16px; grid-template-columns: minmax(240px, 380px) 1fr; align-items: start; }
-.rb-image { position: relative; line-height: 0; border-radius: 10px; overflow: hidden; background: #fbfaf7; }
+.rb-image { line-height: 0; border-radius: 10px; overflow: hidden; background: #fbfaf7; }
 .rb-image img { width: 100%; height: auto; display: block; }
-.rb-box { position: absolute; border: 2px solid var(--purple-on-dark); border-radius: 3px; background: color-mix(in srgb, var(--purple) 18%, transparent); }
-.rb-box.is-selected { border-color: var(--white); background: color-mix(in srgb, var(--purple) 42%, transparent); }
-.rb-rows { display: grid; gap: 4px; }
-.rb-row { display: grid; grid-template-columns: 1fr auto auto; gap: 12px; align-items: baseline; width: 100%; text-align: left; padding: 8px 10px; border: 1px solid transparent; border-radius: 8px; background: none; color: var(--white); font: 400 14px var(--sans); cursor: pointer; }
-.rb-row:hover, .rb-row[aria-pressed="true"] { border-color: var(--purple-on-dark); }
-.rb-row b { font-weight: 500; }
+.rb-rows { display: grid; gap: 2px; margin: 0; }
+.rb-row { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: baseline; padding: 8px 10px; border-radius: 8px; font-size: 14px; }
+.rb-row:nth-child(odd) { background: color-mix(in srgb, var(--purple) 10%, transparent); }
+.rb-row dt { font-weight: 500; }
+.rb-row dd { margin: 0; }
 .rb-row .rb-value { font-family: var(--mono); font-size: 13px; }
-.rb-row small { color: var(--muted); font-family: var(--mono); font-size: 11px; white-space: nowrap; }
 .rb-footnote { margin: 12px 0 0; font-size: 12px; color: var(--muted); }
 .rb-raw { margin-top: 14px; }
 .rb-raw pre { overflow: auto; max-height: 320px; font-size: 12px; }
-@media (max-width: 760px) { .rb-workbench { grid-template-columns: 1fr; } .rb-row small { display: none; } }
+@media (max-width: 760px) { .rb-workbench { grid-template-columns: 1fr; } }

@@ -1,8 +1,6 @@
 import type { Detail } from '../../lib/image.ts';
 
-export type Box = [number, number, number, number];
-export interface Size { width: number; height: number }
-export interface Row { path: string; label: string; value: string; box: Box | null }
+export interface Row { path: string; label: string; value: string }
 
 export const FIELDS = [
   { key: 'merchant', label: 'Merchant', type: 'string', description: 'business name printed at the top of the receipt' },
@@ -29,9 +27,8 @@ export const schema = {
   },
 };
 /**
- * One extract call over one image. `boxes` come back in the uploaded image's own pixels.
- * The public request carries no free-text instructions, so the wording that guides the model
- * lives in the schema's own `title` and field `description`s.
+ * One extract call over one image. The public request carries no free-text instructions, so the
+ * wording that guides the model lives in the schema's own `title` and field `description`s.
  */
 export const extractionRequest = (image: string, detail: Detail) => ({ image, detail, schema });
 
@@ -39,27 +36,16 @@ const number = (value: unknown) => typeof value === 'number' && Number.isFinite(
 const text = (value: unknown) => value === null || value === undefined || typeof value === 'string' || number(value);
 const show = (value: unknown) => (value === null || value === undefined ? '' : String(value));
 
-/** A box is usable only when it is four integers inside the image and not inverted. */
-export function parseBox(value: unknown, size: Size): Box | null {
-  if (!Array.isArray(value) || value.length !== 4 || !value.every(n => Number.isInteger(n))) return null;
-  const [x1, y1, x2, y2] = value as Box;
-  if (x2 <= x1 || y2 <= y1) return null;
-  if (x1 < 0 || y1 < 0 || x2 > size.width || y2 > size.height) return null;
-  return [x1, y1, x2, y2];
-}
-
-/** Flatten the extracted record into display rows, each carrying its box when the model returned one. */
-export function parseReceipt(raw: unknown, size: Size): { rows: Row[]; data: Record<string, unknown>; boxed: number } {
+/** Flatten the extracted record into display rows. */
+export function parseReceipt(raw: unknown): { rows: Row[]; data: Record<string, unknown> } {
   if (!raw || typeof raw !== 'object' || Array.isArray(raw)) throw new Error('The extraction did not return a receipt. Try again.');
-  const body = raw as { data?: unknown; boxes?: unknown };
+  const body = raw as { data?: unknown };
   if (!body.data || typeof body.data !== 'object' || Array.isArray(body.data)) throw new Error('The extraction did not return a receipt. Try again.');
   const data = body.data as Record<string, unknown>;
-  // `boxes` is optional: text extractions have none, and an image extraction may return an empty map.
-  const boxes = (body.boxes && typeof body.boxes === 'object' && !Array.isArray(body.boxes) ? body.boxes : {}) as Record<string, unknown>;
   const rows: Row[] = [];
   const add = (path: string, label: string, value: unknown) => {
     if (!text(value)) throw new Error(`Unexpected value for ${label}. Try again.`);
-    rows.push({ path, label, value: show(value), box: parseBox(boxes[path], size) });
+    rows.push({ path, label, value: show(value) });
   };
   for (const field of FIELDS) add(field.key, field.label, data[field.key]);
   const items = Array.isArray(data.items) ? data.items : [];
@@ -69,11 +55,6 @@ export function parseReceipt(raw: unknown, size: Size): { rows: Row[]; data: Rec
     add(`items[${index}].name`, `Item ${index + 1}`, line.name);
     add(`items[${index}].price`, `Item ${index + 1} price`, line.price);
   });
-  return { rows, data, boxed: rows.filter(row => row.box).length };
+  return { rows, data };
 }
 
-/** Box in image pixels to a percentage rectangle, so the overlay follows any rendered width. */
-export function rect(box: Box, size: Size) {
-  const [x1, y1, x2, y2] = box;
-  return { left: `${(x1 / size.width) * 100}%`, top: `${(y1 / size.height) * 100}%`, width: `${((x2 - x1) / size.width) * 100}%`, height: `${((y2 - y1) / size.height) * 100}%` };
-}

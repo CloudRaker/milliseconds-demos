@@ -34,7 +34,7 @@ After a deploy, `node scripts/warm-examples.mjs https://demo.milliseconds.ai` pr
 
 **Custom input needs your key.** Any edit to text, labels, schemas, or options is custom. The key travels only in the `x-ms-key` header to `POST /api/run`. Signed-in console users get their test key automatically. Pasted `test_sk-` and `prod_sk-` keys are stored in `localStorage`. Keys never appear in URLs, logs, analytics, or code samples.
 
-**Images.** One capability demo sends an image: `receipt-boxes` posts the receipt PNG with `image` and `detail` to `/extract` and draws the returned `boxes` over it. Limits live in `src/lib/image.ts` and the Worker enforces them: one JPEG, PNG or WebP of at most 5 MB, never a URL, base64 excluded from the character count. `node scripts/generate-receipt.mjs` rebuilds the stock receipt, which changes its example ID.
+**Images.** One capability demo sends an image: `receipt-reader` posts the receipt PNG with `image` and `detail` to `/extract` and shows the extracted record beside it. Limits live in `src/lib/image.ts` and the Worker enforces them: one JPEG, PNG or WebP of at most 5 MB, never a URL, base64 excluded from the character count. `node scripts/generate-receipt.mjs` rebuilds the stock receipt, which changes its example ID.
 
 **Every page shows the same metrics panel:** median delivery time, input tokens, and estimated inference cost at $0.04 per million tokens. Unknown usage is shown as `Unavailable` or `≥`, never as zero.
 
@@ -60,7 +60,7 @@ node --experimental-transform-types src/lib/telemetry.test.mjs
 node --experimental-transform-types src/lib/stock-client-check.mjs
 node src/lib/worker-stock-check.mjs
 node src/demos/ax-pilot/check.mjs
-for d in invoice-desk sales-intake catalog-studio evidence-check private-share returns-desk receipt-boxes; do
+for d in invoice-desk sales-intake catalog-studio evidence-check private-share returns-desk receipt-reader; do
   node --experimental-strip-types src/demos/$d/check.mjs
 done
 ```

@@ -28,8 +28,10 @@ function python(value: unknown, level = 0): string {
 }
 
 /**
- * Image samples read the file instead of pasting 40 kB of base64: the SDKs take bytes or a path,
- * and `detail` selects the resolution tier. Signatures follow @cloudraker/milliseconds 0.2.0.
+ * Image samples read the file instead of pasting 40 kB of base64. Both SDKs take the image as
+ * bytes (or as a data URL / bare base64), never as a path: TypeScript's `image` is
+ * `Uint8Array | ArrayBuffer | Blob | string`, Python's is `bytes | str | PathLike`. The CLI is the
+ * one surface that takes a path, through `--image`. `detail` selects the resolution tier.
  */
 const IMAGE_FILE = 'receipt.png';
 
@@ -47,8 +49,8 @@ export function sdkCode(example: Pick<StockExample, 'route' | 'body'>) {
   const tsArgs = [...args.map(json), ...tsOptions];
   const pyArgs = [
     ...args.map(arg => python(arg)),
-    // A str is read as base64 by the Python SDK; a path must be a Path.
-    ...(image ? [`image=Path("${IMAGE_FILE}")`, ...(detail ? [`detail=${python(detail)}`] : [])] : Object.entries(hints).map(([k, v]) => `${k}=${python(v)}`)),
+    // A str is read as base64 by the Python SDK, so the file goes in as bytes.
+    ...(image ? [`image=Path("${IMAGE_FILE}").read_bytes()`, ...(detail ? [`detail=${python(detail)}`] : [])] : Object.entries(hints).map(([k, v]) => `${k}=${python(v)}`)),
   ];
   // The CLI reads the image from disk. Piping JSON is not an option beside an image: any stdin
   // that starts with { becomes the whole request, and a request with no text is a usage error.

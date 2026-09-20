@@ -1,10 +1,9 @@
-// node --experimental-strip-types src/demos/receipt-boxes/check.mjs — no credentials or network.
+// node --experimental-strip-types src/demos/receipt-reader/check.mjs — no credentials or network.
 import assert from 'node:assert/strict';
-import { extractionRequest, parseBox, parseReceipt, rect, FIELDS } from './logic.ts';
+import { extractionRequest, parseReceipt, FIELDS } from './logic.ts';
 import { RECEIPT } from './receipt.ts';
 import { decodedBytes, imageProblem, imageTokens, MAX_IMAGE_BYTES } from '../../lib/image.ts';
 
-const size = { width: RECEIPT.width, height: RECEIPT.height };
 const base64 = RECEIPT.dataUrl.slice(RECEIPT.dataUrl.indexOf(',') + 1);
 
 // The stock image is a real, accepted, small PNG.
@@ -33,32 +32,24 @@ assert.equal(request.schema.properties.items.type, 'array');
 assert.deepEqual(Object.keys(request).sort(), ['detail', 'image', 'schema']);
 assert.match(request.schema.description, /exactly as printed/);
 
-// Boxes: only four integers inside the image, in order, are usable.
-assert.deepEqual(parseBox([10, 20, 30, 40], size), [10, 20, 30, 40]);
-for (const bad of [null, [1, 2, 3], [1, 2, 3, 4, 5], [1.5, 2, 3, 4], [30, 20, 10, 40], [10, 40, 30, 20], [-1, 0, 10, 10], [0, 0, size.width + 1, 10], [0, 0, 10, size.height + 1], '10,20,30,40'])
-  assert.equal(parseBox(bad, size), null, JSON.stringify(bad));
-
-const response = {
+// Every schema field becomes a row, and line items expand into a name and a price each.
+const parsed = parseReceipt({
   data: { merchant: 'Harbor Lane Bakery', date: '2026-09-18', receipt_number: 'HLB-40218', subtotal: 23.85, tax: 1.91, total: 25.76, currency: 'USD', card_last4: '4417', items: [{ name: 'Flat white', price: 9 }, { name: 'Oat milk 1L', price: 3.1 }] },
-  boxes: { merchant: [28, 26, 300, 52], total: [28, 440, 392, 470], 'items[1].price': [340, 330, 392, 348], 'items[0].name': [0, 0, 0, 0] },
-};
-const parsed = parseReceipt(response, size);
+});
 assert.equal(parsed.rows.length, FIELDS.length + 4, 'every field plus a name and a price per line item');
 assert.deepEqual(parsed.rows.map(row => row.path).slice(-4), ['items[0].name', 'items[0].price', 'items[1].name', 'items[1].price']);
-assert.equal(parsed.boxed, 3, 'the degenerate box is dropped');
+assert.deepEqual(parsed.rows.map(row => row.label).slice(0, 2), ['Merchant', 'Date']);
+assert.equal(parsed.rows.find(row => row.path === 'merchant').value, 'Harbor Lane Bakery');
 assert.equal(parsed.rows.find(row => row.path === 'total').value, '25.76');
 assert.equal(parsed.rows.find(row => row.path === 'items[1].price').value, '3.1');
+assert.deepEqual(Object.keys(parsed.rows[0]).sort(), ['label', 'path', 'value'], 'a row carries no coordinates');
 
-// Missing values render empty, and a response without boxes still extracts.
-const sparse = parseReceipt({ data: { merchant: 'Harbor Lane Bakery', total: null } }, size);
-assert.equal(sparse.boxed, 0);
+// Missing values render empty.
+const sparse = parseReceipt({ data: { merchant: 'Harbor Lane Bakery', total: null } });
 assert.equal(sparse.rows.find(row => row.path === 'tax').value, '');
+assert.equal(sparse.rows.find(row => row.path === 'total').value, '');
 
 for (const bad of [null, 'text', [], {}, { data: [] }, { data: { merchant: { nested: true } } }, { data: { items: [{ name: ['a'] }] } }])
-  assert.throws(() => parseReceipt(bad, size), JSON.stringify(bad));
+  assert.throws(() => parseReceipt(bad), JSON.stringify(bad));
 
-// Overlay geometry: percentages of the natural size, so any rendered width lines up.
-assert.deepEqual(rect([0, 0, size.width, size.height], size), { left: '0%', top: '0%', width: '100%', height: '100%' });
-assert.deepEqual(rect([size.width / 2, 0, size.width, size.height / 2], size), { left: '50%', top: '0%', width: '50%', height: '50%' });
-
-console.log('Receipt Boxes: image limits, tier billing, box validation, record flattening and overlay geometry passed.');
+console.log('Receipt Reader: image limits, tier billing and record flattening passed.');
