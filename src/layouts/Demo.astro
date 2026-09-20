@@ -23,14 +23,13 @@ const structuredData = {
       <p class="demo-crumbs"><a href="/">All demos</a><span aria-hidden="true">/</span><span>{meta.title}</span></p>
       <div class="demo-title"><DemoIcon slug={meta.slug} /><h1>{meta.title}</h1></div>
       <p class="demo-summary">{meta.summary}</p>
-      <p class="demo-routes"><span>Powered by</span>{meta.routes.map((r) => <code>/{r}</code>)}</p>
     </div>
   </section>
   <section class="demo-stage">
     <div class="shell demo-stage-inner">
       <div class="key-banner">
-        <span><strong>Free samples or live inference.</strong> Use your key for custom input, or enable live mode below for every request.</span>
-        <button class="btn" type="button" data-key-open>Use your own input</button>
+        <span>Examples are free. Bring a key for your own inputs.</span>
+        <button class="btn" type="button" data-key-open>Connect a key</button>
         <a class="muted" data-demo-key-cta href="https://console.milliseconds.ai/signup" target="_blank" rel="noopener noreferrer">Get a free key</a>
       </div>
       <RunMetrics client:load />
@@ -51,7 +50,10 @@ const structuredData = {
   </script>
   <section class="demo-notes">
     <div class="shell">
+      <details class="demo-method"><summary>Under the hood <span>How it works &amp; limitations</span></summary><div class="demo-method-body">
+      <p class="demo-routes"><span>API calls</span>{meta.routes.map((r) => <code>/{r}</code>)}</p>
       <slot name="notes" />
+      </div></details>
       {meta.origin && <p class="demo-origin">Inspired by the work of <a href={`https://github.com/dabit3/jev-experiments/tree/main/${meta.origin}`} target="_blank" rel="noopener noreferrer">dabit3</a>.</p>}
     </div>
   </section>

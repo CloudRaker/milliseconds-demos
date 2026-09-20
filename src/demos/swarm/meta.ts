@@ -3,8 +3,8 @@ import type { DemoMeta } from "../meta";
 export default {
   slug: "swarm",
   title: "Agent Swarm",
-  summary: "Watch up to 32 agents decide when to flee, chase food or spend a speed boost in a shared arena.",
-  instruction: "Select Run the swarm, then follow the latest decisions beside the arena.",
+  summary: "Hungry agents. One arena. Lots of tiny decisions.",
+  instruction: "Run the swarm and watch what each agent does.",
   routes: ["yes-no"],
   origin: "jev-swarm",
   category: "Developer & interactive",

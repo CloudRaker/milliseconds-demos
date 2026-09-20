@@ -12,8 +12,8 @@ const theme = { ...pierreDarkSoft, colors: { ...pierreDarkSoft.colors, 'editor.b
 <details id="sdk-examples" class="sdk-examples">
   <summary><CodeIcon size={20} aria-hidden="true" />Build with the SDK<span>TypeScript · Python · dm1</span><CaretDownIcon className="sdk-chevron" size={16} aria-hidden="true" /></summary>
   <div class="sdk-body">
-    <p>Use these API building blocks in your own app. Each sample is one request from this demo’s supplied inputs. Your code owns the surrounding workflow, validation and actions.</p>
-    <p class="muted">Copied samples call the live API with <code>MS_API_KEY</code> and use your quota. Keep the key on your server. The free demo cache is only for this site.</p>
+    <p>One request from this demo. Copy it into your app.</p>
+    <p class="muted">Uses your <code>MS_API_KEY</code> and quota. Keep the key on your server.</p>
     <div class="sdk-controls">
       <div role="tablist" aria-label="Code sample language">
         {SDK_LANGUAGES.map((language, i) => <button type="button" role="tab" id={`sdk-tab-${language.id}`} aria-selected={i === 0 ? 'true' : 'false'} aria-controls={`sdk-panel-${language.id}`} tabindex={i === 0 ? 0 : -1} data-sdk-language={language.id}>{language.label}</button>)}

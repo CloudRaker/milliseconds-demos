@@ -28,15 +28,29 @@ const structuredData = {
 const categories = ['Documents & operations', 'Sales & commerce', 'Customer experience', 'Developer & interactive'];
 ---
 <Site structuredData={structuredData} title="Interactive AI demos · milliseconds.ai" description="Try decision-machine-1 with free stock examples for routing, moderation, search, images, documents and more. Use your own API key for custom input.">
-  <section class="demo-head">
-    <div class="shell">
-      <p class="demo-crumbs"><span>Interactive demos</span></p>
-      <h1>Small decisions. Remarkable possibilities.</h1>
-      <p class="demo-summary">Photos, text, and decisions your software can act on. Find a workflow by its input or by what you want to do. Explore {demos.length} interactive demos powered by decision-machine-1, with time, tokens, and cost visible as you go. Run the supplied examples for free—no API key needed.</p>
+  <section class="gallery-hero">
+    <div class="shell gallery-hero-inner">
+      <div><p class="micro-label">THE milliseconds.ai PLAYGROUND</p><h1>GO ON.<br /><span>PUSH A BUTTON.</span></h1></div>
+      <div class="gallery-intro"><p>Read a receipt. Route an email.<br />Settle the hot-dog debate.</p><span>{demos.length} demos. Free examples. No key needed.</span><a href="#all-demos">Find your next idea <ArrowRightIcon size={20} aria-hidden="true" /></a></div>
     </div>
   </section>
-  <section class="demo-stage">
+  <section class="shell featured-demos" aria-label="Start with a demo">
+    <a href="/invoice-desk/" class="featured-demo featured-invoice">
+      <div class="featured-art" aria-hidden="true"><div class="mini-invoice"><span>INVOICE</span><strong>Northstar<br />Studio</strong><i></i><i></i><div>Total <b>$2,520.00</b></div></div><span class="result-sticker">JUST THE FIELDS. ↗</span></div>
+      <div class="featured-caption"><div><span>EXTRACT</span><h2>Skip the paperwork.</h2></div><ArrowRightIcon size={26} aria-hidden="true" /></div>
+    </a>
+    <a href="/sales-intake/" class="featured-demo featured-inbox">
+      <div class="featured-art" aria-hidden="true"><div class="mini-mail"><span>NEW MESSAGE</span><strong>“Can we book<br />a demo?”</strong></div><span class="result-sticker">SALES ↗</span></div>
+      <div class="featured-caption"><div><span>CLASSIFY</span><h2>Inbox. Sorted.</h2></div><ArrowRightIcon size={26} aria-hidden="true" /></div>
+    </a>
+    <a href="/hot-dog/" class="featured-demo featured-hotdog">
+      <div class="featured-art" aria-hidden="true"><img src="/images/hotdog-cutout.png" alt="" width="1254" height="1254" /><span class="result-sticker">HOT DOG? ↗</span></div>
+      <div class="featured-caption"><div><span>VISION</span><h2>Very serious AI.</h2></div><ArrowRightIcon size={26} aria-hidden="true" /></div>
+    </a>
+  </section>
+  <section class="demo-stage gallery-directory" id="all-demos">
     <div class="shell">
+      <div class="directory-heading"><h2>What do you want to try?</h2><a href="https://github.com/CloudRaker/milliseconds-demos">Get the source ↗</a></div>
       {demos.length === 0 && <p class="muted">No demos yet.</p>}
       <div class="demo-filter-section">
         <span class="demo-filter-label" id="input-filter-label">Input</span>
@@ -47,9 +61,9 @@ const categories = ['Documents & operations', 'Sales & commerce', 'Customer expe
         </div>
       </div>
       <div class="demo-filter-section">
-        <span class="demo-filter-label" id="category-filter-label">Use case</span>
+        <span class="demo-filter-label" id="category-filter-label">Explore</span>
         <div class="demo-filters" role="group" aria-labelledby="category-filter-label">
-          <button class="btn" data-demo-filter="all" aria-pressed="true">All use cases <span>{demos.length}</span></button>
+          <button class="btn" data-demo-filter="all" aria-pressed="true">Everything <span>{demos.length}</span></button>
           {categories.map(category => <button class="btn" data-demo-filter={category} aria-pressed="false">{category} <span>{demos.filter(d => d.category === category).length}</span></button>)}
         </div>
       </div>
@@ -66,7 +80,7 @@ const categories = ['Documents & operations', 'Sales & commerce', 'Customer expe
               <h3>{d.title}</h3>
             </div>
             <p>{d.summary}</p>
-            <span class="demo-card-action">Try demo <ArrowRightIcon size={16} aria-hidden="true" focusable="false" /></span>
+            <span class="demo-card-action"><span class="sr-only">Try {d.title}</span><ArrowRightIcon size={22} aria-hidden="true" focusable="false" /></span>
           </a>
         ))}
       </div>

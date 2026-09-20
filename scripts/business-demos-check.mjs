@@ -53,8 +53,8 @@ try {
     }
     assert.equal(apiCalls, 0, `${slug}: inspecting a sample must not call the API`);
     const values = await page.locator('.run-metrics-grid dd').allTextContents();
-    assert.equal(values[1], '0', 'samples do not incur input tokens');
-    assert.equal(values[2], '$0.00', 'samples do not incur API cost');
+    assert.equal(values[2], '0', 'samples do not incur input tokens');
+    assert.equal(values[3], '$0.00', 'samples do not incur API cost');
     if (slug === 'private-share') {
       await page.evaluate(() => localStorage.setItem('ms.apiKey', 'sk-ms-browser-test-not-a-real-key'));
       await page.getByRole('button', { name: 'Detect details', exact: true }).click();

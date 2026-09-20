@@ -1,7 +1,7 @@
 import type { DemoMeta } from '../meta';
 export default {
   slug: 'crack-check', title: 'Crack Check',
-  summary: 'Screen concrete inspection photos for visible cracks using a real civil-engineering image dataset.',
-  instruction: 'Choose a concrete photo and compare the visual screen with its source label.',
+  summary: "Spot visible cracks in concrete photos.",
+  instruction: "Pick a photo and classify it.",
   routes: ['classify'], category: 'Documents & operations', modality: 'image',
 } satisfies DemoMeta;

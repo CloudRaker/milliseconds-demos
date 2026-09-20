@@ -2,8 +2,8 @@ import type { DemoMeta } from "../meta";
 export default {
   slug: "returns-desk",
   title: "Returns Desk",
-  summary: "Turn a return request, order facts and your store policy into a clear next step—with every policy check visible.",
-  instruction: "Run a stock request free and adjust the order or policy. Use your key for a custom customer message.",
+  summary: "Read the request. Apply your return policy.",
+  instruction: "Check a request, then change the policy and try again.",
   routes: ["classify", "answer"],
   category: "Customer experience",
   order: 6,

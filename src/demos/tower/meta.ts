@@ -3,8 +3,8 @@ import type { DemoMeta } from "../meta";
 export default {
   slug: "tower",
   title: "Air Traffic Tower",
-  summary: "Watch a controller resolve predicted aircraft conflicts by choosing headings, altitudes and speeds.",
-  instruction: "Select Run, then watch the radar and inspect the instructions issued to aircraft.",
+  summary: "Keep simulated aircraft out of each other’s way.",
+  instruction: "Hit Run and follow the radar.",
   routes: ["classify", "rate", "yes-no"],
   origin: "jev-tower",
   category: "Developer & interactive",

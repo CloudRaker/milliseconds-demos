@@ -3,8 +3,8 @@ import type { DemoMeta } from "../meta";
 export default {
   slug: "send-guard",
   title: "Send Guard",
-  summary: "Check a message for exposed secrets, personal data, risky commitments and tone before sending it.",
-  instruction: "Write a message or select Start replay, then inspect the Send verdict and highlighted text.",
+  summary: "One last check before you hit send.",
+  instruction: "Write a message or start the replay.",
   routes: ["yes-no", "classify", "rate"],
   origin: "send-guard",
   category: "Customer experience",

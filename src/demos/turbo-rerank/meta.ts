@@ -3,8 +3,8 @@ import type { DemoMeta } from "../meta";
 export default {
   slug: "turbo-rerank",
   title: "Document Reranker",
-  summary: "Find the documentation passages most likely to answer a question written in your own words.",
-  instruction: "Choose an example question or enter your own, then select Rerank.",
+  summary: "A question in. The relevant docs up top.",
+  instruction: "Pick a question and hit Rerank.",
   routes: ["yes-no"],
   origin: "turbo-rerank",
   category: "Documents & operations",

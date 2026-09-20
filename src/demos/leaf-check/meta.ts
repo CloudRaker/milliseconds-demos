@@ -1,2 +1,2 @@
 import type { DemoMeta } from '../meta';
-export default { slug: 'leaf-check', title: 'Bean Leaf Check', summary: 'Sort real field photos into healthy, angular leaf spot and bean rust visual categories for crop-image review.', instruction: 'Classify nine real bean-leaf photos, then try your own with your key.', routes: ['classify'], modality: 'image', category: 'Documents & operations' } satisfies DemoMeta;
+export default { slug: 'leaf-check', title: 'Bean Leaf Check', summary: "Healthy leaf, leaf spot, or rust? Sort the photos.", instruction: "Classify the leaf photos and compare their labels.", routes: ['classify'], modality: 'image', category: 'Documents & operations' } satisfies DemoMeta;

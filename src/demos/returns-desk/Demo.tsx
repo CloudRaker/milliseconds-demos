@@ -59,7 +59,7 @@ export default function ReturnsDesk() {
     </div>
     <div className="rd-workbench">
       <section className="rd-inputs panel" aria-label="Request and order facts">
-        <div className="rd-section-head"><span className="rd-step">01</span><h2>The request</h2></div>
+        <div className="rd-section-head"><h2>The request</h2></div>
         <label className="rd-label" htmlFor="rd-request">Customer message <span>{selected === null ? "Your text · editable" : "Fictional sample · editable"}</span></label>
         <textarea id="rd-request" className="textarea" value={text} maxLength={20000} onChange={e => { invalidate(); setText(e.target.value); }} />
         
@@ -76,7 +76,7 @@ export default function ReturnsDesk() {
         <p className={`rd-status ${mode === "error" ? "error" : ""}`} role="status">{status}</p>
       </section>
       <section className="rd-result panel" aria-label="Draft routing result">
-        <div className="rd-section-head"><span className="rd-step">02</span><h2>The next step</h2><span className="tag">{mode === "sample" ? "Sample preview" : mode === "live" ? "Model reading" : mode === "running" ? "Working" : "Not checked"}</span></div>
+        <div className="rd-section-head"><h2>The next step</h2><span className="tag">{mode === "sample" ? "Sample preview" : mode === "live" ? "Model reading" : mode === "running" ? "Working" : "Not checked"}</span></div>
         {decision && reading ? <>
           <div className={`rd-route ${decision.route === "Standard handling" ? "rd-standard" : "rd-review"}`}><ArrowUUpLeft size={25} aria-hidden="true" /><div><p className="rd-kicker">Draft route</p><h3 data-testid="return-route">{decision.route}</h3></div></div>
           <p className="rd-next">{decision.next}</p>

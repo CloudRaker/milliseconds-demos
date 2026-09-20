@@ -44,8 +44,8 @@ try {
     assert.ok(calls.every(call => call.status === 200 && /^\d+$/.test(call.tokens)), `${slug}: status and usage headers`);
     const tokens = calls.reduce((sum, call) => sum + Number(call.tokens), 0);
     const metrics = await page.locator('.run-metrics-grid dd').allTextContents();
-    assert.equal(metrics[1], tokens.toLocaleString('en-US'));
-    assert.equal(metrics[2], `$${(tokens * 0.04 / 1e6).toFixed(6)}`);
+    assert.equal(metrics[2], tokens.toLocaleString('en-US'));
+    assert.equal(metrics[3], `$${(tokens * 0.04 / 1e6).toFixed(6)}`);
     assert.deepEqual(errors, []);
     for (const width of [1440, 390]) {
       await page.setViewportSize({ width, height: 1000 });

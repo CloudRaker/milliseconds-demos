@@ -17,13 +17,10 @@
   --white: #f4f1ed;
   --muted: #b0adb9;
   --line: #ffffff24;
-  /* Both values are --accent from apps/web/src/styles/tokens.css, which swaps
-     by color-scheme. This site is dark-only, so it carries both explicitly:
-     --purple is the brand purple, for fills with a light label on top
-     (9.29:1). It is unreadable as a foreground on --ink (1.80:1), so anything
-     purple that sits ON the dark page uses --purple-on-dark instead. */
-  --purple: #3c11bd;
+  --purple: #6d4aff;
   --purple-on-dark: #6d4aff;
+  --lime: #dcff50;
+  --peach: #ffd2bd;
   --sans: Space, sans-serif;
   --heading-size: clamp(42px, 4.8vw, 76px);
   --mono: Ioskeley, monospace;

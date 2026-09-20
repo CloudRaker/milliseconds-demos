@@ -8,7 +8,7 @@ Static Astro pages with React islands. A small Cloudflare Worker proxies API cal
 
 ```sh
 pnpm install
-pnpm dev        # localhost:4324, no API proxy
+pnpm dev        # localhost:4324, API requests go to demo.milliseconds.ai
 pnpm preview    # build + wrangler dev on localhost:8787, with the API proxy
 ```
 

@@ -3,8 +3,8 @@ import type { DemoMeta } from "../meta";
 export default {
   slug: "commit-sentry",
   title: "Commit Sentry",
-  summary: "Review a staged code change for exposed secrets, risky edits and a misleading commit message.",
-  instruction: "Select Run check, then open a file or finding to see the affected lines.",
+  summary: "Catch exposed secrets and risky edits before a commit.",
+  instruction: "Run check, then open a finding.",
   routes: ["yes-no", "classify", "rate"],
   origin: "commit-sentry",
   category: "Developer & interactive",

@@ -3,8 +3,8 @@ import type { DemoMeta } from "../meta";
 export default {
   slug: "inbox-blitz",
   title: "Inbox Triage",
-  summary: "Organize support emails by urgency and intent, then find messages that match a label you describe.",
-  instruction: "Select Triage inbox, then open a message in Priority or Needs review.",
+  summary: "Find the urgent emails hiding in your inbox.",
+  instruction: "Triage the inbox, then open a priority message.",
   routes: ["classify", "yes-no", "rate"],
   origin: "inbox-blitz",
   category: "Customer experience",

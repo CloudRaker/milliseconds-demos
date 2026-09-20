@@ -26,15 +26,16 @@ try {
   await page.goto(`${base}/returns-desk/`);await page.locator('#rd-request').waitFor();
   await page.getByRole('button',{name:'Check request',exact:true}).click();
   await page.waitForFunction(()=>document.querySelector('.rd-status')?.textContent?.includes('Reading complete'));
-  const values=await page.locator('.run-metrics-grid dd').allTextContents();assert.deepEqual(values.slice(1),expected,name);
-  assert.match(await page.locator('.run-metrics-grid dt').last().innerText(),/Estimated inference cost/);
-  assert.match(await page.locator('.run-metrics').innerText(),/Stock examples are free to try/);
+  const values=await page.locator('.run-metrics-grid dd').allTextContents();assert.deepEqual(values.slice(2),expected,name);
+  assert.equal(values[1], '20 ms', 'model compute stays visible');
+  assert.match(await page.locator('.run-metrics-grid dt').last().innerText(),/Est. cost/);
+  assert.match(await page.locator('.run-metrics').innerText(),/Examples are free/);
   if(name==='cached'){
    await page.evaluate(()=>localStorage.setItem('ms.apiKey','sk-ms-test-not-a-real-credential'));
    await page.locator('#rd-request').fill('A custom return request for order RD-1042.');
    await page.getByRole('button',{name:'Check request',exact:true}).click();
    await page.waitForFunction(()=>document.querySelector('.run-metrics-details summary')?.textContent?.includes('4 successful requests'));
-   assert.equal((await page.locator('.run-metrics-grid dd').allTextContents())[2],'$0.000016','cached + personal workload estimate');
+   assert.equal((await page.locator('.run-metrics-grid dd').allTextContents())[3],'$0.000016','cached + personal workload estimate');
    await page.locator('.run-metrics-details summary').click();
    assert.match(await page.locator('.run-metrics-secondary').innerText(),/Your key · estimated cost\n\$0\.000008/);
   }

@@ -1,2 +1,2 @@
 import type { DemoMeta } from '../meta';
-export default { slug:'invoice-desk', title:'Invoice Desk', summary:'Turn invoice text into an editable draft, trace fields to their source, and catch missing details or amount discrepancies.', instruction:'Run a stock invoice free, inspect its source evidence, then use your key for custom text or amounts.', routes:['extract','answer','verify'], category:'Documents & operations', order:1 } satisfies DemoMeta;
+export default { slug:'invoice-desk', title:'Invoice Desk', summary: "Invoice in. Fields out. Catch the totals that don’t add up.", instruction: "Pick an invoice and hit Process invoice.", routes:['extract','answer','verify'], category:'Documents & operations', order:1 } satisfies DemoMeta;

@@ -1,2 +1,2 @@
 import type { DemoMeta } from '../meta';
-export default { slug: 'land-cover', title: 'Satellite Land Cover', summary: 'Classify ten real Sentinel-2 satellite tiles into forests, fields, water, roads and built-up areas.', instruction: 'Classify ten EuroSAT tiles, then try your own satellite image with your key.', routes: ['classify'], modality: 'image', category: 'Developer & interactive' } satisfies DemoMeta;
+export default { slug: 'land-cover', title: 'Satellite Land Cover', summary: "Forest, farmland, or freeway? Read satellite images.", instruction: "Classify the satellite tiles and compare their labels.", routes: ['classify'], modality: 'image', category: 'Developer & interactive' } satisfies DemoMeta;

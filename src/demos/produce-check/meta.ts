@@ -1,7 +1,7 @@
 import type { DemoMeta } from '../meta';
 export default {
   slug: 'produce-check', title: 'Produce Check',
-  summary: 'Flag visible deterioration in real produce photos for closer human inspection.',
-  instruction: 'Classify a dataset photo free, then try a produce photo of your own.',
+  summary: "Flag fruit and vegetables that look past their best.",
+  instruction: "Pick a produce photo and classify it.",
   routes: ['classify'], category: 'Sales & commerce', modality: 'image',
 } satisfies DemoMeta;

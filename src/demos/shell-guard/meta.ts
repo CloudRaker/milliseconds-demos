@@ -3,8 +3,8 @@ import type { DemoMeta } from '../meta';
 export default {
   slug: 'shell-guard',
   title: "Shell Guard",
-  summary: "Check a shell command for risk before allowing it, asking for confirmation or blocking it.",
-  instruction: "Choose an example command or type one in the terminal, then press Enter.",
+  summary: "Run it, review it, or block it. Check a command’s risk.",
+  instruction: "Choose a command and press Enter.",
   routes: ['yes-no', 'classify'],
   origin: 'jev-shell-guard',
   category: "Developer & interactive",

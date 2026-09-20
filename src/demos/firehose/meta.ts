@@ -3,8 +3,8 @@ import type { DemoMeta } from "../meta";
 export default {
   slug: "firehose",
   title: "Chat Firehose",
-  summary: "Find messages that need a moderator’s attention in a fast-moving chat stream.",
-  instruction: "Start the stream, then inspect a flagged message or adjust a moderation threshold.",
+  summary: "A very busy chat. A much shorter moderation queue.",
+  instruction: "Start the stream and inspect a flagged message.",
   routes: ["classify", "rate"],
   origin: "jev-firehose",
   category: "Customer experience",
