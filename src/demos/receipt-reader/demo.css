@@ -3,8 +3,8 @@
 .rb-toolbar { display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; align-items: flex-end; }
 .rb-toolbar p { margin: 8px 0 0; color: var(--muted); font-size: 14px; }
 .rb-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
-.rb-actions label { display: flex; gap: 8px; align-items: center; font-size: 13px; color: var(--muted); }
-.rb-actions select { width: auto; }
+.rb-actions label { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 13px; color: var(--muted); max-width: 100%; }
+.rb-actions select { width: auto; max-width: 100%; min-width: 0; }
 .rb-status { margin: 0; font-size: 14px; color: var(--muted); }
 .rb-section-head { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 16px; }
 .rb-section-head h2 { font-size: 16px; margin: 0; }
@@ -22,3 +22,6 @@
 .rb-raw { margin-top: 14px; }
 .rb-raw pre { overflow: auto; max-height: 320px; font-size: 12px; }
 @media (max-width: 760px) { .rb-workbench { grid-template-columns: 1fr; } }
+/* Grid children default to min-width:auto, so a long mono value widens the page on narrow phones. */
+.receipt-demo, .rb-workbench > *, .rb-row > * { min-width: 0; }
+.rb-row .rb-value { overflow-wrap: anywhere; }

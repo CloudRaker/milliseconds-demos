@@ -15,7 +15,7 @@ try {
   await page.goto(base);
   const cards = page.locator('.demo-card');
   assert.equal(await cards.count(), 27);
-  assert.deepEqual(await cards.evaluateAll(nodes => nodes.slice(0, slugs.length).map(node => node.getAttribute('href'))), slugs.map(slug => `/${slug}/`));
+  assert.deepEqual(await cards.evaluateAll((nodes, n) => nodes.slice(0, n).map(node => node.getAttribute("href")), slugs.length), slugs.map(slug => `/${slug}/`));
   for (const button of await page.locator('[data-demo-filter]').all()) {
     const category = await button.getAttribute('data-demo-filter');
     await button.click();
@@ -55,7 +55,7 @@ try {
     assert.equal(values[2], '$0.00', 'samples do not incur API cost');
     if (slug === 'private-share') {
       await page.evaluate(() => localStorage.setItem('ms.apiKey', 'sk-ms-browser-test-not-a-real-key'));
-      await page.getByRole('button', { name: 'Detect details live', exact: true }).click();
+      await page.getByRole('button', { name: 'Detect details', exact: true }).click();
       const unknown = page.locator('.run-metrics-grid dd.is-unavailable');
       await unknown.first().waitFor();
       const sizes = await unknown.evaluateAll(nodes => nodes.map(node => ({ width: node.clientWidth, scroll: node.scrollWidth, height: node.clientHeight, line: parseFloat(getComputedStyle(node).lineHeight) })));
