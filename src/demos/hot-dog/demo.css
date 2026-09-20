@@ -1,7 +1,6 @@
 /* Scoped to the hot dog island. Colours come from the shared tokens in src/styles/demos.css. */
 .hotdog-demo { display: grid; gap: 16px; }
 .hd-toolbar { display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; align-items: flex-end; }
-.hd-toolbar p { margin: 8px 0 0; color: var(--muted); font-size: 14px; max-width: 52ch; }
 .hd-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .hd-status { margin: 0; font-size: 14px; color: var(--muted); }
 .hd-rule { margin: 0; font-size: 13px; color: var(--muted); }

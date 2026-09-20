@@ -32,6 +32,11 @@ for (const url of urls) {
   for (const tag of ['og:title', 'og:description', 'og:url', 'og:image', 'og:image:alt']) {
     assert.ok(html.includes(`property="${tag}"`), `Missing ${tag}: ${url}`);
   }
+  const socialPath = new URL(html.match(/<meta property="og:image" content="([^"]+)"/)?.[1]).pathname;
+  const social = await readFile(new URL(`dist${socialPath}`, root));
+  assert.equal(social.toString('hex', 0, 8), '89504e470d0a1a0a', `Invalid PNG: ${url}`);
+  assert.equal(social.readUInt32BE(16), 1200, `OG width: ${url}`);
+  assert.equal(social.readUInt32BE(20), 630, `OG height: ${url}`);
   const json = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)?.[1];
   assert.ok(json, `Missing structured data: ${url}`);
   const schema = JSON.parse(json);

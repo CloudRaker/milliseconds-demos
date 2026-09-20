@@ -16,7 +16,7 @@ export default function Demo() {
   const [results, setResults] = useState(new Map<string, Verdict>());
   const [running, setRunning] = useState<string | null>(null);
   const [failed, setFailed] = useState(new Set<string>());
-  const [status, setStatus] = useState('Classify the fourteen stock photos free, or add one of your own with your key.');
+  const [status, setStatus] = useState('');
   const ctrl = useRef<AbortController | null>(null);
   const file = useRef<HTMLInputElement | null>(null);
   const cards = own ? [own, ...SAMPLES] : SAMPLES;
@@ -34,7 +34,7 @@ export default function Demo() {
       ctrl.current?.abort(); ctrl.current = null; setRunning(null);
       setOwn({ id: 'your-photo', caption: 'Your photo', alt: `Uploaded photo, ${decoded.width} by ${decoded.height} pixels`, width: decoded.width, height: decoded.height, dataUrl: decoded.dataUrl });
       setResults(map => { const next = new Map(map); next.delete('your-photo'); return next; });
-      setStatus('Photo ready. Classifying your own photo uses your API key.');
+      setStatus('Photo ready · uses your API key.');
       trackDemoEvent('hot-dog', 'own_input_run');
     } catch (error) {
       setStatus(error instanceof Error ? error.message : 'That photo could not be read.');
@@ -67,35 +67,33 @@ export default function Demo() {
     ctrl.current = null; setRunning(null);
     if (!stopped) {
       trackDemoEvent('hot-dog', 'run_completed');
-      setStatus(`${queue.length === 1 ? 'One photo' : `${queue.length} photos`} classified. Each verdict is the label above 0.5.`);
+      setStatus(`${queue.length === 1 ? 'One photo' : `${queue.length} photos`} classified.`);
     }
   }
   function stop() {
     trackDemoEvent('hot-dog', 'run_cancelled');
     ctrl.current?.abort(); ctrl.current = null; setRunning(null);
-    setStatus('Stopped. The verdicts already returned are kept.');
+    setStatus('Stopped. Results kept.');
   }
 
   return <div className="hotdog-demo">
     <div className="hd-toolbar">
       <div>
         <span className="tag">14 stock photos</span>
-        <p>One <code>classify</code> call per photo, two labels, nothing else. A hot dog needs no resolution, so every call runs at <code>low</code> detail.</p>
       </div>
       <div className="hd-actions">
         <button className="btn" onClick={() => file.current?.click()}><ImageSquareIcon size={18} aria-hidden="true" />Use my image</button>
         <input ref={file} type="file" accept="image/jpeg,image/png,image/webp" className="sr-only" tabIndex={-1} aria-hidden="true" onChange={event => { void pick(event.target.files?.[0]); event.target.value = ''; }} />
-        <button className="btn" onClick={() => { setOwn(null); clear('Grid reset. Classifying the stock photos is free.'); }} disabled={!own && !results.size && !running}>Reset</button>
+        <button className="btn" onClick={() => { setOwn(null); clear('Grid reset.'); }} disabled={!own && !results.size && !running}>Reset</button>
         {running
           ? <button className="btn" onClick={stop}>Stop</button>
           : <button className="btn primary" onClick={() => void run(cards)}><ScanIcon size={18} aria-hidden="true" />Classify sample</button>}
       </div>
     </div>
-    <p role="status" className="hd-status">{status}</p>
+    <p role="status" className="hd-status" hidden={!status}>{status}</p>
     <p className="hd-rule">
-      Two labels, so the scores sum to one: the verdict is <strong>hot dog</strong> when its probability is 0.5 or above.
-      Each photo bills {TOKENS.toLocaleString()} image tokens at <code>low</code> detail, about $0.04 per 1,000 photos at $0.04 per million tokens.
-      {scored > 0 && <> {agreement(results, SAMPLES)} of {scored} verdicts match the caption under the photo.</>}
+      {TOKENS.toLocaleString()} tokens / photo · $0.04 / 1,000 photos
+      {scored > 0 && <> · {agreement(results, SAMPLES)}/{scored} match the captions</>}
     </p>
     <ul className="hd-grid">
       {cards.map(sample => {
@@ -113,8 +111,8 @@ export default function Demo() {
       })}
     </ul>
     <details className="panel"><summary>Workflow notes</summary>
-      <p>Each call sends one photo and the two labels. There is no text in the request: the photo is the whole input. The response holds the winning <code>label</code>, its <code>probability</code>, a <code>confidence</code> number and the score of every label.</p>
-      <p>The caption under each photo is what a person would write, not a model output. Two subjects are honest edge cases: a corn dog and a bratwurst in a roll divide people as well.</p>
+      <p>One photo, two labels, <code>low</code> detail. A hot-dog probability of 50% or more means hot dog. Cost uses $0.04 per million input tokens.</p>
+      <p>Captions are human labels. Corn dogs and bratwursts are debatable.</p>
       <p>Photos are processed in memory, never written to disk and never logged. Send one photo of at most 5 MB, as JPEG, PNG or WebP. Image URLs are not accepted.</p>
       <p><a href="#sdk-examples">See SDK and CLI examples</a></p>
     </details>

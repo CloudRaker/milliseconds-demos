@@ -29,7 +29,7 @@ try {
   const values=await page.locator('.run-metrics-grid dd').allTextContents();assert.deepEqual(values.slice(2),expected,name);
   assert.equal(values[1], '20 ms', 'model compute stays visible');
   assert.match(await page.locator('.run-metrics-grid dt').last().innerText(),/Est. cost/);
-  assert.match(await page.locator('.run-metrics').innerText(),/Examples are free/);
+  assert.match(await page.locator('.run-metrics').innerText(),/Free example · estimated live cost/);
   if(name==='cached'){
    await page.evaluate(()=>localStorage.setItem('ms.apiKey','sk-ms-test-not-a-real-credential'));
    await page.locator('#rd-request').fill('A custom return request for order RD-1042.');

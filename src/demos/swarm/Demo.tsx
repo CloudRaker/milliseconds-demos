@@ -154,7 +154,7 @@ export default function Demo() {
 
   return (
     <div className="d-swarm">
-      <p className="muted">Watch model-controlled agents choose when to flee, chase or boost. Free stock scenes reset every five seconds after their decisions arrive. Enable continuous play with your API key to steer the green player.</p>
+      <p className="muted">Free scenes reset every five seconds. Continuous play uses your key; steer the green agent.</p>
       <div className="swarm-controls">
         <button className={`btn ${s?.running ? "" : "primary"}`} onClick={toggleRun}>
           {s?.running ? `Stop · ${s.left}s left` : `Run the swarm · ${RUN_LIMIT_MS / 1000}s`}
@@ -221,7 +221,7 @@ export default function Demo() {
             onPointerEnter={() => (hoverRef.current = true)}
             onPointerLeave={() => (hoverRef.current = false)}
           />
-          {!s?.running && <p className="arena-note">Preview uses local movement. Run to see model decisions applied to stock scenes.</p>}
+          {!s?.running && <p className="arena-note">Local preview · Run to apply model decisions.</p>}
           <div className="legend">
             {LEGEND.map((l) => (
               <span key={l.key}>
@@ -234,7 +234,7 @@ export default function Demo() {
 
         <div className="swarm-side">
           <div className="panel">
-            <p className="panel-title">Agent decisions</p><p className="muted">Probabilities from 0 to 1: flee danger, chase food, or boost speed.</p>
+            <p className="panel-title">Agent decisions</p><p className="muted">0–1 probability of fleeing, chasing, or boosting.</p>
             <table className="jud">
               <thead>
                 <tr>
@@ -315,7 +315,7 @@ export default function Demo() {
                 <pre className="wire">{s.sample.text}</pre>
               </>
             ) : (
-              <p className="muted">Press Run and the scene sent for one agent appears here.</p>
+              <p className="muted">Run to inspect an agent’s input.</p>
             )}
           </div>
         </div>

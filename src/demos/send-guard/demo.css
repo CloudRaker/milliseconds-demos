@@ -603,7 +603,7 @@
   }
 }
 
-.d-send-guard .sg-intro { margin: 0; max-width: 76ch; }
+.d-send-guard .sg-intro { margin: 0; }
 .d-send-guard .sg-msgs li > div { min-width: 0; }
 .d-send-guard .sg-msg-text, .d-send-guard .sg-card-why { overflow-wrap: anywhere; }
 .d-send-guard .sg-msg-meta { flex-wrap: wrap; }

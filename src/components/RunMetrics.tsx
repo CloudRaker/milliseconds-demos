@@ -28,7 +28,7 @@ export default function RunMetrics() {
         <div><dt>{forceLive ? 'Live input tokens' : cacheOnly ? "Recorded input tokens" : s.cachedResponses ? "Input tokens · live + recorded" : "Live input tokens"}</dt><dd className={unknownOnly ? "is-unavailable" : undefined}>{usage(shownTokens, shownUnknown)}</dd></div>
         <div><dt>Est. cost · USD</dt><dd className={unknownOnly ? "is-unavailable" : undefined}>{usage(shownTokens, shownUnknown, true)}</dd></div>
       </dl>
-      {!forceLive && (s.cachedResponses > 0 || s.sponsoredAttempts > 0 || s.exampleUnknownAttempts > 0) && <p className="run-metrics-note">Examples are free. Cost shown is the equivalent live estimate.</p>}
+      {!forceLive && (s.cachedResponses > 0 || s.sponsoredAttempts > 0 || s.exampleUnknownAttempts > 0) && <p className="run-metrics-note">Free example · estimated live cost.</p>}
       <div className="run-live-mode">
         <label><input type="checkbox" checked={forceLive} disabled={s.pending > 0} aria-describedby="live-mode-help" onChange={event => {
           setForceLive(event.target.checked);
@@ -36,7 +36,7 @@ export default function RunMetrics() {
         }} />Use my key for every request</label>
         <p id="live-mode-help">{forceLive
           ? 'Live API · your key and quota. Cached results excluded.'
-          : 'Free examples. Switch on to measure live inference with your key and quota.'}</p>
+          : 'Bypass examples to measure live inference. Uses your quota.'}</p>
       </div>
       <details className="run-metrics-details">
         <summary>Measurement details <span>· {s.succeeded} successful requests</span></summary>

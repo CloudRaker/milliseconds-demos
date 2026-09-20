@@ -1,7 +1,6 @@
 .image-classifier { display: grid; gap: 20px; }
 .ic-toolbar { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 16px; }
 .ic-toolbar > div:first-child { flex: 1 1 340px; }
-.ic-toolbar p { margin: 10px 0 0; max-width: 65ch; color: var(--muted); font-size: 14px; line-height: 1.6; }
 .ic-actions { display: flex; flex-wrap: wrap; gap: 8px; }
 .ic-status { margin: 0; color: var(--muted); font-size: 14px; min-height: 1.5em; }
 .ic-status.is-error { color: #ff8a8a; }

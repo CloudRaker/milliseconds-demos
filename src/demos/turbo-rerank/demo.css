@@ -63,7 +63,7 @@
 /* Benchmark */
 .d-turbo-rerank .tr-benchhead { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
 .d-turbo-rerank .tr-benchhead h3 { margin: 0 0 6px; font-size: 20px; }
-.d-turbo-rerank .tr-benchhead p { margin: 0; font-size: 14px; max-width: 60ch; }
+.d-turbo-rerank .tr-benchhead p { margin: 0; font-size: 14px; }
 .d-turbo-rerank .tr-progress { margin-bottom: 18px; }
 .d-turbo-rerank .tr-accuracy { display: flex; flex-direction: column; gap: 12px; }
 .d-turbo-rerank .tr-acc { display: grid; grid-template-columns: 56px 1fr 110px; gap: 12px; align-items: center; font-size: 13px; }
