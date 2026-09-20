@@ -43,16 +43,24 @@ export function sdkCode(example: Pick<StockExample, 'route' | 'body'>) {
   const image = typeof body.image === 'string' ? body.image : undefined;
   const IMAGE_FILE = image ? imageFile(image) : '';
   const detail = typeof body.detail === 'string' ? body.detail : undefined;
-  const input = image ? (body.text ?? '') : (body.text ?? body.texts);
-  const args = [input, ...fields.map(field => body[field] ?? body[field.slice(0, -1)])];
-  if (args.some(arg => arg === undefined)) throw new Error(`Incomplete SDK example: ${route}`);
+  // With no text, the image itself is the first argument (SDK 0.2.2). Text beside an image goes
+  // first, and the image becomes the option.
+  const textBesideImage = image && typeof body.text === 'string' && body.text !== '';
+  const input = image ? (textBesideImage ? body.text : undefined) : (body.text ?? body.texts);
+  const rest = fields.map(field => body[field] ?? body[field.slice(0, -1)]);
+  if (rest.some(arg => arg === undefined) || (!image && input === undefined)) throw new Error(`Incomplete SDK example: ${route}`);
   const hints = Object.fromEntries(['when_true', 'when_false'].filter(k => body[k] !== undefined).map(k => [k, body[k]]));
-  const tsOptions = image ? [`{ image: await readFile("${IMAGE_FILE}")${detail ? `, detail: ${json(detail)}` : ''} }`] : Object.keys(hints).length ? [json(hints)] : [];
-  const tsArgs = [...args.map(json), ...tsOptions];
+  const tsImage = `await readFile("${IMAGE_FILE}")`;
+  const tsDetail = detail ? `detail: ${json(detail)}` : '';
+  const tsOptions = image
+    ? textBesideImage ? [`{ image: ${tsImage}${tsDetail ? `, ${tsDetail}` : ''} }`] : tsDetail ? [`{ ${tsDetail} }`] : []
+    : Object.keys(hints).length ? [json(hints)] : [];
+  const tsArgs = [...(image && !textBesideImage ? [tsImage] : [json(input)]), ...rest.map(json), ...tsOptions];
+  const pyImage = `Path("${IMAGE_FILE}").read_bytes()`;
   const pyArgs = [
-    ...args.map(arg => python(arg)),
-    // A str is read as base64 by the Python SDK, so the file goes in as bytes.
-    ...(image ? [`image=Path("${IMAGE_FILE}").read_bytes()`, ...(detail ? [`detail=${python(detail)}`] : [])] : Object.entries(hints).map(([k, v]) => `${k}=${python(v)}`)),
+    ...(image && !textBesideImage ? [pyImage] : [python(input)]),
+    ...rest.map(arg => python(arg)),
+    ...(image ? [...(textBesideImage ? [`image=${pyImage}`] : []), ...(detail ? [`detail=${python(detail)}`] : [])] : Object.entries(hints).map(([k, v]) => `${k}=${python(v)}`)),
   ];
   // The CLI reads the image from disk. Piping JSON is not an option beside an image: any stdin
   // that starts with { becomes the whole request, and a request with no text is a usage error.
