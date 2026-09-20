@@ -10,9 +10,9 @@ export type Detail = keyof typeof DETAIL_EDGE;
 export const IMAGE_TOKENS: Record<Detail, number> = { low: 1000, medium: 2000, high: 4000 };
 /**
  * Generation on an image costs more GPU time than a decision does, so those capabilities bill a
- * multiple of the tier. PROVISIONAL: answer x2, extract/entities/verify x5 (decision 2026-09-20).
+ * multiple of the tier: answer x1.5, extract/entities/verify x2 (decision 2026-09-20).
  */
-export const GENERATIVE_MULTIPLIER: Record<string, number> = { answer: 2, extract: 5, entities: 5, verify: 5 };
+export const GENERATIVE_MULTIPLIER: Record<string, number> = { answer: 1.5, extract: 2, entities: 2, verify: 2 };
 /** Billed input tokens for the image part of one request. */
 export const imageTokens = (capability: string, detail: Detail) =>
   IMAGE_TOKENS[detail] * (Object.hasOwn(GENERATIVE_MULTIPLIER, capability) ? GENERATIVE_MULTIPLIER[capability] : 1);

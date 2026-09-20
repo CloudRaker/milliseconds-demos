@@ -20,7 +20,7 @@ for (const [value, code] of [
 ]) assert.equal(imageProblem(value), code, String(value).slice(0, 40));
 
 // Provisional generative multiplier: extract bills five times the tier.
-assert.deepEqual(['low', 'medium', 'high'].map(detail => imageTokens('extract', detail)), [5000, 10000, 20000]);
+assert.deepEqual(['low', 'medium', 'high'].map(detail => imageTokens('extract', detail)), [2000, 4000, 8000]);
 assert.equal(imageTokens('classify', 'medium'), 2000);
 
 // The request carries the image and the tier, never a URL.
